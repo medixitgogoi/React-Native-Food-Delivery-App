@@ -21,16 +21,16 @@ const Login = () => {
         });
     };
 
-    const [otp, setOtp] = useState('');
+    const [mobileNumber, setMobileNumber] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleOtpSubmit = () => {
-        if (otp.length !== 6) {
-            Alert.alert('Invalid OTP', 'Please enter a 6-digit OTP.');
+    const handleLoginSubmit = () => {
+        if (mobileNumber.length < 10) {
+            Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
             return;
         }
         setLoading(true);
-        // Add OTP submission logic here
+        // Add mobile number submission logic here
         // After submission, setLoading(false);
     };
 
@@ -68,7 +68,7 @@ const Login = () => {
                                     </View>
 
                                     <LinearGradient
-                                        colors={['#70c068', '#499b41']}
+                                        colors={[darkGreen, '#3a9f43']}
                                         start={{ x: 0, y: 0 }}
                                         end={{ x: 1, y: 0 }}
                                         style={{ borderRadius: 50, paddingVertical: 18, paddingHorizontal: 24 }}
@@ -93,15 +93,16 @@ const Login = () => {
                                 marginBottom: 10,
                                 color: '#000'
                             }}>
-                                Enter OTP
+                                Enter Mobile Number
                             </Text>
                             <Text style={{
                                 fontSize: responsiveFontSize(2),
                                 textAlign: 'center',
                                 marginBottom: 20,
-                                color: '#afb8c2'
+                                color: '#afb8c2',
+                                fontWeight: 500,
                             }}>
-                                We’ve sent a 6-digit OTP to your registered mobile number.
+                                We’ll send you an OTP to verify your number.
                             </Text>
 
                             <TextInput
@@ -115,16 +116,16 @@ const Login = () => {
                                     marginBottom: 20,
                                     color: '#000'
                                 }}
-                                placeholder="123456"
+                                placeholder="1234567890"
                                 keyboardType="numeric"
-                                maxLength={6}
-                                value={otp}
-                                onChangeText={setOtp}
+                                maxLength={10}
+                                value={mobileNumber}
+                                onChangeText={setMobileNumber}
                                 placeholderTextColor="#afb8c2"
                             />
 
                             <TouchableOpacity
-                                onPress={handleOtpSubmit}
+                                onPress={handleLoginSubmit}
                                 style={{
                                     backgroundColor: '#70c068',
                                     borderRadius: 50,
@@ -139,25 +140,12 @@ const Login = () => {
                                     fontSize: responsiveFontSize(2.5),
                                     fontWeight: '500'
                                 }}>
-                                    {loading ? 'Verifying...' : 'Submit OTP'}
+                                    {loading ? 'Sending OTP...' : 'Send OTP'}
                                 </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity
-                                onPress={() => {/* Handle resend OTP logic */ }}
-                                style={{ alignItems: 'center', marginVertical: 5 }}
-                            >
-                                <Text style={{
-                                    color: '#70c068',
-                                    fontSize: responsiveFontSize(2),
-                                    textDecorationLine: 'underline'
-                                }}>
-                                    Resend OTP
-                                </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                onPress={() => {/* Handle back navigation */ }}
+                            {/* <TouchableOpacity
+                               
                                 style={{ alignItems: 'center', marginVertical: 5 }}
                             >
                                 <Text style={{
@@ -167,7 +155,7 @@ const Login = () => {
                                 }}>
                                     Back to Login
                                 </Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                     </Animated.View>
