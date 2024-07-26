@@ -59,7 +59,7 @@ const Login = () => {
 
                                     <View style={{ flexDirection: 'column', gap: 15 }}>
                                         <View>
-                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(3.5), fontWeight: 900, textAlign: 'center' }}>Everything You Need: Groceries, Cakes, and More</Text>
+                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(3.5), fontWeight: 900, textAlign: 'center' }}>Everything You Need: Groceries, Cakes and More</Text>
                                         </View>
 
                                         <View>
@@ -71,10 +71,10 @@ const Login = () => {
                                         colors={[darkGreen, '#3a9f43']}
                                         start={{ x: 0, y: 0 }}
                                         end={{ x: 1, y: 0 }}
-                                        style={{ borderRadius: 50, paddingVertical: 18, paddingHorizontal: 24 }}
+                                        style={{ borderRadius: 12, paddingVertical: 18, paddingHorizontal: 24, width: '100%', elevation: 2 }}
                                     >
-                                        <TouchableOpacity onPress={handleGetStarted} style={{ borderRadius: 50 }}>
-                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>
+                                        <TouchableOpacity onPress={handleGetStarted}>
+                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500', textAlign: 'center' }}>
                                                 Get started
                                             </Text>
                                         </TouchableOpacity>
@@ -85,77 +85,47 @@ const Login = () => {
                         </View>
 
                         {/* Login Form */}
-                        <View style={{ width: screenWidth, padding: 20, justifyContent: 'center', flex: 1 }}>
-                            <Text style={{
-                                fontSize: responsiveFontSize(3),
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                marginBottom: 10,
-                                color: '#000'
-                            }}>
-                                Enter Mobile Number
-                            </Text>
-                            <Text style={{
-                                fontSize: responsiveFontSize(2),
-                                textAlign: 'center',
-                                marginBottom: 20,
-                                color: '#afb8c2',
-                                fontWeight: 500,
-                            }}>
-                                We’ll send you an OTP to verify your number.
-                            </Text>
-
-                            <TextInput
-                                style={{
-                                    height: 50,
-                                    borderColor: '#ddd',
-                                    borderWidth: 1,
-                                    borderRadius: 8,
-                                    paddingHorizontal: 15,
-                                    fontSize: responsiveFontSize(2),
-                                    marginBottom: 20,
-                                    color: '#000'
-                                }}
-                                placeholder="1234567890"
-                                keyboardType="numeric"
-                                maxLength={10}
-                                value={mobileNumber}
-                                onChangeText={setMobileNumber}
-                                placeholderTextColor="#afb8c2"
-                            />
-
-                            <TouchableOpacity
-                                onPress={handleLoginSubmit}
-                                style={{
-                                    backgroundColor: '#70c068',
-                                    borderRadius: 50,
-                                    paddingVertical: 15,
-                                    alignItems: 'center',
-                                    marginBottom: 10
-                                }}
-                                disabled={loading}
+                        <View style={{ width: screenWidth, padding: 30, justifyContent: 'space-between', flex: 1, flexDirection: 'column' }}>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(3.5), fontWeight: 900, textAlign: 'center' }}>Time to say goodbye to other delivery apps 👋</Text>
+                            <View style={{ flexDirection: 'column', gap: 7 }}>
+                                {/* <Text style={{ fontSize: responsiveFontSize(3), fontWeight: 'bold', textAlign: 'center', color: '#000' }}>Enter Mobile Number</Text>
+                                <Text style={{ fontSize: responsiveFontSize(2), textAlign: 'center', color: '#afb8c2', marginBottom: 10, fontWeight: 500 }}>We’ll send you an OTP to verify your number.</Text> */}
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 3 }}>
+                                    <Text style={{ color: '#b9c1ca' }}>________________ </Text>
+                                    <Text style={{ color: '#000', textAlign: 'center', color: '#555555', fontWeight: 500, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in or sign up </Text>
+                                    <Text style={{ color: '#b9c1ca' }}>________________ </Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
+                                    <View style={{ height: 45, flex: 0.15, borderColor: '#c1c1c1', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', elevation: 1, backgroundColor: '#fff' }}>
+                                        <Text style={{ color: '#000', fontWeight: 600 }}>+91</Text>
+                                    </View>
+                                    <View style={{ flex: 0.8 }}>
+                                        <TextInput
+                                            style={{ height: 45, borderColor: '#c1c1c1', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', elevation: 1, backgroundColor: '#fff' }}
+                                            placeholder="Enter Phone Number"
+                                            keyboardType="numeric"
+                                            maxLength={10}
+                                            value={mobileNumber}
+                                            onChangeText={setMobileNumber}
+                                            placeholderTextColor="#afb8c2"
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+                            <LinearGradient
+                                colors={[darkGreen, '#3a9f43']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                                style={{ borderRadius: 12, paddingVertical: 18, paddingHorizontal: 24, elevation: 2 }}
                             >
-                                <Text style={{
-                                    color: '#fff',
-                                    fontSize: responsiveFontSize(2.5),
-                                    fontWeight: '500'
-                                }}>
-                                    {loading ? 'Sending OTP...' : 'Send OTP'}
-                                </Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={handleLoginSubmit}
+                                    disabled={loading}
+                                >
+                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Sending OTP...' : 'Continue'}</Text>
+                                </TouchableOpacity>
+                            </LinearGradient>
 
-                            {/* <TouchableOpacity
-                               
-                                style={{ alignItems: 'center', marginVertical: 5 }}
-                            >
-                                <Text style={{
-                                    color: '#70c068',
-                                    fontSize: responsiveFontSize(2),
-                                    textDecorationLine: 'underline'
-                                }}>
-                                    Back to Login
-                                </Text>
-                            </TouchableOpacity> */}
                         </View>
 
                     </Animated.View>
