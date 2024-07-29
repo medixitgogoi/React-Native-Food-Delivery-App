@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 const StackNavigation = () => {
 
-    const [isUserLoggedIn, setisUserLoggedIn] = useState(false);
+    const [isUserLoggedIn, setisUserLoggedIn] = useState(true);
 
     return (
         <NavigationContainer>

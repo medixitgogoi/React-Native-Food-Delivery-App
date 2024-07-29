@@ -9,6 +9,9 @@ const { width: screenWidth } = Dimensions.get('window');
 const Login = () => {
 
     const [showOtpLogin, setShowOtpLogin] = useState(false);
+    const [mobileNumber, setMobileNumber] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const translateX = useRef(new Animated.Value(0)).current;
 
     const handleGetStarted = () => {
@@ -20,9 +23,6 @@ const Login = () => {
             setShowOtpLogin(true);
         });
     };
-
-    const [mobileNumber, setMobileNumber] = useState('');
-    const [loading, setLoading] = useState(false);
 
     const handleLoginSubmit = () => {
         if (mobileNumber.length < 10) {
@@ -44,12 +44,13 @@ const Login = () => {
             />
             <View style={{ flexDirection: 'column', height: '100%' }}>
 
+                {/* Image */}
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: lightGreen, flex: 0.6 }}>
                     <Image source={require("../assets/login3.png")} style={{ width: '100%', height: '100%' }} resizeMode='contain' />
                 </View>
 
-                {/* changes to be made */}
-                <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 50, borderTopRightRadius: 50, flex: 0.4, }}>
+                {/* Content */}
+                <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 50, borderTopRightRadius: 50, flex: 0.4 }}>
                     <Animated.View style={{ flexDirection: 'row', transform: [{ translateX }], width: screenWidth * 2, height: '100%' }}>
 
                         {/* Get Started */}
@@ -57,7 +58,7 @@ const Login = () => {
                             {!showOtpLogin && (
                                 <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', gap: 20, height: '100%', paddingTop: 20 }}>
 
-                                    <View style={{ flexDirection: 'column', gap: 15 }}>
+                                    <View style={{ flexDirection: 'column', gap: 20 }}>
                                         <View>
                                             <Text style={{ color: '#000', fontSize: responsiveFontSize(3.5), fontWeight: 900, textAlign: 'center' }}>Everything You Need: Groceries, Cakes and More</Text>
                                         </View>
@@ -85,23 +86,21 @@ const Login = () => {
                         </View>
 
                         {/* Login Form */}
-                        <View style={{ width: screenWidth, padding: 30, justifyContent: 'space-between', flex: 1, flexDirection: 'column' }}>
+                        <View style={{ width: screenWidth, padding: 30, justifyContent: 'space-between', flex: 1, flexDirection: 'column', }}>
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(3.5), fontWeight: 900, textAlign: 'center' }}>Time to say goodbye to other delivery apps 👋</Text>
                             <View style={{ flexDirection: 'column', gap: 7 }}>
-                                {/* <Text style={{ fontSize: responsiveFontSize(3), fontWeight: 'bold', textAlign: 'center', color: '#000' }}>Enter Mobile Number</Text>
-                                <Text style={{ fontSize: responsiveFontSize(2), textAlign: 'center', color: '#afb8c2', marginBottom: 10, fontWeight: 500 }}>We’ll send you an OTP to verify your number.</Text> */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 3 }}>
                                     <Text style={{ color: '#b9c1ca' }}>________________ </Text>
                                     <Text style={{ color: '#000', textAlign: 'center', color: '#555555', fontWeight: 500, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in or sign up </Text>
                                     <Text style={{ color: '#b9c1ca' }}>________________ </Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
-                                    <View style={{ height: 45, flex: 0.15, borderColor: '#c1c1c1', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', elevation: 1, backgroundColor: '#fff' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <View style={{ height: 45, flex: 0.15, borderColor: '#4d4d4d', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: lightGreen }}>
                                         <Text style={{ color: '#000', fontWeight: 600 }}>+91</Text>
                                     </View>
                                     <View style={{ flex: 0.8 }}>
                                         <TextInput
-                                            style={{ height: 45, borderColor: '#c1c1c1', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', elevation: 1, backgroundColor: '#fff' }}
+                                            style={{ height: 45, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
                                             placeholder="Enter Phone Number"
                                             keyboardType="numeric"
                                             maxLength={10}
@@ -125,13 +124,13 @@ const Login = () => {
                                     <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Sending OTP...' : 'Continue'}</Text>
                                 </TouchableOpacity>
                             </LinearGradient>
-
                         </View>
 
                     </Animated.View>
                 </View>
 
             </View>
+
         </SafeAreaView>
     );
 }
@@ -146,5 +145,3 @@ const styles = StyleSheet.create({
         color: '#000'
     },
 });
-
-// Order cakes, groceries, and restaurant meals all in one place!
