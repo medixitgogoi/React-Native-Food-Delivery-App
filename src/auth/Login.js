@@ -72,7 +72,7 @@ const Login = () => {
                                         colors={[darkGreen, '#3a9f43']}
                                         start={{ x: 0, y: 0 }}
                                         end={{ x: 1, y: 0 }}
-                                        style={{ borderRadius: 12, paddingVertical: 18, paddingHorizontal: 24, width: '100%', elevation: 2 }}
+                                        style={{ borderRadius: 12, paddingVertical: 15, paddingHorizontal: 24, width: '100%', elevation: 2 }}
                                     >
                                         <TouchableOpacity onPress={handleGetStarted}>
                                             <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500', textAlign: 'center' }}>
@@ -115,7 +115,7 @@ const Login = () => {
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
-                                style={{ borderRadius: 12, paddingVertical: 18, paddingHorizontal: 24, elevation: 2 }}
+                                style={{ borderRadius: 12, paddingVertical: 15, paddingHorizontal: 24, elevation: 2 }}
                             >
                                 <TouchableOpacity
                                     onPress={handleLoginSubmit}
