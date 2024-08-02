@@ -1,4 +1,4 @@
-import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { darkGreen, lightGreen } from '../utils/colors';
@@ -8,6 +8,8 @@ import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+
+const { width: screenWidth } = Dimensions.get('window');
 
 const Home = () => {
 
@@ -25,7 +27,7 @@ const Home = () => {
             />
 
             {/* header */}
-            <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 8, paddingHorizontal: 12 }}>
+            <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, paddingHorizontal: 12 }}>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Welcome</Text>
                     <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>Neymar Jr.</Text>
@@ -76,16 +78,17 @@ const Home = () => {
             </LinearGradient>
 
             {/* for you */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ color: '#ebedf0', }}>__________ </Text>
-                <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(2), textTransform: 'uppercase', letterSpacing: 1.1 }}> What are you looking for ? </Text>
-                <Text style={{ color: '#ebedf0', }}>__________ </Text>
-            </View>
+            <View>
 
-            <View style={{ paddingVertical: 12 }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ paddingLeft: 12, paddingRight: 12 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: '#ebedf0', }}>___________ </Text>
+                    <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> What are you looking for ? </Text>
+                    <Text style={{ color: '#ebedf0', }}>___________ </Text>
+                </View>
 
-                    <TouchableOpacity style={{ width: 130, height: 130, borderRadius: 16, marginRight: 12, overflow: 'hidden' }}>
+                <View style={{ padding: 12, width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
+                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }}>
                         <Image source={require("../assets/grocery.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <LinearGradient
@@ -97,8 +100,8 @@ const Home = () => {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width: 130, height: 130, borderRadius: 16, marginRight: 12, overflow: 'hidden' }}>
-                        <Image source={require("../assets/grocery.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
+                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }}>
+                        <Image source={require("../assets/restaurant.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <LinearGradient
                                 colors={['#00000000', '#000']}
@@ -109,8 +112,8 @@ const Home = () => {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width: 130, height: 130, borderRadius: 16, marginRight: 12, overflow: 'hidden' }}>
-                        <Image source={require("../assets/grocery.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
+                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }}>
+                        <Image source={require("../assets/cake.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <LinearGradient
                                 colors={['#00000000', '#000']}
@@ -121,7 +124,20 @@ const Home = () => {
                         </View>
                     </TouchableOpacity>
 
-                </ScrollView>
+                </View>
+
+            </View>
+
+            {/* explore */}
+            <View style={{ marginTop: 5 }}>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
+                    <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Explore </Text>
+                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
+                </View>
+
+
             </View>
 
 
