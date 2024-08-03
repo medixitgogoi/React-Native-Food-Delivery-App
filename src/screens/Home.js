@@ -1,7 +1,7 @@
-import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { darkGreen, lightGreen } from '../utils/colors';
+import { background, darkGreen, lightGreen } from '../utils/colors';
 import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
@@ -19,10 +19,10 @@ const Home = () => {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#F9FAFD", paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={'#5EC467'}
+                backgroundColor={darkGreen}
                 barStyle="dark-content"
             />
 
@@ -42,7 +42,7 @@ const Home = () => {
 
             {/* searchbar and location */}
             <LinearGradient
-                colors={['#5EC467', '#F9FAFD']}
+                colors={[darkGreen, '#F9FAFD']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 locations={[0, 0.99]}
@@ -88,7 +88,7 @@ const Home = () => {
 
                 <View style={{ padding: 12, width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
-                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }}>
+                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }} onPress={() => navigation.navigate('Groceries')}>
                         <Image source={require("../assets/grocery.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <LinearGradient
@@ -100,7 +100,7 @@ const Home = () => {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }}>
+                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }} onPress={() => navigation.navigate('Restaurants')}>
                         <Image source={require("../assets/restaurant.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <LinearGradient
@@ -112,7 +112,7 @@ const Home = () => {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }}>
+                    <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }} onPress={() => navigation.navigate('Cakes')}>
                         <Image source={require("../assets/cake.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                             <LinearGradient
@@ -134,6 +134,30 @@ const Home = () => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: '#ebedf0', }}>________________________ </Text>
                     <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Explore </Text>
+                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
+                </View>
+
+
+            </View>
+
+            {/* exclusive offer */}
+            <View style={{ marginTop: 5 }}>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
+                    <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Exclusive Offer </Text>
+                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
+                </View>
+
+
+            </View>
+
+            {/* best selling */}
+            <View style={{ marginTop: 5 }}>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
+                    <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Best Selling </Text>
                     <Text style={{ color: '#ebedf0', }}>________________________ </Text>
                 </View>
 
