@@ -6,7 +6,7 @@ export const groceries = [
         description: 'Fresh and crisp red apples',
         image: '../assets/grocery.jpeg',
         subCategory: 'Fruit',
-        starRating: 4,
+        starRating: 3.1,
     },
     {
         id: 2,
@@ -15,7 +15,7 @@ export const groceries = [
         description: 'Sweet organic yellow bananas',
         image: '../assets/grocery.jpeg',
         subCategory: 'Fruit',
-        starRating: 5,
+        starRating: 4.5,
     },
     {
         id: 3,
