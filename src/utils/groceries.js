@@ -5,6 +5,7 @@ export const groceries = [
         price: '299',
         description: 'Fresh and crisp red apples',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -13,6 +14,7 @@ export const groceries = [
         price: '279',
         description: 'Sweet organic yellow bananas',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 5,
     },
     {
@@ -21,6 +23,7 @@ export const groceries = [
         price: '349',
         description: 'Juicy and tangy fresh oranges',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -29,6 +32,7 @@ export const groceries = [
         price: '259',
         description: 'Ripe and fresh red tomatoes',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 3,
     },
     {
@@ -37,6 +41,7 @@ export const groceries = [
         price: '269',
         description: 'Organic and healthy brown potatoes',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Vegetable',
         starRating: 4,
     },
     {
@@ -45,6 +50,7 @@ export const groceries = [
         price: '299',
         description: 'Fresh and crunchy white onions',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Meat',
         starRating: 3,
     },
     {
@@ -53,6 +59,7 @@ export const groceries = [
         price: '319',
         description: 'Crunchy and fresh orange carrots',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Dairy',
         starRating: 4,
     },
     {
@@ -61,6 +68,7 @@ export const groceries = [
         price: '359',
         description: 'Green and healthy fresh broccoli',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Pulses',
         starRating: 5,
     },
     {
@@ -69,6 +77,7 @@ export const groceries = [
         price: '289',
         description: 'Organic and fresh green spinach',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Cereals',
         starRating: 4,
     },
     {
@@ -77,6 +86,7 @@ export const groceries = [
         price: '369',
         description: 'Fresh and creamy whole milk',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -85,6 +95,7 @@ export const groceries = [
         price: '279',
         description: 'Farm fresh organic brown eggs',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 5,
     },
     {
@@ -93,6 +104,7 @@ export const groceries = [
         price: '459',
         description: 'Rich and creamy cheddar cheese',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -101,6 +113,7 @@ export const groceries = [
         price: '329',
         description: 'Smooth and creamy unsalted butter',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -109,6 +122,7 @@ export const groceries = [
         price: '299',
         description: 'Thick and creamy plain yogurt',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 3,
     },
     {
@@ -117,6 +131,7 @@ export const groceries = [
         price: '269',
         description: 'Freshly baked whole wheat bread',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -125,6 +140,7 @@ export const groceries = [
         price: '389',
         description: 'Long grain organic basmati rice',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 5,
     },
     {
@@ -133,6 +149,7 @@ export const groceries = [
         price: '349',
         description: 'Organic whole wheat pasta',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     },
     {
@@ -141,6 +158,7 @@ export const groceries = [
         price: '479',
         description: 'Fresh organic chicken breast',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 5,
     },
     {
@@ -149,6 +167,7 @@ export const groceries = [
         price: '499',
         description: 'Grass-fed organic beef steak',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 5,
     },
     {
@@ -157,6 +176,7 @@ export const groceries = [
         price: '459',
         description: 'Fresh and healthy salmon fish',
         image: '../assets/grocery.jpeg',
+        subCategory: 'Fruit',
         starRating: 4,
     }
 ];
