@@ -74,23 +74,23 @@ const Groceries = () => {
                 useNativeDriver: false,
             }).start();
         }
-    }
+    };
 
     const priceLowToHighHandler = () => {
         setPriceLowToHigh(prev => !prev);
-    }
+    };
 
     const priceHighToLowHandler = () => {
         setPriceHighToLow(prev => !prev);
-    }
+    };
 
     const ratingHighToLowHandler = () => {
         setRatingHighToLow(prev => !prev);
-    }
+    };
 
     const rateHandler = () => {
         setRated(prev => !prev);
-    }
+    };
 
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
@@ -160,7 +160,7 @@ const Groceries = () => {
                 {/* headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
                     <View style={{ paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
-                        <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: lightGreen, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
+                        <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                             <Icon name="keyboard-arrow-left" size={23} color={backIconColor} />
                         </TouchableOpacity>
                         <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', width: '83%', textTransform: 'uppercase' }}>Groceries</Text>
@@ -228,30 +228,32 @@ const Groceries = () => {
 
             </View>
 
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth, paddingHorizontal: 10, paddingVertical: 6 }}>
-                    {loading ? (
-                        Array(6).fill(null).map((_, index) => (
-                            <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }} key={index}>
-                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
-                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                            </View>
-                        ))
-                    ) : (
-                        <FlatList
-                            data={filteredNames}
-                            renderItem={renderOrder}
-                            keyExtractor={item => item.id.toString()}
-                            initialNumToRender={10}
-                            maxToRenderPerBatch={10}
-                            windowSize={5}
-                        />
-                    )}
-                </View>
-            </ScrollView>
-
+            {/* Content */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth, paddingVertical: 6 }}>
+                {loading ? (
+                    <FlatList
+                        data={[1, 1, 1, 1, 1, 1, 1]}
+                        contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', margin: 0, paddingHorizontal: 10, paddingBottom: 90 }}
+                        renderItem={() => {
+                            return (
+                                <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                </View>
+                            )
+                        }}
+                    />
+                ) : (
+                    <FlatList
+                        data={filteredNames}
+                        renderItem={renderOrder}
+                        keyExtractor={item => item.id.toString()}
+                        contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', margin: 0, paddingHorizontal: 10, paddingBottom: 90 }}
+                    />
+                )}
+            </View>
         </SafeAreaView>
     )
 }
@@ -259,34 +261,3 @@ const Groceries = () => {
 export default Groceries;
 
 const styles = StyleSheet.create({});
-
-// data?.map(item => (
-//     <View key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
-
-//         <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-//             <Icon name="favorite-border" size={18} color={'#019934'} />
-//         </TouchableOpacity>
-
-//         <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-//             <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-//                 <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-//             </View>
-//         </View>
-
-//         <View style={{ padding: 10 }}>
-//             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-//                 <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
-//                 <StarRating rating={item.starRating} />
-//             </View>
-//             <View style={{ flexDirection: 'row', marginBottom: 5 }}>
-//                 <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
-//             </View>
-//             <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
-//         </View>
-
-//         <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
-//             <Icon name="add" size={20} color="#fff" />
-//         </TouchableOpacity>
-
-//     </View>
-// ))

@@ -1,13 +1,15 @@
-import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { background, darkGreen, lightGreen } from '../utils/colors';
+import { background, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import { groceries } from '../utils/groceries';
+import StarRating from '../components/StarRating';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -79,15 +81,12 @@ const Home = () => {
 
             {/* for you */}
             <View>
-
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: '#ebedf0', }}>___________ </Text>
                     <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> What are you looking for ? </Text>
                     <Text style={{ color: '#ebedf0', }}>___________ </Text>
                 </View>
-
                 <View style={{ padding: 12, width: screenWidth, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-
                     <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }} onPress={() => navigation.navigate('Groceries')}>
                         <Image source={require("../assets/grocery.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                         <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
@@ -123,9 +122,7 @@ const Home = () => {
                             </LinearGradient>
                         </View>
                     </TouchableOpacity>
-
                 </View>
-
             </View>
 
             {/* explore */}
@@ -137,89 +134,44 @@ const Home = () => {
                     <Text style={{ color: '#ebedf0', }}>________________________ </Text>
                 </View>
 
+                <ScrollView horizontal>
+                    <View style={{ paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                        {groceries.map(item => (
+                            <View key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
-            </View>
+                                <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Icon3 name="favorite-border" size={18} color={'#019934'} />
+                                </TouchableOpacity>
 
-            {/* exclusive offer */}
-            <View style={{ marginTop: 5 }}>
+                                <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                    <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                    </View>
+                                </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
-                    <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Exclusive Offer </Text>
-                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
-                </View>
+                                <View style={{ padding: 10 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
+                                        <StarRating rating={item.starRating} />
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
+                                </View>
 
+                                <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                    <Icon3 name="add" size={20} color="#fff" />
+                                </TouchableOpacity>
 
-            </View>
-
-            {/* best selling */}
-            <View style={{ marginTop: 5 }}>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
-                    <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Best Selling </Text>
-                    <Text style={{ color: '#ebedf0', }}>________________________ </Text>
-                </View>
-
-
-            </View>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-                <View style={{ width: '48%', backgroundColor: '#f9f9f9', borderRadius: 8, padding: 16 }}>
-                    <Image
-                        style={{ width: '100%', height: 100, borderRadius: 8, marginBottom: 8 }}
-                        source={{ uri: 'https://via.placeholder.com/100' }}
-                    />
-                    <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000', marginBottom: 4 }}>Orange Fruit</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.6), color: '#888', marginBottom: 4 }}>Fruit</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000' }}>$14.99</Text>
-                </View>
-                <View style={{ width: '48%', backgroundColor: '#f9f9f9', borderRadius: 8, padding: 16 }}>
-                    <Image
-                        style={{ width: '100%', height: 100, borderRadius: 8, marginBottom: 8 }}
-                        source={{ uri: 'https://via.placeholder.com/100' }}
-                    />
-                    <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000', marginBottom: 4 }}>Broccoli Vegetable</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.6), color: '#888', marginBottom: 4 }}>Vegetable</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000' }}>$29.99</Text>
-                </View>
-            </View>
-            <View style={{ marginBottom: 16 }}>
-                <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000', marginBottom: 8 }}>Recent Shop</Text>
-                <View style={{ flexDirection: 'row', backgroundColor: '#f9f9f9', borderRadius: 8, padding: 16, alignItems: 'center' }}>
-                    <Image
-                        style={{ width: 40, height: 40, borderRadius: 8, marginRight: 16 }}
-                        source={{ uri: 'https://via.placeholder.com/40' }}
-                    />
-                    <View>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000', marginBottom: 4 }}>Celery Vegetable</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.6), color: '#888', marginBottom: 4 }}>Vegetable</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), fontWeight: 'bold', color: '#000' }}>$10.99</Text>
+                            </View>
+                        ))}
                     </View>
-                </View>
+                </ScrollView>
+
             </View>
-        </SafeAreaView >
+
+        </SafeAreaView>
     );
 };
 
