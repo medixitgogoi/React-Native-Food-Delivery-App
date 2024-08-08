@@ -61,7 +61,7 @@ const Home = () => {
                             <Icon4 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                         </View>
                         <TextInput
-                            style={{ height: 38, color: '#000', fontWeight: '400', width: '88%' }}
+                            style={{ height: 40, color: '#000', fontWeight: '400', width: '88%' }}
                             placeholder="Search your favorite food item"
                             placeholderTextColor="#a0abb7"
                             onChangeText={setSearch}

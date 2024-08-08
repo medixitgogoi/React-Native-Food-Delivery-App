@@ -134,7 +134,7 @@ const Cakes = () => {
 
                 <View style={{ padding: 10 }}>
                     <View style={{ flexDirection: 'column', gap: 3 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                             <StarRating rating={item.starRating} />
                             <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
@@ -217,7 +217,7 @@ const Cakes = () => {
                             <View style={{ width: '100%', flexDirection: 'row', gap: 8, alignItems: 'center' }}>
 
                                 <TouchableOpacity style={{ backgroundColor: priceLowToHigh ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceLowToHigh ? backIconColor : '', borderWidth: priceLowToHigh ? 0.4 : 0 }} onPress={priceLowToHighHandler}>
-                                    <Icon4 name="arrow-trend-up" size={16} color={'#E1A32A'} />
+                                    <Icon4 name="arrow-trend-up" size={16} color={'#FF6F61'} />
                                     <Text style={{ color: priceLowToHigh ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - low to high</Text>
                                     {priceLowToHigh && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
@@ -225,7 +225,7 @@ const Cakes = () => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{ backgroundColor: priceHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceHighToLow ? backIconColor : '', borderWidth: priceHighToLow ? 0.4 : 0 }} onPress={priceHighToLowHandler}>
-                                    <Icon4 name="arrow-trend-down" size={16} color={'#E1A32A'} />
+                                    <Icon4 name="arrow-trend-down" size={16} color={'#FF6F61'} />
                                     <Text style={{ color: priceHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - high to low</Text>
                                     {priceHighToLow && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
