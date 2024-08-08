@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { groceries } from '../utils/groceries';
 import StarRating from '../components/StarRating';
+import { restaurants } from '../utils/restaurants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -162,6 +163,54 @@ const Home = () => {
 
                                     <View style={{ padding: 10 }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
+                                            <StarRating rating={item.starRating} />
+                                        </View>
+                                        <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                                        </View>
+                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
+                                    </View>
+
+                                    <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                        <Icon3 name="add" size={20} color="#fff" />
+                                    </TouchableOpacity>
+
+                                </View>
+                            ))}
+                        </View>
+                    </ScrollView>
+                </View>
+
+                {/* Restaurants */}
+                <View style={{ marginTop: 12 }}>
+                    <View style={{ marginHorizontal: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Restaurants</Text>
+                        <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Restaurants')}>
+                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
+                            <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <Icon3 name="chevron-right" size={17} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView horizontal>
+                        <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                            {restaurants.map(item => (
+                                <View key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Icon3 name="favorite-border" size={18} color={'#019934'} />
+                                    </TouchableOpacity>
+
+                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image source={require('../assets/rice.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                        </View>
+                                    </View>
+
+                                    <View style={{ padding: 10 }}>
+                                        <View style={{ flexDirection: 'column', gap: 1 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
                                             <StarRating rating={item.starRating} />
                                         </View>
