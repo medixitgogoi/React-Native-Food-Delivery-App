@@ -184,7 +184,7 @@ const Home = () => {
 
                 {/* Restaurants */}
                 <View style={{ marginTop: 12 }}>
-                    <View style={{ marginHorizontal: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Restaurants</Text>
                         <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Restaurants')}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
@@ -211,7 +211,7 @@ const Home = () => {
 
                                     <View style={{ padding: 10 }}>
                                         <View style={{ flexDirection: 'column', gap: 1 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
                                             <StarRating rating={item.starRating} />
                                         </View>
                                         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
