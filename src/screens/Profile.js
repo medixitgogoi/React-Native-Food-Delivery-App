@@ -1,6 +1,6 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { background } from '../utils/colors'
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { background } from '../utils/colors';
 
 const Profile = () => {
     return (
@@ -15,6 +15,6 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default Profile;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
