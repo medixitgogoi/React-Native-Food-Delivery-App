@@ -5,7 +5,7 @@ export const restaurants = [
         price: '149',
         description: 'A delightful mix of rice, chicken, and vegetables stir-fried to perfection.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 3.1,
     },
     {
@@ -14,7 +14,7 @@ export const restaurants = [
         price: '129',
         description: 'Fragrant basmati rice cooked with mixed vegetables and mild spices.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.2,
     },
     {
@@ -23,7 +23,7 @@ export const restaurants = [
         price: '199',
         description: 'A deliciously spiced rice dish with marinated paneer and aromatic spices.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.5,
     },
     {
@@ -32,7 +32,7 @@ export const restaurants = [
         price: '139',
         description: 'Rice stir-fried with eggs and fresh vegetables for a quick, tasty meal.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.0,
     },
     {
@@ -41,7 +41,7 @@ export const restaurants = [
         price: '249',
         description: 'Rich and flavorful mutton biryani cooked with basmati rice and spices.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.8,
     },
     {
@@ -50,7 +50,7 @@ export const restaurants = [
         price: '129',
         description: 'A healthy mix of vegetables stir-fried with rice and light spices.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.1,
     },
     {
@@ -59,7 +59,7 @@ export const restaurants = [
         price: '229',
         description: 'A spicy, flavorful biryani made with tender chicken and aromatic basmati rice.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.7,
     },
     {
@@ -68,7 +68,7 @@ export const restaurants = [
         price: '119',
         description: 'Stir-fried noodles with fresh vegetables in a tangy sauce.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 3.9,
     },
     {
@@ -77,7 +77,7 @@ export const restaurants = [
         price: '159',
         description: 'Spicy Schezwan rice with tender chicken pieces and vegetables.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.3,
     },
     {
@@ -86,7 +86,7 @@ export const restaurants = [
         price: '149',
         description: 'Aromatic basmati rice cooked with fresh vegetables and spices.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.2,
     },
     {
@@ -95,7 +95,7 @@ export const restaurants = [
         price: '199',
         description: 'Rice stir-fried with juicy prawns and vegetables, seasoned perfectly.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.6,
     },
     {
@@ -104,7 +104,7 @@ export const restaurants = [
         price: '139',
         description: 'Crispy veg Manchurian balls served with flavorful fried rice.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.0,
     },
     {
@@ -113,7 +113,7 @@ export const restaurants = [
         price: '249',
         description: 'Basmati rice cooked with flavorful fish and spices in traditional style.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.4,
     },
     {
@@ -122,7 +122,7 @@ export const restaurants = [
         price: '99',
         description: 'Simple yet flavorful rice dish infused with the aroma of cumin seeds.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 3.8,
     },
     {
@@ -131,7 +131,7 @@ export const restaurants = [
         price: '179',
         description: 'Minced meat stir-fried with rice and a blend of spices for a hearty meal.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.5,
     },
     {
@@ -140,7 +140,7 @@ export const restaurants = [
         price: '129',
         description: 'Spicy and tangy fried rice mixed with a variety of fresh vegetables.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.0,
     },
     {
@@ -149,7 +149,7 @@ export const restaurants = [
         price: '189',
         description: 'Aromatic rice cooked with mushrooms and spices, perfect for veg lovers.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.2,
     },
     {
@@ -158,7 +158,7 @@ export const restaurants = [
         price: '219',
         description: 'Grilled chicken tikka served with spiced basmati rice in biryani style.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.7,
     },
     {
@@ -167,7 +167,7 @@ export const restaurants = [
         price: '159',
         description: 'Spicy chicken noodles stir-fried with fresh vegetables and Schezwan sauce.',
         image: '../assets/rice.png',
-        subCategory: 'non-veg',
+        subCategory: 'Non-veg',
         starRating: 4.3,
     },
     {
@@ -176,7 +176,7 @@ export const restaurants = [
         price: '149',
         description: 'Crispy paneer pieces stir-fried with rice and seasoned with light spices.',
         image: '../assets/rice.png',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.1,
     }
 ];

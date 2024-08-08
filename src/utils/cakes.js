@@ -14,7 +14,7 @@ export const cakes = [
         price: '699',
         description: 'Delicious red velvet cake with cream cheese frosting.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.7,
     },
     {
@@ -32,7 +32,7 @@ export const cakes = [
         price: '499',
         description: 'Light and refreshing pineapple flavored cake.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.0,
     },
     {
@@ -41,7 +41,7 @@ export const cakes = [
         price: '549',
         description: 'Delicious butterscotch cake with caramel drizzle.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.2,
     },
     {
@@ -50,7 +50,7 @@ export const cakes = [
         price: '749',
         description: 'Fresh fruit cake with layers of seasonal fruits.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.6,
     },
     {
@@ -59,7 +59,7 @@ export const cakes = [
         price: '499',
         description: 'Classic vanilla cake with buttercream frosting.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.1,
     },
     {
@@ -68,7 +68,7 @@ export const cakes = [
         price: '599',
         description: 'Delicious mango flavored cake with fresh mango slices.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.4,
     },
     {
@@ -86,7 +86,7 @@ export const cakes = [
         price: '599',
         description: 'Sweet strawberry cake with fresh strawberry topping.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.3,
     },
     {
@@ -95,7 +95,7 @@ export const cakes = [
         price: '549',
         description: 'Tangy lemon cake with a zesty lemon glaze.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.2,
     },
     {
@@ -104,7 +104,7 @@ export const cakes = [
         price: '699',
         description: 'Delicious blueberry cake with fresh blueberries.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.6,
     },
     {
@@ -122,7 +122,7 @@ export const cakes = [
         price: '549',
         description: 'Sweet banana cake with a caramel glaze.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.3,
     },
     {
@@ -131,7 +131,7 @@ export const cakes = [
         price: '599',
         description: 'Tropical coconut cake with coconut flakes.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.2,
     },
     {
@@ -149,7 +149,7 @@ export const cakes = [
         price: '699',
         description: 'Sweet raspberry cake with fresh raspberries.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.5,
     },
     {
@@ -176,7 +176,7 @@ export const cakes = [
         price: '699',
         description: 'Delicious almond cake with a marzipan frosting.',
         image: '../assets/cake.jpeg',
-        subCategory: 'veg',
+        subCategory: 'Veg',
         starRating: 4.6,
     },
 ];
