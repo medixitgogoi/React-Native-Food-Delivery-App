@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 const StarRating = ({ rating }) => {
-    
+
     const stars = [];
     const starSize = 12;
     const starColor = "#FFA41C";
@@ -18,7 +18,7 @@ const StarRating = ({ rating }) => {
     }
 
     return (
-        <View style={{ flexDirection: 'row', backgroundColor: '#ffecd0', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 4, alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', backgroundColor: '#ffecd0', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 4, alignItems: 'center', width: '50%' }}>
             {stars}
         </View>
     );
