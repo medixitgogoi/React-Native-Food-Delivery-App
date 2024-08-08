@@ -18,7 +18,7 @@ const StarRating = ({ rating }) => {
     }
 
     return (
-        <View style={{ flexDirection: 'row', backgroundColor: '#ffecd0', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 4, alignItems: 'center', width: '50%' }}>
+        <View style={{ flexDirection: 'row', backgroundColor: '#ffecd0', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 4, alignItems: 'center' }}>
             {stars}
         </View>
     );

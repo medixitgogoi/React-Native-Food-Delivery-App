@@ -212,16 +212,20 @@ const Home = () => {
                                     </View>
 
                                     <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'column', gap: 1 }}>
+                                        <View style={{ flexDirection: 'column', gap: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                            <StarRating rating={item.starRating} />
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                <StarRating rating={item.starRating} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                                    <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
                                         </View>
                                         <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
-
-                                            {item.subCategory === 'veg' ? (
+                                            {item.subCategory === 'Veg' ? (
                                                 <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                                     <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
-
                                                     </View>
                                                 </View>
                                             ) : (
@@ -231,7 +235,7 @@ const Home = () => {
                                             )}
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 5 }}>₹{item.price}</Text>
+                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
                                     </View>
 
                                     <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
@@ -256,6 +260,8 @@ const Home = () => {
                         </TouchableOpacity>
                     </View>
 
+                    {/* but the cards that are coming two in a row are rendered adjacent to each other. I want that there should be space between them just like justifyContent: 'spce-between' */}
+
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             {cakes.map(item => (
@@ -272,13 +278,19 @@ const Home = () => {
                                     </View>
 
                                     <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'column', gap: 1 }}>
+                                        <View style={{ flexDirection: 'column', gap: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                            <StarRating rating={item.starRating} />
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                <StarRating rating={item.starRating} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                                    <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
                                         </View>
-                                        <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
+                                        <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
 
-                                            {item.subCategory === 'veg' ? (
+                                            {item.subCategory === 'Veg' ? (
                                                 <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                                     <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
 
@@ -291,7 +303,7 @@ const Home = () => {
                                             )}
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 5 }}>₹{item.price}</Text>
+                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
                                     </View>
 
                                     <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>

@@ -181,7 +181,7 @@ const Groceries = () => {
                             onBlur={() => setIsSearchFocused(false)}
                         />
                     </View>
-                    <TouchableOpacity style={{ backgroundColor: lightGreen, borderRadius: 8, width: 38, height: 35, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={toggleSlider}>
+                    <TouchableOpacity style={{ backgroundColor: '#fff', borderRadius: 8, width: 38, height: 35, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={toggleSlider}>
                         <Icon4 name="sliders" size={16} color={backIconColor} />
                     </TouchableOpacity>
                 </View>
@@ -229,11 +229,10 @@ const Groceries = () => {
             </View>
 
             {/* Content */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth, paddingVertical: 6 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
                 {loading ? (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1, 1]}
-                        contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', margin: 0, paddingHorizontal: 10, paddingBottom: 90 }}
                         renderItem={() => {
                             return (
                                 <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
@@ -244,13 +243,22 @@ const Groceries = () => {
                                 </View>
                             )
                         }}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }} // Adds space between columns
+                        key={2}
                     />
                 ) : (
                     <FlatList
                         data={filteredNames}
                         renderItem={renderOrder}
                         keyExtractor={item => item.id.toString()}
-                        contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', margin: 0, paddingHorizontal: 10, paddingBottom: 90 }}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingVertical: 4 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
+                        key={2}
                     />
                 )}
             </View>
