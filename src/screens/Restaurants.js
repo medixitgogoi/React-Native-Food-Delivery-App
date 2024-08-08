@@ -54,7 +54,7 @@ const Restaurants = () => {
             setData(restaurants);
             setFilteredNames(restaurants);
             setLoading(false);
-        }, 1500); // Simulate loading delay
+        }, 1000);
     }, []);
 
     const toggleSlider = () => {
@@ -129,7 +129,7 @@ const Restaurants = () => {
 
                 <View style={{ padding: 10 }}>
                     <View style={{ flexDirection: 'column', gap: 3 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                             <StarRating rating={item.starRating} />
                             <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
@@ -172,24 +172,25 @@ const Restaurants = () => {
 
             {/* header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
-
                 {/* headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
                     <View style={{ paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
                         <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                             <Icon name="keyboard-arrow-left" size={23} color={backIconColor} />
                         </TouchableOpacity>
-                        <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', width: '83%', textTransform: 'uppercase' }}>Groceries</Text>
+                        <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', width: '83%', textTransform: 'uppercase' }}>Restaurants</Text>
                     </View>
                 </View>
 
                 {/* searchbar */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
-                        <Icon2 name="search" size={16} color={'#687889'} style={{ padding: 5 }} />
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
+                            <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
+                        </View>
                         <TextInput
-                            style={{ paddingVertical: 0, height: 35, color: '#000', fontWeight: '500', width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
-                            placeholder="Search Grocery"
+                            style={{ paddingVertical: 0, height: 35, color: '#000', fontWeight: '400', width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
+                            placeholder="Search for dishes, snacks or drinks"
                             placeholderTextColor="#a0abb7"
                             onChangeText={handleSearch}
                             value={search}
@@ -241,7 +242,6 @@ const Restaurants = () => {
                         </ScrollView>
                     )}
                 </Animated.View>
-
             </View>
 
             {/* Content */}

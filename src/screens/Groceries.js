@@ -170,10 +170,12 @@ const Groceries = () => {
                 {/* searchbar */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
-                        <Icon2 name="search" size={16} color={'#687889'} style={{ padding: 5 }} />
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
+                            <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
+                        </View>
                         <TextInput
-                            style={{ paddingVertical: 0, height: 35, color: '#000', fontWeight: '500', width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
-                            placeholder="Search Grocery"
+                            style={{ paddingVertical: 0, height: 35, color: '#000', fontWeight: '400', width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
+                            placeholder="Search for Apple, Banana or Orange"
                             placeholderTextColor="#a0abb7"
                             onChangeText={handleSearch}
                             value={search}

@@ -57,10 +57,12 @@ const Home = () => {
                 {/* searchbar and location */}
                 <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, paddingVertical: 5 }}>
                     <View style={{ width: '70%', borderColor: isSearchFocused ? '#3a9d43' : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
-                        <Icon2 name="search" size={16} color={'#687889'} style={{ padding: 5 }} />
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
+                            <Icon4 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
+                        </View>
                         <TextInput
-                            style={{ height: 40, color: '#000', fontWeight: '500', width: '87%' }}
-                            placeholder="Search Grocery"
+                            style={{ height: 38, color: '#000', fontWeight: '400', width: '88%' }}
+                            placeholder="Search your favorite food item"
                             placeholderTextColor="#a0abb7"
                             onChangeText={setSearch}
                             value={search}
