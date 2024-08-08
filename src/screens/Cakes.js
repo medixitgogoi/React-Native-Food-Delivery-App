@@ -32,7 +32,8 @@ const Cakes = () => {
     const [priceLowToHigh, setPriceLowToHigh] = useState(false);
     const [priceHighToLow, setPriceHighToLow] = useState(false);
     const [ratingHighToLow, setRatingHighToLow] = useState(false);
-    const [rated, setRated] = useState(false);
+    const [veg, setVeg] = useState(false);
+    const [nonVeg, setNonVeg] = useState(false);
 
     const [filteredNames, setFilteredNames] = useState([]);
 
@@ -88,9 +89,13 @@ const Cakes = () => {
         setRatingHighToLow(prev => !prev);
     };
 
-    const rateHandler = () => {
-        setRated(prev => !prev);
+    const vegHandler = () => {
+        setVeg(prev => !prev);
     };
+
+    const nonVegHandler = () => {
+        setNonVeg(prev => !prev);
+    }
 
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
@@ -211,14 +216,16 @@ const Cakes = () => {
                         <ScrollView horizontal>
                             <View style={{ width: '100%', flexDirection: 'row', gap: 8, alignItems: 'center' }}>
 
-                                <TouchableOpacity style={{ backgroundColor: priceLowToHigh ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: priceLowToHigh ? backIconColor : '', borderWidth: priceLowToHigh ? 0.4 : 0 }} onPress={priceLowToHighHandler}>
+                                <TouchableOpacity style={{ backgroundColor: priceLowToHigh ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceLowToHigh ? backIconColor : '', borderWidth: priceLowToHigh ? 0.4 : 0 }} onPress={priceLowToHighHandler}>
+                                    <Icon4 name="arrow-trend-up" size={16} color={'#E1A32A'} />
                                     <Text style={{ color: priceLowToHigh ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - low to high</Text>
                                     {priceLowToHigh && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: priceHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: priceHighToLow ? backIconColor : '', borderWidth: priceHighToLow ? 0.4 : 0 }} onPress={priceHighToLowHandler}>
+                                <TouchableOpacity style={{ backgroundColor: priceHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceHighToLow ? backIconColor : '', borderWidth: priceHighToLow ? 0.4 : 0 }} onPress={priceHighToLowHandler}>
+                                    <Icon4 name="arrow-trend-down" size={16} color={'#E1A32A'} />
                                     <Text style={{ color: priceHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - high to low</Text>
                                     {priceHighToLow && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
@@ -226,16 +233,30 @@ const Cakes = () => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
+                                    <Icon3 name="star" size={16} color={'#FFA41C'} />
                                     <Text style={{ color: ratingHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rating - high to low</Text>
                                     {ratingHighToLow && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: rated ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: rated ? backIconColor : '', borderWidth: rated ? 0.4 : 0 }} onPress={rateHandler}>
-                                    <Icon3 name="star" size={16} color={'#FFA41C'} />
-                                    <Text style={{ color: rated ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rated 4+</Text>
-                                    {rated && (
+                                <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }} onPress={vegHandler}>
+                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+                                        </View>
+                                    </View>
+                                    <Text style={{ color: veg ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Veg</Text>
+                                    {veg && (
+                                        <Icon5 name="close" size={16} color={'#cb202d'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{ backgroundColor: nonVeg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: nonVeg ? backIconColor : '', borderWidth: nonVeg ? 0.4 : 0 }} onPress={nonVegHandler}>
+                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                        <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                    </View>
+                                    <Text style={{ color: nonVeg ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Non-veg</Text>
+                                    {nonVeg && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
                                 </TouchableOpacity>
@@ -262,10 +283,10 @@ const Cakes = () => {
                             )
                         }}
                         numColumns={2}
+                        key={2}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90 }}
-                        columnWrapperStyle={{ justifyContent: 'space-between' }} // Adds space between columns
-                        key={2}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
                     />
                 ) : (
                     <FlatList
@@ -286,4 +307,4 @@ const Cakes = () => {
 
 export default Cakes;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
