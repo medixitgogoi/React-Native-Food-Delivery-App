@@ -170,7 +170,7 @@ const Groceries = () => {
                 {/* searchbar */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 35, width: 23, }}>
                             <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                         </View>
                         <TextInput
@@ -257,10 +257,10 @@ const Groceries = () => {
                         renderItem={renderOrder}
                         keyExtractor={item => item.id.toString()}
                         numColumns={2}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingVertical: 4 }}
-                        columnWrapperStyle={{ justifyContent: 'space-between' }}
                         key={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
                     />
                 )}
             </View>
