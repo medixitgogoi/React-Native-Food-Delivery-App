@@ -8,9 +8,12 @@ const StackNavigation = () => {
 
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
 
+    // take the value from redux
+    const cartItemCount = 0;
+
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? <GuestStackNavigator /> : <AuthStackNavigator initialRoute="Login" />}
+            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
         </NavigationContainer>
     );
 }

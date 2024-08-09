@@ -50,7 +50,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                     if (route.name === 'Home') {
                         iconName = 'home';
                     } else if (route.name === 'Cart') {
-                        iconName = 'cart';
+                        iconName = 'shopping';
                     } else if (route.name === 'Profile') {
                         iconName = 'account';
                     } else if (route.name === 'Wishlist') {
@@ -89,9 +89,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
     );
 };
 
-const cartItemCount = 2;
-
-const GuestStackNavigator = () => {
+const GuestStackNavigator = ({ cartItemCount }) => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="BottomTabs">
             <Stack.Screen name="BottomTabs">
