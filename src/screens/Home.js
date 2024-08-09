@@ -70,6 +70,7 @@ const Home = () => {
                             onBlur={() => setIsSearchFocused(false)}
                         />
                     </View>
+
                     <View style={{ width: '29%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Icon3 name="location-pin" size={30} color={'#cb202d'} />
                         <TouchableOpacity style={{ width: '70%', flexDirection: 'column' }}>
@@ -80,6 +81,7 @@ const Home = () => {
                             <Text style={{ color: '#768697', fontWeight: '600', fontSize: responsiveFontSize(1.5) }}>Meghalaya</Text>
                         </TouchableOpacity>
                     </View>
+
                 </View>
 
             </LinearGradient>
@@ -145,7 +147,7 @@ const Home = () => {
                         <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Groceries')}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
                             <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon3 name="chevron-right" size={17} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -153,7 +155,7 @@ const Home = () => {
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             {groceries.map(item => (
-                                <View key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon3 name="favorite-border" size={18} color={'#019934'} />
@@ -180,7 +182,7 @@ const Home = () => {
                                         <Icon3 name="add" size={20} color="#fff" />
                                     </TouchableOpacity>
 
-                                </View>
+                                </TouchableOpacity>
                             ))}
                         </View>
                     </ScrollView>
@@ -193,7 +195,7 @@ const Home = () => {
                         <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Restaurants')}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
                             <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon3 name="chevron-right" size={17} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -201,7 +203,7 @@ const Home = () => {
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             {restaurants.map(item => (
-                                <View key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon3 name="favorite-border" size={18} color={'#019934'} />
@@ -244,7 +246,7 @@ const Home = () => {
                                         <Icon3 name="add" size={20} color="#fff" />
                                     </TouchableOpacity>
 
-                                </View>
+                                </TouchableOpacity>
                             ))}
                         </View>
                     </ScrollView>
@@ -257,7 +259,7 @@ const Home = () => {
                         <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Cakes')}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
                             <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon3 name="chevron-right" size={17} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -267,7 +269,7 @@ const Home = () => {
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             {cakes.map(item => (
-                                <View key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon3 name="favorite-border" size={18} color={'#019934'} />
@@ -312,7 +314,7 @@ const Home = () => {
                                         <Icon3 name="add" size={20} color="#fff" />
                                     </TouchableOpacity>
 
-                                </View>
+                                </TouchableOpacity>
                             ))}
                         </View>
                     </ScrollView>

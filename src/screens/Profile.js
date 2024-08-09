@@ -1,16 +1,16 @@
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { background } from '../utils/colors';
+import { background, darkGreen } from '../utils/colors';
 
 const Profile = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={background}
+                backgroundColor={darkGreen}
                 barStyle="dark-content"
             />
-            <Text></Text>
+            <Text style={{ color: '#000' }}>Profile</Text>
         </SafeAreaView>
     )
 }

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 const ProductDetails = () => {
     return (
         <View>
-            <Text>ProductDetails</Text>
+            <Text style={{ color: '#000' }}>ProductDetails</Text>
         </View>
     )
 }
