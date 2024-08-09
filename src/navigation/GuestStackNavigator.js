@@ -11,6 +11,8 @@ import Cakes from '../screens/Cakes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Wishlist from '../screens/Wishlist';
 import SearchScreen from '../screens/SearchScreen';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { backIconColor } from '../utils/colors';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,13 +27,14 @@ const HomeStack = () => (
     </Stack.Navigator>
 );
 
+// not in use
 const CartStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Cart" component={Cart} />
         {/* Add other screens related to Cart here as needed */}
     </Stack.Navigator>
 );
-
+// not in use
 const ProfileStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Profile" component={Profile} />
@@ -49,7 +52,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                     if (route.name === 'HomeStack') {
                         iconName = 'home';
                     } else if (route.name === 'Cart') {
-                        iconName = 'cart';
+                        iconName = 'shopping';
                     } else if (route.name === 'Profile') {
                         iconName = 'account';
                     } else if (route.name === 'Wishlist') {
@@ -71,14 +74,14 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                         return <Icon name={iconName} size={size} color={color} />;
                     }
                 },
-                tabBarActiveTintColor: '#5EC467',
-                tabBarInactiveTintColor: '#b5b9bf',
+                tabBarActiveTintColor: backIconColor,
+                tabBarInactiveTintColor: '#000',
                 headerShown: false,
             })}
         >
             <Tab.Screen name="HomeStack" component={HomeStack} />
             <Tab.Screen name="Cart" component={Cart} />
-            <Tab.Screen name="Wishlist" component={Wishlist} />
+            <Tab.Screen name="Wishlist" component={Wishlist} options={{ tabBarBadge: 3 }} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
     );
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
         right: -6,
         top: -3,
         backgroundColor: '#ff0000',
-        borderRadius: 6,
+        borderRadius: 5,
         paddingHorizontal: 5,
         paddingVertical: 2,
         justifyContent: 'center',
@@ -112,8 +115,8 @@ const styles = StyleSheet.create({
     },
     badgeText: {
         color: '#fff',
-        fontSize: 10,
-        fontWeight: 'bold',
+        fontSize: responsiveFontSize(1.2),
+        fontWeight: '600',
     },
 });
 
