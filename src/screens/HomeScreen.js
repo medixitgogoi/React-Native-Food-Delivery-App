@@ -24,7 +24,7 @@ const Home = () => {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}

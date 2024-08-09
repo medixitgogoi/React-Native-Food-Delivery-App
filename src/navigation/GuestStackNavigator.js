@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../screens/Home';
+import HomeScreen from '../screens/HomeScreen';
 import Cart from '../screens/Cart';
 import ProductDetails from '../screens/ProductDetails';
 import Profile from '../screens/Profile';
@@ -12,14 +12,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Wishlist from '../screens/Wishlist';
 import SearchScreen from '../screens/SearchScreen';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { backIconColor } from '../utils/colors';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const HomeStack = () => (
+const Home = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="Groceries" component={Groceries} />
         <Stack.Screen name="Restaurants" component={Restaurants} />
         <Stack.Screen name="Cakes" component={Cakes} />
@@ -27,14 +26,13 @@ const HomeStack = () => (
     </Stack.Navigator>
 );
 
-// not in use
 const CartStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Cart" component={Cart} />
         {/* Add other screens related to Cart here as needed */}
     </Stack.Navigator>
 );
-// not in use
+
 const ProfileStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Profile" component={Profile} />
@@ -49,39 +47,43 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 tabBarIcon: ({ color, size }) => {
                     let iconName;
 
-                    if (route.name === 'HomeStack') {
+                    if (route.name === 'Home') {
                         iconName = 'home';
                     } else if (route.name === 'Cart') {
-                        iconName = 'shopping';
+                        iconName = 'cart';
                     } else if (route.name === 'Profile') {
                         iconName = 'account';
                     } else if (route.name === 'Wishlist') {
                         iconName = 'heart';
                     }
 
-                    if (route.name === 'Cart') {
-                        return (
-                            <View>
-                                <Icon name={iconName} size={size} color={color} />
-                                {/* {cartItemCount > 0 && ( */}
+                    return (
+                        <View style={styles.iconContainer}>
+                            <Icon name={iconName} size={22} color={color} />
+                            {route.name === 'Cart' && cartItemCount > 0 && (
                                 <View style={styles.badge}>
-                                    <Text style={styles.badgeText}>3</Text>
+                                    <Text style={styles.badgeText}>{cartItemCount}</Text>
                                 </View>
-                                {/* )} */}
-                            </View>
-                        );
-                    } else {
-                        return <Icon name={iconName} size={size} color={color} />;
-                    }
+                            )}
+                        </View>
+                    );
                 },
-                tabBarActiveTintColor: backIconColor,
+                tabBarLabel: ({ focused, color }) => (
+                    <View style={styles.tabLabelContainer}>
+                        <Text style={[styles.tabLabel, { color }]}>{route.name}</Text>
+                    </View>
+                ),
+                tabBarActiveTintColor: '#318538',
                 tabBarInactiveTintColor: '#000',
                 headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: '#f8fcf7',
+                },
             })}
         >
-            <Tab.Screen name="HomeStack" component={HomeStack} />
+            <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Cart" component={Cart} />
-            <Tab.Screen name="Wishlist" component={Wishlist} options={{ tabBarBadge: 3 }} />
+            <Tab.Screen name="Wishlist" component={Wishlist} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
     );
@@ -101,12 +103,25 @@ const GuestStackNavigator = ({ cartItemCount }) => {
 };
 
 const styles = StyleSheet.create({
+    iconContainer: {
+        alignItems: 'center',
+    },
+    tabLabelContainer: {
+        marginTop: -10, // Adjust this value to minimize the gap
+        alignItems: 'center',
+        marginBottom: 2,
+    },
+    tabLabel: {
+        fontSize: responsiveFontSize(1.4), // Adjust font size as needed
+        marginBottom: 3, // Ensure there's no extra margin below the text
+        fontWeight: '500'
+    },
     badge: {
         position: 'absolute',
         right: -6,
         top: -3,
         backgroundColor: '#ff0000',
-        borderRadius: 5,
+        borderRadius: 6,
         paddingHorizontal: 5,
         paddingVertical: 2,
         justifyContent: 'center',
@@ -115,8 +130,8 @@ const styles = StyleSheet.create({
     },
     badgeText: {
         color: '#fff',
-        fontSize: responsiveFontSize(1.2),
-        fontWeight: '600',
+        fontSize: 10,
+        fontWeight: 'bold',
     },
 });
 
