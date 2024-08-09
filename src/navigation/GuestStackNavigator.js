@@ -89,7 +89,9 @@ const BottomTabNavigator = ({ cartItemCount }) => {
     );
 };
 
-const GuestStackNavigator = ({ cartItemCount }) => {
+const cartItemCount = 2;
+
+const GuestStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="BottomTabs">
             <Stack.Screen name="BottomTabs">
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     tabLabelContainer: {
-        marginTop: -10, // Adjust this value to minimize the gap
+        marginTop: -8, // Adjust this value to minimize the gap
         alignItems: 'center',
         marginBottom: 2,
     },
