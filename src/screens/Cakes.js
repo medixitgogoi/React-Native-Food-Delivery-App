@@ -285,7 +285,7 @@ const Cakes = () => {
                         numColumns={2}
                         key={2}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90 }}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
                         columnWrapperStyle={{ justifyContent: 'space-between' }}
                     />
                 ) : (

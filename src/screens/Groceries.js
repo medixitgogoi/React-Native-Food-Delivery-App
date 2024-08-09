@@ -250,7 +250,7 @@ const Groceries = () => {
                         }}
                         numColumns={2}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90 }}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
                         columnWrapperStyle={{ justifyContent: 'space-between' }} // Adds space between columns
                         key={2}
                     />
