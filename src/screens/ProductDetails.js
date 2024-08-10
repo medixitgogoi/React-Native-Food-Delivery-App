@@ -7,9 +7,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import StarRating from '../components/StarRating';
 import StarRatingDetails from '../components/StarRatingDetails';
-import { reporter } from '../../metro.config';
 
 const ProductDetails = () => {
 
@@ -45,6 +43,7 @@ const ProductDetails = () => {
             {/* Details */}
             <View style={{ paddingHorizontal: 10, marginTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
                 <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>Fresh Orange</Text>
+                
                 <StarRatingDetails rating={4} />
 
                 {/* price */}
@@ -67,17 +66,19 @@ const ProductDetails = () => {
                 {/* details */}
                 <View style={{ marginTop: 12, flexDirection: 'column', gap: 8 }}>
                     <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600' }}>Product Details :</Text>
-                    <Text style={{ color: '#a6a6a6', fontWeight: '500', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab aliquam inventore perferendis nulla facere, dolores harum qui rerum facilis alias similique ratione tenetur molestiae nesciunt ducimus explicabo commodi odio error?</Text>
+                    <Text style={{ color: '#c0c0c0', fontWeight: '500', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab aliquam inventore perferendis nulla facere, dolores harum qui rerum facilis alias similique ratione tenetur molestiae nesciunt ducimus explicabo commodi odio error?</Text>
                 </View>
             </View>
 
             {/* total price and add to cart */}
-            <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 5, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12 }}>
-                <View style={{ width: '40%', height: '100%' }}>
-
+            <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 5, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
+                <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
+                    <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹1000</Text>
                 </View>
+                
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 20, height: 40, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
                         <Icon name="add-shopping-cart" size={18} color={'#fff'} />
                     </TouchableOpacity>

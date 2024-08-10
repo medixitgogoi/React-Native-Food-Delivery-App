@@ -8,6 +8,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 2,
@@ -18,6 +19,7 @@ export const groceries = [
         subCategory: 'Dairy',
         starRating: 4,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 3,
@@ -28,6 +30,7 @@ export const groceries = [
         subCategory: 'Pulses',
         starRating: 5,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 4,
@@ -38,6 +41,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 3,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 5,
@@ -48,6 +52,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 6,
@@ -58,6 +63,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 7,
@@ -68,6 +74,7 @@ export const groceries = [
         subCategory: 'Cereals',
         starRating: 4,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 8,
@@ -78,6 +85,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 9,
@@ -88,6 +96,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 5,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 10,
@@ -98,6 +107,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4.5,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 11,
@@ -108,6 +118,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 12,
@@ -118,6 +129,7 @@ export const groceries = [
         subCategory: 'Meat',
         starRating: 3,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 13,
@@ -128,6 +140,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 5,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 14,
@@ -138,6 +151,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 3.1,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 15,
@@ -148,6 +162,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 3,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 16,
@@ -158,6 +173,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 5,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 17,
@@ -168,6 +184,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 5,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 18,
@@ -178,6 +195,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'piece',
+        type: 'grocery',
     },
     {
         id: 19,
@@ -188,6 +206,7 @@ export const groceries = [
         subCategory: 'Fruit',
         starRating: 4,
         unit: 'kg',
+        type: 'grocery',
     },
     {
         id: 20,
@@ -198,5 +217,6 @@ export const groceries = [
         subCategory: 'Vegetable',
         starRating: 4,
         unit: 'kg',
+        type: 'grocery',
     },
 ];
