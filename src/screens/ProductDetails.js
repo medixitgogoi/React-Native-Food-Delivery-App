@@ -53,7 +53,7 @@ const ProductDetails = () => {
                         <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹250</Text>
                         <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                         <TouchableOpacity>
                             <Icon3 name="circle-minus" size={30} color={backIconColor} />
                         </TouchableOpacity>
@@ -65,9 +65,22 @@ const ProductDetails = () => {
                 </View>
 
                 {/* details */}
-                <View style={{ marginTop: 15 , flexDirection: 'column', gap: 8}}>
+                <View style={{ marginTop: 12, flexDirection: 'column', gap: 8 }}>
                     <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600' }}>Product Details :</Text>
                     <Text style={{ color: '#a6a6a6', fontWeight: '500', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab aliquam inventore perferendis nulla facere, dolores harum qui rerum facilis alias similique ratione tenetur molestiae nesciunt ducimus explicabo commodi odio error?</Text>
+                </View>
+            </View>
+
+            {/* total price and add to cart */}
+            <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 5, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12 }}>
+                <View style={{ width: '40%', height: '100%' }}>
+
+                </View>
+                <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <TouchableOpacity style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 20, height: 40, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
+                        <Icon name="add-shopping-cart" size={18} color={'#fff'} />
+                    </TouchableOpacity>
                 </View>
             </View>
 
