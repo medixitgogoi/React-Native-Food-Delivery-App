@@ -173,9 +173,12 @@ const Home = () => {
                                             <StarRating rating={item.starRating} />
                                         </View>
                                         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
-                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/{item.unit}</Text>
+                                        </View>
                                     </View>
 
                                     <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
@@ -237,9 +240,9 @@ const Home = () => {
                                                     <Icon5 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                                 </View>
                                             )}
-                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
                                     </View>
 
                                     <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
@@ -263,8 +266,6 @@ const Home = () => {
                             </View>
                         </TouchableOpacity>
                     </View>
-
-                    {/* but the cards that are coming two in a row are rendered adjacent to each other. I want that there should be space between them just like justifyContent: 'spce-between' */}
 
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
@@ -305,9 +306,9 @@ const Home = () => {
                                                     <Icon5 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                                 </View>
                                             )}
-                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
                                     </View>
 
                                     <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
