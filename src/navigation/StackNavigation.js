@@ -8,7 +8,6 @@ const StackNavigation = () => {
 
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
 
-    // take the value from redux
     const cartItemCount = 0;
 
     return (

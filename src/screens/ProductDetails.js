@@ -18,6 +18,8 @@ const ProductDetails = () => {
 
     const navigation = useNavigation();
 
+    const relatedProducts = groceries.filter(item => item.id < 5);
+
     const renderOrder = ({ item }) => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
@@ -47,18 +49,18 @@ const ProductDetails = () => {
                 </View>
 
             </TouchableOpacity>
-)
+        )
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 75 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
                 backgroundColor={'#dff1dd'}
                 barStyle="dark-content"
             />
 
-            {/* Header */}
+            {/* header */}
             <View style={{ paddingHorizontal: 10, backgroundColor: '#dff1dd', height: '40%', width: '100%', flexDirection: 'column', paddingVertical: 8, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '13%' }}>
                     <TouchableOpacity style={{ width: 32, height: 32, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
@@ -104,16 +106,16 @@ const ProductDetails = () => {
                     {/* product details */}
                     <View style={{ marginTop: 12, flexDirection: 'column', gap: 5 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
-                        <Text style={{ color: '#c0c0c0', fontWeight: '500', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab aliquam inventore perferendis nulla facere, dolores harum qui rerum facilis alias similique ratione tenetur molestiae nesciunt ducimus explicabo commodi odio error?</Text>
+                        <Text style={{ color: '#a0a0a0', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab aliquam inventore perferendis nulla facere, dolores harum qui rerum facilis alias similique ratione tenetur molestiae nesciunt ducimus explicabo commodi odio error?</Text>
                     </View>
 
                     {/* related products */}
-                    <View style={{ flexDirection: 'column', gap: 5, marginTop: 12, }}>
-                        <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>Related Products :</Text>
+                    <View style={{ flexDirection: 'column', gap: 5, marginTop: 12, marginBottom: 80 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {groceries.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                            {relatedProducts.map(item => (
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
@@ -148,7 +150,7 @@ const ProductDetails = () => {
             </ScrollView>
 
             {/* total price and add to cart */}
-            <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 5, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
+            <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
                 <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
                     <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹1000</Text>
