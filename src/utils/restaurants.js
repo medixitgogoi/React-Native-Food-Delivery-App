@@ -7,6 +7,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 3.1,
+        type: 'restaurant',
     },
     {
         id: 2,
@@ -16,6 +17,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.2,
+        type: 'restaurant',
     },
     {
         id: 3,
@@ -25,6 +27,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.5,
+        type: 'restaurant',
     },
     {
         id: 4,
@@ -34,6 +37,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.0,
+        type: 'restaurant',
     },
     {
         id: 5,
@@ -43,6 +47,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.8,
+        type: 'restaurant',
     },
     {
         id: 6,
@@ -52,6 +57,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.1,
+        type: 'restaurant',
     },
     {
         id: 7,
@@ -61,6 +67,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.7,
+        type: 'restaurant',
     },
     {
         id: 8,
@@ -70,6 +77,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 3.9,
+        type: 'restaurant',
     },
     {
         id: 9,
@@ -79,6 +87,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.3,
+        type: 'restaurant',
     },
     {
         id: 10,
@@ -88,6 +97,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.2,
+        type: 'restaurant',
     },
     {
         id: 11,
@@ -97,6 +107,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.6,
+        type: 'restaurant',
     },
     {
         id: 12,
@@ -106,6 +117,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.0,
+        type: 'restaurant',
     },
     {
         id: 13,
@@ -115,6 +127,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.4,
+        type: 'restaurant',
     },
     {
         id: 14,
@@ -124,6 +137,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 3.8,
+        type: 'restaurant',
     },
     {
         id: 15,
@@ -133,6 +147,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.5,
+        type: 'restaurant',
     },
     {
         id: 16,
@@ -142,6 +157,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.0,
+        type: 'restaurant',
     },
     {
         id: 17,
@@ -151,6 +167,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.2,
+        type: 'restaurant',
     },
     {
         id: 18,
@@ -160,6 +177,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.7,
+        type: 'restaurant',
     },
     {
         id: 19,
@@ -169,6 +187,7 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Non-veg',
         starRating: 4.3,
+        type: 'restaurant',
     },
     {
         id: 20,
@@ -178,5 +197,6 @@ export const restaurants = [
         image: '../assets/rice.png',
         subCategory: 'Veg',
         starRating: 4.1,
+        type: 'restaurant',
     }
 ];
