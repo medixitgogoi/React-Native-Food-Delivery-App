@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 const StarRatingDetails = ({ rating }) => {
@@ -18,12 +18,10 @@ const StarRatingDetails = ({ rating }) => {
     }
 
     return (
-        <View style={{ flexDirection: 'row', paddingVertical: 2, paddingRight: 5, borderRadius: 4, alignItems: 'center' , gap: 3}}>
+        <View style={{ flexDirection: 'row', paddingVertical: 2, paddingRight: 5, borderRadius: 4, alignItems: 'center', gap: 3 }}>
             {stars}
         </View>
     );
 }
 
 export default StarRatingDetails;
-
-const styles = StyleSheet.create({});

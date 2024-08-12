@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, modalBackColor, offWhite } from '../utils/colors';
@@ -10,8 +11,9 @@ import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import StarRatingDetails from '../components/StarRatingDetails';
 import { groceries } from '../utils/groceries';
+import { restaurants } from '../utils/restaurants';
+import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
-import { useEffect, useState } from 'react';
 import Modal from 'react-native-modal';
 import { RadioButton } from 'react-native-paper';
 
@@ -19,7 +21,8 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const ProductDetails = ({ route }) => {
 
-    console.log('route', route?.params?.data);
+    const product = route?.params?.data;
+    console.log('product', product);
 
     const navigation = useNavigation();
 
@@ -83,21 +86,27 @@ const ProductDetails = ({ route }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '87%' }}>
-                    <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
+                    {product.type === 'grocery' ? (
+                        <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
+                    ) : product.type === 'restaurant' ? (
+                        <Image source={require('../assets/rice.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
+                    ) : (
+                        <Image source={require('../assets/cake.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
+                    )}
                 </View>
             </View>
 
             {/* Details */}
             <ScrollView>
                 <View style={{ paddingHorizontal: 10, paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
-                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>Fresh Orange</Text>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
 
-                    <StarRatingDetails rating={4} />
+                    <StarRating rating={product.starRating} />
 
                     {/* price */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                            <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹250</Text>
+                            <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹{product.price}</Text>
                             {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
                         </View>
                         {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -114,7 +123,7 @@ const ProductDetails = ({ route }) => {
                     {/* product details */}
                     <View style={{ marginTop: 12, flexDirection: 'column', gap: 5 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
-                        <Text style={{ color: '#a0a0a0', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab aliquam inventore perferendis nulla facere, dolores harum qui rerum facilis alias similique ratione tenetur molestiae nesciunt ducimus explicabo commodi odio error?</Text>
+                        <Text style={{ color: '#a0a0a0', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>{product.description}</Text>
                     </View>
 
                     {/* related products */}
