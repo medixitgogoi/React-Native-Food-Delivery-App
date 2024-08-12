@@ -18,6 +18,38 @@ const ProductDetails = () => {
 
     const navigation = useNavigation();
 
+    const renderOrder = ({ item }) => {
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+                <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name="favorite-border" size={18} color={'#019934'} />
+                </TouchableOpacity>
+
+                <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                    <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                    </View>
+                </View>
+
+                <View style={{ padding: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
+                        <StarRating rating={item.starRating} />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/{item.unit}</Text>
+                    </View>
+                </View>
+
+            </TouchableOpacity>
+)
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 75 }}>
             <StatusBar
