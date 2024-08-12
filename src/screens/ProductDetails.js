@@ -26,7 +26,9 @@ const ProductDetails = ({ route }) => {
 
     const navigation = useNavigation();
 
-    const relatedProducts = groceries.filter(item => item.id < 5);
+    const relatedGroceryProducts = groceries.filter(item => item.id < 5);
+    const relatedRestaurantProducts = restaurants.filter(item => item.id < 5);
+    const relatedCakeProducts = cakes.filter(item => item.id < 5);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [checked, setChecked] = useState('kg');
@@ -67,7 +69,7 @@ const ProductDetails = ({ route }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
-                backgroundColor={modalVisible ? "#818181" : '#dff1dd'}
+                backgroundColor={modalVisible ? "#747474" : '#dff1dd'}
                 barStyle="dark-content"
             />
 
@@ -139,9 +141,9 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* product details */}
-                    <View style={{ marginTop: 12, flexDirection: 'column', gap: 5 }}>
+                    <View style={{ marginTop: 12, flexDirection: 'column', gap: 4 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
-                        <Text style={{ color: '#a0a0a0', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>{product.description}</Text>
+                        <Text style={{ color: '#898989', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(2) }}>{product.description}</Text>
                     </View>
 
                     {/* related products */}
@@ -149,7 +151,7 @@ const ProductDetails = ({ route }) => {
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                            {relatedProducts.map(item => (
+                            {product.type === 'grocery' && relatedGroceryProducts.map(item => (
                                 <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -175,6 +177,102 @@ const ProductDetails = ({ route }) => {
                                             <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/{item.unit}</Text>
                                         </View>
                                     </View>
+
+                                </TouchableOpacity>
+                            ))}
+
+                            {product.type === 'restaurant' && relatedRestaurantProducts.map(item => (
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Icon name="favorite-border" size={18} color={'#019934'} />
+                                    </TouchableOpacity>
+
+                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image source={require('../assets/rice.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                        </View>
+                                    </View>
+
+                                    <View style={{ padding: 10 }}>
+                                        <View style={{ flexDirection: 'column', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                <StarRating rating={item.starRating} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                                    <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
+                                            {item.subCategory === 'Veg' ? (
+                                                <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+                                                    </View>
+                                                </View>
+                                            ) : (
+                                                <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                    <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            )}
+                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+                                        </View>
+                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                    </View>
+
+                                    {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                        <Icon3 name="add" size={20} color="#fff" />
+                                    </TouchableOpacity> */}
+
+                                </TouchableOpacity>
+                            ))}
+
+                            {product.type === 'cake' && relatedCakeProducts.map(item => (
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Icon name="favorite-border" size={18} color={'#019934'} />
+                                    </TouchableOpacity>
+
+                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image source={require('../assets/cake.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                        </View>
+                                    </View>
+
+                                    <View style={{ padding: 10 }}>
+                                        <View style={{ flexDirection: 'column', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                <StarRating rating={item.starRating} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                                    <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
+
+                                            {item.subCategory === 'Veg' ? (
+                                                <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+
+                                                    </View>
+                                                </View>
+                                            ) : (
+                                                <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                    <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            )}
+                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+                                        </View>
+                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                    </View>
+
+                                    {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                        <Icon3 name="add" size={20} color="#fff" />
+                                    </TouchableOpacity> */}
 
                                 </TouchableOpacity>
                             ))}
@@ -218,13 +316,13 @@ const ProductDetails = ({ route }) => {
                     </TouchableOpacity>
 
                     {/* unit */}
-                    <View style={{ backgroundColor: modalBackColor, borderTopLeftRadius: 15, borderTopRightRadius: 15, elevation: 1, paddingHorizontal: 14, paddingVertical: 8 }}>
+                    <View style={{ backgroundColor: modalBackColor, borderTopLeftRadius: 17, borderTopRightRadius: 17, elevation: 1, paddingHorizontal: 14, paddingVertical: 8 }}>
                         {/* Headline */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginBottom: 15, marginTop: 5 }}>
                             <Text style={{ textAlign: 'center', color: '#383838', fontWeight: '600', fontSize: responsiveFontSize(2.2), }}>Fill up the details below</Text>
                         </View>
 
-                        <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderRadius: 12, paddingHorizontal: 15, paddingVertical: 12, gap: 3 }}>
+                        <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderRadius: 14, paddingHorizontal: 15, paddingVertical: 12, gap: 3 }}>
                             <Text style={{ color: '#517c84', fontWeight: '500', fontSize: responsiveFontSize(2.3), marginBottom: 4 }}>Select Unit :</Text>
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>

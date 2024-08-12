@@ -55,7 +55,7 @@ const Cakes = () => {
             setData(cakes);
             setFilteredNames(cakes);
             setLoading(false);
-        }, 1000);
+        }, 800);
     }, []);
 
     const toggleSlider = () => {

@@ -54,7 +54,7 @@ const Groceries = () => {
             setData(groceries);
             setFilteredNames(groceries);
             setLoading(false);
-        }, 1000); // Simulate loading delay
+        }, 700); // Simulate loading delay
     }, []);
 
     const toggleSlider = () => {

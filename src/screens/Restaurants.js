@@ -55,7 +55,7 @@ const Restaurants = () => {
             setData(restaurants);
             setFilteredNames(restaurants);
             setLoading(false);
-        }, 1000);
+        }, 600);
     }, []);
 
     const toggleSlider = () => {
