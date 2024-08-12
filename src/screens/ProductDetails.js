@@ -1,16 +1,18 @@
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
+import { background, backIconColor, darkGreen, lightGreen, modalBackColor, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import StarRatingDetails from '../components/StarRatingDetails';
 import { groceries } from '../utils/groceries';
 import StarRating from '../components/StarRating';
 import { useEffect, useState } from 'react';
+import Modal from 'react-native-modal';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -19,6 +21,8 @@ const ProductDetails = () => {
     const navigation = useNavigation();
 
     const relatedProducts = groceries.filter(item => item.id < 5);
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     const renderOrder = ({ item }) => {
         return (
@@ -56,7 +60,7 @@ const ProductDetails = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
-                backgroundColor={'#dff1dd'}
+                backgroundColor={modalVisible ? "#818181" : '#dff1dd'}
                 barStyle="dark-content"
             />
 
@@ -90,13 +94,13 @@ const ProductDetails = () => {
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹250</Text>
-                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text>
+                            {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <TouchableOpacity>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                            <Text style={{ color: '#8f8f8f', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>1 KG</Text>
+                            <Text style={{ color: '#8f8f8f', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>1</Text>
                             <TouchableOpacity>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -157,12 +161,40 @@ const ProductDetails = () => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity onPress={() => setModalVisible(true)} style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
                         <Icon name="add-shopping-cart" size={18} color={'#fff'} />
                     </TouchableOpacity>
                 </View>
             </View>
+
+            <Modal
+                isVisible={modalVisible}
+                onBackdropPress={() => setModalVisible(false)}
+                onSwipeComplete={() => setModalVisible(false)}
+                onRequestClose={() => setModalVisible(false)}
+                animationType="slide"
+                swipeDirection={['down']}
+                backdropOpacity={0.5}
+                style={{ justifyContent: 'flex-end', margin: 0, }}
+            >
+
+                <View style={{ width: "100%", height: '100%', justifyContent: 'flex-end' }}>
+
+                    {/* Close Button */}
+                    <TouchableOpacity style={{ alignSelf: 'center', backgroundColor: '#000', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: 35, height: 35, borderRadius: 50, marginBottom: 10 }} onPress={() => setModalVisible(false)}>
+                        <Icon5 name="close" size={20} style={{ color: '#fff' }} />
+                    </TouchableOpacity>
+
+                    <View style={{ backgroundColor: modalBackColor, borderTopLeftRadius: 15, borderTopRightRadius: 15, elevation: 1, paddingHorizontal: 14, paddingVertical: 8 }}>
+                        {/* Headline */}
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginBottom: 10, marginBottom: 15 }}>
+                            <Text style={{ textAlign: 'center', color: '#383838', fontWeight: '600', fontSize: responsiveFontSize(2.2), }}>Fill up the details below</Text>
+                        </View>
+                        
+                    </View>
+                </View>
+            </Modal>
 
         </SafeAreaView>
     )

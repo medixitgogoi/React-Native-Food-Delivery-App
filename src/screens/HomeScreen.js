@@ -181,9 +181,9 @@ const Home = () => {
                                         </View>
                                     </View>
 
-                                    <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                    {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
                                         <Icon3 name="add" size={20} color="#fff" />
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> */}
 
                                 </TouchableOpacity>
                             ))}
@@ -245,9 +245,9 @@ const Home = () => {
                                         <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
                                     </View>
 
-                                    <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                    {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
                                         <Icon3 name="add" size={20} color="#fff" />
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> */}
 
                                 </TouchableOpacity>
                             ))}
@@ -311,9 +311,9 @@ const Home = () => {
                                         <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
                                     </View>
 
-                                    <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+                                    {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
                                         <Icon3 name="add" size={20} color="#fff" />
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> */}
 
                                 </TouchableOpacity>
                             ))}
