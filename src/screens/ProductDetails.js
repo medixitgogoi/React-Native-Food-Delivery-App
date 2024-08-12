@@ -5,7 +5,7 @@ import { background, backIconColor, darkGreen, lightGreen, modalBackColor, offWh
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/dist/FontAwesome5';
+import Icon2 from 'react-native-vector-icons/dist/AntDesign';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
@@ -98,10 +98,28 @@ const ProductDetails = ({ route }) => {
 
             {/* Details */}
             <ScrollView>
-                <View style={{ paddingHorizontal: 10, paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
-                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
+                <View style={{ paddingHorizontal: 10, paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
+                    {/* name */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
+                        {product.type != 'grocery' && (
+                            <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3, backgroundColor: '#fff', borderColor: offWhite, borderWidth: 0.8, padding: 5, borderRadius: 7 }}>
+                                {product?.subCategory === 'Veg' ? (
+                                    <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                        <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                    </View>
+                                )}
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{product?.subCategory}</Text>
+                            </View>
+                        )}
+                    </View>
 
-                    <StarRating rating={product.starRating} />
+                    <StarRatingDetails rating={product.starRating} />
 
                     {/* price */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
