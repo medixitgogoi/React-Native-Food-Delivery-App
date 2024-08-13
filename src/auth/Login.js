@@ -30,8 +30,6 @@ const Login = () => {
             return;
         }
         setLoading(true);
-        // Add mobile number submission logic here
-        // After submission, setLoading(false);
     };
 
     return (
@@ -122,6 +120,7 @@ const Login = () => {
                                     disabled={loading}
                                 >
                                     <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Sending OTP...' : 'Continue'}</Text>
+                                    {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Continue</Text> */}
                                 </TouchableOpacity>
                             </LinearGradient>
                         </View>

@@ -120,7 +120,7 @@ const Home = () => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={{ width: screenWidth / 3.5, height: screenWidth / 3.5, borderRadius: 16, overflow: 'hidden' }} onPress={() => navigation.navigate('Cakes')}>
-                            <Image source={require("../assets/cake.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
+                            <Image source={require("../assets/cakeThumbnail.jpeg")} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
                             <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
                                 <LinearGradient
                                     colors={['#00000000', '#000']}
