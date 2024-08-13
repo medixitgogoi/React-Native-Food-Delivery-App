@@ -146,15 +146,7 @@ const Cart = () => {
 
             </View>
 
-            {/* <FlatList
-                data={groceries}
-                renderItem={renderOrder}
-                // keyExtractor={item => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
-                // columnWrapperStyle={{ justifyContent: 'space-between' }}
-            /> */}
-
+            {/* checkout button */}
             <View style={{ position: 'absolute', bottom: 0, backgroundColor: lightGreen, width: '100%', height: 65, elevation: 2, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1.2, flexDirection: 'column', paddingHorizontal: 20, gap: 1 }}>
                     <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Total Price</Text>
@@ -167,6 +159,15 @@ const Cart = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            
+            {/* <FlatList
+                data={groceries}
+                renderItem={renderOrder}
+                // keyExtractor={item => item.id.toString()}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                // columnWrapperStyle={{ justifyContent: 'space-between' }}
+            /> */}
 
         </SafeAreaView>
     )
