@@ -14,8 +14,7 @@ import { groceries } from '../utils/groceries';
 import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
-import Modal from 'react-native-modal';
-import { RadioButton } from 'react-native-paper';
+import SelectDropdown from 'react-native-select-dropdown';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -26,14 +25,14 @@ const ProductDetails = ({ route }) => {
 
     const navigation = useNavigation();
 
+    const sizes = [
+        { title: 'kg', },
+        { title: 'gm', },
+    ];
+
     const relatedGroceryProducts = groceries.filter(item => item.id < 5);
     const relatedRestaurantProducts = restaurants.filter(item => item.id < 5);
     const relatedCakeProducts = cakes.filter(item => item.id < 5);
-
-    const [modalVisible, setModalVisible] = useState(false);
-    const [checked, setChecked] = useState(product.type === 'grocery' ? 'kg' : product.type === 'restaurant' ? 'Half' : '1/2 Kg');
-
-    console.log('checked', checked);
 
     const renderOrder = ({ item }) => {
         return (
@@ -71,7 +70,7 @@ const ProductDetails = ({ route }) => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
-                backgroundColor={modalVisible ? "#747474" : '#dff1dd'}
+                backgroundColor='#dff1dd'
                 barStyle="dark-content"
             />
 
@@ -127,11 +126,40 @@ const ProductDetails = ({ route }) => {
 
                     {/* price */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹{product.price}</Text>
                             {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
+
+                            {/* size */}
+                            <SelectDropdown
+                                data={sizes}
+                                onSelect={(selectedItem, index) => {
+                                    console.log(selectedItem, index);
+                                }}
+                                renderButton={(selectedItem, isOpened) => {
+                                    return (
+                                        <View style={styles.dropdownButtonStyle}>
+                                            <Text style={styles.dropdownButtonTxtStyle}>
+                                                {(selectedItem && selectedItem.title) || 'Select size'}
+                                            </Text>
+                                            <Icon4 name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                                        </View>
+                                    );
+                                }}
+                                renderItem={(item, isSelected) => {
+                                    return (
+                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
+                                            <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
+                                        </View>
+                                    );
+                                }}
+                                showsVerticalScrollIndicator={false}
+                                dropdownStyle={styles.dropdownMenuStyle}
+                            />
                         </View>
-                        {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+
+                        {/* quantity */}
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <TouchableOpacity>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -139,11 +167,11 @@ const ProductDetails = ({ route }) => {
                             <TouchableOpacity>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                        </View> */}
+                        </View>
                     </View>
 
                     {/* product details */}
-                    <View style={{ marginTop: 12, flexDirection: 'column', gap: 4 }}>
+                    <View style={{ marginTop: 5, flexDirection: 'column', gap: 4 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
                         <Text style={{ color: '#898989', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(1.9) }}>{product.description}</Text>
                     </View>
@@ -292,167 +320,12 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
                         <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
                         <Icon name="add-shopping-cart" size={18} color={'#fff'} />
                     </TouchableOpacity>
                 </View>
             </View>
-
-            {/* modal */}
-            <Modal
-                isVisible={modalVisible}
-                onBackdropPress={() => setModalVisible(false)}
-                onSwipeComplete={() => setModalVisible(false)}
-                onRequestClose={() => setModalVisible(false)}
-                animationType="slide"
-                swipeDirection={['down']}
-                backdropOpacity={0.5}
-                style={{ justifyContent: 'flex-end', margin: 0, }}
-            >
-
-                <View style={{ width: "100%", height: '100%', justifyContent: 'flex-end' }}>
-                    {/* Close Button */}
-                    <TouchableOpacity style={{ alignSelf: 'center', backgroundColor: '#000', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: 35, height: 35, borderRadius: 50, marginBottom: 10 }} onPress={() => setModalVisible(false)}>
-                        <Icon5 name="close" size={20} style={{ color: '#fff' }} />
-                    </TouchableOpacity>
-
-                    {product.type === 'grocery' && (
-                        <View style={{ backgroundColor: modalBackColor, borderTopLeftRadius: 17, borderTopRightRadius: 17, elevation: 1, paddingHorizontal: 14, paddingVertical: 8 }}>
-                            {/* Headline */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginBottom: 15, marginTop: 5 }}>
-                                <Text style={{ textAlign: 'center', color: '#383838', fontWeight: '600', fontSize: responsiveFontSize(2.2), }}>Fill up the details below</Text>
-                            </View>
-
-                            <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderRadius: 14, paddingHorizontal: 15, paddingVertical: 12, gap: 3 }}>
-                                <Text style={{ color: '#517c84', fontWeight: '500', fontSize: responsiveFontSize(2.3), marginBottom: 4 }}>Select Unit :</Text>
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>
-                                    <RadioButton
-                                        value="kg"
-                                        status={checked === 'kg' ? 'checked' : 'unchecked'}
-                                        onPress={() => setChecked('kg')}
-                                        color={backIconColor}
-                                    />
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Text style={{ color: '#000', fontWeight: '600' }}>kg</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>
-                                    <RadioButton
-                                        value="gm"
-                                        status={checked === 'gm' ? 'checked' : 'unchecked'}
-                                        onPress={() => setChecked('gm')}
-                                        color={backIconColor}
-                                    />
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Text style={{ color: '#000', fontWeight: '600' }}>gm</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-
-                    {product.type === 'restaurant' && (
-                        <View style={{ backgroundColor: modalBackColor, borderTopLeftRadius: 17, borderTopRightRadius: 17, elevation: 1, paddingHorizontal: 14, paddingVertical: 8 }}>
-                            {/* Headline */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginBottom: 15, marginTop: 5 }}>
-                                <Text style={{ textAlign: 'center', color: '#383838', fontWeight: '600', fontSize: responsiveFontSize(2.2), }}>Fill up the details below</Text>
-                            </View>
-
-                            <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderRadius: 14, paddingHorizontal: 15, paddingVertical: 12, gap: 3 }}>
-                                <Text style={{ color: '#517c84', fontWeight: '500', fontSize: responsiveFontSize(2.3), marginBottom: 4 }}>Select any one option below :</Text>
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>
-                                    <RadioButton
-                                        value="Half"
-                                        status={checked === 'Half' ? 'checked' : 'unchecked'}
-                                        onPress={() => setChecked('Half')}
-                                        color={backIconColor}
-                                    />
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
-                                        <Text style={{ color: '#000', fontWeight: '500' }}>Half</Text>
-                                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹{product.price}</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>
-                                    <RadioButton
-                                        value="Full"
-                                        status={checked === 'Full' ? 'checked' : 'unchecked'}
-                                        onPress={() => setChecked('Full')}
-                                        color={backIconColor}
-                                    />
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
-                                        <Text style={{ color: '#000', fontWeight: '500' }}>Full</Text>
-                                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹{Math.floor(product.price * 1.5)}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-
-                    {product.type === 'cake' && (
-                        <View style={{ backgroundColor: modalBackColor, borderTopLeftRadius: 17, borderTopRightRadius: 17, elevation: 1, paddingHorizontal: 14, paddingVertical: 8 }}>
-                            {/* Headline */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginBottom: 15, marginTop: 5 }}>
-                                <Text style={{ textAlign: 'center', color: '#383838', fontWeight: '600', fontSize: responsiveFontSize(2.2), }}>Fill up the details below</Text>
-                            </View>
-
-                            <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderRadius: 14, paddingHorizontal: 15, paddingVertical: 12, gap: 3 }}>
-                                <Text style={{ color: '#517c84', fontWeight: '500', fontSize: responsiveFontSize(2.3), marginBottom: 4 }}>Select any one option below :</Text>
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>
-                                    <RadioButton
-                                        value="1/2 Kg"
-                                        status={checked === '1/2 Kg' ? 'checked' : 'unchecked'}
-                                        onPress={() => setChecked('1/2 Kg')}
-                                        color={backIconColor}
-                                    />
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
-                                        <Text style={{ color: '#000', fontWeight: '500' }}>1/2 Kg</Text>
-                                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹{product.price}</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{ flexDirection: 'row', alignItems: 'center', height: 25 }}>
-                                    <RadioButton
-                                        value="1 Kg"
-                                        status={checked === '1 Kg' ? 'checked' : 'unchecked'}
-                                        onPress={() => setChecked('1 Kg')}
-                                        color={backIconColor}
-                                    />
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}>
-                                        <Text style={{ color: '#000', fontWeight: '500' }}>1 Kg</Text>
-                                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹{Math.floor(product.price * 1.5)}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-
-                    {/* add button */}
-                    <View style={{ backgroundColor: '#fff', height: 65, paddingHorizontal: 12, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: lightGreen, height: 42, width: '32%', justifyContent: 'center', borderRadius: 8, borderColor: backIconColor, borderWidth: 0.5 }}>
-                            <TouchableOpacity>
-                                <Icon3 name="circle-minus" size={25} color={backIconColor} />
-                            </TouchableOpacity>
-                            <Text style={{ color: '#8f8f8f', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>1</Text>
-                            <TouchableOpacity>
-                                <Icon3 name="circle-plus" size={25} color={backIconColor} />
-                            </TouchableOpacity>
-                        </View>
-
-                        <TouchableOpacity style={{ width: '65%', height: 42, backgroundColor: darkGreen, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                                <Text style={{ color: '#fff', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>Add item</Text>
-                                <Text style={{ color: '#fff', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>₹1000</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
 
         </SafeAreaView>
     )
@@ -460,4 +333,51 @@ const ProductDetails = ({ route }) => {
 
 export default ProductDetails;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    dropdownButtonStyle: {
+        width: 113,
+        height: 35,
+        backgroundColor: '#E9ECEF',
+        borderRadius: 12,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 12,
+    },
+    dropdownButtonTxtStyle: {
+        flex: 1,
+        fontSize: responsiveFontSize(2),
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownButtonArrowStyle: {
+        fontSize: responsiveFontSize(3),
+        color: '#000'
+    },
+    dropdownButtonIconStyle: {
+        fontSize: 28,
+        marginRight: 8,
+    },
+    dropdownMenuStyle: {
+        backgroundColor: '#E9ECEF',
+        borderRadius: 8,
+    },
+    dropdownItemStyle: {
+        width: '100%',
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 8,
+    },
+    dropdownItemTxtStyle: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#151E26',
+    },
+    dropdownItemIconStyle: {
+        fontSize: 28,
+        marginRight: 8,
+    },
+});
