@@ -25,10 +25,22 @@ const ProductDetails = ({ route }) => {
 
     const navigation = useNavigation();
 
-    const sizes = [
+    const grocerySizes = [
         { title: 'kg', },
         { title: 'gm', },
     ];
+
+    const restaurantSizes = [
+        { title: 'Half plate', },
+        { title: 'Full plate', },
+    ];
+
+    const cakeSizes = [
+        { title: '1/2 Kg', },
+        { title: '1 Kg', },
+    ];
+
+    const [selectedSize, setSelectedSize] = useState(null);
 
     const relatedGroceryProducts = groceries.filter(item => item.id < 5);
     const relatedRestaurantProducts = restaurants.filter(item => item.id < 5);
@@ -125,15 +137,17 @@ const ProductDetails = ({ route }) => {
                     <StarRatingDetails rating={product.starRating} />
 
                     {/* price */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹{product.price}</Text>
+
                             {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
 
                             {/* size */}
                             <SelectDropdown
-                                data={sizes}
+                                data={product.type === 'grocery' ? grocerySizes : product.type === 'restaurant' ? restaurantSizes : cakeSizes}
                                 onSelect={(selectedItem, index) => {
+                                    setSelectedSize(selectedItem);
                                     console.log(selectedItem, index);
                                 }}
                                 renderButton={(selectedItem, isOpened) => {
@@ -148,8 +162,8 @@ const ProductDetails = ({ route }) => {
                                 }}
                                 renderItem={(item, isSelected) => {
                                     return (
-                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#D2D9DF' }) }}>
-                                            <Text style={styles.dropdownItemTxtStyle}>{item.title}</Text>
+                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: darkGreen }) }}>
+                                            <Text style={{ ...styles.dropdownItemTxtStyle, ...(isSelected && { color: '#000' }) }}>{item.title}</Text>
                                         </View>
                                     );
                                 }}
@@ -171,7 +185,7 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* product details */}
-                    <View style={{ marginTop: 5, flexDirection: 'column', gap: 4 }}>
+                    <View style={{ marginTop: 12, flexDirection: 'column', gap: 4 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
                         <Text style={{ color: '#898989', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(1.9) }}>{product.description}</Text>
                     </View>
@@ -335,46 +349,48 @@ export default ProductDetails;
 
 const styles = StyleSheet.create({
     dropdownButtonStyle: {
-        width: 113,
-        height: 35,
-        backgroundColor: '#E9ECEF',
-        borderRadius: 12,
+        width: 110,
+        height: 33,
+        backgroundColor: darkGreen,
+        borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 12,
+        paddingHorizontal: 10,
     },
     dropdownButtonTxtStyle: {
         flex: 1,
         fontSize: responsiveFontSize(2),
-        fontWeight: '500',
-        color: '#151E26',
+        fontWeight: '600',
+        color: '#000',
     },
     dropdownButtonArrowStyle: {
         fontSize: responsiveFontSize(3),
-        color: '#000'
+        color: '#000',
     },
     dropdownButtonIconStyle: {
         fontSize: 28,
         marginRight: 8,
     },
     dropdownMenuStyle: {
-        backgroundColor: '#E9ECEF',
-        borderRadius: 8,
+        // backgroundColor: '#000',
+        borderRadius: 10,
+        marginTop: 2
     },
     dropdownItemStyle: {
         width: '100%',
-        flexDirection: 'row',
+        paddingVertical: 7,
         paddingHorizontal: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: 8,
+        // flexDirection: 'row',
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
     dropdownItemTxtStyle: {
         flex: 1,
-        fontSize: 18,
-        fontWeight: '500',
-        color: '#151E26',
+        fontSize: responsiveFontSize(1.9),
+        fontWeight: '600',
+        color: '#000',
+        textAlign: 'center',
     },
     dropdownItemIconStyle: {
         fontSize: 28,
