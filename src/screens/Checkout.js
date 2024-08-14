@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { background, darkGreen } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 const Checkout = () => {
 
