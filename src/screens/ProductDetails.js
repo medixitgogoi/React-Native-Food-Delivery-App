@@ -157,8 +157,10 @@ const ProductDetails = ({ route }) => {
 
                     {/* unit */}
                     <View>
-                        <Text style={{color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase'}}>Select Unit</Text>
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit</Text>
+                        <View>
 
+                        </View>
                     </View>
 
                     {/* product details */}
