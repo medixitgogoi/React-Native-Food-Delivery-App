@@ -140,40 +140,11 @@ const ProductDetails = ({ route }) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.6), color: '#019934', fontWeight: '700' }}>₹{product.price}</Text>
-
                             {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
-
-                            {/* size */}
-                            <SelectDropdown
-                                data={product.type === 'grocery' ? grocerySizes : product.type === 'restaurant' ? restaurantSizes : cakeSizes}
-                                onSelect={(selectedItem, index) => {
-                                    setSelectedSize(selectedItem);
-                                    console.log(selectedItem, index);
-                                }}
-                                renderButton={(selectedItem, isOpened) => {
-                                    return (
-                                        <View style={styles.dropdownButtonStyle}>
-                                            <Text style={styles.dropdownButtonTxtStyle}>
-                                                {(selectedItem && selectedItem.title) || 'Select size'}
-                                            </Text>
-                                            <Icon4 name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
-                                        </View>
-                                    );
-                                }}
-                                renderItem={(item, isSelected) => {
-                                    return (
-                                        <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: darkGreen }) }}>
-                                            <Text style={{ ...styles.dropdownItemTxtStyle, ...(isSelected && { color: '#000' }) }}>{item.title}</Text>
-                                        </View>
-                                    );
-                                }}
-                                showsVerticalScrollIndicator={false}
-                                dropdownStyle={styles.dropdownMenuStyle}
-                            />
                         </View>
 
                         {/* quantity */}
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <TouchableOpacity>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -184,10 +155,16 @@ const ProductDetails = ({ route }) => {
                         </View>
                     </View>
 
+                    {/* unit */}
+                    <View>
+                        <Text style={{color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase'}}>Select Unit</Text>
+
+                    </View>
+
                     {/* product details */}
                     <View style={{ marginTop: 12, flexDirection: 'column', gap: 4, width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
-                        <Text style={{ color: '#898989', fontWeight: '400',fontSize: responsiveFontSize(1.9), width: '97%' }}>{product.description}</Text>
+                        <Text style={{ color: '#898989', fontWeight: '400', fontSize: responsiveFontSize(1.9), width: '97%' }}>{product.description}</Text>
                     </View>
 
                     {/* related products */}
