@@ -152,3 +152,30 @@
         </View>
     </View>
 </Modal>
+
+{/* <SelectDropdown
+        data={product.type === 'grocery' ? grocerySizes : product.type === 'restaurant' ? restaurantSizes : cakeSizes}
+        onSelect={(selectedItem, index) => {
+            setSelectedSize(selectedItem);
+            console.log(selectedItem, index);
+        }}
+        renderButton={(selectedItem, isOpened) => {
+            return (
+                <View style={styles.dropdownButtonStyle}>
+                    <Text style={styles.dropdownButtonTxtStyle}>
+                        {(selectedItem && selectedItem.title) || 'Select size'}
+                    </Text>
+                    <Icon4 name={isOpened ? 'chevron-up' : 'chevron-down'} style={styles.dropdownButtonArrowStyle} />
+                </View>
+            );
+        }}
+        renderItem={(item, isSelected) => {
+            return (
+                <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: darkGreen }) }}>
+                    <Text style={{ ...styles.dropdownItemTxtStyle, ...(isSelected && { color: '#000' }) }}>{item.title}</Text>
+                </View>
+            );
+        }}
+        showsVerticalScrollIndicator={false}
+        dropdownStyle={styles.dropdownMenuStyle}
+    /> */}
