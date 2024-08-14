@@ -173,7 +173,7 @@ const ProductDetails = ({ route }) => {
                         </View>
 
                         {/* quantity */}
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
                             <TouchableOpacity>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -185,9 +185,9 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* product details */}
-                    <View style={{ marginTop: 12, flexDirection: 'column', gap: 4 }}>
+                    <View style={{ marginTop: 12, flexDirection: 'column', gap: 4, width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
-                        <Text style={{ color: '#898989', fontWeight: '400', textAlign: 'justify', fontSize: responsiveFontSize(1.9) }}>{product.description}</Text>
+                        <Text style={{ color: '#898989', fontWeight: '400',fontSize: responsiveFontSize(1.9), width: '97%' }}>{product.description}</Text>
                     </View>
 
                     {/* related products */}
