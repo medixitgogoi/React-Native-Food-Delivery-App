@@ -78,6 +78,11 @@ const ProductDetails = ({ route }) => {
         )
     }
 
+    const discountPercentage = (price, discountedPrice) => {
+        const num = (price - discountedPrice) / price;
+        return Math.floor(num * 100);
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
@@ -139,8 +144,8 @@ const ProductDetails = ({ route }) => {
                     {/* price */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                            <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product.discountedPrice}</Text>
-                            <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product.price}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product.units[0].discountedPrice}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product.units[0].price}</Text>
                             {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
                         </View>
 
@@ -164,33 +169,18 @@ const ProductDetails = ({ route }) => {
                             {product.units.map(it => (
                                 <TouchableOpacity style={{ elevation: 1, backgroundColor: '#d8f4f8', width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>7% off</Text>
+                                        <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.price, it.discountedPrice)}% off</Text>
                                     </View>
                                     <View style={{ height: '78%', backgroundColor: '#fff', borderRadius: 12, borderColor: offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.unit}</Text>
-                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{product.discountedPrice}</Text>
+                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.discountedPrice}</Text>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
                                             <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>MRP</Text>
-                                            <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{product.price}</Text>
+                                            <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.price}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
                             ))}
-
-
-                            <TouchableOpacity style={{ elevation: 1, backgroundColor: '#d8f4f8', width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
-                                <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>10% off</Text>
-                                </View>
-                                <View style={{ height: '78%', backgroundColor: '#fff', borderRadius: 12, borderColor: offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>1 Kg</Text>
-                                    <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹370</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>MRP</Text>
-                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹349</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
 
                             {/* when selected */}
                             {/* <TouchableOpacity style={{ elevation: 1, backgroundColor: lightGreen, width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
@@ -242,9 +232,9 @@ const ProductDetails = ({ route }) => {
                                         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
-                                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/{item.unit}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
                                         </View>
                                     </View>
 
@@ -288,7 +278,10 @@ const ProductDetails = ({ route }) => {
                                             )}
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+                                        </View>
                                     </View>
 
                                     {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
@@ -323,12 +316,9 @@ const ProductDetails = ({ route }) => {
                                             </View>
                                         </View>
                                         <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
-
                                             {item.subCategory === 'Veg' ? (
                                                 <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
-
-                                                    </View>
+                                                    <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}></View>
                                                 </View>
                                             ) : (
                                                 <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
@@ -337,7 +327,10 @@ const ProductDetails = ({ route }) => {
                                             )}
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+                                        </View>
                                     </View>
 
                                     {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
