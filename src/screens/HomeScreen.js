@@ -168,7 +168,7 @@ const Home = () => {
                                     </View>
 
                                     <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                        <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 2, marginBottom: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
                                             <StarRating rating={item.starRating} />
                                         </View>
@@ -176,9 +176,8 @@ const Home = () => {
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.discountedPrice}</Text>
-                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.price}</Text>
-                                            {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/kg</Text> */}
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
                                         </View>
                                     </View>
 
@@ -243,7 +242,10 @@ const Home = () => {
                                             )}
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+                                        </View>
                                     </View>
 
                                     {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
@@ -309,7 +311,10 @@ const Home = () => {
                                             )}
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
                                         </View>
-                                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+                                        </View>
                                     </View>
 
                                     {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>

@@ -158,7 +158,10 @@ const Cakes = () => {
                         )}
                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
                     </View>
-                    <Text style={{ fontSize: 16, color: '#019934', fontWeight: '700', marginTop: 2 }}>₹{item.price}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+                    </View>
                 </View>
 
                 {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
