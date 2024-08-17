@@ -13,6 +13,7 @@ import Wishlist from '../screens/Wishlist';
 import SearchScreen from '../screens/SearchScreen';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Checkout from '../screens/Checkout';
+import { backIconColor, darkGreen } from '../utils/colors';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,9 +122,9 @@ const styles = StyleSheet.create({
     },
     badge: {
         position: 'absolute',
-        right: -6,
+        right: -8,
         top: -3,
-        backgroundColor: '#ff0000',
+        backgroundColor: darkGreen,
         borderRadius: 6,
         paddingHorizontal: 5,
         paddingVertical: 2,
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
         minWidth: 15,
     },
     badgeText: {
-        color: '#fff',
+        color: '#000',
         fontSize: 10,
         fontWeight: 'bold',
     },
