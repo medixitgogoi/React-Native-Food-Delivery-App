@@ -408,6 +408,7 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    
                     <TouchableOpacity
                         style={{
                             gap: 5,
