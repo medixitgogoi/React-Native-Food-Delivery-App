@@ -23,7 +23,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    console.log('product', product);
+    // console.log('product', product);
 
     const navigation = useNavigation();
 
@@ -197,7 +197,7 @@ const ProductDetails = ({ route }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingTop: 12 }}>
 
                             {product.units.map(it => (
-                                <TouchableOpacity style={{ elevation: 1, backgroundColor: '#d8f4f8', width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
+                                <TouchableOpacity style={{ elevation: 1, backgroundColor: '#d8f4f8', width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }} key={it.id}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.price, it.discountedPrice)}% off</Text>
                                     </View>
