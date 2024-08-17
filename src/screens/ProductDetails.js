@@ -32,6 +32,8 @@ const ProductDetails = ({ route }) => {
     const cartProducts = useSelector(state => state.cart);
     // console.log('cartProducts', cartProducts);
 
+    const [quantity, setQuantity] = useState(1);
+
     const grocerySizes = [
         { title: 'kg', },
         { title: 'gm', },
@@ -93,7 +95,7 @@ const ProductDetails = ({ route }) => {
     const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
 
     const decrementQuantity = (item) => {
-        if (item.qty === 1) {
+        if (isPresentInTheCart.qty === 1) {
             return;
         } else {
             dispatch(decrementItem(item));
@@ -135,7 +137,7 @@ const ProductDetails = ({ route }) => {
 
             {/* Details */}
             <ScrollView>
-                <View style={{ paddingHorizontal: 10, paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
+                <View style={{ paddingHorizontal: 13, paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
                     {/* name */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
@@ -168,11 +170,16 @@ const ProductDetails = ({ route }) => {
 
                         {/* quantity */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity onPress={() => dispatch(decrementQuantity(product))}>
+                            <TouchableOpacity onPress={() => isPresentInTheCart ? decrementQuantity(product) : setQuantity(prev => prev !== 1 && prev - 1)}>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart?.qty}</Text>
-                            <TouchableOpacity onPress={() => dispatch(addItemToCart(product))}>
+                            {isPresentInTheCart ? (
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart.qty}</Text>
+                            ) : (
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{quantity}</Text>
+                            )}
+                            {/* <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart ? isPresentInTheCart.qty : 1}</Text> */}
+                            <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
                         </View>
@@ -370,7 +377,7 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity style={{ gap: 5, backgroundColor: isPresentInTheCart ? lightGreen : '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center', borderColor: isPresentInTheCart ? backIconColor : '', borderWidth: isPresentInTheCart ? 1.5 : 0 }} onPress={() => dispatch(addItemToCart(product))}>
+                    <TouchableOpacity style={{ gap: 5, backgroundColor: isPresentInTheCart ? lightGreen : '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center', borderColor: isPresentInTheCart ? backIconColor : '', borderWidth: isPresentInTheCart ? 1.5 : 0 }} onPress={() => dispatch(addItemToCart({ ...product, qty: quantity }))}>
                         {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text> */}
                         {isPresentInTheCart ? (
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>

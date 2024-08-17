@@ -14,7 +14,8 @@ export const cartSlice = createSlice({
             if (existingItemIndex !== -1) {
                 state[existingItemIndex].qty += 1;
             } else {
-                state.push({ ...newItem, qty: 1 });
+                state.push(newItem);
+                // state.push({ ...newItem, qty: 1 });
             }
         },
         removeItemFromCart: (state, action) => {
