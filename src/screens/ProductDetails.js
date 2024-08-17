@@ -34,6 +34,8 @@ const ProductDetails = ({ route }) => {
 
     const [quantity, setQuantity] = useState(1);
 
+    const [unit, setUnit] = useState(null);
+
     const grocerySizes = [
         { title: 'kg', },
         { title: 'gm', },
@@ -102,6 +104,14 @@ const ProductDetails = ({ route }) => {
         }
     };
 
+    const unitSelector = (item) => {
+        if (unit?.id === item.id) {
+            setUnit(null); // Set to null if the IDs match
+        } else {
+            setUnit(item); // Otherwise, update unit with the new item
+        }
+    };
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
@@ -137,9 +147,9 @@ const ProductDetails = ({ route }) => {
 
             {/* Details */}
             <ScrollView>
-                <View style={{ paddingHorizontal: 13, paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
+                <View style={{ paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
                     {/* name */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
                         {product.type != 'grocery' && (
                             <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3, backgroundColor: '#fff', borderColor: offWhite, borderWidth: 0.8, padding: 5, borderRadius: 7 }}>
@@ -158,10 +168,12 @@ const ProductDetails = ({ route }) => {
                         )}
                     </View>
 
-                    <StarRatingDetails rating={product.starRating} />
+                    <View style={{ paddingHorizontal: 13, }}>
+                        <StarRatingDetails rating={product.starRating} />
+                    </View>
 
                     {/* price */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
+                    <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product.units[0].discountedPrice}</Text>
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product.units[0].price}</Text>
@@ -193,15 +205,15 @@ const ProductDetails = ({ route }) => {
 
                     {/* unit */}
                     <View style={{ marginTop: 10 }}>
-                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingTop: 12 }}>
+                        <Text style={{ paddingHorizontal: 13, color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.units.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.units.length == 2 ? 13 : 0 }}>
 
-                            {product.units.map(it => (
-                                <TouchableOpacity style={{ elevation: 1, backgroundColor: '#d8f4f8', width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }} key={it.id}>
+                            {product?.units?.map(it => (
+                                <TouchableOpacity onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.price, it.discountedPrice)}% off</Text>
                                     </View>
-                                    <View style={{ height: '78%', backgroundColor: '#fff', borderRadius: 12, borderColor: offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
+                                    <View style={{ height: '78%', backgroundColor: unit?.id === it.id ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.unit}</Text>
                                         <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.discountedPrice}</Text>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
@@ -211,6 +223,20 @@ const ProductDetails = ({ route }) => {
                                     </View>
                                 </TouchableOpacity>
                             ))}
+
+                            {/* <TouchableOpacity style={{ elevation: 1, backgroundColor: lightGreen, width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
+                                <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>10% off</Text>
+                                </View>
+                                <View style={{ height: '78%', backgroundColor: '#fff', borderRadius: 12, borderColor: backIconColor, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
+                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9) }}>1 Kg</Text>
+                                    <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹370</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>MRP</Text>
+                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹349</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity> */}
 
                             {/* when selected */}
                             {/* <TouchableOpacity style={{ elevation: 1, backgroundColor: lightGreen, width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
@@ -231,13 +257,13 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* product details */}
-                    <View style={{ marginTop: 20, flexDirection: 'column', gap: 4, width: '100%' }}>
+                    <View style={{ paddingHorizontal: 13, marginTop: 20, flexDirection: 'column', gap: 4, width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
                         <Text style={{ color: '#a4a4a4', fontWeight: '400', fontSize: responsiveFontSize(1.9), width: '97%' }}>{product.description}</Text>
                     </View>
 
                     {/* related products */}
-                    <View style={{ flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 80 }}>
+                    <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 80 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
@@ -383,8 +409,25 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity style={{ gap: 5, backgroundColor: isPresentInTheCart ? lightGreen : '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center', borderColor: isPresentInTheCart ? backIconColor : '', borderWidth: isPresentInTheCart ? 1.5 : 0 }} onPress={() => dispatch(addItemToCart({ ...product, qty: quantity }))}>
-                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text> */}
+                    <TouchableOpacity
+                        style={{
+                            gap: 5,
+                            backgroundColor: isPresentInTheCart ? lightGreen : '#41b24b',
+                            paddingHorizontal: 30,
+                            height: 43,
+                            borderRadius: 10,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            borderColor: isPresentInTheCart ? backIconColor : '',
+                            borderWidth: isPresentInTheCart ? 1.5 : 0
+                        }}
+                        onPress={() => {
+                            if (!isPresentInTheCart) {
+                                dispatch(addItemToCart({ ...product, qty: quantity }));
+                            }
+                        }}
+                        disabled={isPresentInTheCart ? true : false}
+                    >
                         {isPresentInTheCart ? (
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                                 <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
@@ -400,7 +443,7 @@ const ProductDetails = ({ route }) => {
                 </View>
             </View>
 
-        </SafeAreaView >
+        </SafeAreaView>
     )
 }
 

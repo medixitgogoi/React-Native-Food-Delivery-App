@@ -10,38 +10,15 @@ export const groceries = [
         units: [
             {
                 id: 1,
+                unit: '250 gm',
+                price: 120,
+                discountedPrice: 100,
+            },
+            {
+                id: 2,
                 unit: '1 Kg',
                 price: 459,
                 discountedPrice: 419,
-            },
-            {
-                id: 2,
-                unit: '5 Kg',
-                price: 1899,
-                discountedPrice: 1709,
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Bananas',
-        description: 'Enjoy the natural sweetness of ripe bananas, a go-to snack rich in nutrients and energy. Perfect for smoothies, desserts, or a quick on-the-go bite, these bananas offer a wholesome treat packed with potassium and essential vitamins.',
-        image: '../assets/banana.jpeg',
-        subCategory: 'Fruit',
-        starRating: 4.5,
-        type: 'grocery',
-        units: [
-            {
-                id: 1,
-                unit: '1 Kg',
-                price: 60,
-                discountedPrice: 50,
-            },
-            {
-                id: 2,
-                unit: '5 Kg',
-                price: 280,
-                discountedPrice: 240,
             },
         ],
     },
@@ -56,12 +33,18 @@ export const groceries = [
         units: [
             {
                 id: 1,
+                unit: '500 gm',
+                price: 90,
+                discountedPrice: 80,
+            },
+            {
+                id: 2,
                 unit: '1 Kg',
                 price: 150,
                 discountedPrice: 130,
             },
             {
-                id: 2,
+                id: 3,
                 unit: '3 Kg',
                 price: 420,
                 discountedPrice: 370,
@@ -79,38 +62,15 @@ export const groceries = [
         units: [
             {
                 id: 1,
+                unit: '250 gm',
+                price: 50,
+                discountedPrice: 45,
+            },
+            {
+                id: 2,
                 unit: '500 gm',
                 price: 90,
                 discountedPrice: 75,
-            },
-            {
-                id: 2,
-                unit: '1 Kg',
-                price: 170,
-                discountedPrice: 150,
-            },
-        ],
-    },
-    {
-        id: 5,
-        name: 'Carrots',
-        description: 'Bright and crunchy, these carrots are a versatile staple in many dishes. Whether eaten raw, cooked, or juiced, they bring a sweet flavor and a wealth of nutrients like vitamin A and beta-carotene.',
-        image: '../assets/carrots.jpeg',
-        subCategory: 'Vegetable',
-        starRating: 4.4,
-        type: 'grocery',
-        units: [
-            {
-                id: 1,
-                unit: '1 Kg',
-                price: 60,
-                discountedPrice: 50,
-            },
-            {
-                id: 2,
-                unit: '2 Kg',
-                price: 110,
-                discountedPrice: 95,
             },
         ],
     },
@@ -125,12 +85,18 @@ export const groceries = [
         units: [
             {
                 id: 1,
+                unit: '250 gm',
+                price: 150,
+                discountedPrice: 130,
+            },
+            {
+                id: 2,
                 unit: '500 gm',
                 price: 250,
                 discountedPrice: 220,
             },
             {
-                id: 2,
+                id: 3,
                 unit: '1 Kg',
                 price: 470,
                 discountedPrice: 430,
@@ -148,61 +114,15 @@ export const groceries = [
         units: [
             {
                 id: 1,
+                unit: '500 ml',
+                price: 90,
+                discountedPrice: 80,
+            },
+            {
+                id: 2,
                 unit: '1 litre',
                 price: 150,
                 discountedPrice: 135,
-            },
-            {
-                id: 2,
-                unit: '2 litre',
-                price: 280,
-                discountedPrice: 250,
-            },
-        ],
-    },
-    {
-        id: 8,
-        name: 'Brown Bread',
-        description: 'Soft and fiber-rich, this brown bread is a wholesome choice for sandwiches, toasts, or as a side for soups. Made from whole grains, it offers a nutty flavor and a texture that’s both hearty and satisfying.',
-        image: '../assets/brownbread.jpeg',
-        subCategory: 'Bakery',
-        starRating: 4.2,
-        type: 'grocery',
-        units: [
-            {
-                id: 1,
-                unit: '1 Pack',
-                price: 50,
-                discountedPrice: 45,
-            },
-            {
-                id: 2,
-                unit: '2 Packs',
-                price: 95,
-                discountedPrice: 85,
-            },
-        ],
-    },
-    {
-        id: 9,
-        name: 'Butter',
-        description: 'Rich and creamy, this butter adds indulgence to every dish. Perfect for spreading on toast, baking, or cooking, it enhances flavors with its smooth and silky texture, making every bite a delight.',
-        image: '../assets/butter.jpeg',
-        subCategory: 'Dairy',
-        starRating: 4.9,
-        type: 'grocery',
-        units: [
-            {
-                id: 1,
-                unit: '500 gm',
-                price: 180,
-                discountedPrice: 160,
-            },
-            {
-                id: 2,
-                unit: '1 Kg',
-                price: 340,
-                discountedPrice: 310,
             },
         ],
     },
@@ -217,38 +137,21 @@ export const groceries = [
         units: [
             {
                 id: 1,
+                unit: '500 gm',
+                price: 25,
+                discountedPrice: 20,
+            },
+            {
+                id: 2,
                 unit: '1 Kg',
                 price: 40,
                 discountedPrice: 35,
             },
             {
-                id: 2,
+                id: 3,
                 unit: '3 Kg',
                 price: 115,
                 discountedPrice: 100,
-            },
-        ],
-    },
-    {
-        id: 11,
-        name: 'Basmati Rice',
-        description: 'Long-grain and aromatic, this basmati rice is perfect for biryanis, pulaos, and everyday meals. Its fluffy texture and rich fragrance make it a favorite staple in many kitchens.',
-        image: '../assets/basmati.jpeg',
-        subCategory: 'Grains',
-        starRating: 4.7,
-        type: 'grocery',
-        units: [
-            {
-                id: 1,
-                unit: '1 Kg',
-                price: 120,
-                discountedPrice: 110,
-            },
-            {
-                id: 2,
-                unit: '5 Kg',
-                price: 550,
-                discountedPrice: 510,
             },
         ],
     },
