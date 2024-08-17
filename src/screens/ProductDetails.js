@@ -119,7 +119,7 @@ const ProductDetails = ({ route }) => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ paddingHorizontal: 10, backgroundColor: '#dff1dd', height: '40%', width: '100%', flexDirection: 'column', paddingVertical: 8, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '13%' }}>
                     <TouchableOpacity style={{ width: 32, height: 32, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
@@ -400,7 +400,7 @@ const ProductDetails = ({ route }) => {
                 </View>
             </ScrollView>
 
-            {/* total price and add to cart */}
+            {/* Total price and add to cart */}
             <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
                 <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
