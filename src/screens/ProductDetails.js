@@ -14,7 +14,6 @@ import { groceries } from '../utils/groceries';
 import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
-import SelectDropdown from 'react-native-select-dropdown';
 import { addItemToCart, decrementItem } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -30,7 +29,7 @@ const ProductDetails = ({ route }) => {
     const dispatch = useDispatch();
 
     const cartProducts = useSelector(state => state.cart);
-    // console.log('cartProducts', cartProducts);
+    console.log('cartProducts', cartProducts);
 
     const [quantity, setQuantity] = useState(1);
 
@@ -423,7 +422,7 @@ const ProductDetails = ({ route }) => {
                         }}
                         onPress={() => {
                             if (!isPresentInTheCart) {
-                                dispatch(addItemToCart({ ...product, qty: quantity }));
+                                dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
                             }
                         }}
                         disabled={isPresentInTheCart ? true : false}
