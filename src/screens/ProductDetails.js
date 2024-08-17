@@ -15,16 +15,22 @@ import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
 import SelectDropdown from 'react-native-select-dropdown';
-import { addItemToCart, removeItemFromCart } from '../redux/CartSlice';
+import { addItemToCart, decrementItem } from '../redux/CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    // console.log('product', product);
+    console.log('product', product);
 
     const navigation = useNavigation();
+
+    const dispatch = useDispatch();
+
+    const cartProducts = useSelector(state => state.cart);
+    // console.log('cartProducts', cartProducts);
 
     const grocerySizes = [
         { title: 'kg', },
@@ -83,6 +89,16 @@ const ProductDetails = ({ route }) => {
         const num = (price - discountedPrice) / price;
         return Math.floor(num * 100);
     }
+
+    const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
+
+    const decrementQuantity = (item) => {
+        if (item.qty === 1) {
+            return;
+        } else {
+            dispatch(decrementItem(item));
+        }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -152,11 +168,11 @@ const ProductDetails = ({ route }) => {
 
                         {/* quantity */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity onPress={() => addItemToCart(product)}>
+                            <TouchableOpacity onPress={() => dispatch(decrementQuantity(product))}>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>1</Text>
-                            <TouchableOpacity onPress={() => removeItemFromCart(product)}>
+                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart?.qty}</Text>
+                            <TouchableOpacity onPress={() => dispatch(addItemToCart(product))}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
                         </View>
@@ -354,9 +370,19 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <TouchableOpacity style={{ gap: 5, backgroundColor: '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
-                        <Icon name="add-shopping-cart" size={18} color={'#fff'} />
+                    <TouchableOpacity style={{ gap: 5, backgroundColor: isPresentInTheCart ? lightGreen : '#41b24b', paddingHorizontal: 30, height: 43, borderRadius: 10, flexDirection: 'row', alignItems: 'center', borderColor: isPresentInTheCart ? backIconColor : '', borderWidth: isPresentInTheCart ? 1.5 : 0 }} onPress={() => dispatch(addItemToCart(product))}>
+                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text> */}
+                        {isPresentInTheCart ? (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                                <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
+                                <Icon2 name="checkcircle" size={21} color={backIconColor} />
+                            </View>
+                        ) : (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
+                                <Icon name="add-shopping-cart" size={19} color={'#fff'} />
+                            </View>
+                        )}
                     </TouchableOpacity>
                 </View>
             </View>
