@@ -9,12 +9,16 @@ import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 const Cart = () => {
 
     const navigation = useNavigation();
 
     const moveAnim = useRef(new Animated.Value(0)).current;
+
+    const cartProducts = useSelector(state => state.cart);
+    console.log('cartProducts', cartProducts);
 
     useEffect(() => {
         const startAnimation = () => {

@@ -15,6 +15,7 @@ import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
 import SelectDropdown from 'react-native-select-dropdown';
+import { addItemToCart, removeItemFromCart } from '../redux/CartSlice';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -151,11 +152,11 @@ const ProductDetails = ({ route }) => {
 
                         {/* quantity */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => addItemToCart(product)}>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
                             <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>1</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => removeItemFromCart(product)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
                         </View>
