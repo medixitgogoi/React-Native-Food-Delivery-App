@@ -3,12 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthStackNavigator from './AuthStackNavigator';
 import GuestStackNavigator from './GuestStackNavigator';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const StackNavigation = () => {
 
+    const cartProducts = useSelector(state => state.cart);
+
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
 
-    const cartItemCount = 0;
+    const cartItemCount = cartProducts.length;
 
     return (
         <NavigationContainer>

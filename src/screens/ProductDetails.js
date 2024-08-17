@@ -170,15 +170,21 @@ const ProductDetails = ({ route }) => {
 
                         {/* quantity */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity onPress={() => isPresentInTheCart ? decrementQuantity(product) : setQuantity(prev => prev !== 1 && prev - 1)}>
+                            <TouchableOpacity onPress={() => {
+                                if (isPresentInTheCart) {
+                                    decrementQuantity(product);
+                                } else if (quantity > 1) {
+                                    setQuantity(prev => prev - 1);
+                                }
+                            }}>
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
+
                             {isPresentInTheCart ? (
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart.qty}</Text>
                             ) : (
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{quantity}</Text>
                             )}
-                            {/* <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart ? isPresentInTheCart.qty : 1}</Text> */}
                             <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -186,7 +192,7 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* unit */}
-                    <View style={{ marginTop: 15 }}>
+                    <View style={{ marginTop: 10 }}>
                         <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingTop: 12 }}>
 
@@ -234,9 +240,9 @@ const ProductDetails = ({ route }) => {
                     <View style={{ flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 80 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
                             {product.type === 'grocery' && relatedGroceryProducts.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
@@ -394,7 +400,7 @@ const ProductDetails = ({ route }) => {
                 </View>
             </View>
 
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
