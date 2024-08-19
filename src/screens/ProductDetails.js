@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -9,6 +9,7 @@ import Icon2 from 'react-native-vector-icons/dist/AntDesign';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
+import Icon6 from 'react-native-vector-icons/dist/Entypo';
 import StarRatingDetails from '../components/StarRatingDetails';
 import { groceries } from '../utils/groceries';
 import { restaurants } from '../utils/restaurants';
@@ -36,6 +37,13 @@ const ProductDetails = ({ route }) => {
     const [unit, setUnit] = useState(null);
 
     const [error, setError] = useState(false);
+
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => setError(false), 3000); // Hide error after 3 seconds
+            return () => clearTimeout(timer); // Cleanup timer if the component unmounts
+        }
+    }, [error]);
 
     const grocerySizes = [
         { title: 'kg', },
@@ -112,6 +120,8 @@ const ProductDetails = ({ route }) => {
             setUnit(item); // Otherwise, update unit with the new item
         }
     };
+
+    console.log('error', error);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -207,6 +217,17 @@ const ProductDetails = ({ route }) => {
                     {/* unit */}
                     <View style={{ marginTop: 10 }}>
                         <Text style={{ paddingHorizontal: 13, color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
+
+                        {/* Error message */}
+                        {error && (
+                            <View style={{ marginHorizontal: 13, paddingLeft: 10, paddingRight: 4, backgroundColor: '#fceced', borderRadius: 7, borderColor: '#cb202d', borderWidth: 1, marginTop: 4, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingVertical: 2 }}>
+                                <Text style={{ color: '#cb202d', fontSize: responsiveFontSize(2), fontWeight: '500' }}>Please select a unit</Text>
+                                <TouchableOpacity onPress={() => setError(false)}>
+                                    <Icon6 name="squared-cross" size={27} color={'#cb202d'} />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.units.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.units.length == 2 ? 13 : 0 }}>
 
                             {product?.units?.map(it => (
