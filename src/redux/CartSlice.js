@@ -30,11 +30,13 @@ export const cartSlice = createSlice({
             return state = [];
         },
         updateProduct: (state, action) => {
-            const { id, updatedProduct } = action.payload;
-            const existingItemIndex = state.findIndex(item => item.id === id);
-            if (existingItemIndex !== -1) {
-                // Update the relevant fields of the product in the cart
-                state[existingItemIndex] = { ...state[existingItemIndex], ...updatedProduct };
+            const { id, updatedUnits } = action.payload;
+
+            // Find the product by id and update its units
+            const product = state.find(item => item.id === id);
+
+            if (product) {
+                product.units = updatedUnits;
             }
         },
     },

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -15,7 +15,7 @@ import { groceries } from '../utils/groceries';
 import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
-import { addItemToCart, decrementItem } from '../redux/CartSlice';
+import { addItemToCart, decrementItem, updateProduct } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -96,12 +96,12 @@ const ProductDetails = ({ route }) => {
 
             </TouchableOpacity>
         )
-    }
+    };
 
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
         return Math.floor(num * 100);
-    }
+    };
 
     const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
 
@@ -111,19 +111,27 @@ const ProductDetails = ({ route }) => {
         }
     }, []);
 
+    const unitSelector = (item) => {
+        if (isPresentInTheCart) {
+            setUnit(item);
+            dispatch(updateProduct({
+                id: isPresentInTheCart.id, // ID of the product you want to update
+                updatedUnits: item,
+            }));
+        } else {
+            if (unit?.id === item.id) {
+                setUnit(null); // Set to null if the IDs match
+            } else {
+                setUnit(item); // Otherwise, update unit with the new item
+            }
+        }
+    };
+
     const decrementQuantity = (item) => {
         if (isPresentInTheCart.qty === 1) {
             return;
         } else {
             dispatch(decrementItem(item));
-        }
-    };
-
-    const unitSelector = (item) => {
-        if (unit?.id === item.id) {
-            setUnit(null); // Set to null if the IDs match
-        } else {
-            setUnit(item); // Otherwise, update unit with the new item
         }
     };
 
@@ -240,7 +248,7 @@ const ProductDetails = ({ route }) => {
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.units.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.units.length == 2 ? 13 : 0 }}>
 
                             {product?.units?.map(it => (
-                                <TouchableOpacity disabled={isPresentInTheCart ? true : false} onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
+                                <TouchableOpacity onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.price, it.discountedPrice)}% off</Text>
                                     </View>
@@ -312,7 +320,7 @@ const ProductDetails = ({ route }) => {
                                     </View>
 
                                     <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                        <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 2, marginBottom: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
                                             <StarRating rating={item.starRating} />
                                         </View>
@@ -329,7 +337,7 @@ const ProductDetails = ({ route }) => {
                             ))}
 
                             {product.type === 'restaurant' && relatedRestaurantProducts.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
@@ -379,7 +387,7 @@ const ProductDetails = ({ route }) => {
                             ))}
 
                             {product.type === 'cake' && relatedCakeProducts.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
