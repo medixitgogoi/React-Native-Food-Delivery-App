@@ -28,10 +28,18 @@ export const cartSlice = createSlice({
         },
         deleteAllItemsFromCart: (state) => {
             return state = [];
-        }
+        },
+        updateProduct: (state, action) => {
+            const { id, updatedProduct } = action.payload;
+            const existingItemIndex = state.findIndex(item => item.id === id);
+            if (existingItemIndex !== -1) {
+                // Update the relevant fields of the product in the cart
+                state[existingItemIndex] = { ...state[existingItemIndex], ...updatedProduct };
+            }
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addItemToCart, removeItemFromCart, decrementItem, deleteAllItemsFromCart } = cartSlice.actions;
+export const { addItemToCart, removeItemFromCart, decrementItem, deleteAllItemsFromCart, updateProduct } = cartSlice.actions;
 export default cartSlice.reducer;

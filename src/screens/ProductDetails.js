@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -105,6 +105,12 @@ const ProductDetails = ({ route }) => {
 
     const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
 
+    useEffect(() => {
+        if (isPresentInTheCart) {
+            setUnit(isPresentInTheCart.units);
+        }
+    }, []);
+
     const decrementQuantity = (item) => {
         if (isPresentInTheCart.qty === 1) {
             return;
@@ -121,7 +127,7 @@ const ProductDetails = ({ route }) => {
         }
     };
 
-    console.log('error', error);
+    // console.log('quantity', quantity);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -201,7 +207,6 @@ const ProductDetails = ({ route }) => {
                                         setQuantity(prev => prev - 1);
                                     }
                                 }}
-                                disabled={isPresentInTheCart?.qty === 1 || quantity === 1 ? true : false}
                             >
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -211,6 +216,7 @@ const ProductDetails = ({ route }) => {
                             ) : (
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{quantity}</Text>
                             )}
+
                             <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
@@ -234,7 +240,7 @@ const ProductDetails = ({ route }) => {
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.units.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.units.length == 2 ? 13 : 0 }}>
 
                             {product?.units?.map(it => (
-                                <TouchableOpacity onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
+                                <TouchableOpacity disabled={isPresentInTheCart ? true : false} onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.price, it.discountedPrice)}% off</Text>
                                     </View>
@@ -421,7 +427,6 @@ const ProductDetails = ({ route }) => {
                                 </TouchableOpacity>
                             ))}
                         </View>
-
                     </View>
                 </View>
             </ScrollView>
@@ -472,7 +477,6 @@ const ProductDetails = ({ route }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-
         </SafeAreaView>
     )
 }
