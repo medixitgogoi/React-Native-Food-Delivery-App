@@ -193,13 +193,16 @@ const ProductDetails = ({ route }) => {
 
                         {/* quantity */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity onPress={() => {
-                                if (isPresentInTheCart) {
-                                    decrementQuantity(product);
-                                } else if (quantity > 1) {
-                                    setQuantity(prev => prev - 1);
-                                }
-                            }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if (isPresentInTheCart) {
+                                        decrementQuantity(product);
+                                    } else if (quantity > 1) {
+                                        setQuantity(prev => prev - 1);
+                                    }
+                                }}
+                                disabled={isPresentInTheCart?.qty === 1 || quantity === 1 ? true : false}
+                            >
                                 <Icon3 name="circle-minus" size={30} color={backIconColor} />
                             </TouchableOpacity>
 
