@@ -69,6 +69,15 @@ const Cart = () => {
             <ScrollView>
                 <View style={{ padding: 10 }}>
 
+                    <View style={{ marginBottom: 8, padding: 4, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden', }}>
+                        <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: '#e4f4ea' }}>
+                            <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 80, resizeMode: 'contain' }} />
+                        </View>
+                        <View style={{ flex: 3 }}>
+
+                        </View>
+                    </View>
+
                     {/* cart item */}
                     <View style={{ paddingHorizontal: 4, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden', height: 90 }}>
                         <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 0.9, backgroundColor: '#e4f4ea', height: 80 }}>
@@ -107,6 +116,7 @@ const Cart = () => {
                                 </View>
                                 <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Non-veg</Text>
                             </View>
+
                             {/* <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.4) }}>Half plate</Text> */}
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingRight: 7, marginTop: 3 }}>
