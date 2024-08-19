@@ -35,6 +35,8 @@ const ProductDetails = ({ route }) => {
 
     const [unit, setUnit] = useState(null);
 
+    const [error, setError] = useState(false);
+
     const grocerySizes = [
         { title: 'kg', },
         { title: 'gm', },
@@ -408,7 +410,7 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    
+
                     <TouchableOpacity
                         style={{
                             gap: 5,
@@ -423,7 +425,11 @@ const ProductDetails = ({ route }) => {
                         }}
                         onPress={() => {
                             if (!isPresentInTheCart) {
-                                dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
+                                if (unit !== null) {
+                                    dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
+                                } else {
+                                    setError(true);
+                                }
                             }
                         }}
                         disabled={isPresentInTheCart ? true : false}
