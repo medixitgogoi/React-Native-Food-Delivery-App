@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { background, backIconColor, darkGreen, lightGreen, modalBackColor, offWhite } from '../utils/colors';
+import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -29,7 +29,7 @@ const ProductDetails = ({ route }) => {
     const dispatch = useDispatch();
 
     const cartProducts = useSelector(state => state.cart);
-    console.log('cartProducts', cartProducts);
+    // console.log('cartProducts', cartProducts);
 
     const [quantity, setQuantity] = useState(1);
 
@@ -53,8 +53,8 @@ const ProductDetails = ({ route }) => {
     const [selectedSize, setSelectedSize] = useState(null);
 
     const relatedGroceryProducts = groceries.filter(item => item.id < 5);
-    const relatedRestaurantProducts = restaurants.filter(item => item.id < 5);
-    const relatedCakeProducts = cakes.filter(item => item.id < 5);
+    const relatedRestaurantProducts = restaurants.filter(item => item.id < 25);
+    const relatedCakeProducts = cakes.filter(item => item.id < 45);
 
     const renderOrder = ({ item }) => {
         return (
