@@ -70,7 +70,7 @@ const Home = () => {
                         <TextInput
                             style={{ height: 40, color: '#000', fontWeight: '500', width: '88%' }}
                             placeholder="I'd like to have"
-                            placeholderTextColor="#3b3b3b"
+                            placeholderTextColor="#68788a"
                             onChangeText={setSearch}
                             value={search}
                             onFocus={() => setIsSearchFocused(true)}

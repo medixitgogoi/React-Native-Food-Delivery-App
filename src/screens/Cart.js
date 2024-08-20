@@ -183,21 +183,21 @@ const Cart = () => {
 
                         <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 8 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Sub Total</Text>
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹{cartProductsSubTotal()}.00</Text>
+                                <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Sub Total</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹{cartProductsSubTotal()}.00</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Delivery Charges</Text>
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹50.00</Text>
+                                <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Delivery Charges</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹50.00</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Discount</Text>
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹120.00</Text>
+                                <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Discount</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹120.00</Text>
                             </View>
                             <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 5 }}>
-                                <Text style={{ color: '#60666f', fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>Final Total</Text>
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹{cartProductsSubTotal() + 50 - 120}.00</Text>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>Final Total</Text>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>₹{cartProductsSubTotal() + 50 - 120}.00</Text>
                             </View>
                         </View>
                     </View>
