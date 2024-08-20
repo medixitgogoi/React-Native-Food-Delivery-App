@@ -23,7 +23,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    // console.log('product', product);
+    console.log('product', product);
 
     const navigation = useNavigation();
 
@@ -444,9 +444,9 @@ const ProductDetails = ({ route }) => {
                 <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
                     {isPresentInTheCart ? (
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹1000</Text>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{isPresentInTheCart.units.discountedPrice * isPresentInTheCart.qty}</Text>
                     ) : (
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{product.units.discountedPrice}</Text>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹0</Text>
                     )}
                 </View>
 
