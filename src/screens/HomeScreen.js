@@ -7,7 +7,7 @@ import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { groceries } from '../utils/groceries';
 import StarRating from '../components/StarRating';
@@ -22,6 +22,13 @@ const Home = () => {
 
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -61,9 +68,9 @@ const Home = () => {
                             <Icon4 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                         </View>
                         <TextInput
-                            style={{ height: 40, color: '#000', fontWeight: '400', width: '88%' }}
-                            placeholder="Search your favorite food item"
-                            placeholderTextColor="#a0abb7"
+                            style={{ height: 40, color: '#000', fontWeight: '500', width: '88%' }}
+                            placeholder="I'd like to have"
+                            placeholderTextColor="#3b3b3b"
                             onChangeText={setSearch}
                             value={search}
                             onFocus={() => setIsSearchFocused(true)}

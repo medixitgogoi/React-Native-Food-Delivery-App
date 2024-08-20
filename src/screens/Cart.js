@@ -1,12 +1,12 @@
 import { StatusBar, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Animated, ScrollView } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, decrementItem, removeItemFromCart } from '../redux/CartSlice';
 
@@ -42,6 +42,10 @@ const Cart = () => {
         startAnimation();
     }, [moveAnim]);
 
+    const cartProductsSubTotal = () => {
+        return cartProducts.reduce((total, item) => total + item.qty * item.units.discountedPrice, 0);
+    };
+
     const renderOrder = ({ item }) => {
         <View style={{ marginBottom: 8, padding: 4, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
             <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
@@ -75,6 +79,13 @@ const Cart = () => {
         </View>
     };
 
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
@@ -96,6 +107,7 @@ const Cart = () => {
                 </View>
             </View>
 
+            {/* Content */}
             <ScrollView>
                 <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                     {cartProducts.map(item => (
@@ -132,9 +144,9 @@ const Cart = () => {
                                                     </View>
                                                 )
                                             )}
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
                                                 {/* <View style={{ borderColor: '#000', borderWidth: 1.2, borderRadius: 3, width: 15, height: 15, alignItems: 'center', justifyContent: 'center' }}> */}
-                                                <Icon2 name="cube-outline" size={17} color={'#000'} />
+                                                <Icon2 name="cube-outline" size={16} color={'#000'} />
                                                 {/* </View> */}
                                                 <Text style={{ color: backIconColor, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.units.unit}</Text>
                                             </View>
@@ -163,50 +175,53 @@ const Cart = () => {
                 </View>
 
                 {/* Cart Total */}
-                <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
-                    <View style={{ backgroundColor: backIconColor, paddingTop: 10, }}>
-                        <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#fff', marginBottom: 10 }}>Cart Total</Text>
-                    </View>
+                {cartProducts.length !== 0 && (
+                    <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
+                        <View style={{ backgroundColor: backIconColor, paddingTop: 10, }}>
+                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#fff', marginBottom: 10 }}>Cart Total</Text>
+                        </View>
 
-                    <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 8 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                            <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Sub Total</Text>
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹590.00</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                            <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Delivery Charges</Text>
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹50.00</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                            <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Discount</Text>
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹120.00</Text>
-                        </View>
-                        <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 5 }}>
-                            <Text style={{ color: '#60666f', fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>Final Total</Text>
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹410.00</Text>
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 8 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                                <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Sub Total</Text>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹{cartProductsSubTotal()}.00</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                                <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Delivery Charges</Text>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹50.00</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                                <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Discount</Text>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>₹120.00</Text>
+                            </View>
+                            <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 5 }}>
+                                <Text style={{ color: '#60666f', fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>Final Total</Text>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>₹{cartProductsSubTotal() + 50 - 120}.00</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                )}
             </ScrollView>
 
             {/* Continue button */}
-            <View style={{ position: 'absolute', bottom: 0, backgroundColor: lightGreen, width: '100%', height: 65, elevation: 2, flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ flex: 1.2, flexDirection: 'column', paddingHorizontal: 20, gap: 1 }}>
-                    <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Total Price</Text>
-                    <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.8) }}>₹1300</Text>
+            {cartProducts.length !== 0 && (
+                <View style={{ position: 'absolute', bottom: 0, backgroundColor: lightGreen, width: '100%', height: 65, elevation: 2, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flex: 1.2, flexDirection: 'column', paddingHorizontal: 20, gap: 1 }}>
+                        <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Total Price</Text>
+                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.8) }}>₹{cartProductsSubTotal() + 50 - 120}.00</Text>
+                    </View>
+                    <View style={{ flex: 3, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ backgroundColor: backIconColor, borderRadius: 50, width: '90%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                            <Text style={{ color: '#fff', fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.3) }}>Continue</Text>
+                            <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
+                                <Icon4 name="arrowright" size={23} color={'#fff'} />
+                            </Animated.View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={{ flex: 3, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 10 }}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ backgroundColor: backIconColor, borderRadius: 50, width: '90%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                        <Text style={{ color: '#fff', fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.3) }}>Continue</Text>
-                        <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
-                            <Icon4 name="arrowright" size={23} color={'#fff'} />
-                        </Animated.View>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-        </SafeAreaView >
+            )}
+        </SafeAreaView>
     )
 }
 
@@ -214,10 +229,12 @@ export default Cart;
 
 const styles = StyleSheet.create({});
 
-{/* <FlatList
-                data={cartProducts}
-                renderItem={renderOrder}
-                keyExtractor={item => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ padding: 10 }}
-            /> */}
+{/* 
+    <FlatList
+        data={cartProducts}
+        renderItem={renderOrder}
+        keyExtractor={item => item.id.toString()}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: 10 }}
+    /> 
+*/}

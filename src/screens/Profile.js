@@ -12,7 +12,7 @@ const Profile = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={darkGreen}
+                backgroundColor={background}
                 barStyle="dark-content"
             />
             <Text style={{ color: '#000' }}>Profile screen</Text>
