@@ -177,7 +177,13 @@ const Home = () => {
                                     <View style={{ padding: 10 }}>
                                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 2, marginBottom: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
-                                            <StarRating rating={item.starRating} />
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                <StarRating rating={item.starRating} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                                    <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
                                         </View>
                                         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>

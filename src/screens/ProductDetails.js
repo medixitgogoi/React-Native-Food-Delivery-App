@@ -45,58 +45,9 @@ const ProductDetails = ({ route }) => {
         }
     }, [error]);
 
-    const grocerySizes = [
-        { title: 'kg', },
-        { title: 'gm', },
-    ];
-
-    const restaurantSizes = [
-        { title: 'Half plate', },
-        { title: 'Full plate', },
-    ];
-
-    const cakeSizes = [
-        { title: '1/2 Kg', },
-        { title: '1 Kg', },
-    ];
-
-    const [selectedSize, setSelectedSize] = useState(null);
-
     const relatedGroceryProducts = groceries.filter(item => item.id < 5);
     const relatedRestaurantProducts = restaurants.filter(item => item.id < 25);
     const relatedCakeProducts = cakes.filter(item => item.id < 45);
-
-    const renderOrder = ({ item }) => {
-        return (
-            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails')} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
-
-                <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon name="favorite-border" size={18} color={'#019934'} />
-                </TouchableOpacity>
-
-                <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-                    <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                    </View>
-                </View>
-
-                <View style={{ padding: 10 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
-                        <StarRating rating={item.starRating} />
-                    </View>
-                    <View style={{ flexDirection: 'row', marginBottom: 5 }}>
-                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '700' }}>₹{item.price}</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6c6c6c', fontWeight: '500' }}>/{item.unit}</Text>
-                    </View>
-                </View>
-
-            </TouchableOpacity>
-        )
-    };
 
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
@@ -134,8 +85,6 @@ const ProductDetails = ({ route }) => {
             dispatch(decrementItem(item));
         }
     };
-
-    // console.log('quantity', quantity);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -269,35 +218,6 @@ const ProductDetails = ({ route }) => {
                                 </TouchableOpacity>
                             ))}
 
-                            {/* <TouchableOpacity style={{ elevation: 1, backgroundColor: lightGreen, width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
-                                <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>10% off</Text>
-                                </View>
-                                <View style={{ height: '78%', backgroundColor: '#fff', borderRadius: 12, borderColor: backIconColor, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9) }}>1 Kg</Text>
-                                    <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹370</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>MRP</Text>
-                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹349</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity> */}
-
-                            {/* when selected */}
-                            {/* <TouchableOpacity style={{ elevation: 1, backgroundColor: lightGreen, width: 90, height: 90, overflow: 'hidden', borderRadius: 12, flexDirection: 'column' }}>
-                                <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>10% off</Text>
-                                </View>
-                                <View style={{ height: '78%', backgroundColor: '#fff', borderRadius: 12, borderColor: backIconColor, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9) }}>1 Kg</Text>
-                                    <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹370</Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>MRP</Text>
-                                        <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹349</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity> */}
-
                         </View>
                     </View>
 
@@ -328,7 +248,13 @@ const ProductDetails = ({ route }) => {
                                     <View style={{ padding: 10 }}>
                                         <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 2, marginBottom: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
-                                            <StarRating rating={item.starRating} />
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                <StarRating rating={item.starRating} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                                    <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
                                         </View>
                                         <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                                             <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
@@ -500,54 +426,3 @@ const ProductDetails = ({ route }) => {
 }
 
 export default ProductDetails;
-
-const styles = StyleSheet.create({
-    dropdownButtonStyle: {
-        width: 110,
-        height: 33,
-        backgroundColor: darkGreen,
-        borderRadius: 10,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-    },
-    dropdownButtonTxtStyle: {
-        flex: 1,
-        fontSize: responsiveFontSize(2),
-        fontWeight: '600',
-        color: '#000',
-    },
-    dropdownButtonArrowStyle: {
-        fontSize: responsiveFontSize(3),
-        color: '#000',
-    },
-    dropdownButtonIconStyle: {
-        fontSize: 28,
-        marginRight: 8,
-    },
-    dropdownMenuStyle: {
-        // backgroundColor: '#000',
-        borderRadius: 10,
-        marginTop: 2
-    },
-    dropdownItemStyle: {
-        width: '100%',
-        paddingVertical: 7,
-        paddingHorizontal: 12,
-        // flexDirection: 'row',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-    },
-    dropdownItemTxtStyle: {
-        flex: 1,
-        fontSize: responsiveFontSize(1.9),
-        fontWeight: '600',
-        color: '#000',
-        textAlign: 'center',
-    },
-    dropdownItemIconStyle: {
-        fontSize: 28,
-        marginRight: 8,
-    },
-});
