@@ -109,8 +109,20 @@ const Cart = () => {
 
             {/* Content */}
             <ScrollView>
+
+                {cartProducts.length === 0 && (
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+                        <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+                        <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your cart!</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={{ elevation: 2, marginTop: 20, backgroundColor: darkGreen, paddingVertical: 10, gap: 5, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Go to Home</Text>
+                            <Icon4 name="arrowright" size={20} color={'#000'} />
+                        </TouchableOpacity>
+                    </View>
+                )}
+
                 <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
-                    {cartProducts.map(item => (
+                    {cartProducts?.map(item => (
                         <View key={item.id} style={{ marginBottom: 8, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
                             <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
                                 <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
@@ -175,7 +187,7 @@ const Cart = () => {
                 </View>
 
                 {/* Cart Total */}
-                {cartProducts.length !== 0 && (
+                {cartProducts?.length !== 0 && (
                     <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
                         <View style={{ backgroundColor: backIconColor, paddingTop: 10, }}>
                             <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#fff', marginBottom: 10 }}>Cart Total</Text>
@@ -205,7 +217,7 @@ const Cart = () => {
             </ScrollView>
 
             {/* Continue button */}
-            {cartProducts.length !== 0 && (
+            {cartProducts?.length !== 0 && (
                 <View style={{ position: 'absolute', bottom: 0, backgroundColor: lightGreen, width: '100%', height: 65, elevation: 2, flexDirection: 'row', alignItems: 'center' }}>
                     <View style={{ flex: 1.2, flexDirection: 'column', paddingHorizontal: 20, gap: 1 }}>
                         <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Total Price</Text>
