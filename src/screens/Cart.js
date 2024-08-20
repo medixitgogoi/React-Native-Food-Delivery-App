@@ -87,7 +87,7 @@ const Cart = () => {
     );
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={background}
@@ -109,8 +109,9 @@ const Cart = () => {
 
             {/* Content */}
             <ScrollView>
+                {/* fallback image */}
                 {cartProducts.length === 0 && (
-                    <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+                    <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                         <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
                         <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your cart!</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={{ elevation: 2, marginTop: 20, backgroundColor: darkGreen, paddingVertical: 10, gap: 5, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -120,6 +121,7 @@ const Cart = () => {
                     </View>
                 )}
 
+                {/* cart products */}
                 <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                     {cartProducts?.map(item => (
                         <View key={item.id} style={{ marginBottom: 8, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
@@ -217,16 +219,12 @@ const Cart = () => {
 
             {/* Continue button */}
             {cartProducts?.length !== 0 && (
-                <View style={{ position: 'absolute', bottom: 2, width: '100%', height: 65, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <View style={{ flex: 3, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.5 }}>
-                            <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
-                            <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
-                                <Icon4 name="arrowright" size={23} color={backIconColor} />
-                            </Animated.View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.5 }}>
+                    <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
+                    <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
+                        <Icon4 name="arrowright" size={23} color={backIconColor} />
+                    </Animated.View>
+                </TouchableOpacity>
             )}
         </SafeAreaView>
     )
