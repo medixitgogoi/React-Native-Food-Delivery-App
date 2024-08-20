@@ -69,8 +69,8 @@ const Home = () => {
                         </View>
                         <TextInput
                             style={{ height: 40, color: '#000', fontWeight: '500', width: '88%' }}
-                            placeholder="I'd like to have"
-                            placeholderTextColor="#68788a"
+                            placeholder="I'd like to have ..."
+                            placeholderTextColor="#909dac"
                             onChangeText={setSearch}
                             value={search}
                             onFocus={() => setIsSearchFocused(true)}
