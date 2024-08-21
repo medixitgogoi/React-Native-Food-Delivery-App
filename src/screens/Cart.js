@@ -105,19 +105,22 @@ const Cart = () => {
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                                         <View style={{ flexDirection: 'column', gap: 3 }}>
                                             {item.type === 'grocery' ? (
-                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Fruit</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                                                    <Icon2 name="food-apple" size={16} color={backIconColor} style={{ marginLeft: -1 }} />
+                                                    <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+                                                </View>
                                             ) : (
                                                 item.subCategory === 'Veg' ? (
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                                        <View style={{ width: 15, height: 15, borderColor: '#000', borderWidth: 1.2, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                            <View style={{ backgroundColor: 'green', width: 8, height: 8, borderRadius: 10, }}>
+                                                        <View style={{ width: 13, height: 13, borderColor: '#000', borderWidth: 1.2, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <View style={{ backgroundColor: 'green', width: 6, height: 6, borderRadius: 10, }}>
                                                             </View>
                                                         </View>
                                                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Veg</Text>
                                                     </View>
                                                 ) : (
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                                        <View style={{ width: 15, height: 15, borderColor: '#000', borderWidth: 1.2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                        <View style={{ width: 13, height: 13, borderColor: '#000', borderWidth: 1.2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
                                                             <Icon4 name="caretup" size={9} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                                         </View>
                                                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Non-veg</Text>
@@ -126,9 +129,9 @@ const Cart = () => {
                                             )}
                                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
                                                 {/* <View style={{ borderColor: '#000', borderWidth: 1.2, borderRadius: 3, width: 15, height: 15, alignItems: 'center', justifyContent: 'center' }}> */}
-                                                <Icon2 name="cube-outline" size={16} color={'#000'} />
+                                                <Icon2 name="scale" size={13} color={backIconColor} style={{}} />
                                                 {/* </View> */}
-                                                <Text style={{ color: backIconColor, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.units.unit}</Text>
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.units.unit}</Text>
                                             </View>
                                         </View>
                                         <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.6, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 5, paddingHorizontal: 5, borderRadius: 7 }}>
@@ -186,7 +189,7 @@ const Cart = () => {
 
             {/* Continue button */}
             {cartProducts?.length !== 0 && (
-                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.5 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
                     <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
                     <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
                         <Icon4 name="arrowright" size={23} color={backIconColor} />

@@ -40,9 +40,9 @@ const Checkout = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ paddingTop: 10 }}>
+            <View style={{ }}>
                 {/* address */}
-                <View style={{ paddingHorizontal: 13 }}>
+                <View style={{ paddingHorizontal: 13 , marginVertical: 10}}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -84,6 +84,12 @@ const Checkout = () => {
 
                 </View>
 
+                {/* payment */}
+                <View style={{ paddingHorizontal: 13,marginTop: 5 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
+                    </View>
+                </View>
             </View>
         </SafeAreaView>
     )
