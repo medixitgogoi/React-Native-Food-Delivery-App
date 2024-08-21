@@ -190,8 +190,8 @@ const Cart = () => {
                 {/* Cart Total */}
                 {cartProducts?.length !== 0 && (
                     <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
-                        <View style={{ backgroundColor: backIconColor, paddingTop: 10, }}>
-                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#fff', marginBottom: 10 }}>Cart Total</Text>
+                        <View style={{ backgroundColor: darkGreen, paddingTop: 10, }}>
+                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#000', marginBottom: 10 }}>Cart Total</Text>
                         </View>
 
                         <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 8 }}>

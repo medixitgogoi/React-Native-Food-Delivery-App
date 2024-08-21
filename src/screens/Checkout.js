@@ -13,22 +13,24 @@ const Checkout = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={darkGreen}
+                backgroundColor={background}
                 barStyle="dark-content"
             />
 
             {/* Header */}
-            <View style={{ paddingHorizontal: 10, backgroundColor: darkGreen, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                     <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
                 </TouchableOpacity>
-                <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', textTransform: 'uppercase' }}>Checkout</Text>
+                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.5), textAlign: 'center', textTransform: 'uppercase' }}>Checkout</Text>
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.navigate('Profile')}>
                     <Icon2 name="account" size={23} color={'#000'} />
                 </TouchableOpacity>
             </View>
 
-            <Text style={{ color: '#000' }}>Checkout</Text>
+            <View style={{ paddingHorizontal: 13 }}>
+
+            </View>
         </SafeAreaView>
     )
 }
