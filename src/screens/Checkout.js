@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import { useState } from 'react';
-import { address } from '../utils/address';
+import { data } from '../utils/address';
 
 const Checkout = () => {
 
@@ -38,7 +38,7 @@ const Checkout = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ paddingTop: 5 }}>
+            <View style={{ paddingTop: 10 }}>
                 {/* address */}
                 <View style={{ paddingHorizontal: 13 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -49,27 +49,30 @@ const Checkout = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ marginTop: 8, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
-                        <TouchableOpacity onPress={addressHandler} style={{ flex: 0.1, paddingTop: 0, justifyContent: 'center', flexDirection: 'row' }}>
-                            {address ? (
-                                <View>
-                                    <Icon2 name="checkbox-marked" size={20} color={backIconColor} />
-                                </View>
-                            ) : (
-                                <View>
-                                    <Icon2 name="checkbox-blank-outline" size={20} color={'#868c95'} />
-                                </View>
-                            )}
+                    {data.map(item => (
+                        <View key={item.id} style={{ marginTop: 12, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
+                            <TouchableOpacity onPress={addressHandler} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
+                                {address ? (
+                                    <View>
+                                        <Icon2 name="checkbox-marked" size={20} color={backIconColor} />
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <Icon2 name="checkbox-blank-outline" size={20} color={'#868c95'} />
+                                    </View>
+                                )}
 
-                        </TouchableOpacity>
-                        <View style={{ flex: 0.8, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', }}>
-                            <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>Home</Text>
-                            <Text style={{ color: '#000', textAlign: 'justify', fontSize: responsiveFontSize(1.9) }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis animi eum nam quis beatae repellendus neque deserunt aspernatur cum eius.</Text>
+                            </TouchableOpacity>
+                            <View style={{ flex: 0.8, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 4 }}>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.type}</Text>
+                                <Text style={{ color: '#000', textAlign: 'justify', fontSize: responsiveFontSize(1.8) }}>{item.address}</Text>
+                            </View>
+                            <TouchableOpacity style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
+                                <Icon3 name="pencil" size={15} color={'#868c95'} />
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
-                            <Icon3 name="pencil" size={15} color={'#868c95'} />
-                        </TouchableOpacity>
-                    </View>
+                    ))}
+
                 </View>
 
             </View>

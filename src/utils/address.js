@@ -1,4 +1,4 @@
-export const address = [
+export const data = [
     {
         id: 1,
         type: 'Home',
