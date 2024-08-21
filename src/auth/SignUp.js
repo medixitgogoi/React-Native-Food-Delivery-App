@@ -1,10 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { background } from '../utils/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SignUp = () => {
     return (
-        <View>
-            <Text style={{ color: '#000' }}>Sign up</Text>
-        </View>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+            <StatusBar
+                animated={true}
+                backgroundColor={background}
+                barStyle="dark-content"
+            />
+
+            <View style={{ paddingHorizontal: 13 }}>
+
+            </View>
+
+        </SafeAreaView>
     )
 }
 

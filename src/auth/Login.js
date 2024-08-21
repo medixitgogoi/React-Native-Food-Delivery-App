@@ -55,7 +55,6 @@ const Login = () => {
                 {/* Content */}
                 <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 50, borderTopRightRadius: 50, flex: 0.4 }}>
                     <Animated.View style={{ flexDirection: 'row', transform: [{ translateX }], width: screenWidth * 2, height: '100%' }}>
-
                         {/* Get Started */}
                         <View style={{ width: screenWidth, height: '100%', padding: 30 }}>
                             {!showOtpLogin && (
@@ -152,7 +151,6 @@ const Login = () => {
                                 </TouchableOpacity>
                             </LinearGradient>
                         </View>
-
                     </Animated.View>
                 </View>
 
