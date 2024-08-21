@@ -1,23 +1,29 @@
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
-import { background, backIconColor, darkGreen, offWhite } from '../utils/colors';
+import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { data } from '../utils/address';
 
 const Checkout = () => {
 
     const navigation = useNavigation();
 
-    const [address, setAddress] = useState(true);
+    const [address, setAddress] = useState(null);
 
-    const addressHandler = () => {
-        setAddress(prev => !prev);
+    useEffect(() => {
+        setAddress(data[0]);
+    }, []);
+
+    const addressHandler = (item) => {
+        setAddress(item);
     }
+
+    console.log('address', address);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -41,7 +47,7 @@ const Checkout = () => {
             <View style={{ paddingTop: 10 }}>
                 {/* address */}
                 <View style={{ paddingHorizontal: 13 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Saved Addresses</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Add new</Text>
@@ -50,9 +56,9 @@ const Checkout = () => {
                     </View>
 
                     {data.map(item => (
-                        <View key={item.id} style={{ marginTop: 12, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
-                            <TouchableOpacity onPress={addressHandler} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
-                                {address ? (
+                        <View key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
+                            <TouchableOpacity onPress={() => addressHandler(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
+                                {address?.id === item?.id ? (
                                     <View>
                                         <Icon2 name="checkbox-marked" size={20} color={backIconColor} />
                                     </View>
@@ -63,8 +69,15 @@ const Checkout = () => {
                                 )}
 
                             </TouchableOpacity>
-                            <View style={{ flex: 0.8, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 4 }}>
-                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.type}</Text>
+                            <View style={{ flex: 0.8, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 5 }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.type}</Text>
+                                    {item.default && (
+                                        <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.8, borderRadius: 5, paddingVertical: 2, paddingHorizontal: 4 }}>
+                                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '600' }}>Default</Text>
+                                        </View>
+                                    )}
+                                </View>
                                 <Text style={{ color: '#000', textAlign: 'justify', fontSize: responsiveFontSize(1.8) }}>{item.address}</Text>
                             </View>
                             <TouchableOpacity style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
