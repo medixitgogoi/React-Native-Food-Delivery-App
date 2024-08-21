@@ -95,7 +95,7 @@ const Login = () => {
                             <View style={{ flexDirection: 'column', gap: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 3 }}>
                                     <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
-                                    <Text style={{ color: '#000', textAlign: 'center', color: '#555555', textTransform: 'uppercase', fontWeight: 500, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in </Text>
+                                    <Text style={{ color: '#000', textAlign: 'center', color: '#555555', textTransform: 'uppercase', fontWeight: 600, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in </Text>
                                     <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

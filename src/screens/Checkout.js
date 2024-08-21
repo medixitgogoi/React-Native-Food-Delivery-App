@@ -40,9 +40,9 @@ const Checkout = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ }}>
+            <View style={{}}>
                 {/* address */}
-                <View style={{ paddingHorizontal: 13 , marginVertical: 10}}>
+                <View style={{ paddingHorizontal: 13, marginVertical: 10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -76,7 +76,7 @@ const Checkout = () => {
                                 </View>
                                 <Text style={{ color: address?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address}</Text>
                             </View>
-                            <TouchableOpacity style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('EditAddress')} style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
                                 <Icon3 name="pencil" size={15} color={'#868c95'} />
                             </TouchableOpacity>
                         </View>
@@ -85,7 +85,7 @@ const Checkout = () => {
                 </View>
 
                 {/* payment */}
-                <View style={{ paddingHorizontal: 13,marginTop: 5 }}>
+                <View style={{ paddingHorizontal: 13, marginTop: 5 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
                     </View>
