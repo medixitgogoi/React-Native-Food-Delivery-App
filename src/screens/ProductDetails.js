@@ -86,6 +86,11 @@ const ProductDetails = ({ route }) => {
         }
     };
 
+    const relatedProductsHandler = (item) => {
+        navigation.navigate('ProductDetails', { data: item })
+        setUnit(null);
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
@@ -228,7 +233,7 @@ const ProductDetails = ({ route }) => {
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
                             {product.type === 'grocery' && relatedGroceryProducts.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
@@ -264,7 +269,7 @@ const ProductDetails = ({ route }) => {
                             ))}
 
                             {product.type === 'restaurant' && relatedRestaurantProducts.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
@@ -314,7 +319,7 @@ const ProductDetails = ({ route }) => {
                             ))}
 
                             {product.type === 'cake' && relatedCakeProducts.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon name="favorite-border" size={18} color={'#019934'} />
