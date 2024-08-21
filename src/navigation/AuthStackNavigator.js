@@ -2,6 +2,8 @@ import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../auth/Login';
 import SplashScreen from '../auth/SplashScreen';
+import SignUp from '../auth/SignUp';
+import ForgotPassword from '../auth/ForgotPassword';
 
 const AuthStackNavigator = ({ initialRoute }) => {
 
@@ -11,6 +13,8 @@ const AuthStackNavigator = ({ initialRoute }) => {
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRoute ? initialRoute : "Login"}>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         </Stack.Navigator>
     )
 }

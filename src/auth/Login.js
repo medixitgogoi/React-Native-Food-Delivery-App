@@ -1,15 +1,20 @@
 import { useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, SafeAreaView, StatusBar, Animated, TouchableOpacity, Dimensions, TextInput, Alert } from 'react-native';
-import { darkGreen, lightGreen } from '../utils/colors';
+import { darkGreen, lightGreen, backIconColor, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const Login = () => {
 
+    const navigation = useNavigation();
+
     const [showOtpLogin, setShowOtpLogin] = useState(false);
     const [mobileNumber, setMobileNumber] = useState('');
+    const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false);
 
     const translateX = useRef(new Animated.Value(0)).current;
@@ -84,21 +89,22 @@ const Login = () => {
                         </View>
 
                         {/* Login Form */}
-                        <View style={{ width: screenWidth, padding: 30, justifyContent: 'space-between', flex: 1, flexDirection: 'column', }}>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(3.5), fontWeight: 900, textAlign: 'center' }}>Time to say goodbye to other delivery apps 👋</Text>
-                            <View style={{ flexDirection: 'column', gap: 7 }}>
+                        <View style={{ width: screenWidth, padding: 25, justifyContent: 'space-between', flex: 1, flexDirection: 'column', }}>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: 900, textAlign: 'center' }}>Hi There 👋</Text>
+
+                            <View style={{ flexDirection: 'column', gap: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 3 }}>
-                                    <Text style={{ color: '#b9c1ca' }}>________________ </Text>
-                                    <Text style={{ color: '#000', textAlign: 'center', color: '#555555', fontWeight: 500, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in or sign up </Text>
-                                    <Text style={{ color: '#b9c1ca' }}>________________ </Text>
+                                    <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
+                                    <Text style={{ color: '#000', textAlign: 'center', color: '#555555', textTransform: 'uppercase', fontWeight: 500, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in </Text>
+                                    <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <View style={{ height: 45, flex: 0.15, borderColor: '#4d4d4d', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: lightGreen }}>
-                                        <Text style={{ color: '#000', fontWeight: 600 }}>+91</Text>
+                                    <View style={{ height: 40, flex: 0.165, borderColor: '#4d4d4d', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: lightGreen }}>
+                                        <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2) }}>+91</Text>
                                     </View>
                                     <View style={{ flex: 0.8 }}>
                                         <TextInput
-                                            style={{ height: 45, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
+                                            style={{ height: 40, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
                                             placeholder="Enter Phone Number"
                                             keyboardType="numeric"
                                             maxLength={10}
@@ -108,18 +114,40 @@ const Login = () => {
                                         />
                                     </View>
                                 </View>
+                                <View style={{ marginTop: 8 }}>
+                                    <TextInput
+                                        style={{ height: 40, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
+                                        placeholder="Enter Password"
+                                        value={password}
+                                        onChangeText={setPassword}
+                                        placeholderTextColor="#afb8c2"
+                                    />
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                        <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6) }}>Don't have an account?</Text>
+                                        <TouchableOpacity style={{ paddingHorizontal: 5 }} onPress={() => navigation.navigate('SignUp')}>
+                                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.5), fontWeight: '600', textDecorationLine: 'underline' }}>Sign Up</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <TouchableOpacity style={{ paddingLeft: 5 }} onPress={() => navigation.navigate('ForgotPassword')}>
+                                        <Text style={{ color: '#000', fontSize: responsiveFontSize(1.5), fontWeight: '600', textDecorationLine: 'underline' }}>Forgot password?</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                             <LinearGradient
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
-                                style={{ borderRadius: 12, paddingVertical: 15, paddingHorizontal: 24, elevation: 2 }}
+                                style={{ borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, elevation: 2, marginTop: 30 }}
                             >
                                 <TouchableOpacity
                                     onPress={handleLoginSubmit}
                                     disabled={loading}
+                                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}
                                 >
                                     <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Sending OTP...' : 'Continue'}</Text>
+                                    <Icon4 name="arrowright" size={23} color={'#fff'} />
                                     {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Continue</Text> */}
                                 </TouchableOpacity>
                             </LinearGradient>

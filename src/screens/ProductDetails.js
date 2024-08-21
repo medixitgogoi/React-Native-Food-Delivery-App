@@ -23,7 +23,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    console.log('product', product);
+    // console.log('product', product);
 
     const navigation = useNavigation();
 
