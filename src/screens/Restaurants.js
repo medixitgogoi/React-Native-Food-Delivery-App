@@ -175,7 +175,7 @@ const Restaurants = () => {
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}
-                barStyle="light-content"
+                barStyle="dark-content"
             />
 
             {/* header */}

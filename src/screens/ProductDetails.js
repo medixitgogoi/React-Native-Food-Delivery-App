@@ -147,13 +147,8 @@ const ProductDetails = ({ route }) => {
                         <StarRatingDetails rating={product.starRating} />
                     </View>
 
-                    {/* sub category */}
-                    <View style={{ paddingHorizontal: 13, }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{product.subCategory}</Text>
-                    </View>
-
                     {/* price */}
-                    <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 5 }}>
+                    <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product.units[0].discountedPrice}</Text>
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product.units[0].price}</Text>
