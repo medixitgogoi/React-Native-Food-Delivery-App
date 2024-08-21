@@ -19,11 +19,7 @@ const Checkout = () => {
         setAddress(data[0]);
     }, []);
 
-    const addressHandler = (item) => {
-        setAddress(item);
-    }
-
-    console.log('address', address);
+    // console.log('address', address);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -48,7 +44,7 @@ const Checkout = () => {
                 {/* address */}
                 <View style={{ paddingHorizontal: 13 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Saved Addresses</Text>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Add new</Text>
                             <Icon3 name="plus" size={13} color={backIconColor} />
@@ -57,7 +53,7 @@ const Checkout = () => {
 
                     {data.map(item => (
                         <View key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
-                            <TouchableOpacity onPress={() => addressHandler(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
+                            <TouchableOpacity onPress={() => setAddress(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
                                 {address?.id === item?.id ? (
                                     <View>
                                         <Icon2 name="checkbox-marked" size={20} color={backIconColor} />

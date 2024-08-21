@@ -18,6 +18,13 @@ const Cart = () => {
 
     const dispatch = useDispatch();
 
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
+
     const cartProducts = useSelector(state => state.cart);
     console.log('cartProducts', cartProducts);
 
@@ -45,46 +52,6 @@ const Cart = () => {
     const cartProductsSubTotal = () => {
         return cartProducts.reduce((total, item) => total + item.qty * item.units.discountedPrice, 0);
     };
-
-    const renderOrder = ({ item }) => {
-        <View style={{ marginBottom: 8, padding: 4, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
-            <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
-                <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
-            </View>
-            <View style={{ flex: 3, flexDirection: 'column', height: '100%', paddingHorizontal: 10, paddingVertical: 6 }}>
-                <View style={{ flex: 0.8 }}>
-                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.name}</Text>
-                </View>
-                <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingTop: 3 }}>
-                    <View style={{ flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-                        <View style={{ flexDirection: 'column', gap: 1 }}>
-                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Fruit</Text>
-                            <Text style={{ color: backIconColor, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>500 gm</Text>
-                        </View>
-                        <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.6, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 5, paddingHorizontal: 5, borderRadius: 7 }}>
-                            <TouchableOpacity style={{ width: 20, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                                <Icon3 name="minus" size={13} color={'#000'} />
-                            </TouchableOpacity>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>0</Text>
-                            <TouchableOpacity style={{ width: 20, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                                <Icon3 name="plus" size={13} color={'#000'} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingBottom: 25 }}>
-                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹299.00</Text>
-                    </View>
-                </View>
-            </View>
-        </View>
-    };
-
-    useFocusEffect(
-        useCallback(() => {
-            StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
-            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
-        }, [])
-    );
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
