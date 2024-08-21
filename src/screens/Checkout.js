@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
-import { background, darkGreen } from '../utils/colors';
+import { background, backIconColor, darkGreen } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -28,7 +28,15 @@ const Checkout = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ paddingHorizontal: 13 }}>
+            <View style={{ paddingHorizontal: 13, paddingTop: 5 }}>
+                <View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Saved Addresses</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')}>
+                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Add new</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
             </View>
         </SafeAreaView>

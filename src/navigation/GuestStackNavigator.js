@@ -14,6 +14,7 @@ import SearchScreen from '../screens/SearchScreen';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Checkout from '../screens/Checkout';
 import { backIconColor, darkGreen } from '../utils/colors';
+import AddNewAddress from '../screens/AddNewAddress';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,7 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             <Stack.Screen name="ProductDetails" component={ProductDetails} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
             <Stack.Screen name="Checkout" component={Checkout} />
+            <Stack.Screen name="AddNewAddress" component={AddNewAddress} />
             {/* Add other screens that are independent of the tab navigator */}
         </Stack.Navigator>
     );
