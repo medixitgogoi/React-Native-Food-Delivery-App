@@ -74,7 +74,7 @@ const Checkout = () => {
                                         </View>
                                     )}
                                 </View>
-                                <Text style={{ color: '#000', textAlign: 'justify', fontSize: responsiveFontSize(1.8) }}>{item.address}</Text>
+                                <Text style={{ color: address?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address}</Text>
                             </View>
                             <TouchableOpacity style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
                                 <Icon3 name="pencil" size={15} color={'#868c95'} />
