@@ -97,6 +97,8 @@ const Login = () => {
                                     <Text style={{ color: '#000', textAlign: 'center', color: '#555555', textTransform: 'uppercase', fontWeight: 600, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in </Text>
                                     <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
                                 </View>
+
+                                {/* Phone Number */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <View style={{ height: 40, flex: 0.165, borderColor: '#4d4d4d', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: lightGreen }}>
                                         <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2) }}>+91</Text>
@@ -113,6 +115,8 @@ const Login = () => {
                                         />
                                     </View>
                                 </View>
+
+                                {/* Password */}
                                 <View style={{ marginTop: 8 }}>
                                     <TextInput
                                         style={{ height: 40, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
@@ -122,6 +126,7 @@ const Login = () => {
                                         placeholderTextColor="#afb8c2"
                                     />
                                 </View>
+
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6) }}>Don't have an account?</Text>
@@ -134,6 +139,7 @@ const Login = () => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            
                             <LinearGradient
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
