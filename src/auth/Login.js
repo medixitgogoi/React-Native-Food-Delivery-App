@@ -14,7 +14,7 @@ const Login = () => {
 
     const [showOtpLogin, setShowOtpLogin] = useState(false);
     const [mobileNumber, setMobileNumber] = useState('');
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const translateX = useRef(new Animated.Value(0)).current;
@@ -139,7 +139,7 @@ const Login = () => {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            
+
                             <LinearGradient
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
