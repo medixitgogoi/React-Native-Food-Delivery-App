@@ -7,7 +7,7 @@ const SplashScreen = () => {
     return (
         <ImageBackground
             source={require('../assets/splash6.jpeg')} // Replace with your image path
-            style={{ flex: 1, opacity: 0.5, backgroundColor: '#0f2811' }}
+            style={{ flex: 1, opacity: 1, backgroundColor: '#0f2811' }}
             resizeMode="cover" // Ensures the image covers the entire screen
         >
             <SafeAreaView style={{ flex: 1, }}>
