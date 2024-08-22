@@ -16,8 +16,8 @@ const SplashScreen = () => {
                     backgroundColor="transparent"
                 />
 
-                <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <Image source={require('../assets/logo.jpg')} style={{ width: 300, height: 300, resizeMode: 'contain' }} />
+                <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 20 }}>
+                    <Image source={require('../assets/logo2.png')} style={{ width: 300, height: 300, resizeMode: 'contain' }} />
                     <Text style={{ color: '#fff', fontWeight: '800', fontSize: responsiveFontSize(3.5), textTransform: 'uppercase' }}>SkerCart</Text>
                 </View>
             </SafeAreaView>
