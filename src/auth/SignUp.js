@@ -15,7 +15,7 @@ const SignUp = () => {
 
     const otpHandler = () => {
 
-    }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
