@@ -48,7 +48,7 @@ const SignUp = () => {
                         <Image source={require('../assets/mobile.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
                     </View>
 
-                    <View style={{ flexDirection: 'column', gap: 5 }}>
+                    <View style={{ flexDirection: 'column', gap: 1 }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700', textAlign: 'center' }}>Enter Your Mobile Number</Text>
                         <Text style={{ color: '#444444', fontSize: responsiveFontSize(2), fontWeight: '400', textAlign: 'center' }}>We'll send a confirmation code to verify it's really you</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
