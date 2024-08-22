@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, SafeAreaView, StatusBar, Animated, TouchableOpacity, Dimensions, TextInput, Alert } from 'react-native';
-import { darkGreen, lightGreen, backIconColor, offWhite } from '../utils/colors';
+import { darkGreen, lightGreen, backIconColor } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
