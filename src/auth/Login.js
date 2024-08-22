@@ -4,6 +4,7 @@ import { darkGreen, lightGreen, backIconColor, offWhite } from '../utils/colors'
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import Icon from 'react-native-vector-icons/dist/Feather';
 import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -16,6 +17,7 @@ const Login = () => {
     const [mobileNumber, setMobileNumber] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [show, setShow] = useState(true);
 
     const translateX = useRef(new Animated.Value(0)).current;
 
@@ -89,7 +91,7 @@ const Login = () => {
 
                         {/* Login Form */}
                         <View style={{ width: screenWidth, padding: 25, justifyContent: 'space-between', flex: 1, flexDirection: 'column', }}>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: 900, textAlign: 'center' }}>Hi There 👋</Text>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: 800, textAlign: 'center' }}>Hi There, Welcome Back 👋</Text>
 
                             <View style={{ flexDirection: 'column', gap: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 3 }}>
@@ -124,14 +126,29 @@ const Login = () => {
                                         value={password}
                                         onChangeText={setPassword}
                                         placeholderTextColor="#afb8c2"
+                                        secureTextEntry={show}
                                     />
+                                    <View style={{ position: 'absolute', right: 5, top: 12 }}>
+                                        <Icon
+                                            name={show ? 'eye-off' : 'eye'}
+                                            onPress={() => setShow(!show)}
+                                            style={{
+                                                color: backIconColor,
+                                                fontSize: responsiveFontSize(2.2),
+                                                width: 28,
+                                                height: 28,
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}
+                                        />
+                                    </View>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 3 }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6) }}>Don't have an account?</Text>
-                                        <TouchableOpacity style={{ paddingHorizontal: 5 }} onPress={() => navigation.navigate('SignUp')}>
-                                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.5), fontWeight: '600', textDecorationLine: 'underline' }}>Sign Up</Text>
+                                        <TouchableOpacity style={{ paddingHorizontal: 3 }} onPress={() => navigation.navigate('SignUp')}>
+                                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>Register now</Text>
                                         </TouchableOpacity>
                                     </View>
                                     <TouchableOpacity style={{ paddingLeft: 5 }} onPress={() => navigation.navigate('ForgotPassword')}>
