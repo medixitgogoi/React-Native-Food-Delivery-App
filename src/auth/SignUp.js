@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import { darkGreen, lightGreen, offWhite } from '../utils/colors';
+import { darkGreen } from '../utils/colors';
 import { useState } from 'react';
 
 const SignUp = () => {
@@ -40,8 +40,7 @@ const SignUp = () => {
                 <View style={{ flexDirection: 'column', paddingTop: 15, }}>
                     {/* <View style={{ flexDirection: 'column', gap: 20 }}>
                         <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(3.5) }}>Let's Register Account</Text>
-                        <Text style={{ color: '#737984', fon
-                        tWeight: '600', fontSize: responsiveFontSize(2.1) }}>Hello user, create an account to get started with our services</Text>
+                        <Text style={{ color: '#737984', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Hello user, create an account to get started with our services</Text>
                     </View> */}
 
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
@@ -49,8 +48,8 @@ const SignUp = () => {
                     </View>
 
                     <View style={{ flexDirection: 'column', gap: 1 }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700', textAlign: 'center' }}>Enter Your Mobile Number</Text>
-                        <Text style={{ color: '#444444', fontSize: responsiveFontSize(2), fontWeight: '400', textAlign: 'center' }}>We'll send a confirmation code to verify it's really you</Text>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: '700', textAlign: 'center' }}>Enter Your Mobile Number</Text>
+                        <Text style={{ color: '#444444', fontSize: responsiveFontSize(1.9), fontWeight: '500', textAlign: 'center' }}>We'll send a confirmation code to verify it's really you</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
                             <View style={{ height: 40, flex: 0.165, borderColor: '#4d4d4d', borderWidth: 1, borderRadius: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#d9eed7' }}>
                                 <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2) }}>+91</Text>

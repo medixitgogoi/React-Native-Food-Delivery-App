@@ -68,7 +68,7 @@ const Login = () => {
                                         </View>
 
                                         <View>
-                                            <Text style={{ color: '#afb8c2', fontSize: responsiveFontSize(2), fontWeight: 500, textAlign: 'center' }}>Order delicious cakes, fresh groceries, and meals from your favorite restaurants — all in one convenient app!</Text>
+                                            <Text style={{ color: '#444444', fontSize: responsiveFontSize(2), fontWeight: 500, textAlign: 'center' }}>Order delicious cakes, fresh groceries, and meals from your favorite restaurants — all in one convenient app!</Text>
                                         </View>
                                     </View>
 
