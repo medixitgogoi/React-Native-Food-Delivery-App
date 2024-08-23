@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../auth/Login';
 import SplashScreen from '../auth/SplashScreen';
-import SignUp from '../auth/OtpVerification';
+import SignUp from '../auth/SignUp';
 import ForgotPassword from '../auth/ForgotPassword';
 import OtpVerification from '../auth/OtpVerification';
 

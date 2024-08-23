@@ -1,4 +1,4 @@
-import { Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -9,8 +9,8 @@ import { useState } from 'react';
 
 const OtpVerification = ({ route }) => {
 
-    const to = route.params.to;
-    console.log('to', to);
+    const to = route?.params?.to;
+    // console.log('to', to);
 
     const navigation = useNavigation();
 
@@ -21,12 +21,18 @@ const OtpVerification = ({ route }) => {
     };
 
     const handleOTPVerificationSuccess = () => {
-        if (to === 'signup') {
-            navigation.navigate('SignUpScreen');
-        } else if (to === 'forgotPassword') {
-            navigation.navigate('ForgotPasswordScreen');
+        if (mobileNumber.length < 10) {
+            Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
+            return;
+        } else {
+            if (to === 'signup') {
+                navigation.navigate('SignUp');
+            } else if (to === 'forgotPassword') {
+                navigation.navigate('ForgotPassword');
+            }
         }
     };
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -85,7 +91,7 @@ const OtpVerification = ({ route }) => {
                         end={{ x: 1, y: 0 }}
                         style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 30 }}
                     >
-                        <TouchableOpacity onPress={() => otpHandler()} style={{ gap: 5, width: '100%', height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={handleOTPVerificationSuccess} style={{ gap: 5, width: '100%', height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                             <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Send OTP</Text>
                             <Icon4 name="arrowright" size={23} color='#fff' />
                         </TouchableOpacity>

@@ -2,8 +2,8 @@ import { StyleSheet, Text, View } from 'react-native';
 
 const SignUp = () => {
     return (
-        <View>
-            <Text></Text>
+        <View style={{ marginTop: 30 }}>
+            <Text style={{ color: '#000' }}>SignUp</Text>
         </View>
     )
 }
