@@ -39,9 +39,9 @@ const SignUp = () => {
                 {/* Content */}
                 <View style={{ flexDirection: 'column', paddingTop: 15, }}>
                     {/* <View style={{ flexDirection: 'column', gap: 20 }}>
-                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(3.5) }}>Let's Register Account</Text>
-                        <Text style={{ color: '#737984', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Hello user, create an account to get started with our services</Text>
-                    </View> */}
+                            <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(3.5) }}>Let's Register Account</Text>
+                            <Text style={{ color: '#737984', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Hello user, create an account to get started with our services</Text>
+                        </View> */}
 
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
                         <Image source={require('../assets/mobile.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
