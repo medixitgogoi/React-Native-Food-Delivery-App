@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from 'react';
 const { width: screenWidth } = Dimensions.get('window'); // Get the screen width
 
 const OtpVerification = ({ route }) => {
-    
+
     const to = route?.params?.to;
     const navigation = useNavigation();
     const [mobileNumber, setMobileNumber] = useState('443435353535');

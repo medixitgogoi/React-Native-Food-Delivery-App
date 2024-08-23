@@ -93,7 +93,6 @@ const OtpVerification = ({ route }) => {
                 animated={true}
                 backgroundColor="#fff"
                 barStyle="dark-content"
-                translucent={true}
             />
 
             {/* Linear Gradient Background */}
