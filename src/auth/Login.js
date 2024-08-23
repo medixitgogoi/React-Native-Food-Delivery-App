@@ -169,7 +169,7 @@ const Login = () => {
                                     disabled={loading}
                                     style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}
                                 >
-                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Sending OTP...' : 'Continue'}</Text>
+                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Logging you in...' : 'Continue'}</Text>
                                     <Icon4 name="arrowright" size={23} color={'#fff'} />
                                     {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Continue</Text> */}
                                 </TouchableOpacity>

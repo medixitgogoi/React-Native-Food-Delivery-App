@@ -9,7 +9,7 @@ const StackNavigation = () => {
 
     const cartProducts = useSelector(state => state.cart);
 
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
 
     const cartItemCount = cartProducts.length;
 
