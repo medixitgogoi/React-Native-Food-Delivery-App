@@ -1,23 +1,21 @@
-import { Alert, Image, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import { darkGreen, offWhite } from '../utils/colors';
-import { useState } from 'react';
+import { backIconColor, darkGreen, offWhite } from '../utils/colors';
+import { useState, useRef } from 'react';
 
 const OtpVerification = ({ route }) => {
-
     const to = route?.params?.to;
-    // console.log('to', to);
-
     const navigation = useNavigation();
-
     const [mobileNumber, setMobileNumber] = useState('443435353535');
+    const [otp, setOtp] = useState(['', '', '', '']);
+    const inputRefs = useRef([]);
 
     const otpHandler = () => {
-
+        // Handle OTP submission logic here
     };
 
     const handleOTPVerificationSuccess = () => {
@@ -29,6 +27,24 @@ const OtpVerification = ({ route }) => {
                 navigation.navigate('SignUp');
             } else if (to === 'forgotPassword') {
                 navigation.navigate('ForgotPassword');
+            }
+        }
+    };
+
+    const handleInputChange = (text, index) => {
+        if (text.length === 1) {
+            const newOtp = [...otp];
+            newOtp[index] = text;
+            setOtp(newOtp);
+            if (index < 3) {
+                inputRefs.current[index + 1].focus();
+            }
+        } else if (text === '') {
+            const newOtp = [...otp];
+            newOtp[index] = text;
+            setOtp(newOtp);
+            if (index > 0) {
+                inputRefs.current[index - 1].focus();
             }
         }
     };
@@ -45,7 +61,7 @@ const OtpVerification = ({ route }) => {
             {/* Linear Gradient Background */}
             <LinearGradient
                 colors={['#fff', '#c7e6c4']}
-                style={{ flex: 1, paddingHorizontal: 13, }}
+                style={{ flex: 1, paddingHorizontal: 13 }}
             >
                 {/* Header */}
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginVertical: 20 }}>
@@ -53,16 +69,12 @@ const OtpVerification = ({ route }) => {
                 </TouchableOpacity>
 
                 {/* Content */}
-                <View style={{ flexDirection: 'column', paddingTop: 15, }}>
-                    {/* <View style={{ flexDirection: 'column', gap: 20 }}>
-                            <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(3.5) }}>Let's Register Account</Text>
-                            <Text style={{ color: '#737984', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Hello user, create an account to get started with our services</Text>
-                        </View> */}
-
+                <View style={{ flexDirection: 'column', paddingTop: 15 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
                         <Image source={require('../assets/mobile.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
                     </View>
 
+                    {/* Enter mobile number */}
                     {/* <View>
                         <View style={{ flexDirection: 'column', gap: 1 }}>
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: '700', textAlign: 'center' }}>Enter Your Mobile Number</Text>
@@ -98,6 +110,7 @@ const OtpVerification = ({ route }) => {
                         </LinearGradient>
                     </View> */}
 
+                    {/* OTP */}
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>We have sent a verification code to</Text>
@@ -107,14 +120,37 @@ const OtpVerification = ({ route }) => {
                         <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 8 }}>
                             <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Enter Your OTP Code Below</Text>
                         </View>
-                    </View>
 
+                        {/* OTP Input Boxes */}
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 40 }}>
+                            {otp.map((_, index) => (
+                                <TextInput
+                                    key={index}
+                                    style={{
+                                        width: 45,
+                                        height: 45,
+                                        borderWidth: 1.8,
+                                        borderRadius: 10,
+                                        borderColor: backIconColor,
+                                        textAlign: 'center',
+                                        fontSize: 18,
+                                        marginHorizontal: 8,
+                                        color: '#000',
+                                        fontWeight: '600'
+                                    }}
+                                    value={otp[index]}
+                                    onChangeText={(text) => handleInputChange(text, index)}
+                                    keyboardType="numeric"
+                                    maxLength={1}
+                                    ref={(ref) => (inputRefs.current[index] = ref)}
+                                />
+                            ))}
+                        </View>
+                    </View>
                 </View>
             </LinearGradient>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 export default OtpVerification;
-
-const styles = StyleSheet.create({});
