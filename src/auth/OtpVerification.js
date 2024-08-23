@@ -14,10 +14,10 @@ const OtpVerification = ({ route }) => {
     const to = route?.params?.to;
 
     const navigation = useNavigation();
-    
+
     const inputRefs = useRef([]);
-    
-    const [mobileNumber, setMobileNumber] = useState('443435353535');
+
+    const [mobileNumber, setMobileNumber] = useState('');
     const [otp, setOtp] = useState(['', '', '', '']);
     const [resendTimer, setResendTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
@@ -74,13 +74,17 @@ const OtpVerification = ({ route }) => {
     };
 
     const handleSendOtpPress = () => {
-        // Start the slide animation
-        setShowOtpSection(true);
-        Animated.timing(slideAnim, {
-            toValue: -screenWidth, // Slide left by the screen width
-            duration: 300,
-            useNativeDriver: true,
-        }).start();
+        if (mobileNumber.length < 10) {
+            Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
+            return;
+        } else {
+            setShowOtpSection(true);
+            Animated.timing(slideAnim, {
+                toValue: -screenWidth,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        }
     };
 
     return (
@@ -95,10 +99,10 @@ const OtpVerification = ({ route }) => {
             {/* Linear Gradient Background */}
             <LinearGradient
                 colors={['#fff', '#c7e6c4']}
-                style={{ flex: 1, paddingHorizontal: 13 }}
+                style={{ flex: 1 }}
             >
                 {/* Header */}
-                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginVertical: 20 }}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginVertical: 20, paddingHorizontal: 13 }}>
                     <Icon4 name="arrowleft" size={23} color={'#000'} />
                 </TouchableOpacity>
 
@@ -143,9 +147,9 @@ const OtpVerification = ({ route }) => {
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
-                                style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 35 }}
+                                style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 35, width: '95%', }}
                             >
-                                <TouchableOpacity onPress={handleSendOtpPress} style={{ gap: 5, width: '100%', height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity onPress={handleSendOtpPress} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Send OTP</Text>
                                     <Icon4 name="arrowright" size={23} color='#fff' />
                                 </TouchableOpacity>
@@ -157,7 +161,7 @@ const OtpVerification = ({ route }) => {
                             {/* Heading */}
                             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>We have sent a verification code to</Text>
-                                <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2) }}>+91 {mobileNumber}</Text>
+                                <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2) }}>+91 {`*******${mobileNumber.slice(-3)}`}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 8 }}>
@@ -177,7 +181,7 @@ const OtpVerification = ({ route }) => {
                                             borderColor: backIconColor,
                                             textAlign: 'center',
                                             fontSize: 18,
-                                            marginHorizontal: 8,
+                                            marginHorizontal: 10,
                                             color: '#000',
                                             fontWeight: '600'
                                         }}
@@ -212,7 +216,7 @@ const OtpVerification = ({ route }) => {
                                     <Text style={{
                                         color: isResendDisabled ? offWhite : backIconColor,
                                         fontSize: responsiveFontSize(1.7),
-                                        fontWeight: isResendDisabled ? '500' : '600',
+                                        fontWeight: isResendDisabled ? '400' : '600',
                                         textTransform: isResendDisabled ? '' : 'uppercase',
                                     }}>
                                         Resend {isResendDisabled ? `in ${resendTimer}s` : 'code'}

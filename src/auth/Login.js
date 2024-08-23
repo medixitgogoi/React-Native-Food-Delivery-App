@@ -50,12 +50,12 @@ const Login = () => {
             <View style={{ flexDirection: 'column', height: '100%' }}>
 
                 {/* Image */}
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: lightGreen, flex: 0.6 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: lightGreen, flex: 0.58 }}>
                     <Image source={require("../assets/login3.png")} style={{ width: '100%', height: '100%' }} resizeMode='contain' />
                 </View>
 
                 {/* Content */}
-                <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 50, borderTopRightRadius: 50, flex: 0.4 }}>
+                <View style={{ backgroundColor: '#fff', borderTopLeftRadius: 50, borderTopRightRadius: 50, flex: 0.42 }}>
                     <Animated.View style={{ flexDirection: 'row', transform: [{ translateX }], width: screenWidth * 2, height: '100%' }}>
                         {/* Get Started */}
                         <View style={{ width: screenWidth, height: '100%', padding: 30 }}>
@@ -94,7 +94,7 @@ const Login = () => {
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: 800, textAlign: 'center' }}>Hi There, Welcome Back 👋</Text>
 
                             <View style={{ flexDirection: 'column', gap: 3 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 3 }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 8 }}>
                                     <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
                                     <Text style={{ color: '#000', textAlign: 'center', color: '#555555', textTransform: 'uppercase', fontWeight: 600, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in </Text>
                                     <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
@@ -119,7 +119,7 @@ const Login = () => {
                                 </View>
 
                                 {/* Password */}
-                                <View style={{ marginTop: 8 }}>
+                                <View style={{ marginTop: 10 }}>
                                     <TextInput
                                         style={{ height: 40, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
                                         placeholder="Enter Password"
@@ -144,7 +144,8 @@ const Login = () => {
                                     </View>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 3 }}>
+                                {/* Don't have account */}
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 5 }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6) }}>Don't have an account?</Text>
                                         <TouchableOpacity style={{ paddingHorizontal: 3 }} onPress={() => navigation.navigate('OtpVerification', { to: 'signup' })}>
