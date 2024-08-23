@@ -147,11 +147,11 @@ const Login = () => {
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 3 }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6) }}>Don't have an account?</Text>
-                                        <TouchableOpacity style={{ paddingHorizontal: 3 }} onPress={() => navigation.navigate('SignUp')}>
+                                        <TouchableOpacity style={{ paddingHorizontal: 3 }} onPress={() => navigation.navigate('OtpVerification', { to: 'signup' })}>
                                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>Register now</Text>
                                         </TouchableOpacity>
                                     </View>
-                                    <TouchableOpacity style={{ paddingLeft: 5 }} onPress={() => navigation.navigate('ForgotPassword')}>
+                                    <TouchableOpacity style={{ paddingLeft: 5 }} onPress={() => navigation.navigate('OtpVerification', { to: 'forgotPassword' })}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.5), fontWeight: '600', textDecorationLine: 'underline' }}>Forgot password?</Text>
                                     </TouchableOpacity>
                                 </View>
