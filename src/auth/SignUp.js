@@ -45,107 +45,115 @@ const SignUp = () => {
                     <Icon4 name="arrowleft" size={23} color={'#000'} />
                 </TouchableOpacity>
 
-                <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
-                    <Text style={{ fontSize: responsiveFontSize(3.5), fontWeight: 'bold', color: '#000', marginBottom: 10 }}>Let's Register Account</Text>
-                    <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '400', color: '#333', marginBottom: 30 }}>Hello user, you have a greatful journey</Text>
+                <View style={{ flex: 1, flexDirection: 'column', paddingHorizontal: 20, gap: 30, paddingVertical: 50 }}>
+                    <View style={{ marginBottom: 40 }}>
+                        <Text style={{ fontSize: responsiveFontSize(3.5), fontWeight: '700', color: '#000', marginBottom: 5 }}>Let's Register Account</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '400', color: '#333', fontWeight: '500' }}>Hello user, you have a greatful journey</Text>
+                    </View>
 
-                    {/* Name */}
-                    <TextInput
-                        style={{ height: 42, borderColor: isNameFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
-                        placeholder="Enter Your Name"
-                        value={name}
-                        onChangeText={setName}
-                        placeholderTextColor={offWhite}
-                        onFocus={() => setIsNameFocused(true)}
-                        onBlur={() => setIsNameFocused(false)}
-                    />
-
-                    {/* Email */}
-                    <TextInput
-                        style={{ marginTop: 15, height: 42, borderColor: isEmailFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
-                        placeholder="Enter Your Email"
-                        value={email}
-                        onChangeText={setEmail}
-                        placeholderTextColor={offWhite}
-                        onFocus={() => setIsEmailFocused(true)}
-                        onBlur={() => setIsEmailFocused(false)}
-                    />
-
-                    {/* Password */}
-                    <View style={{ marginTop: 15 }}>
+                    <View>
+                        {/* Name */}
                         <TextInput
-                            style={{ height: 40, borderColor: isPasswordFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
-                            placeholder="Enter Password"
-                            value={password}
-                            onChangeText={setPassword}
+                            style={{ height: 45, borderColor: isNameFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
+                            placeholder="Enter Your Name"
+                            value={name}
+                            onChangeText={setName}
                             placeholderTextColor={offWhite}
-                            secureTextEntry={show}
-                            onFocus={() => setIsPasswordFocused(true)}
-                            onBlur={() => setIsPasswordFocused(false)}
+                            onFocus={() => setIsNameFocused(true)}
+                            onBlur={() => setIsNameFocused(false)}
                         />
-                        <View style={{ position: 'absolute', right: 5, top: 12 }}>
-                            <Icon
-                                name={show ? 'eye-off' : 'eye'}
-                                onPress={() => setShow(!show)}
-                                style={{
-                                    color: backIconColor,
-                                    fontSize: responsiveFontSize(2.2),
-                                    width: 28,
-                                    height: 28,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
+
+                        {/* Email */}
+                        <TextInput
+                            style={{ marginTop: 25, height: 45, borderColor: isEmailFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
+                            placeholder="Enter Your Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType='email-address'
+                            placeholderTextColor={offWhite}
+                            onFocus={() => setIsEmailFocused(true)}
+                            onBlur={() => setIsEmailFocused(false)}
+                        />
+
+                        {/* Password */}
+                        <View style={{ marginTop: 25 }}>
+                            <TextInput
+                                style={{ height: 45, borderColor: isPasswordFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
+                                placeholder="Enter Password"
+                                value={password}
+                                onChangeText={setPassword}
+                                placeholderTextColor={offWhite}
+                                secureTextEntry={show}
+                                onFocus={() => setIsPasswordFocused(true)}
+                                onBlur={() => setIsPasswordFocused(false)}
                             />
+                            <View style={{ position: 'absolute', right: 5, top: 12 }}>
+                                <Icon
+                                    name={show ? 'eye-off' : 'eye'}
+                                    onPress={() => setShow(!show)}
+                                    style={{
+                                        color: '#000',
+                                        fontSize: responsiveFontSize(2.2),
+                                        width: 28,
+                                        height: 28,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                />
+                            </View>
+                        </View>
+
+                        {/* Confirm Password */}
+                        <View style={{ marginTop: 25 }}>
+                            <TextInput
+                                style={{ height: 45, borderColor: isConfirmPasswordFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChangeText={setConfirmPassword}
+                                placeholderTextColor={offWhite}
+                                secureTextEntry={confirmShow}
+                                onFocus={() => setIsConfirmPasswordFocused(true)}
+                                onBlur={() => setIsConfirmPasswordFocused(false)}
+                            />
+                            <View style={{ position: 'absolute', right: 5, top: 12 }}>
+                                <Icon
+                                    name={confirmShow ? 'eye-off' : 'eye'}
+                                    onPress={() => setConfirmShow(!confirmShow)}
+                                    style={{
+                                        color: '#000',
+                                        fontSize: responsiveFontSize(2.2),
+                                        width: 28,
+                                        height: 28,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                />
+                            </View>
                         </View>
                     </View>
 
-                    {/* Confirm Password */}
-                    <View style={{ marginTop: 15 }}>
-                        <TextInput
-                            style={{ height: 40, borderColor: isConfirmPasswordFocused ? backIconColor : '#ccc', fontWeight: "500", borderWidth: 1.4, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000' }}
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                            onChangeText={setConfirmPassword}
-                            placeholderTextColor={offWhite}
-                            secureTextEntry={confirmShow}
-                            onFocus={() => setIsConfirmPasswordFocused(true)}
-                            onBlur={() => setIsConfirmPasswordFocused(false)}
-                        />
-                        <View style={{ position: 'absolute', right: 5, top: 12 }}>
-                            <Icon
-                                name={confirmShow ? 'eye-off' : 'eye'}
-                                onPress={() => setConfirmShow(!confirmShow)}
-                                style={{
-                                    color: backIconColor,
-                                    fontSize: responsiveFontSize(2.2),
-                                    width: 28,
-                                    height: 28,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            />
+                    <View>
+                        {/* Sign up button */}
+                        <LinearGradient
+                            colors={[darkGreen, '#3a9f43']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 40, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                        >
+                            <TouchableOpacity style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
+                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Sign up</Text>
+                            </TouchableOpacity>
+                        </LinearGradient>
+
+                        {/* Already have an account */}
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
+                            <Text style={{ color: '#333', fontSize: responsiveFontSize(1.8) }}>Already have an account? </Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '600' }}>Login</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
-                    {/* Sign up button */}
-                    <LinearGradient
-                        colors={[darkGreen, '#3a9f43']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 25, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
-                    >
-                        <TouchableOpacity style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
-                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Sign up</Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-
-                    {/* Already have an account */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
-                        <Text style={{ color: '#333', fontSize: responsiveFontSize(1.8) }}>Already have an account? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '600' }}>Login</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </LinearGradient>
         </SafeAreaView>
