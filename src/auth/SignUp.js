@@ -47,8 +47,8 @@ const SignUp = () => {
 
                 <View style={{ flex: 1, flexDirection: 'column', paddingHorizontal: 20, gap: 30, paddingVertical: 50 }}>
                     <View style={{ marginBottom: 40 }}>
-                        <Text style={{ fontSize: responsiveFontSize(3.5), fontWeight: '700', color: '#000', marginBottom: 5 }}>Let's Register Account</Text>
-                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '400', color: '#333', fontWeight: '500' }}>Hello user, you have a greatful journey</Text>
+                        <Text style={{ fontSize: responsiveFontSize(3.5), fontWeight: '700', color: '#000', marginBottom: 8 }}>Let's Register Account</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '400', color: '#333', fontWeight: '500' }}>Start your journey to fresher, healthier living today!</Text>
                     </View>
 
                     <View>
