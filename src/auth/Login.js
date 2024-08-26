@@ -1,12 +1,14 @@
 import { useRef, useState } from 'react';
-import { Text, View, Image, SafeAreaView, StatusBar, Animated, TouchableOpacity, Dimensions, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, StatusBar, Animated, TouchableOpacity, Dimensions, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { darkGreen, lightGreen, backIconColor } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import Icon from 'react-native-vector-icons/dist/Feather';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
+import Icon from 'react-native-vector-icons/dist/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/LoginSlice';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -32,12 +34,20 @@ const Login = () => {
         });
     };
 
+    const dispatch = useDispatch();
+
     const handleLoginSubmit = () => {
-        if (mobileNumber.length < 10) {
-            Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
-            return;
-        }
-        setLoading(true);
+        setLoading(true)
+        setTimeout(() => {
+            dispatch(login());
+            setLoading(false);
+        }, 1000);
+        // if (mobileNumber.length < 10) {
+        //     Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
+        //     return;
+        // } else {
+        //     dispatch(login());
+        // }
     };
 
     return (
@@ -110,9 +120,9 @@ const Login = () => {
                                         <TextInput
                                             style={{ height: 40, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
                                             placeholder="Enter Phone Number"
-                                            value={mobileNumber}
                                             keyboardType="numeric"
                                             maxLength={10}
+                                            value={mobileNumber}
                                             onChangeText={setMobileNumber}
                                             placeholderTextColor="#afb8c2"
                                         />
@@ -170,8 +180,16 @@ const Login = () => {
                                     disabled={loading}
                                     style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}
                                 >
-                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Logging you in...' : 'Login'}</Text>
-                                    <Icon2 name="login" size={23} color={'#fff'} />
+                                    {loading ? (
+                                        <View>
+                                            <ActivityIndicator size='small' color={'#fff'} />
+                                        </View>
+                                    ) : (
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Login</Text>
+                                            <Icon2 name="login" size={23} color={'#fff'} />
+                                        </View>
+                                    )}
                                     {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Continue</Text> */}
                                 </TouchableOpacity>
                             </LinearGradient>
@@ -186,3 +204,12 @@ const Login = () => {
 }
 
 export default Login;
+
+const styles = StyleSheet.create({
+    buttonText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#000'
+    },
+});

@@ -8,14 +8,13 @@ import { useSelector } from 'react-redux';
 const StackNavigation = () => {
 
     const cartProducts = useSelector(state => state.cart);
-
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const login = useSelector(state => state.login);
 
     const cartItemCount = cartProducts.length;
 
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
+            {login.isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
         </NavigationContainer>
     );
 }

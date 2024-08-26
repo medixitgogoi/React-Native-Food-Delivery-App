@@ -1,20 +1,48 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = [];
+const initialState = {
+    isUserLoggedIn: false,
+};
 
 export const loginSlice = createSlice({
     name: 'login',
     initialState,
     reducers: {
-        addLoginUser: (state, action) => {
-            state.push(action.payload);
+        login: (state) => {
+            state.isUserLoggedIn = true;
         },
-        logoutUser: (state) => {
-            return state = [];
+        logout: (state) => {
+            state.isUserLoggedIn = false;
         },
     },
 })
 
-// Action creators are generated for each case reducer function
-export const { addLoginUser, logoutUser } = loginSlice.actions;
+export const { login, logout } = loginSlice.actions;
 export default loginSlice.reducer;
+
+
+
+
+
+
+
+
+// import { createSlice } from '@reduxjs/toolkit';
+
+// const initialState = [];
+
+// export const loginSlice = createSlice({
+//     name: 'login',
+//     initialState,
+//     reducers: {
+//         addLoginUser: (state, action) => {
+//             state.push(action.payload);
+//         },
+//         logoutUser: (state) => {
+//             return state = [];
+//         },
+//     },
+// })
+
+// export const { addLoginUser, logoutUser } = loginSlice.actions;
+// export default loginSlice.reducer;

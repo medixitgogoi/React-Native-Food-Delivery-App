@@ -3,6 +3,7 @@ import cartReducer from "./CartSlice";
 import userReducer from "./UserSlice";
 import wishlistReducer from "./WishlistSlice";
 import themeReducer from './ThemeSlice';
+import loginReducer from "./LoginSlice";
 
 export const store = configureStore({
     reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
         user: userReducer,
         wishlist: wishlistReducer,
         theme: themeReducer,
+        login: loginReducer
     },
 })
