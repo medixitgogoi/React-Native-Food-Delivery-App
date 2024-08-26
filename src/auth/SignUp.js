@@ -160,10 +160,9 @@ const SignUp = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
                 </View>
 
-                {/* Terms of service */}
+                {/* Terms of service and Privacy Policy */}
                 <View style={{ marginBottom: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
                     <TouchableOpacity onPress={() => setChecked(prev => !prev)}>
                         {checked ? (
