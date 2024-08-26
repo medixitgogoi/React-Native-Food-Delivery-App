@@ -13,7 +13,7 @@ const SignUp = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={'#fff'}
+                backgroundColor="#fff"
                 barStyle="dark-content"
             />
 
