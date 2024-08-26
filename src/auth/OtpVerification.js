@@ -113,7 +113,7 @@ const OtpVerification = ({ route }) => {
                         {/* Content */}
                         <View style={{ flexDirection: 'column', paddingTop: 15 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
-                                <Image source={require('../assets/mobile.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                                <Image source={require('../assets/otp.png')} style={{ width: 220, height: 220, resizeMode: 'contain' }} />
                             </View>
 
                             {/* Sections */}
