@@ -5,6 +5,8 @@ import SplashScreen from '../auth/SplashScreen';
 import SignUp from '../auth/SignUp';
 import ForgotPassword from '../auth/ForgotPassword';
 import OtpVerification from '../auth/OtpVerification';
+import TermsAndConditions from '../auth/TermsAndConditions';
+import PrivacyPolicy from '../auth/PrivacyPolicy';
 
 const AuthStackNavigator = ({ initialRoute }) => {
 
@@ -17,6 +19,8 @@ const AuthStackNavigator = ({ initialRoute }) => {
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="OtpVerification" component={OtpVerification} />
+            <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
+            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         </Stack.Navigator>
     )
 }

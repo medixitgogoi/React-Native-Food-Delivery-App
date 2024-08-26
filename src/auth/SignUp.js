@@ -2,8 +2,9 @@ import { Alert, Animated, Dimensions, Image, StatusBar, Text, TextInput, Touchab
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import Icon from 'react-native-vector-icons/dist/Feather';
+import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
@@ -11,6 +12,8 @@ import { useState, useRef, useEffect } from 'react';
 const SignUp = () => {
 
     const navigation = useNavigation();
+
+    const [checked, setChecked] = useState(false);
 
     const [name, setName] = useState('');
     const [isNameFocused, setIsNameFocused] = useState(false);
@@ -45,6 +48,7 @@ const SignUp = () => {
                     <Icon4 name="arrowleft" size={23} color={'#000'} />
                 </TouchableOpacity>
 
+                {/* Content */}
                 <View style={{ flex: 1, flexDirection: 'column', paddingHorizontal: 20, gap: 30, paddingVertical: 50 }}>
                     {/* Heading */}
                     <View style={{ marginBottom: 40 }}>
@@ -150,9 +154,37 @@ const SignUp = () => {
 
                         {/* Already have an account */}
                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 8 }}>
-                            <Text style={{ color: '#333', fontSize: responsiveFontSize(1.8) }}>Already have an account? </Text>
+                            <Text style={{ color: '#333', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>Already have an account? </Text>
                             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                                 <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '600' }}>Login</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                </View>
+
+                {/* Terms of service */}
+                <View style={{ marginBottom: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
+                    <TouchableOpacity onPress={() => setChecked(prev => !prev)}>
+                        {checked ? (
+                            <View>
+                                <Icon2 name="checkbox-marked" size={16} color={backIconColor} />
+                            </View>
+                        ) : (
+                            <View>
+                                <Icon2 name="checkbox-blank-outline" size={16} color={'#868c95'} />
+                            </View>
+                        )}
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'column', alignItems: 'center', }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(1.5), paddingTop: 1.5 }}>By continuing, you agree to our company's</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: 3 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('TermsAndConditions')}>
+                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.7), fontWeight: '600' }}>Terms & Conditions</Text>
+                            </TouchableOpacity>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.5) }}>and</Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
+                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.7), fontWeight: '600' }}>Privacy Policy</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
