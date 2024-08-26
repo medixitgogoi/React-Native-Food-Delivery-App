@@ -46,11 +46,13 @@ const SignUp = () => {
                 </TouchableOpacity>
 
                 <View style={{ flex: 1, flexDirection: 'column', paddingHorizontal: 20, gap: 30, paddingVertical: 50 }}>
+                    {/* Heading */}
                     <View style={{ marginBottom: 40 }}>
                         <Text style={{ fontSize: responsiveFontSize(3.5), fontWeight: '700', color: '#000', marginBottom: 8 }}>Let's Register Account</Text>
                         <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '400', color: '#333', fontWeight: '500' }}>Start your journey to fresher, healthier living today!</Text>
                     </View>
 
+                    {/* Text Inputs */}
                     <View>
                         {/* Name */}
                         <TextInput
@@ -132,6 +134,7 @@ const SignUp = () => {
                         </View>
                     </View>
 
+                    {/* Buttons */}
                     <View>
                         {/* Sign up button */}
                         <LinearGradient
@@ -153,7 +156,6 @@ const SignUp = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
                 </View>
             </LinearGradient>
         </SafeAreaView>
