@@ -36,8 +36,7 @@ const ForgotPassword = () => {
             >
                 <KeyboardAvoidingView
                     style={{ flex: 1 }}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    keyboardVerticalOffset={50}
+                    behavior={'padding'}
                 >
                     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                         {/* Header */}

@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, StatusBar, Animated, TouchableOpacity, Dimensions, TextInput, Alert } from 'react-native';
+import { Text, View, Image, SafeAreaView, StatusBar, Animated, TouchableOpacity, Dimensions, TextInput, Alert } from 'react-native';
 import { darkGreen, lightGreen, backIconColor } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import Icon from 'react-native-vector-icons/dist/Feather';
+import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -169,8 +170,8 @@ const Login = () => {
                                     disabled={loading}
                                     style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}
                                 >
-                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Logging you in...' : 'Continue'}</Text>
-                                    <Icon4 name="arrowright" size={23} color={'#fff'} />
+                                    <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>{loading ? 'Logging you in...' : 'Login'}</Text>
+                                    <Icon2 name="login" size={23} color={'#fff'} />
                                     {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Continue</Text> */}
                                 </TouchableOpacity>
                             </LinearGradient>
@@ -185,12 +186,3 @@ const Login = () => {
 }
 
 export default Login;
-
-const styles = StyleSheet.create({
-    buttonText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: '#000'
-    },
-});
