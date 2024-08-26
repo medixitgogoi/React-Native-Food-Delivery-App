@@ -109,9 +109,9 @@ const Login = () => {
                                         <TextInput
                                             style={{ height: 40, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
                                             placeholder="Enter Phone Number"
+                                            value={mobileNumber}
                                             keyboardType="numeric"
                                             maxLength={10}
-                                            value={mobileNumber}
                                             onChangeText={setMobileNumber}
                                             placeholderTextColor="#afb8c2"
                                         />

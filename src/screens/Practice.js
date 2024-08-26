@@ -27,7 +27,7 @@ const SignUp = () => {
                     <Icon4 name="arrowleft" size={23} color={'#000'} />
                 </TouchableOpacity>
 
-                <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20, backgroundColor: '#fff' }}>
+                <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
                     <Text style={{ fontSize: responsiveFontSize(3.5), fontWeight: 'bold', color: '#000', marginBottom: 10 }}>Let's Register Account</Text>
                     <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '400', color: '#333', marginBottom: 30 }}>Hello user, you have a greatful journey</Text>
 
