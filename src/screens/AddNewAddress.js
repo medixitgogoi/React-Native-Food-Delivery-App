@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput, PermissionsAndroid, Platform, Alert } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
@@ -8,8 +8,8 @@ import Icon3 from 'react-native-vector-icons/dist/FontAwesome5';
 import Icon4 from 'react-native-vector-icons/dist/Feather';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useState } from 'react';
-import { data } from '../utils/address';
 import LinearGradient from 'react-native-linear-gradient';
+import Geolocation from 'react-native-geolocation-service';
 
 const AddNewAddress = () => {
 
@@ -18,6 +18,50 @@ const AddNewAddress = () => {
     const [name, setName] = useState('');
     const [contact, setContact] = useState('');
     const [addressType, setAddressType] = useState('Home');
+
+    const [location, setLocation] = useState(null);
+
+    useEffect(() => {
+        requestLocationPermission();
+    }, []);
+
+    const requestLocationPermission = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: 'Location Permission',
+                        message: 'This app needs access to your location.',
+                        buttonNeutral: 'Ask Me Later',
+                        buttonNegative: 'Cancel',
+                        buttonPositive: 'OK',
+                    }
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    getLocation();
+                } else {
+                    Alert.alert('Location permission denied');
+                }
+            } catch (err) {
+                console.warn(err);
+            }
+        } else {
+            getLocation();
+        }
+    };
+
+    const getLocation = () => {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                setLocation(position);
+            },
+            (error) => {
+                Alert.alert(`Error: ${error.message}`);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -124,8 +168,17 @@ const AddNewAddress = () => {
                 </View>
 
                 {/* Address Details */}
-                <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-
+                <View style={{ flexDirection: 'column', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
+                    {location ? (
+                        <Text style={{ color: '#000' }}>
+                            Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}
+                        </Text>
+                    ) : (
+                        <Text style={{ color: '#000' }}>Location not available</Text>
+                    )}
+                    <TouchableOpacity style={{ backgroundColor: darkGreen, padding: 10 }} onPress={getLocation}>
+                        <Text style={{ color: '#fff' }}>Change</Text>
+                    </TouchableOpacity>
                 </View>
 
                 {/* Flat/House Details */}
