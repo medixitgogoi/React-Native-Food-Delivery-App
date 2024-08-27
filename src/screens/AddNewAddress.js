@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome5';
 import Icon4 from 'react-native-vector-icons/dist/Feather';
+import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useState } from 'react';
 import { data } from '../utils/address';
 import LinearGradient from 'react-native-linear-gradient';
@@ -74,10 +75,13 @@ const AddNewAddress = () => {
                     <View style={{}}>
                         <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s contact</Text>
                         <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start' }}>
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
+                            <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1 }}>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
+                            </View>
                             <TextInput
                                 style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%' }}
                                 placeholder="Enter Contact No"
+                                keyboardType='numeric'
                                 value={contact}
                                 onChangeText={setContact}
                                 placeholderTextColor={'#c8cacf'}
@@ -120,12 +124,8 @@ const AddNewAddress = () => {
                 </View>
 
                 {/* Address Details */}
-                <View style={{ marginTop: 10 }}>
-                    <Text style={{ fontSize: 16, color: '#555' }}>Christian Basti, Guwahati</Text>
-                    <TouchableOpacity style={{ paddingVertical: 6, paddingHorizontal: 12, backgroundColor: '#F1F7FB', borderRadius: 4, alignSelf: 'flex-start', marginTop: 8 }}>
-                        <Text style={{ fontSize: 14, color: '#CB202D' }}>Change</Text>
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 12, color: '#999', marginTop: 4 }}>Updated based on your exact map pin</Text>
+                <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
+
                 </View>
 
                 {/* Flat/House Details */}
@@ -153,8 +153,9 @@ const AddNewAddress = () => {
                 end={{ x: 1, y: 0 }}
                 style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 8, marginHorizontal: 10, width: '95%', height: 45, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
             >
-                <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center' }}>
+                <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ fontSize: responsiveFontSize(2.1), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Confirm address</Text>
+                    <Icon5 name="arrowright" size={23} color={'#fff'} />
                 </TouchableOpacity>
             </LinearGradient>
 
