@@ -54,7 +54,7 @@ const Home = () => {
 
             {/* searchbar and location */}
             <LinearGradient
-                colors={[darkGreen, '#F9FAFD']}
+                colors={[darkGreen, background]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 locations={[0, 0.99]}
