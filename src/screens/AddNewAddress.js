@@ -151,11 +151,11 @@ const AddNewAddress = () => {
                 colors={[darkGreen, '#3a9f43']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, elevation: 2, marginTop: 30 }}
+                style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 8, marginHorizontal: 10, width: '95%', height: 45, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
             >
-                {/* <TouchableOpacity style={{ backgroundColor: '#DADFE2', padding: 16, borderRadius: 8, alignItems: 'center', position: 'absolute', bottom: 8, width: '96%', alignSelf: 'center' }}>
-                    <Text style={{ fontSize: 16, color: '#fff', fontWeight: 'bold' }}>Confirm address</Text>
-                </TouchableOpacity> */}
+                <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center' }}>
+                    <Text style={{ fontSize: responsiveFontSize(2.1), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Confirm address</Text>
+                </TouchableOpacity>
             </LinearGradient>
 
         </SafeAreaView>
