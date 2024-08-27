@@ -143,7 +143,6 @@ const AddNewAddress = () => {
                         style={{ borderWidth: 1, borderColor: '#e0e0e0', borderRadius: 8, padding: 12, fontSize: 16, backgroundColor: '#fff' }}
                     />
                 </View>
-
             </View>
 
             {/* Confirm Address Button */}
