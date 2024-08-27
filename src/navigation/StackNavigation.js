@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStackNavigator from './AuthStackNavigator';
 import GuestStackNavigator from './GuestStackNavigator';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const StackNavigation = () => {
