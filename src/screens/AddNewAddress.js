@@ -63,6 +63,8 @@ const AddNewAddress = () => {
         );
     };
 
+    console.log(location);
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
@@ -210,11 +212,10 @@ const AddNewAddress = () => {
                     <Icon5 name="arrowright" size={23} color={'#fff'} />
                 </TouchableOpacity>
             </LinearGradient>
-
         </SafeAreaView>
     )
 }
 
-export default AddNewAddress
+export default AddNewAddress;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
