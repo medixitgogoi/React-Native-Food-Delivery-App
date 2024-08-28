@@ -128,6 +128,7 @@ const AddNewAddress = () => {
                                 style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%' }}
                                 placeholder="Enter Contact No"
                                 keyboardType='numeric'
+                                maxLength={10}
                                 value={contact}
                                 onChangeText={setContact}
                                 placeholderTextColor={'#c8cacf'}
