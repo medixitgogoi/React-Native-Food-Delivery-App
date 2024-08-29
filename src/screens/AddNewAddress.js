@@ -140,7 +140,7 @@ const AddNewAddress = () => {
 
             {/* Content */}
             <ScrollView>
-                <View style={{ padding: 10, paddingBottom: 55}}>
+                <View style={{ padding: 10, paddingBottom: 55 }}>
                     {/* Unexpanded */}
                     <TouchableOpacity style={{ backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
                         <View>
@@ -251,7 +251,7 @@ const AddNewAddress = () => {
                             <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 2</Text>
                             <TextInput
                                 style={{ height: 38, borderColor: address2Focused ? backIconColor : offWhite, fontWeight: "500", borderWidth: address2Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                placeholder="Enter Address 2"
+                                placeholder="Flat / House no / Floor / Building"
                                 value={name}
                                 onChangeText={setName}
                                 placeholderTextColor={'#c8cacf'}
@@ -298,8 +298,8 @@ const AddNewAddress = () => {
                     </View>
 
                     {/* State */}
-                    <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <View style={{ marginBottom: 6, width: '100%' }}>
+                    <View style={{ width: '60%', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <View style={{ marginBottom: 4, width: '100%' }}>
                             <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>State *</Text>
                             <TextInput
                                 style={{ height: 38, borderColor: stateFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: stateFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
