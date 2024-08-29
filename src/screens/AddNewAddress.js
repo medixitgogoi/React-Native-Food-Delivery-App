@@ -9,7 +9,6 @@ import Icon4 from 'react-native-vector-icons/dist/Feather';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import Modal from "react-native-modal";
 import GetLocation from 'react-native-get-location';
 import Geocoder from 'react-native-geocoder';
 
@@ -39,7 +38,7 @@ const AddNewAddress = () => {
     const [landmark, setLandmark] = useState(null);
     const [landmarkFocused, setLandmarkFocused] = useState(false);
 
-    const [loadingLocation, setLoadingLocation] = useState(true);
+    const [loadingLocation, setLoadingLocation] = useState(false);
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
     const [address, setAddress] = useState('');
@@ -337,55 +336,15 @@ const AddNewAddress = () => {
                 </TouchableOpacity>
             </LinearGradient>
 
+            {/* Location loading spinner */}
             {loadingLocation && (
-                <View
-                    style={{
-                        position: 'absolute',
-                        flex: 1,
-                        alignItems: 'center',
-                        height: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        width: '100%',
-                        backgroundColor: '#00000033', // Added background overlay
-                    }}
-                >
-                    <View
-                        style={{
-                            backgroundColor: lightGreen,
-                            borderColor: backIconColor,
-                            borderWidth: 1,
-                            borderRadius: 12,
-                            paddingVertical: 10,
-                            paddingHorizontal: 18,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            shadowColor: '#000', // Added shadow for elevation effect
-                            shadowOffset: { width: 0, height: 5 },
-                            shadowOpacity: 0.3,
-                            shadowRadius: 10,
-                            elevation: 2, // Shadow for Android
-                        }}
-                    >
-                        <ActivityIndicator
-                            size="large"
-                            color={backIconColor}
-                            style={{ marginRight: 10 }} // Spacing between spinner and text
-                        />
-                        <Text
-                            style={{
-                                color: '#000',
-                                fontWeight: '600',
-                                fontSize: responsiveFontSize(2),
-                            }}
-                        >
-                            Fetching location ...
-                        </Text>
+                <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000033' }}>
+                    <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
+                        <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
                     </View>
                 </View>
             )}
-
         </SafeAreaView>
     )
 }
