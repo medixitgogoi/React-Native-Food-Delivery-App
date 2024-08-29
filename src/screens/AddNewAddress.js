@@ -38,25 +38,17 @@ const AddNewAddress = () => {
     const [landmark, setLandmark] = useState(null);
     const [landmarkFocused, setLandmarkFocused] = useState(false);
 
-    //for location
-    const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
-    // const [data, setData] = useState('');
-    // const [data1, setData1] = useState('');
     const [address, setAddress] = useState('');
-    const [locationModal, setLocationModal] = useState(false);
-    // const [sendlocation, setsendlocation] = useState(null);
 
-    const mainn = async () => {
-        console.log('Fetching location...');
-        setLocationModal(true);
-        setShow(true);
-        await getdata();
+    const handleUseCurrentLocationClick = async () => {
+        // console.log('Fetching location...');
+        await fetchCurrentLocation();
     };
 
-    const getdata = async () => {
+    const fetchCurrentLocation = async () => {
         setLoading(true);
         setLocation(null);
         setError(null);
@@ -73,10 +65,8 @@ const AddNewAddress = () => {
             });
 
             setLocation(newLocation);
-            // setData1(newLocation.latitude);
-            // setData(newLocation.longitude);
-            get(newLocation);
-            console.log(newLocation, 'location');
+            fetchAddressFromLocation(newLocation);
+            // console.log('newLocation', newLocation);
         } catch (ex) {
             Alert.alert('Location Error', 'Turn on your Location services', [
                 {
@@ -87,11 +77,10 @@ const AddNewAddress = () => {
             ]);
         } finally {
             setLoading(false);
-            setShow(false);
         }
     };
 
-    const get = async (newLocation) => {
+    const fetchAddressFromLocation = async (newLocation) => {
         if (!newLocation) return;
 
         const NY = {
@@ -103,21 +92,15 @@ const AddNewAddress = () => {
 
         try {
             const res = await Geocoder.geocodePosition(NY);
-            console.log('Geocoding Result:', res);
 
-            const result1 = res.reduce((unique, o) => {
-                if (!unique.some(obj => obj.formattedAddress === o.formattedAddress && obj.streetName === o.streetName)) {
-                    unique.push(o);
-                }
-                return unique;
-            }, []);
-
-            const result = result1.slice(0, 3);
+            const result = res.slice(0, 1);
             setAddress(result);
         } catch (err) {
             console.error('Geocoding Error:', err);
         }
     };
+
+    console.log('address', address);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -225,19 +208,15 @@ const AddNewAddress = () => {
                         </View>
                     </View>
 
-                    {/* <TouchableOpacity style={{ backgroundColor: darkGreen, padding: 10 }} onPress={mainn}>
-                        <Text style={{ color: '#fff' }}>Change</Text>
-                    </TouchableOpacity> */}
-
                     {/* Address Line 1 */}
                     <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-                        <View style={{ marginBottom: 6 }}>
+                        <View style={{ marginBottom: 4 }}>
                             <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 1 *</Text>
                             <TextInput
                                 style={{ height: 38, fontWeight: "500", borderColor: address1Focused ? backIconColor : offWhite, borderWidth: address1Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
                                 placeholder="Flat / House no / Floor / Building"
-                                value={name}
-                                onChangeText={setName}
+                                value={address1}
+                                onChangeText={setAddress1}
                                 placeholderTextColor={'#c8cacf'}
                                 onFocus={() => setAddress1Focused(true)}
                                 onBlur={() => setAddress1Focused(false)}
@@ -247,13 +226,13 @@ const AddNewAddress = () => {
 
                     {/* Address Line 2 */}
                     <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-                        <View style={{ marginBottom: 6 }}>
+                        <View style={{ marginBottom: 4 }}>
                             <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 2</Text>
                             <TextInput
                                 style={{ height: 38, borderColor: address2Focused ? backIconColor : offWhite, fontWeight: "500", borderWidth: address2Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
                                 placeholder="Flat / House no / Floor / Building"
-                                value={name}
-                                onChangeText={setName}
+                                value={address2}
+                                onChangeText={setAddress2}
                                 placeholderTextColor={'#c8cacf'}
                                 onFocus={() => setAddress2Focused(true)}
                                 onBlur={() => setAddress2Focused(false)}
@@ -265,7 +244,7 @@ const AddNewAddress = () => {
                     <View style={{ flex: 1, marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                         {/* City */}
                         <View style={{ flex: 0.52 }}>
-                            <View style={{ marginBottom: 6, width: '100%' }}>
+                            <View style={{ marginBottom: 4, width: '100%' }}>
                                 <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>City *</Text>
                                 <TextInput
                                     style={{ height: 38, borderColor: cityFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: cityFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
@@ -281,7 +260,7 @@ const AddNewAddress = () => {
 
                         {/* Pin Code */}
                         <View style={{ flex: 0.43 }}>
-                            <View style={{ marginBottom: 6, width: '100%' }}>
+                            <View style={{ marginBottom: 4, width: '100%' }}>
                                 <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Pin Code *</Text>
                                 <TextInput
                                     style={{ height: 38, borderColor: pinCodeFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: pinCodeFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
@@ -298,19 +277,26 @@ const AddNewAddress = () => {
                     </View>
 
                     {/* State */}
-                    <View style={{ width: '60%', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <View style={{ marginBottom: 4, width: '100%' }}>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>State *</Text>
-                            <TextInput
-                                style={{ height: 38, borderColor: stateFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: stateFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                placeholder="Enter State"
-                                value={state}
-                                onChangeText={setState}
-                                placeholderTextColor={'#c8cacf'}
-                                onFocus={() => setStateFocused(true)}
-                                onBlur={() => setStateFocused(false)}
-                            />
+                    <View style={{ width: '100%', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                        <View style={{ width: '55%', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <View style={{ marginBottom: 4, width: '100%' }}>
+                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>State *</Text>
+                                <TextInput
+                                    style={{ height: 38, borderColor: stateFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: stateFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                    placeholder="Enter State"
+                                    value={state}
+                                    onChangeText={setState}
+                                    placeholderTextColor={'#c8cacf'}
+                                    onFocus={() => setStateFocused(true)}
+                                    onBlur={() => setStateFocused(false)}
+                                />
+                            </View>
                         </View>
+                        {/* Location button */}
+                        <TouchableOpacity onPress={handleUseCurrentLocationClick} style={{ width: '42%', marginTop: 10, borderRadius: 8, gap: 4, backgroundColor: backIconColor, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 10 }}>
+                            <Icon name="my-location" size={19} color={'#fff'} />
+                            <Text style={{ color: '#fff', fontWeight: '600' }}>Use my location</Text>
+                        </TouchableOpacity>
                     </View>
 
                     {/* Landmark */}
