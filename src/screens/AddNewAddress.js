@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput, Alert, Linking, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, KeyboardAvoidingView, TextInput, Alert, Linking, ScrollView, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
@@ -111,246 +111,253 @@ const AddNewAddress = () => {
     // console.log('address', address);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
                 backgroundColor={loadingLocation ? '#c7c7c7' : '#f1f7fb'}
                 barStyle="dark-content"
             />
 
-            {/* Header */}
-            <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
-                    <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
-                </TouchableOpacity>
-                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.5), textAlign: 'center', textTransform: 'uppercase' }}>add a new address</Text>
-                <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.navigate('Profile')}>
-                    <Icon2 name="account" size={23} color={'#000'} />
-                </TouchableOpacity>
-            </View>
-
-            {/* Content */}
-            <ScrollView>
-                <View style={{ padding: 10, paddingBottom: 60 }}>
-                    {/* Unexpanded */}
-                    {!isExpanded && (
-                        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
-                            <View>
-                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Receiver details for this address</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                    <Icon4 name="phone-call" size={15} color={'#000'} />
-                                    <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500', marginLeft: 5 }}>Dixit Gogoi,</Text>
-                                    <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000' }}>6000578700</Text>
-                                </View>
-                                <View>
-                                    <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-
-                    {/* Expanded */}
-                    {isExpanded && (
-                        <View style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
-                            {/* Receiver's Name */}
-                            <View style={{ marginBottom: 10 }}>
-                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s name</Text>
-                                <TextInput
-                                    style={{ height: 40, borderColor: offWhite, fontWeight: "500", borderWidth: 1.2, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
-                                    placeholder="Enter Name"
-                                    value={name}
-                                    onChangeText={setName}
-                                    placeholderTextColor={'#c8cacf'}
-                                />
-                            </View>
-
-                            {/* Receiver's Contact */}
-                            <View style={{}}>
-                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s contact</Text>
-                                <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start', backgroundColor: '#fff' }}>
-                                    <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1, backgroundColor: '#fff' }}>
-                                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
-                                    </View>
-                                    <TextInput
-                                        style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%', backgroundColor: '#fff' }}
-                                        placeholder="Enter Contact No"
-                                        keyboardType='numeric'
-                                        maxLength={10}
-                                        value={contact}
-                                        onChangeText={setContact}
-                                        placeholderTextColor={'#c8cacf'}
-                                    />
-                                </View>
-                                <Text style={{ fontSize: responsiveFontSize(1.5), color: '#5c5c5c', marginTop: 2, textAlign: 'right' }}>*May be used to assist delivery</Text>
-                            </View>
-                        </View>
-                    )}
-
-                    {/* Address Type */}
-                    <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Save address as *</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {['Home', 'Work'].map((type) => (
-                                <TouchableOpacity
-                                    key={type}
-                                    style={{
-                                        width: 80,
-                                        height: 30,
-                                        borderRadius: 8,
-                                        borderWidth: 1,
-                                        borderColor: addressType === type ? backIconColor : '#e0e0e0',
-                                        backgroundColor: addressType === type ? lightGreen : '#fff',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: 4
-                                    }}
-                                    onPress={() => setAddresssType(type)}
-                                >
-                                    <Icon3
-                                        name={type === 'Home' ? 'home' : 'building'}
-                                        size={13}
-                                        color={addressType === type ? backIconColor : '#000'}
-                                    />
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '600' }}>{type}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    </View>
-
-                    {/* Address Line 1 */}
-                    <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-                        <View style={{ marginBottom: 4 }}>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 1 *</Text>
-                            <TextInput
-                                style={{ height: 38, fontWeight: "500", borderColor: address1Focused ? backIconColor : offWhite, borderWidth: address1Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                placeholder="Flat / House no / Floor / Building"
-                                value={address1}
-                                onChangeText={setAddress1}
-                                placeholderTextColor={'#c8cacf'}
-                                onFocus={() => setAddress1Focused(true)}
-                                onBlur={() => setAddress1Focused(false)}
-                            />
-                        </View>
-                    </View>
-
-                    {/* Address Line 2 */}
-                    <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-                        <View style={{ marginBottom: 4 }}>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 2</Text>
-                            <TextInput
-                                style={{ height: 38, borderColor: address2Focused ? backIconColor : offWhite, fontWeight: "500", borderWidth: address2Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                placeholder="Flat / House no / Floor / Building"
-                                value={address2}
-                                onChangeText={setAddress2}
-                                placeholderTextColor={'#c8cacf'}
-                                onFocus={() => setAddress2Focused(true)}
-                                onBlur={() => setAddress2Focused(false)}
-                            />
-                        </View>
-                    </View>
-
-                    {/* City and Pin code */}
-                    <View style={{ flex: 1, marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        {/* City */}
-                        <View style={{ flex: 0.52 }}>
-                            <View style={{ marginBottom: 4, width: '100%' }}>
-                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>City *</Text>
-                                <TextInput
-                                    style={{ height: 38, borderColor: cityFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: cityFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                    placeholder="Enter City"
-                                    value={city}
-                                    onChangeText={setCity}
-                                    placeholderTextColor={'#c8cacf'}
-                                    onFocus={() => setCityFocused(true)}
-                                    onBlur={() => setCityFocused(false)}
-                                />
-                            </View>
-                        </View>
-
-                        {/* Pin Code */}
-                        <View style={{ flex: 0.43 }}>
-                            <View style={{ marginBottom: 4, width: '100%' }}>
-                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Pin Code *</Text>
-                                <TextInput
-                                    style={{ height: 38, borderColor: pinCodeFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: pinCodeFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                    placeholder="Enter Pin Code"
-                                    value={pinCode}
-                                    onChangeText={setPinCode}
-                                    keyboardType='numeric'
-                                    placeholderTextColor={'#c8cacf'}
-                                    onFocus={() => setPinCodeFocused(true)}
-                                    onBlur={() => setPinCodeFocused(false)}
-                                />
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* State */}
-                    <View style={{ width: '100%', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                        <View style={{ width: '55%', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <View style={{ marginBottom: 4, width: '100%' }}>
-                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>State *</Text>
-                                <TextInput
-                                    style={{ height: 38, borderColor: stateFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: stateFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                    placeholder="Enter State"
-                                    value={state}
-                                    onChangeText={setState}
-                                    placeholderTextColor={'#c8cacf'}
-                                    onFocus={() => setStateFocused(true)}
-                                    onBlur={() => setStateFocused(false)}
-                                />
-                            </View>
-                        </View>
-                        {/* Location button */}
-                        <TouchableOpacity onPress={handleUseCurrentLocationClick} style={{ width: '42%', marginTop: 10, borderRadius: 8, gap: 4, backgroundColor: backIconColor, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 10 }}>
-                            <Icon name="my-location" size={19} color={'#fff'} />
-                            <Text style={{ color: '#fff', fontWeight: '600' }}>Use my location</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Landmark */}
-                    <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <View style={{ marginBottom: 6, width: '100%' }}>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 9 }}>Nearby Landmark (optional)</Text>
-                            <TextInput
-                                style={{ height: 38, borderColor: landmarkFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: landmarkFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
-                                placeholder="Enter Landmark"
-                                value={landmark}
-                                onChangeText={setLandmark}
-                                placeholderTextColor={'#c8cacf'}
-                                onFocus={() => setLandmarkFocused(true)}
-                                onBlur={() => setLandmarkFocused(false)}
-                            />
-                        </View>
-                    </View>
-                </View>
-            </ScrollView>
-
-            {/* Save Address Button */}
-            <LinearGradient
-                colors={[darkGreen, '#3a9f43']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 10, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={'padding'}
             >
-                <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
-                    <Icon5 name="arrowright" size={23} color={'#fff'} />
-                </TouchableOpacity>
-            </LinearGradient>
-
-            {/* Location loading spinner */}
-            {loadingLocation && (
-                <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000033' }}>
-                    <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
-                        <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
-                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                    {/* Header */}
+                    <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
+                            <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
+                        </TouchableOpacity>
+                        <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.5), textAlign: 'center', textTransform: 'uppercase' }}>add a new address</Text>
+                        <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.navigate('Profile')}>
+                            <Icon2 name="account" size={23} color={'#000'} />
+                        </TouchableOpacity>
                     </View>
-                </View>
-            )}
+
+                    {/* Content */}
+                    <ScrollView>
+                        <View style={{ padding: 10, paddingBottom: 60 }}>
+                            {/* Unexpanded */}
+                            {!isExpanded && (
+                                <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
+                                    <View>
+                                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Receiver details for this address</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                            <Icon4 name="phone-call" size={15} color={'#000'} />
+                                            <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500', marginLeft: 5 }}>Dixit Gogoi,</Text>
+                                            <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000' }}>6000578700</Text>
+                                        </View>
+                                        <View>
+                                            <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            )}
+
+                            {/* Expanded */}
+                            {isExpanded && (
+                                <View style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
+                                    {/* Receiver's Name */}
+                                    <View style={{ marginBottom: 10 }}>
+                                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s name</Text>
+                                        <TextInput
+                                            style={{ height: 40, borderColor: offWhite, fontWeight: "500", borderWidth: 1.2, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
+                                            placeholder="Enter Name"
+                                            value={name}
+                                            onChangeText={setName}
+                                            placeholderTextColor={'#c8cacf'}
+                                        />
+                                    </View>
+
+                                    {/* Receiver's Contact */}
+                                    <View style={{}}>
+                                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s contact</Text>
+                                        <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start', backgroundColor: '#fff' }}>
+                                            <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1, backgroundColor: '#fff' }}>
+                                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
+                                            </View>
+                                            <TextInput
+                                                style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%', backgroundColor: '#fff' }}
+                                                placeholder="Enter Contact No"
+                                                keyboardType='numeric'
+                                                maxLength={10}
+                                                value={contact}
+                                                onChangeText={setContact}
+                                                placeholderTextColor={'#c8cacf'}
+                                            />
+                                        </View>
+                                        <Text style={{ fontSize: responsiveFontSize(1.5), color: '#5c5c5c', marginTop: 2, textAlign: 'right' }}>*May be used to assist delivery</Text>
+                                    </View>
+                                </View>
+                            )}
+
+                            {/* Address Type */}
+                            <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
+                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Save address as *</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                                    {['Home', 'Work'].map((type) => (
+                                        <TouchableOpacity
+                                            key={type}
+                                            style={{
+                                                width: 80,
+                                                height: 30,
+                                                borderRadius: 8,
+                                                borderWidth: 1,
+                                                borderColor: addressType === type ? backIconColor : '#e0e0e0',
+                                                backgroundColor: addressType === type ? lightGreen : '#fff',
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: 4
+                                            }}
+                                            onPress={() => setAddresssType(type)}
+                                        >
+                                            <Icon3
+                                                name={type === 'Home' ? 'home' : 'building'}
+                                                size={13}
+                                                color={addressType === type ? backIconColor : '#000'}
+                                            />
+                                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '600' }}>{type}</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </View>
+
+                            {/* Address Line 1 */}
+                            <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
+                                <View style={{ marginBottom: 4 }}>
+                                    <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 1 *</Text>
+                                    <TextInput
+                                        style={{ height: 38, fontWeight: "500", borderColor: address1Focused ? backIconColor : offWhite, borderWidth: address1Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                        placeholder="Flat / House no / Floor / Building"
+                                        value={address1}
+                                        onChangeText={setAddress1}
+                                        placeholderTextColor={'#c8cacf'}
+                                        onFocus={() => setAddress1Focused(true)}
+                                        onBlur={() => setAddress1Focused(false)}
+                                    />
+                                </View>
+                            </View>
+
+                            {/* Address Line 2 */}
+                            <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
+                                <View style={{ marginBottom: 4 }}>
+                                    <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Address Line 2 (optional)</Text>
+                                    <TextInput
+                                        style={{ height: 38, borderColor: address2Focused ? backIconColor : offWhite, fontWeight: "500", borderWidth: address2Focused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                        placeholder="Flat / House no / Floor / Building"
+                                        value={address2}
+                                        onChangeText={setAddress2}
+                                        placeholderTextColor={'#c8cacf'}
+                                        onFocus={() => setAddress2Focused(true)}
+                                        onBlur={() => setAddress2Focused(false)}
+                                    />
+                                </View>
+                            </View>
+
+                            {/* City and Pin code */}
+                            <View style={{ flex: 1, marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                {/* City */}
+                                <View style={{ flex: 0.52 }}>
+                                    <View style={{ marginBottom: 4, width: '100%' }}>
+                                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>City *</Text>
+                                        <TextInput
+                                            style={{ height: 38, borderColor: cityFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: cityFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                            placeholder="Enter City"
+                                            value={city}
+                                            onChangeText={setCity}
+                                            placeholderTextColor={'#c8cacf'}
+                                            onFocus={() => setCityFocused(true)}
+                                            onBlur={() => setCityFocused(false)}
+                                        />
+                                    </View>
+                                </View>
+
+                                {/* Pin Code */}
+                                <View style={{ flex: 0.43 }}>
+                                    <View style={{ marginBottom: 4, width: '100%' }}>
+                                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Pin Code *</Text>
+                                        <TextInput
+                                            style={{ height: 38, borderColor: pinCodeFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: pinCodeFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                            placeholder="Enter Pin Code"
+                                            value={pinCode}
+                                            onChangeText={setPinCode}
+                                            keyboardType='numeric'
+                                            placeholderTextColor={'#c8cacf'}
+                                            onFocus={() => setPinCodeFocused(true)}
+                                            onBlur={() => setPinCodeFocused(false)}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+
+                            {/* State */}
+                            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                                <View style={{ width: '55%', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <View style={{ marginBottom: 4, width: '100%' }}>
+                                        <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>State *</Text>
+                                        <TextInput
+                                            style={{ height: 38, borderColor: stateFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: stateFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                            placeholder="Enter State"
+                                            value={state}
+                                            onChangeText={setState}
+                                            placeholderTextColor={'#c8cacf'}
+                                            onFocus={() => setStateFocused(true)}
+                                            onBlur={() => setStateFocused(false)}
+                                        />
+                                    </View>
+                                </View>
+                                {/* Location button */}
+                                <TouchableOpacity onPress={handleUseCurrentLocationClick} style={{ width: '42%', marginTop: 10, borderRadius: 8, gap: 4, backgroundColor: backIconColor, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 10 }}>
+                                    <Icon name="my-location" size={19} color={'#fff'} />
+                                    <Text style={{ color: '#fff', fontWeight: '600' }}>Use my location</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* Landmark */}
+                            <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <View style={{ marginBottom: 6, width: '100%' }}>
+                                    <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 9 }}>Nearby Landmark (optional)</Text>
+                                    <TextInput
+                                        style={{ height: 38, borderColor: landmarkFocused ? backIconColor : offWhite, fontWeight: "500", borderWidth: landmarkFocused ? 1.4 : 1.2, borderRadius: 8, paddingHorizontal: 12, fontSize: responsiveFontSize(1.8), color: '#000', backgroundColor: '#fff' }}
+                                        placeholder="Enter Landmark"
+                                        value={landmark}
+                                        onChangeText={setLandmark}
+                                        placeholderTextColor={'#c8cacf'}
+                                        onFocus={() => setLandmarkFocused(true)}
+                                        onBlur={() => setLandmarkFocused(false)}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                    </ScrollView>
+
+                    {/* Save Address Button */}
+                    <LinearGradient
+                        colors={[darkGreen, '#3a9f43']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 8, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
+                            <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
+                            <Icon5 name="arrowright" size={23} color={'#fff'} />
+                        </TouchableOpacity>
+                    </LinearGradient>
+
+                    {/* Location loading spinner */}
+                    {loadingLocation && (
+                        <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000033' }}>
+                            <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
+                                <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
+                            </View>
+                        </View>
+                    )}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
