@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput, Alert, Linking, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput, Alert, Linking, ScrollView, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import Icon4 from 'react-native-vector-icons/dist/Feather';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import Modal from "react-native-modal";
 import GetLocation from 'react-native-get-location';
 import Geocoder from 'react-native-geocoder';
 
@@ -38,18 +39,18 @@ const AddNewAddress = () => {
     const [landmark, setLandmark] = useState(null);
     const [landmarkFocused, setLandmarkFocused] = useState(false);
 
-    const [loading, setLoading] = useState(false);
+    const [loadingLocation, setLoadingLocation] = useState(true);
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
     const [address, setAddress] = useState('');
 
     const handleUseCurrentLocationClick = async () => {
+        setLoadingLocation(true);
         // console.log('Fetching location...');
         await fetchCurrentLocation();
     };
 
     const fetchCurrentLocation = async () => {
-        setLoading(true);
         setLocation(null);
         setError(null);
 
@@ -75,8 +76,6 @@ const AddNewAddress = () => {
                     style: 'cancel',
                 },
             ]);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -98,15 +97,23 @@ const AddNewAddress = () => {
         } catch (err) {
             console.error('Geocoding Error:', err);
         }
+        setLoadingLocation(false);
     };
 
-    console.log('address', address);
+    useEffect(() => {
+        setAddress1(address?.[0]?.formattedAddress);
+        setState(address?.[0]?.adminArea);
+        setPinCode(address?.[0]?.postalCode);
+        setCity(address?.[0]?.locality);
+    }, [fetchAddressFromLocation]);
+
+    // console.log('address', address);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: loadingLocation ? '#c7c7c7' : background, paddingBottom: 10 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={'#f1f7fb'}
+                backgroundColor={loadingLocation ? '#424242' : '#f1f7fb'}
                 barStyle="dark-content"
             />
 
@@ -329,6 +336,15 @@ const AddNewAddress = () => {
                     <Icon5 name="arrowright" size={23} color={'#fff'} />
                 </TouchableOpacity>
             </LinearGradient>
+
+            {loadingLocation && (
+                <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                    <View style={{ backgroundColor: '#000', padding: 10, gap: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                        <Text style={{ color: '#fff' }}>Fetching location ...</Text>
+                    </View>
+                </View>
+            )}
         </SafeAreaView>
     )
 }
