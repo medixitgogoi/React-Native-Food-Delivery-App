@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput, PermissionsAndroid, Platform, Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, TextInput, Alert, Linking } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +9,8 @@ import Icon4 from 'react-native-vector-icons/dist/Feather';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import Geolocation from 'react-native-geolocation-service';
+import GetLocation from 'react-native-get-location';
+import Geocoder from 'react-native-geocoder';
 
 const AddNewAddress = () => {
 
@@ -19,51 +20,87 @@ const AddNewAddress = () => {
     const [contact, setContact] = useState('');
     const [addressType, setAddressType] = useState('Home');
 
-    const [location, setLocation] = useState(null);
+    //for location
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [location, setLocation] = useState('');
+    const [error, setError] = useState('');
+    const [data, setData] = useState('');
+    const [data1, setData1] = useState('');
+    const [addres, setAddres] = useState('');
+    const [locationModal, setLocationModal] = useState(false);
+    const [sendlocation, setsendlocation] = useState(null);
 
-    useEffect(() => {
-        requestLocationPermission();
-    }, []);
+    const mainn = async () => {
+        console.log('Fetching location...');
+        setLocationModal(true);
+        setShow(true);
+        await getdata();
+    };
 
-    const requestLocationPermission = async () => {
-        if (Platform.OS === 'android') {
-            try {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                    {
-                        title: 'Location Permission',
-                        message: 'This app needs access to your location.',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
-                    }
-                );
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    getLocation();
-                } else {
-                    Alert.alert('Location permission denied');
-                }
-            } catch (err) {
-                console.warn(err);
-            }
-        } else {
-            getLocation();
+    const getdata = async () => {
+        setLoading(true);
+        setLocation(null);
+        setError(null);
+
+        try {
+            const newLocation = await GetLocation.getCurrentPosition({
+                enableHighAccuracy: true,
+                timeout: 30000,
+                rationale: {
+                    title: 'Location permission',
+                    message: 'The app needs permission to request your location.',
+                    buttonPositive: 'Ok',
+                },
+            });
+
+            setLocation(newLocation);
+            setData1(newLocation.latitude);
+            setData(newLocation.longitude);
+            get(newLocation);
+            console.log(newLocation, 'location');
+        } catch (ex) {
+            Alert.alert('Location Error', 'Turn on your Location services', [
+                {
+                    text: 'Go to Settings',
+                    onPress: () => Linking.openSettings(),
+                    style: 'cancel',
+                },
+            ]);
+        } finally {
+            setLoading(false);
+            setShow(false);
         }
     };
 
-    const getLocation = () => {
-        Geolocation.getCurrentPosition(
-            (position) => {
-                setLocation(position);
-            },
-            (error) => {
-                Alert.alert(`Error: ${error.message}`);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
+    const get = async (newLocation) => {
+        if (!newLocation) return;
+
+        const NY = {
+            lng: newLocation.longitude,
+            lat: newLocation.latitude,
+        };
+
+        Geocoder.fallbackToGoogle('YOUR_API_KEY');
+
+        try {
+            const res = await Geocoder.geocodePosition(NY);
+            console.log('Geocoding Result:', res);
+
+            const result1 = res.reduce((unique, o) => {
+                if (!unique.some(obj => obj.formattedAddress === o.formattedAddress && obj.streetName === o.streetName)) {
+                    unique.push(o);
+                }
+                return unique;
+            }, []);
+
+            const result = result1.slice(0, 3);
+            setAddres(result);
+        } catch (err) {
+            console.error('Geocoding Error:', err);
+        }
     };
 
-    console.log(location);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -170,18 +207,22 @@ const AddNewAddress = () => {
                     </View>
                 </View>
 
+                <TouchableOpacity style={{ backgroundColor: darkGreen, padding: 10 }} onPress={mainn}>
+                    <Text style={{ color: '#fff' }}>Change</Text>
+                </TouchableOpacity>
+
                 {/* Address Details */}
                 <View style={{ flexDirection: 'column', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
-                    {location ? (
+                    {/* {location ? (
                         <Text style={{ color: '#000' }}>
                             Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}
                         </Text>
                     ) : (
                         <Text style={{ color: '#000' }}>Location not available</Text>
-                    )}
-                    <TouchableOpacity style={{ backgroundColor: darkGreen, padding: 10 }} onPress={getLocation}>
+                    )} */}
+                    {/* <TouchableOpacity style={{ backgroundColor: darkGreen, padding: 10 }} onPress={mainn}>
                         <Text style={{ color: '#fff' }}>Change</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 {/* Flat/House Details */}

@@ -185,8 +185,8 @@ const Login = () => {
                                             <ActivityIndicator size='small' color={'#fff'} />
                                         </View>
                                     ) : (
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Login</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                            <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', textTransform: 'uppercase' }}>Login</Text>
                                             <Icon2 name="login" size={23} color={'#fff'} />
                                         </View>
                                     )}
