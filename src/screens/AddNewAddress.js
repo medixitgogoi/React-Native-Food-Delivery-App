@@ -16,6 +16,8 @@ const AddNewAddress = () => {
 
     const navigation = useNavigation();
 
+    const [isExpanded, setIsExpanded] = useState(false);
+
     const [name, setName] = useState('');
     const [contact, setContact] = useState('');
     const [addressType, setAddresssType] = useState('Home');
@@ -131,56 +133,60 @@ const AddNewAddress = () => {
             <ScrollView>
                 <View style={{ padding: 10, paddingBottom: 55 }}>
                     {/* Unexpanded */}
-                    <TouchableOpacity style={{ backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
-                        <View>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Receiver details for this address</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                <Icon4 name="phone-call" size={15} color={'#000'} />
-                                <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500', marginLeft: 5 }}>Dixit Gogoi,</Text>
-                                <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000' }}>6000578700</Text>
-                            </View>
+                    {!isExpanded && (
+                        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
                             <View>
-                                <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
+                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Receiver details for this address</Text>
                             </View>
-                        </View>
-                    </TouchableOpacity>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                    <Icon4 name="phone-call" size={15} color={'#000'} />
+                                    <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500', marginLeft: 5 }}>Dixit Gogoi,</Text>
+                                    <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000' }}>6000578700</Text>
+                                </View>
+                                <View>
+                                    <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    )}
 
                     {/* Expanded */}
-                    <View style={{ marginTop: 10, backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
-                        {/* Receiver's Name */}
-                        <View style={{ marginBottom: 10 }}>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s name</Text>
-                            <TextInput
-                                style={{ height: 40, borderColor: offWhite, fontWeight: "500", borderWidth: 1.2, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
-                                placeholder="Enter Name"
-                                value={name}
-                                onChangeText={setName}
-                                placeholderTextColor={'#c8cacf'}
-                            />
-                        </View>
-
-                        {/* Receiver's Contact */}
-                        <View style={{}}>
-                            <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s contact</Text>
-                            <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start' }}>
-                                <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1 }}>
-                                    <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
-                                </View>
+                    {isExpanded && (
+                        <View style={{ marginTop: 0, backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
+                            {/* Receiver's Name */}
+                            <View style={{ marginBottom: 10 }}>
+                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s name</Text>
                                 <TextInput
-                                    style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%' }}
-                                    placeholder="Enter Contact No"
-                                    keyboardType='numeric'
-                                    maxLength={10}
-                                    value={contact}
-                                    onChangeText={setContact}
+                                    style={{ height: 40, borderColor: offWhite, fontWeight: "500", borderWidth: 1.2, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
+                                    placeholder="Enter Name"
+                                    value={name}
+                                    onChangeText={setName}
                                     placeholderTextColor={'#c8cacf'}
                                 />
                             </View>
-                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, marginTop: 2, textAlign: 'right' }}>*May be used to assist delivery</Text>
+
+                            {/* Receiver's Contact */}
+                            <View style={{}}>
+                                <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s contact</Text>
+                                <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start' }}>
+                                    <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1 }}>
+                                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
+                                    </View>
+                                    <TextInput
+                                        style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%' }}
+                                        placeholder="Enter Contact No"
+                                        keyboardType='numeric'
+                                        maxLength={10}
+                                        value={contact}
+                                        onChangeText={setContact}
+                                        placeholderTextColor={'#c8cacf'}
+                                    />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(1.5), color: '#5c5c5c', marginTop: 2, textAlign: 'right' }}>*May be used to assist delivery</Text>
+                            </View>
                         </View>
-                    </View>
+                    )}
 
                     {/* Address Type */}
                     <View style={{ marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, }}>
