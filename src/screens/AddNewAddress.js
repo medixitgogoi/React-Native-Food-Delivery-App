@@ -131,10 +131,10 @@ const AddNewAddress = () => {
 
             {/* Content */}
             <ScrollView>
-                <View style={{ padding: 10, paddingBottom: 55 }}>
+                <View style={{ padding: 10, paddingBottom: 60 }}>
                     {/* Unexpanded */}
                     {!isExpanded && (
-                        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
+                        <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
                             <View>
                                 <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Receiver details for this address</Text>
                             </View>
@@ -153,7 +153,7 @@ const AddNewAddress = () => {
 
                     {/* Expanded */}
                     {isExpanded && (
-                        <View style={{ marginTop: 0, backgroundColor: '#fff', paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 1, borderRadius: 12, gap: 6 }}>
+                        <View style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
                             {/* Receiver's Name */}
                             <View style={{ marginBottom: 10 }}>
                                 <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s name</Text>
@@ -169,12 +169,12 @@ const AddNewAddress = () => {
                             {/* Receiver's Contact */}
                             <View style={{}}>
                                 <Text style={{ color: '#9297a0', fontWeight: '500', fontSize: responsiveFontSize(1.9), marginBottom: 8 }}>Receiver’s contact</Text>
-                                <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start' }}>
-                                    <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1 }}>
+                                <View style={{ height: 40, width: '100%', flexDirection: 'row', alignItems: 'center', borderRadius: 8, borderColor: offWhite, borderWidth: 1.2, paddingHorizontal: 10, justifyContent: 'flex-start', backgroundColor: '#fff' }}>
+                                    <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 1, backgroundColor: '#fff' }}>
                                         <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2), marginRight: 2, }}>+91</Text>
                                     </View>
                                     <TextInput
-                                        style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%' }}
+                                        style={{ fontWeight: "500", fontSize: responsiveFontSize(2), color: '#000', width: '80%', backgroundColor: '#fff' }}
                                         placeholder="Enter Contact No"
                                         keyboardType='numeric'
                                         maxLength={10}
@@ -329,7 +329,7 @@ const AddNewAddress = () => {
                 </View>
             </ScrollView>
 
-            {/* Confirm Address Button */}
+            {/* Save Address Button */}
             <LinearGradient
                 colors={[darkGreen, '#3a9f43']}
                 start={{ x: 0, y: 0 }}
@@ -337,7 +337,7 @@ const AddNewAddress = () => {
                 style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 10, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
             >
                 <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Confirm address</Text>
+                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
                     <Icon5 name="arrowright" size={23} color={'#fff'} />
                 </TouchableOpacity>
             </LinearGradient>
