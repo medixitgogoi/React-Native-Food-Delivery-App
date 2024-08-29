@@ -136,7 +136,7 @@ const AddNewAddress = () => {
 
                     {/* Content */}
                     <ScrollView>
-                        <View style={{ padding: 10, paddingBottom: 60 }}>
+                        <View style={{ padding: 10, paddingBottom: 65 }}>
                             {/* Unexpanded */}
                             {!isExpanded && (
                                 <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
