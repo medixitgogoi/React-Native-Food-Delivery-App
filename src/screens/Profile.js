@@ -4,10 +4,19 @@ import { background, backIconColor, darkGreen } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/LoginSlice';
 import { deleteAllItemsFromCart } from '../redux/CartSlice';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 const Profile = () => {
 
     const dispatch = useDispatch();
+
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
 
     const logOutHandler = () => {
         dispatch(deleteAllItemsFromCart());
