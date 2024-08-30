@@ -125,14 +125,13 @@ const AddNewAddress = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
-                backgroundColor={loadingLocation ? '#c7c7c7' : '#f1f7fb'}
+                backgroundColor={loadingLocation ? '#adadad' : background}
                 barStyle="dark-content"
             />
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={'position'}
-                // keyboardVerticalOffset={10} // Adjust the value as needed
+                behavior={'padding'}
             >
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     {/* Header */}
@@ -147,7 +146,7 @@ const AddNewAddress = () => {
                     </View>
 
                     {/* Content */}
-                    <View style={{ padding: 10, paddingBottom: 65 }}>
+                    <View style={{ padding: 10 }}>
                         {/* Unexpanded */}
                         {!isExpanded && (
                             <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
@@ -304,7 +303,7 @@ const AddNewAddress = () => {
                             </View>
                         </View>
 
-                        {/* State */}
+                        {/* State and location */}
                         <View style={{ width: '100%', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' }}>
                             <View style={{ width: '55%', marginTop: 10, paddingHorizontal: 13, paddingVertical: 12, backgroundColor: '#fff', elevation: 1, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <View style={{ marginBottom: 4, width: '100%' }}>
@@ -343,25 +342,25 @@ const AddNewAddress = () => {
                             </View>
                         </View>
                     </View>
+
+                    {/* Save Address Button */}
+                    <LinearGradient
+                        colors={[darkGreen, '#3a9f43']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={{ marginBottom: 10, borderRadius: 12, elevation: 2, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <TouchableOpacity onPress={saveAddressHandler} style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
+                            <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
+                            <Icon5 name="arrowright" size={23} color={'#fff'} />
+                        </TouchableOpacity>
+                    </LinearGradient>
                 </ScrollView>
             </KeyboardAvoidingView>
 
-            {/* Save Address Button */}
-            <LinearGradient
-                colors={[darkGreen, '#3a9f43']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 10, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-            >
-                <TouchableOpacity onPress={saveAddressHandler} style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
-                    <Icon5 name="arrowright" size={23} color={'#fff'} />
-                </TouchableOpacity>
-            </LinearGradient>
-
             {/* Location loading spinner */}
             {loadingLocation && (
-                <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000033' }}>
+                <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
                     <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
                         <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
                         <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
