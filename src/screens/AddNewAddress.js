@@ -102,11 +102,22 @@ const AddNewAddress = () => {
     };
 
     useEffect(() => {
-        setAddress1(address?.[0]?.formattedAddress);
-        setState(address?.[0]?.adminArea);
-        setPinCode(address?.[0]?.postalCode);
-        setCity(address?.[0]?.locality);
-    }, [fetchAddressFromLocation]);
+        if (address?.[0]?.formattedAddress) {
+            setAddress1(address?.[0]?.formattedAddress);
+        }
+        if (address?.[0]?.adminArea) {
+            setState(address?.[0]?.adminArea);
+        }
+        if (address?.[0]?.postalCode) {
+            setPinCode(address?.[0]?.postalCode);
+        }
+        if (address?.[0]?.locality) {
+            setCity(address?.[0]?.locality);
+        }
+    }, [address]); // Only run this effect when `address` changes
+
+    const saveAddressHandler = () => {
+    }
 
     // console.log('address', address);
 
@@ -333,31 +344,31 @@ const AddNewAddress = () => {
                             </View>
                         </View>
                     </ScrollView>
-
-                    {/* Save Address Button */}
-                    <LinearGradient
-                        colors={[darkGreen, '#3a9f43']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 8, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-                    >
-                        <TouchableOpacity style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
-                            <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
-                            <Icon5 name="arrowright" size={23} color={'#fff'} />
-                        </TouchableOpacity>
-                    </LinearGradient>
-
-                    {/* Location loading spinner */}
-                    {loadingLocation && (
-                        <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000033' }}>
-                            <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
-                                <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
-                            </View>
-                        </View>
-                    )}
                 </ScrollView>
             </KeyboardAvoidingView>
+
+            {/* Save Address Button */}
+            <LinearGradient
+                colors={[darkGreen, '#3a9f43']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ borderRadius: 12, elevation: 2, position: 'absolute', bottom: 10, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+            >
+                <TouchableOpacity onPress={saveAddressHandler} style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
+                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
+                    <Icon5 name="arrowright" size={23} color={'#fff'} />
+                </TouchableOpacity>
+            </LinearGradient>
+
+            {/* Location loading spinner */}
+            {loadingLocation && (
+                <View style={{ position: 'absolute', flex: 1, alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000033' }}>
+                    <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
+                        <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
+                    </View>
+                </View>
+            )}
         </SafeAreaView>
     )
 }
