@@ -38,10 +38,10 @@ const Login = () => {
 
     const handleLoginSubmit = () => {
         setLoading(true)
-        setTimeout(() => {
-            dispatch(login());
-            setLoading(false);
-        }, 1000);
+        dispatch(login());
+        setLoading(false);
+        // setTimeout(() => {
+        // }, 1000);
         // if (mobileNumber.length < 10) {
         //     Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
         //     return;
