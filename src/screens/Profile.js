@@ -13,8 +13,8 @@ const Profile = () => {
 
     useFocusEffect(
         useCallback(() => {
-            StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
-            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+            StatusBar.setBackgroundColor(background);
+            StatusBar.setBarStyle('dark-content');
         }, [])
     );
 
