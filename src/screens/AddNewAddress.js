@@ -359,7 +359,7 @@ const AddNewAddress = () => {
             </KeyboardAvoidingView>
 
             {/* Location loading spinner */}
-            {!loadingLocation && (
+            {loadingLocation && (
                 <View style={{ position: 'absolute', alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
                     <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
                         <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
