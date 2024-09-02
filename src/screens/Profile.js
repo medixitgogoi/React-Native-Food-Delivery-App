@@ -68,15 +68,13 @@ const Profile = () => {
                     </View>
 
                     {/* Profile Section */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 16, backgroundColor: '#FFFFFF', padding: 12, borderRadius: 10 }}>
+                    <TouchableOpacity onPress={() => { }} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 16, backgroundColor: '#FFFFFF', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10 }}>
                         <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                            <Icon name="person-outline" size={20} color="#000" style={{}} />
+                            <Icon name="person-outline" size={15} color="#000" style={{}} />
                         </View>
-                        <Text style={{ fontSize: responsiveFontSize(2.1), flex: 1, color: '#000' }}>Your profile</Text>
-                        <View style={{ paddingHorizontal: 10 }}>
-                            <Icon name="keyboard-arrow-right" size={20} color="#000" style={{}} />
-                        </View>
-                    </View>
+                        <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Your profile</Text>
+                        <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                    </TouchableOpacity>
 
                 </View>
 
