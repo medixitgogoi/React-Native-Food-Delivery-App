@@ -78,15 +78,37 @@ const Profile = () => {
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
                         </TouchableOpacity>
 
-                        {/* Order */}
-                        <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 10 }}>
-                            <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                <Icon2 name="receipt-outline" size={15} color={backIconColor} />
+                        {/* More */}
+                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
+                            {/* Headline */}
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
+                                <View style={{ backgroundColor: backIconColor, height: 24, width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>Food Orders</Text>
                             </View>
-                            <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Your Orders</Text>
-                            <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
-                        </TouchableOpacity>
 
+                            {/* Orders */}
+                            <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 5, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon2 name="receipt-outline" size={15} color={backIconColor} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Your Orders</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
+
+                            {/* Divider */}
+                            <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
+
+                            {/* Address Book */}
+                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon2 name="power" size={15} color={backIconColor} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Address Book</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* More */}
                         <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
