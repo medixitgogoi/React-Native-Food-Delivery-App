@@ -49,7 +49,7 @@ const Profile = () => {
                 <ScrollView style={{ flex: 1 }}>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 12 }}>
                         {/* Details */}
-                        <View style={{ backgroundColor: darkGreen, width: '100%', borderRadius: 20, elevation: 1, padding: 20, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                        <View style={{ backgroundColor: darkGreen, width: '100%', borderRadius: 20, elevation: 1, padding: 20, flexDirection: 'row', alignItems: 'center', gap: 15 }}>
                             {/* Image */}
                             <View style={{ flexDirection: 'column', alignItems: 'center', }}>
                                 <View style={{ height: 100, width: 100, backgroundColor: lightGreen, borderRadius: 100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -83,6 +83,10 @@ const Profile = () => {
                             <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Your Orders</Text>
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
                         </TouchableOpacity>
+
+                        <View>
+
+                        </View>
                     </View>
                 </ScrollView>
 
