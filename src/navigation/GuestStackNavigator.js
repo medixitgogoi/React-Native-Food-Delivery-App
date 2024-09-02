@@ -16,6 +16,8 @@ import Checkout from '../screens/Checkout';
 import { backIconColor, darkGreen } from '../utils/colors';
 import AddNewAddress from '../screens/AddNewAddress';
 import EditAddress from '../screens/EditAddress';
+import EditProfile from '../screens/EditProfile';
+import OrderHistory from '../screens/OrderHistory';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,6 +107,8 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             <Stack.Screen name="Checkout" component={Checkout} />
             <Stack.Screen name="AddNewAddress" component={AddNewAddress} />
             <Stack.Screen name="EditAddress" component={EditAddress} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="OrderHistory" component={OrderHistory} />
             {/* Add other screens that are independent of the tab navigator */}
         </Stack.Navigator>
     );
