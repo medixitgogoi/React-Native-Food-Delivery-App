@@ -71,7 +71,7 @@ const Profile = () => {
                         </View>
 
                         {/* Profile */}
-                        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 12 }}>
                             <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                 <Icon name="person-outline" size={15} color={backIconColor} style={{}} />
                             </View>
@@ -80,7 +80,7 @@ const Profile = () => {
                         </TouchableOpacity>
 
                         {/* Food Orders */}
-                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
+                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 12 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
                                 <View style={{ backgroundColor: backIconColor, height: 24, width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
@@ -110,7 +110,7 @@ const Profile = () => {
                         </View>
 
                         {/* More */}
-                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
+                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 12 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
                                 <View style={{ backgroundColor: backIconColor, height: 24, width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
@@ -173,7 +173,6 @@ const Profile = () => {
                     </View>
                 </View>
             )}
-
         </SafeAreaView>
     )
 }
