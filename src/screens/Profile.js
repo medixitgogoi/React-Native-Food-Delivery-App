@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import Icon2 from 'react-native-vector-icons/dist/Ionicons';
 import { logout } from '../redux/LoginSlice';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { deleteAllItemsFromCart } from '../redux/CartSlice';
@@ -15,6 +16,8 @@ const Profile = () => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
@@ -69,7 +72,7 @@ const Profile = () => {
                         {/* Profile */}
                         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 10 }}>
                             <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                <Icon name="person-outline" size={15} color="#000" style={{}} />
+                                <Icon name="person-outline" size={15} color={backIconColor} style={{}} />
                             </View>
                             <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Your profile</Text>
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -78,7 +81,7 @@ const Profile = () => {
                         {/* Order */}
                         <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 10 }}>
                             <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                <Icon name="person-outline" size={15} color="#000" style={{}} />
+                                <Icon2 name="receipt-outline" size={15} color={backIconColor} />
                             </View>
                             <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Your Orders</Text>
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -87,14 +90,14 @@ const Profile = () => {
                         <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
-                                <View style={{ backgroundColor: backIconColor, height: '100%', width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
+                                <View style={{ backgroundColor: backIconColor, height: 24, width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
                                 <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>More</Text>
                             </View>
 
                             {/* About */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 8, marginBottom: 2 }}>
+                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 5, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="person-outline" size={15} color="#000" style={{}} />
+                                    <Icon2 name="information-circle-outline" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>About</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -106,7 +109,7 @@ const Profile = () => {
                             {/* Log out */}
                             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="person-outline" size={15} color="#000" style={{}} />
+                                    <Icon2 name="power" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Log out</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
