@@ -19,6 +19,7 @@ import EditAddress from '../screens/EditAddress';
 import EditProfile from '../screens/EditProfile';
 import OrderHistory from '../screens/OrderHistory';
 import About from '../screens/About';
+import FAQ from '../screens/FAQ';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,7 +30,6 @@ const Home = () => (
         <Stack.Screen name="Groceries" component={Groceries} />
         <Stack.Screen name="Restaurants" component={Restaurants} />
         <Stack.Screen name="Cakes" component={Cakes} />
-        <Stack.Screen name="About" component={About} />
         {/* Add other screens here as needed */}
     </Stack.Navigator>
 );
@@ -110,7 +110,9 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             <Stack.Screen name="AddNewAddress" component={AddNewAddress} />
             <Stack.Screen name="EditAddress" component={EditAddress} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="About" component={About} />
             <Stack.Screen name="OrderHistory" component={OrderHistory} />
+            <Stack.Screen name="Faq" component={FAQ} />
             {/* Add other screens that are independent of the tab navigator */}
         </Stack.Navigator>
     );

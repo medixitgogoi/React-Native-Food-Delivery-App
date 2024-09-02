@@ -4,6 +4,7 @@ import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../u
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/Ionicons';
+import Icon3 from 'react-native-vector-icons/dist/FontAwesome';
 import { logout } from '../redux/LoginSlice';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { deleteAllItemsFromCart } from '../redux/CartSlice';
@@ -32,10 +33,10 @@ const Profile = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
+        <SafeAreaView style={{ flex: 1 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={isLoggingOut ? '#adadad' : background}
+                backgroundColor={isLoggingOut ? '#adadad' : '#fff'}
                 barStyle="dark-content"
             />
 
@@ -78,7 +79,7 @@ const Profile = () => {
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
                         </TouchableOpacity>
 
-                        {/* More */}
+                        {/* Food Orders */}
                         <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
@@ -101,7 +102,7 @@ const Profile = () => {
                             {/* Address Book */}
                             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon2 name="power" size={15} color={backIconColor} />
+                                    <Icon3 name="address-book-o" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Address Book</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -117,11 +118,23 @@ const Profile = () => {
                             </View>
 
                             {/* About */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 5, marginBottom: 2 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('About')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 5, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                     <Icon2 name="information-circle-outline" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>About</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
+
+                            {/* Divider */}
+                            <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
+
+                            {/* FAQ */}
+                            <TouchableOpacity onPress={() => navigation.navigate('Faq')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Frequently Asked Questions</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
                             </TouchableOpacity>
 
