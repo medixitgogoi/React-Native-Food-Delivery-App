@@ -1,7 +1,8 @@
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { background, backIconColor, darkGreen, lightGreen } from '../utils/colors';
+import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { logout } from '../redux/LoginSlice';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { deleteAllItemsFromCart } from '../redux/CartSlice';
@@ -50,7 +51,6 @@ const Profile = () => {
 
                     {/* Details */}
                     <View style={{ backgroundColor: darkGreen, width: '100%', borderRadius: 20, elevation: 1, padding: 20, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-
                         {/* Image */}
                         <View style={{ flexDirection: 'column', alignItems: 'center', }}>
                             <View style={{ height: 100, width: 100, backgroundColor: lightGreen, borderRadius: 100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -65,8 +65,19 @@ const Profile = () => {
                             {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#656565' }}>{loginDetails[0]?.email}</Text> */}
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>example@gmail.com</Text>
                         </View>
-
                     </View>
+
+                    {/* Profile Section */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 16, backgroundColor: '#FFFFFF', padding: 12, borderRadius: 10 }}>
+                        <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                            <Icon name="person-outline" size={20} color="#000" style={{}} />
+                        </View>
+                        <Text style={{ fontSize: responsiveFontSize(2.1), flex: 1, color: '#000' }}>Your profile</Text>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <Icon name="keyboard-arrow-right" size={20} color="#000" style={{}} />
+                        </View>
+                    </View>
+
                 </View>
 
                 {/* Logout */}
