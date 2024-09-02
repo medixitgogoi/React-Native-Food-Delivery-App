@@ -11,12 +11,12 @@ const StackNavigation = () => {
 
     const cartItemCount = cartProducts.length;
 
-    const isUserLoggedIn = true;
+    // const isUserLoggedIn = true;
 
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />} 
-            {/* {login.isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />} */}
+            {/* {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}  */}
+            {login.isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
         </NavigationContainer>
     );
 }

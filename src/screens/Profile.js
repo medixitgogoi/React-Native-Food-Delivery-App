@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,7 @@ import { logout } from '../redux/LoginSlice';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { deleteAllItemsFromCart } from '../redux/CartSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -35,7 +35,7 @@ const Profile = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
-                backgroundColor={'#fff'}
+                backgroundColor={isLoggingOut ? '#adadad' : background}
                 barStyle="dark-content"
             />
 
@@ -107,7 +107,7 @@ const Profile = () => {
                             <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
 
                             {/* Log out */}
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                            <TouchableOpacity onPress={() => setIsLoggingOut(true)} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                     <Icon2 name="power" size={15} color={backIconColor} />
                                 </View>
@@ -117,12 +117,28 @@ const Profile = () => {
                         </View>
                     </View>
                 </ScrollView>
-
-                {/* Logout Button */}
-                {/* <TouchableOpacity style={{ backgroundColor: backIconColor, alignSelf: 'center', height: 40, marginTop: 10, marginBottom: 10, padding: 5, borderRadius: 10, width: '95%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} onPress={logOutHandler}>
-                    <Text style={{ color: '#fff', fontWeight: '600' }}>Log Out</Text>
-                </TouchableOpacity> */}
             </LinearGradient>
+
+            {/* Log out confirm */}
+            {isLoggingOut && (
+                <View style={{ position: 'absolute', alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
+                    <View style={{ backgroundColor: '#fff', overflow: 'hidden', paddingTop: 30, alignItems: 'center', justifyContent: 'center', borderRadius: 15, shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 10, width: '80%' }}>
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2), marginBottom: 30 }}>Are you sure you want to log out?</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                            {/* Cancel */}
+                            <TouchableOpacity onPress={() => setIsLoggingOut(false)} style={{ width: '50%', backgroundColor: lightGreen, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 13, paddingHorizontal: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 5 }}>
+                                <Text style={{ color: backIconColor, fontWeight: '600' }}>Cancel</Text>
+                            </TouchableOpacity>
+
+                            {/* Confirm */}
+                            <TouchableOpacity onPress={logOutHandler} style={{ width: '50%', backgroundColor: backIconColor, paddingVertical: 13, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 5 }}>
+                                <Text style={{ color: '#fff', fontWeight: '600' }}>Confirm</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            )}
+
         </SafeAreaView>
     )
 }
