@@ -54,7 +54,7 @@ const Profile = () => {
                             <View style={{ flexDirection: 'column', alignItems: 'center', }}>
                                 <View style={{ height: 100, width: 100, backgroundColor: lightGreen, borderRadius: 100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     {/* <Text style={{ color: '#235c9e', fontSize: responsiveFontSize(7), textTransform: 'uppercase' }}>{loginDetails[0]?.name.slice(0, 1)}</Text> */}
-                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(7), textTransform: 'uppercase' }}>E</Text>
+                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(7), textTransform: 'uppercase', }}>E</Text>
                                 </View>
                             </View>
 
@@ -67,7 +67,7 @@ const Profile = () => {
                         </View>
 
                         {/* Profile */}
-                        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 10 }}>
                             <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                 <Icon name="person-outline" size={15} color="#000" style={{}} />
                             </View>
@@ -76,7 +76,7 @@ const Profile = () => {
                         </TouchableOpacity>
 
                         {/* Order */}
-                        <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')} style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 10 }}>
                             <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                 <Icon name="person-outline" size={15} color="#000" style={{}} />
                             </View>
@@ -84,8 +84,32 @@ const Profile = () => {
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
                         </TouchableOpacity>
 
-                        <View>
+                        <View style={{ width: '100%', gap: 8, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
+                            {/* Headline */}
+                            <View style={{ borderLeftColor: backIconColor, borderLeftWidth: 3, paddingHorizontal: 10, }}>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>More</Text>
+                            </View>
 
+                            {/* About */}
+                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 8, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon name="person-outline" size={15} color="#000" style={{}} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>About</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
+
+                            {/* Divider */}
+                            <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
+
+                            {/* Log out */}
+                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon name="person-outline" size={15} color="#000" style={{}} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Log out</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </ScrollView>

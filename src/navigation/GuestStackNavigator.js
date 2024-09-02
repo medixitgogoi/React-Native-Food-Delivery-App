@@ -18,6 +18,7 @@ import AddNewAddress from '../screens/AddNewAddress';
 import EditAddress from '../screens/EditAddress';
 import EditProfile from '../screens/EditProfile';
 import OrderHistory from '../screens/OrderHistory';
+import About from '../screens/About';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,6 +29,7 @@ const Home = () => (
         <Stack.Screen name="Groceries" component={Groceries} />
         <Stack.Screen name="Restaurants" component={Restaurants} />
         <Stack.Screen name="Cakes" component={Cakes} />
+        <Stack.Screen name="About" component={About} />
         {/* Add other screens here as needed */}
     </Stack.Navigator>
 );
