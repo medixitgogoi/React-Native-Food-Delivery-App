@@ -26,7 +26,7 @@ const Profile = () => {
     const logOutHandler = () => {
         dispatch(deleteAllItemsFromCart());
         dispatch(logout());
-    }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -84,10 +84,11 @@ const Profile = () => {
                             <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
                         </TouchableOpacity>
 
-                        <View style={{ width: '100%', gap: 8, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
+                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 10 }}>
                             {/* Headline */}
-                            <View style={{ borderLeftColor: backIconColor, borderLeftWidth: 3, paddingHorizontal: 10, }}>
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>More</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
+                                <View style={{ backgroundColor: backIconColor, height: '100%', width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>More</Text>
                             </View>
 
                             {/* About */}
