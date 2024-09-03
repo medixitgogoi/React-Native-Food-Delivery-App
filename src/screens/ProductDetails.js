@@ -192,10 +192,10 @@ const ProductDetails = ({ route }) => {
 
                         {/* Error message */}
                         {error && (
-                            <View style={{ marginHorizontal: 13, paddingLeft: 10, paddingRight: 4, backgroundColor: '#fceced', borderRadius: 7, borderColor: '#cb202d', borderWidth: 1, marginTop: 4, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingVertical: 2 }}>
-                                <Text style={{ color: '#cb202d', fontSize: responsiveFontSize(2), fontWeight: '500' }}>Please select a unit</Text>
+                            <View style={{ marginHorizontal: 13, paddingLeft: 10, paddingRight: 4, backgroundColor: '#fceced', borderRadius: 7, borderColor: '#cb202d', borderWidth: 0.5, marginTop: 4, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingVertical: 2 }}>
+                                <Text style={{ color: '#cb202d', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>Please select a unit</Text>
                                 <TouchableOpacity onPress={() => setError(false)}>
-                                    <Icon6 name="squared-cross" size={27} color={'#cb202d'} />
+                                    <Icon6 name="squared-cross" size={23} color={'#cb202d'} />
                                 </TouchableOpacity>
                             </View>
                         )}
