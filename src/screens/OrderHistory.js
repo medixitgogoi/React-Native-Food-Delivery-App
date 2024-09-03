@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor } from '../utils/colors';
@@ -14,6 +14,25 @@ const OrderHistory = () => {
 
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    const orders = [
+        {
+            id: 1,
+            restaurantName: 'Pizza Palace',
+            orderDate: '2024-09-01',
+            status: 'Delivered',
+            items: ['Pepperoni Pizza', 'Garlic Bread'],
+            total: '$25.00',
+        },
+        {
+            id: 2,
+            restaurantName: 'Burger Hub',
+            orderDate: '2024-08-30',
+            status: 'On the Way',
+            items: ['Cheese Burger', 'Fries', 'Coke'],
+            total: '$18.50',
+        },
+    ];
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
@@ -50,9 +69,11 @@ const OrderHistory = () => {
                 </View>
             </View>
 
-            <View>
+            <ScrollView style={{ flex: 1 }}>
+                <View style={{ backgroundColor: '#fff' }}>
 
-            </View>
+                </View>
+            </ScrollView>
 
         </SafeAreaView>
     )
