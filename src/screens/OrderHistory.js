@@ -20,6 +20,12 @@ const OrderHistory = () => {
 
     const [loading, setLoading] = useState(false);
 
+    const renderOrder = ({ item }) => {
+        <View key={item.id}>
+            <Text>{item.name}</Text>
+        </View>
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
             <StatusBar
@@ -68,7 +74,7 @@ const OrderHistory = () => {
                         keyExtractor={item => item.id.toString()}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
-                        // columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    // columnWrapperStyle={{ justifyContent: 'space-between' }}
                     />
                 )}
             </View>
