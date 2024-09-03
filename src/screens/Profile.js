@@ -53,7 +53,7 @@ const Profile = () => {
                 <ScrollView style={{ flex: 1 }}>
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 12 }}>
                         {/* Details */}
-                        <View style={{ backgroundColor: darkGreen, width: '100%', borderRadius: 20, elevation: 1, padding: 20, flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+                        <View style={{ backgroundColor: darkGreen, width: '100%', borderRadius: 20, elevation: 1, paddingVertical: 25, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 15 }}>
                             {/* Image */}
                             <View style={{ flexDirection: 'column', alignItems: 'center', }}>
                                 <View style={{ height: 100, width: 100, backgroundColor: lightGreen, borderRadius: 100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
