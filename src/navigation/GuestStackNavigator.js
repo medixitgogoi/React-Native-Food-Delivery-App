@@ -20,6 +20,7 @@ import About from '../screens/About';
 import EditProfile from '../screens/EditProfile';
 import FAQ from '../screens/FAQ';
 import OrderHistory from '../screens/OrderHistory';
+import Addresses from '../screens/Addresses';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -106,6 +107,7 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             </Stack.Screen>
             <Stack.Screen name="ProductDetails" component={ProductDetails} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="Addresses" component={Addresses} />
             <Stack.Screen name="Checkout" component={Checkout} />
             <Stack.Screen name="AddNewAddress" component={AddNewAddress} />
             <Stack.Screen name="EditAddress" component={EditAddress} />
