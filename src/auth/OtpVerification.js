@@ -115,10 +115,8 @@ const OtpVerification = ({ route }) => {
                     }).start();
                 }
 
-                // console.log('response', response?.data?.message);
-
             } catch (error) {
-                Alert.alert(error.message)
+                Alert.alert(error.message);
             }
             setLoading(false);
         }
