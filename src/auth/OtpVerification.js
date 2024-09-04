@@ -40,34 +40,35 @@ const OtpVerification = ({ route }) => {
     }, [resendTimer]);
 
     const handleOTPVerificationSuccess = async () => {
-        if (!otp[0] || !otp[1] || !otp[2] || !otp[3]) {
-            return;
-        } else {
-            setLoading(true);
-            try {
-                // Combine the OTP array into a single string
-                const otpCode = otp.join('');
+        setLoading(true);
+        try {
+            // Combine the OTP array into a single string
+            const otpCode = otp.join('');
 
-                const response = await axios.post(`user/otp/verify`, {
-                    mobile: mobileNumber,
-                    otp: otpCode // Send the OTP as a single string
-                });
+            const response = await axios.post(`user/otp/verify`, {
+                mobile: mobileNumber,
+                otp: otpCode, // Send the OTP as a single string
+            });
 
-                if (response.data.status) {
-                    if (to === 'signup') {
-                        navigation.navigate('SignUp');
-                    } else if (to === 'forgotPassword') {
-                        navigation.navigate('ForgotPassword');
-                    }
+            if (response.data.status) {
+                if (to === 'signup') {
+                    navigation.navigate('SignUp');
+                } else if (to === 'forgotPassword') {
+                    navigation.navigate('ForgotPassword');
                 }
-
-                console.log('response', response?.data?.message);
-
-            } catch (error) {
-                Alert.alert(error.message);
+            } else {
+                // Display the error message if OTP is invalid
+                Alert.alert('Error', response.data.message || 'Something went wrong.');
             }
-            setLoading(false);
+        } catch (error) {
+            // Check if the error response is available and display the backend error message
+            if (error.response && error.response.data && error.response.data.message) {
+                Alert.alert('Error', error.response.data.message);
+            } else {
+                Alert.alert('Error', error.message);
+            }
         }
+        setLoading(false);
     };
 
     const handleInputChange = (text, index) => {
