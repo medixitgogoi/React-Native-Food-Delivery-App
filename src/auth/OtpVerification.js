@@ -58,7 +58,7 @@ const OtpVerification = ({ route }) => {
                 }
             } else {
                 // Display the error message if OTP is invalid
-                Alert.alert('Error', response.data.message || 'Something went wrong.');
+                Alert.alert(response?.data?.message, response?.data?.error_message?.otp?.[0] || response?.data?.error_message?.mobile?.[0] || 'Something went wrong.');
             }
         } catch (error) {
             // Check if the error response is available and display the backend error message
@@ -89,9 +89,26 @@ const OtpVerification = ({ route }) => {
         }
     };
 
-    const handleResendOTP = () => {
-        setResendTimer(30);
-        setIsResendDisabled(true);
+    const handleResendOTP = async () => {
+        setLoading(true); // Show loading indicator
+        try {
+            // Make the API call to resend OTP
+            const response = await axios.post(`user/otp/send`, {
+                mobile: mobileNumber
+            });
+
+            if (response.data.status) {
+                Alert.alert('OTP Sent', 'A new OTP has been sent to your mobile number.');
+                setResendTimer(30); // Reset the timer to 30 seconds
+                setIsResendDisabled(true); // Disable the resend button
+            } else {
+                // Handle error if resend failed
+                Alert.alert('Error', response.data.message || 'Failed to resend OTP. Please try again.');
+            }
+        } catch (error) {
+            Alert.alert('Error', error.message);
+        }
+        setLoading(false); // Hide loading indicator
     };
 
     const handleSendOtpPress = async () => {

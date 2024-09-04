@@ -3,7 +3,6 @@ import StackNavigation from './src/navigation/StackNavigation';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/Store';
 import { useEffect } from 'react';
-import Toast from 'react-native-toast-message'
 
 const App = () => {
 
@@ -39,7 +38,6 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <Toast />
             <StackNavigation />
         </Provider>
     )
