@@ -39,16 +39,36 @@ const OtpVerification = ({ route }) => {
         return () => clearTimeout(timer);
     }, [resendTimer]);
 
-    const handleOTPVerificationSuccess = () => {
-        if (mobileNumber.length < 10) {
-            Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
+    const handleOTPVerificationSuccess = async () => {
+        if (!otp[0] || !otp[1] || !otp[2] || !otp[3]) {
             return;
         } else {
-            if (to === 'signup') {
-                navigation.navigate('SignUp');
-            } else if (to === 'forgotPassword') {
-                navigation.navigate('ForgotPassword');
+            setLoading(true);
+            try {
+                // Combine the OTP array into a single string
+                const otpCode = otp.join('');
+
+                const response = await axios.post(`user/otp/verify`, {
+                    mobile: mobileNumber,
+                    otp: otpCode // Send the OTP as a single string
+                });
+
+                console.log('response', response);
+
+                if (response.data.status) {
+                    if (to === 'signup') {
+                        navigation.navigate('SignUp');
+                    } else if (to === 'forgotPassword') {
+                        navigation.navigate('ForgotPassword');
+                    }
+                }
+
+                console.log('response', response?.data?.message);
+
+            } catch (error) {
+                Alert.alert(error.message);
             }
+            setLoading(false);
         }
     };
 
@@ -97,7 +117,7 @@ const OtpVerification = ({ route }) => {
                     }).start();
                 }
 
-                console.log('response', response?.data?.message);
+                // console.log('response', response?.data?.message);
 
             } catch (error) {
                 Alert.alert(error.message)
@@ -192,6 +212,7 @@ const OtpVerification = ({ route }) => {
                                         <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2) }}>+91 {`*******${mobileNumber.slice(-3)}`}</Text>
                                     </View>
 
+                                    {/* Sub Heading */}
                                     <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 8 }}>
                                         <Text style={{ color: '#8a8f99', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Enter Your OTP Code Below</Text>
                                     </View>
