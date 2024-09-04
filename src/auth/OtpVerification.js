@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -75,18 +76,12 @@ const OtpVerification = ({ route }) => {
         setIsResendDisabled(true);
     };
 
-    // setShowOtpSection(true);
-    // Animated.timing(slideAnim, {
-    //     toValue: -screenWidth,
-    //     duration: 300,
-    //     useNativeDriver: true,
-    // }).start();
-
     const handleSendOtpPress = async () => {
         if (mobileNumber.length < 10) {
             Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
             return;
         } else {
+            setLoading(true);
             try {
                 const response = await axios.post(`user/otp/send`,
                     {
@@ -94,30 +89,27 @@ const OtpVerification = ({ route }) => {
                     }
                 );
 
-                console.log('response', response);
+                if (response.data.status) {
+                    setShowOtpSection(true);
+                    Animated.timing(slideAnim, {
+                        toValue: -screenWidth,
+                        duration: 300,
+                        useNativeDriver: true,
+                    }).start();
+                }
 
-                // if (response.data.status) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'OTP Sent Successfully',
+                    text2: 'Please check your phone for the OTP code.',
+                    position: 'top',
+                    visibilityTime: 3000, // Duration in milliseconds
+                });
 
-                //     const userInfo = {
-                //         name: extractName(response?.data?.message),
-                //         email: email,
-                //         password: password,
-                //         accessToken: response?.data?.access_token,
-                //     };
-
-                //     dispatch(addLoginUser(userInfo));
-
-                //     await AsyncStorage.setItem('loginDetails', JSON.stringify(userInfo));
-
-                //     setEmail('');
-                //     setPassword('');
-
-                // } else {
-                //     Alert.alert(response.data.message)
-                // }
             } catch (error) {
                 Alert.alert(error.message)
             }
+            setLoading(false);
         }
     };
 
@@ -189,8 +181,12 @@ const OtpVerification = ({ route }) => {
                                         style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 35, width: '95%', }}
                                     >
                                         <TouchableOpacity onPress={handleSendOtpPress} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Send OTP</Text>
-                                            <Icon4 name="arrowright" size={23} color='#fff' />
+                                            {loading ? (
+                                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Sending OTP ...</Text>
+                                            ) : (
+                                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Send OTP</Text>
+                                            )}
+                                            {!loading && <Icon4 name="arrowright" size={23} color='#fff' />}
                                         </TouchableOpacity>
                                     </LinearGradient>
                                 </View>
