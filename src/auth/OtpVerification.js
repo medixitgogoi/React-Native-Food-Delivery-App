@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import Toast from 'react-native-toast-message';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -98,13 +97,7 @@ const OtpVerification = ({ route }) => {
                     }).start();
                 }
 
-                Toast.show({
-                    type: 'success',
-                    text1: 'OTP Sent Successfully',
-                    text2: 'Please check your phone for the OTP code.',
-                    position: 'top',
-                    visibilityTime: 3000, // Duration in milliseconds
-                });
+                console.log('response', response?.data?.message);
 
             } catch (error) {
                 Alert.alert(error.message)
