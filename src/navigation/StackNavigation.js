@@ -3,6 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthStackNavigator from './AuthStackNavigator';
 import GuestStackNavigator from './GuestStackNavigator';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
 const StackNavigation = () => {
 

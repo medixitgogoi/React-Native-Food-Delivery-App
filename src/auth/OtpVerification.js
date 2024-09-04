@@ -1,4 +1,4 @@
-import { Alert, Animated, Dimensions, Image, KeyboardAvoidingView, Platform, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, Dimensions, Image, KeyboardAvoidingView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -6,6 +6,7 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -22,6 +23,7 @@ const OtpVerification = ({ route }) => {
     const [resendTimer, setResendTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
     const [showOtpSection, setShowOtpSection] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -73,17 +75,49 @@ const OtpVerification = ({ route }) => {
         setIsResendDisabled(true);
     };
 
-    const handleSendOtpPress = () => {
+    // setShowOtpSection(true);
+    // Animated.timing(slideAnim, {
+    //     toValue: -screenWidth,
+    //     duration: 300,
+    //     useNativeDriver: true,
+    // }).start();
+
+    const handleSendOtpPress = async () => {
         if (mobileNumber.length < 10) {
             Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
             return;
         } else {
-            setShowOtpSection(true);
-            Animated.timing(slideAnim, {
-                toValue: -screenWidth,
-                duration: 300,
-                useNativeDriver: true,
-            }).start();
+            try {
+                const response = await axios.post(`user/otp/send`,
+                    {
+                        mobile: mobileNumber
+                    }
+                );
+
+                console.log('response', response);
+
+                // if (response.data.status) {
+
+                //     const userInfo = {
+                //         name: extractName(response?.data?.message),
+                //         email: email,
+                //         password: password,
+                //         accessToken: response?.data?.access_token,
+                //     };
+
+                //     dispatch(addLoginUser(userInfo));
+
+                //     await AsyncStorage.setItem('loginDetails', JSON.stringify(userInfo));
+
+                //     setEmail('');
+                //     setPassword('');
+
+                // } else {
+                //     Alert.alert(response.data.message)
+                // }
+            } catch (error) {
+                Alert.alert(error.message)
+            }
         }
     };
 
@@ -112,6 +146,7 @@ const OtpVerification = ({ route }) => {
 
                         {/* Content */}
                         <View style={{ flexDirection: 'column', paddingTop: 15 }}>
+                            {/* Image */}
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
                                 <Image source={require('../assets/otp.png')} style={{ width: 220, height: 220, resizeMode: 'contain' }} />
                             </View>
@@ -135,7 +170,7 @@ const OtpVerification = ({ route }) => {
                                             </View>
                                             <View style={{ flex: 0.82 }}>
                                                 <TextInput
-                                                    style={{ height: 45, borderColor: '#4d4d4d', fontWeight: "500", borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
+                                                    style={{ height: 45, borderColor: '#4d4d4d', fontWeight: '500', borderWidth: 1, borderRadius: 8, paddingHorizontal: 15, fontSize: responsiveFontSize(2), color: '#000', backgroundColor: '#fff' }}
                                                     placeholder="Enter Phone Number"
                                                     keyboardType="numeric"
                                                     maxLength={10}
