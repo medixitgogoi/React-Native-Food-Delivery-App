@@ -52,7 +52,7 @@ const OtpVerification = ({ route }) => {
 
             if (response.data.status) {
                 if (to === 'signup') {
-                    navigation.navigate('SignUp');
+                    navigation.navigate('SignUp', { mobile: mobileNumber, otp: otpCode });
                 } else if (to === 'forgotPassword') {
                     navigation.navigate('ForgotPassword');
                 }

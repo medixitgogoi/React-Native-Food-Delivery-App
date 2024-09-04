@@ -9,7 +9,10 @@ import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
 
-const SignUp = () => {
+const SignUp = ({ route }) => {
+
+    const mobileNumber = route.params.mobile;
+    const otp = route.params.otp;
 
     const navigation = useNavigation();
 
@@ -29,6 +32,58 @@ const SignUp = () => {
 
     const [show, setShow] = useState(true);
     const [confirmShow, setConfirmShow] = useState(true);
+
+    const registerUser = async () => {
+        // Ensure all fields are filled
+        if (!name || !email || !password || !confirmPassword) {
+            Alert.alert("Error", "All fields are required.");
+            return;
+        }
+
+        // Ensure passwords match
+        if (password !== confirmPassword) {
+            Alert.alert("Error", "Passwords do not match.");
+            return;
+        }
+
+        // Ensure terms and conditions are accepted
+        if (!checked) {
+            Alert.alert("Error", "Please accept the Terms & Conditions.");
+            return;
+        }
+
+        try {
+            // Data object as per the API requirement
+            const data = {
+                mobile: mobileNumber,
+                otp: otp,
+                name: name,
+                email: email,
+                password: password,
+                confirm_password: confirmPassword
+            };
+
+            // API Call using axios
+            const response = await axios.post(`user/registration/detail/update`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // Handle success response
+            if (response.data.status) {
+                Alert.alert("Success", "User registered successfully!");
+            }
+
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -152,7 +207,7 @@ const SignUp = () => {
                                     end={{ x: 1, y: 0 }}
                                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                                 >
-                                    <TouchableOpacity style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
+                                    <TouchableOpacity onPress={registerUser} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
                                         <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Sign up</Text>
                                     </TouchableOpacity>
                                 </LinearGradient>
