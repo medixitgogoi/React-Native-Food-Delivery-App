@@ -53,8 +53,6 @@ const OtpVerification = ({ route }) => {
                     otp: otpCode // Send the OTP as a single string
                 });
 
-                console.log('response', response);
-
                 if (response.data.status) {
                     if (to === 'signup') {
                         navigation.navigate('SignUp');
@@ -251,7 +249,11 @@ const OtpVerification = ({ route }) => {
                                         style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 40, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                                     >
                                         <TouchableOpacity onPress={handleOTPVerificationSuccess} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
-                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Verify OTP</Text>
+                                            {loading ? (
+                                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Processing, hold on...</Text>
+                                            ) : (
+                                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Verify OTP</Text>
+                                            )}
                                         </TouchableOpacity>
                                     </LinearGradient>
 
