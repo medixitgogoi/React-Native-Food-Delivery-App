@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/Ionicons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome';
-import { logout } from '../redux/LoginSlice';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { deleteAllItemsFromCart } from '../redux/CartSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
+import { logoutUser } from '../redux/UserSlice';
 
 const Profile = () => {
 
@@ -29,7 +29,7 @@ const Profile = () => {
 
     const logOutHandler = () => {
         dispatch(deleteAllItemsFromCart());
-        dispatch(logout());
+        dispatch(logoutUser());
     };
 
     return (

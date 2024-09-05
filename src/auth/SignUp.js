@@ -8,6 +8,9 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import { addUser } from '../redux/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SignUp = ({ route }) => {
 
@@ -16,7 +19,12 @@ const SignUp = ({ route }) => {
 
     const navigation = useNavigation();
 
+    const dispatch = useDispatch();
+
+    const userDetails = useSelector(state => state.user); 
+
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [name, setName] = useState('');
     const [isNameFocused, setIsNameFocused] = useState(false);
@@ -53,6 +61,7 @@ const SignUp = ({ route }) => {
         }
 
         try {
+            setLoading(true);
             // Data object as per the API requirement
             const data = {
                 mobile: mobileNumber,
@@ -72,9 +81,16 @@ const SignUp = ({ route }) => {
 
             // Handle success response
             if (response.data.status) {
-                Alert.alert("Success", "User registered successfully!");
+                dispatch(addUser({
+                    name: name,
+                    email: email,
+                    password: password,
+                    accessToken: response?.data?.access_token,
+                    mobileNumber: mobileNumber,
+                }))
             }
 
+            setLoading(false);
         } catch (error) {
             // Handle error response
             if (error.response) {
@@ -84,6 +100,8 @@ const SignUp = ({ route }) => {
             }
         }
     };
+
+    console.log('userDetails', userDetails);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -207,8 +225,13 @@ const SignUp = ({ route }) => {
                                     end={{ x: 1, y: 0 }}
                                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                                 >
-                                    <TouchableOpacity onPress={registerUser} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
-                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Sign up</Text>
+                                    <TouchableOpacity onPress={registerUser} disabled={loading} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                        {loading ? (
+                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Registering...</Text>
+                                        ) : (
+                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Sign up</Text>
+                                        )}
+                                        {!loading && <Icon4 name="arrowright" size={23} color='#fff' />}
                                     </TouchableOpacity>
                                 </LinearGradient>
 

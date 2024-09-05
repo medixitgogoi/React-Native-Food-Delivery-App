@@ -13,12 +13,16 @@ import { groceries } from '../utils/groceries';
 import StarRating from '../components/StarRating';
 import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
+import { useSelector } from 'react-redux';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const Home = () => {
 
     const navigation = useNavigation();
+
+    const userDetails = useSelector(state => state.user);
+    console.log('homeuser', userDetails);
 
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
