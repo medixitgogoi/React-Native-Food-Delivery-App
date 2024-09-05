@@ -8,7 +8,6 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon from 'react-native-vector-icons/dist/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/LoginSlice';
 import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
