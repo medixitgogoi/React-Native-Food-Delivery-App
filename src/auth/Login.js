@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/dist/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { addUser } from '../redux/UserSlice';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -16,8 +17,8 @@ const Login = () => {
 
     const navigation = useNavigation();
 
-    const userDetails = useSelector(state => state.user);
-    console.log('logibuser', userDetails);
+    // const userDetails = useSelector(state => state.user);
+    // console.log('logibuser', userDetails);
 
     const [showOtpLogin, setShowOtpLogin] = useState(false);
     const [mobileNumber, setMobileNumber] = useState('');
@@ -66,12 +67,14 @@ const Login = () => {
             // Handle success response
             if (response.data.status) {
                 dispatch(addUser({
-                    name: name,
-                    email: email,
+                    name: response?.data?.data?.name,
+                    email: response?.data?.data?.email,
+                    mobileNumber: mobileNumber,
                     password: password,
                     accessToken: response?.data?.access_token,
-                    mobileNumber: mobileNumber,
                 }))
+            } else {
+                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please check your credentials and try again.');
             }
 
             setLoading(false);
