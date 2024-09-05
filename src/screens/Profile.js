@@ -18,6 +18,8 @@ const Profile = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    const userDetails = useSelector(state => state.user);
+
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     useFocusEffect(
@@ -54,19 +56,17 @@ const Profile = () => {
                     <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', paddingVertical: 5, paddingHorizontal: 12 }}>
                         {/* Details */}
                         <View style={{ backgroundColor: darkGreen, width: '100%', borderRadius: 20, elevation: 1, paddingVertical: 25, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-                            {/* Image */}
+                            {/* Initial */}
                             <View style={{ flexDirection: 'column', alignItems: 'center', }}>
                                 <View style={{ height: 100, width: 100, backgroundColor: lightGreen, borderRadius: 100, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                    {/* <Text style={{ color: '#235c9e', fontSize: responsiveFontSize(7), textTransform: 'uppercase' }}>{loginDetails[0]?.name.slice(0, 1)}</Text> */}
-                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(7), textTransform: 'uppercase', }}>E</Text>
+                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(7), textTransform: 'uppercase' }}>{userDetails[0]?.name.slice(0, 1)}</Text>
                                 </View>
                             </View>
 
                             {/* Name and Email */}
                             <View style={{ flexDirection: 'column', gap: 3, width: '65%' }}>
-                                <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>Example Example</Text>
-                                {/* <Text style={{ fontSize: responsiveFontSize(1.8), color: '#656565' }}>{loginDetails[0]?.email}</Text> */}
-                                <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>example@gmail.com</Text>
+                                <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{userDetails[0]?.name}</Text>
+                                <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>{userDetails[0]?.email}</Text>
                             </View>
                         </View>
 
