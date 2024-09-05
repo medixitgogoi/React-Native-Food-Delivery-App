@@ -9,18 +9,13 @@ import OtpVerification from '../auth/OtpVerification';
 import TermsAndConditions from '../auth/TermsAndConditions';
 import PrivacyPolicy from '../auth/PrivacyPolicy';
 
-const AuthStackNavigator = ({ initialRoute }) => {
-    
+const AuthStackNavigator = () => {
+
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRoute || "Login"}>
-            {initialRoute === "SplashScreen" && (
-                <Stack.Screen
-                    name="SplashScreen"
-                    component={SplashScreen}
-                />
-            )}
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={'SplashScreen'}>
+            <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
