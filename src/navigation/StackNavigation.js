@@ -18,6 +18,8 @@ const StackNavigation = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
+
     const cartItemCount = cartProducts.length;
 
     useEffect(() => {
@@ -46,13 +48,16 @@ const StackNavigation = () => {
     }, []);
 
     if (isLoading) {
-        // Show a loading indicator while checking the login status
-        return null; // You can replace this with a loading spinner component if needed
+        return (
+            <NavigationContainer>
+                <AuthStackNavigator initialRoute="SplashScreen" />
+            </NavigationContainer>
+        );
     }
 
     return (
         <NavigationContainer>
-            {userDetails?.[0]?.accessToken ? (
+            {isUserLoggedIn ? (
                 <GuestStackNavigator cartItemCount={cartItemCount} />
             ) : (
                 <AuthStackNavigator initialRoute="Login" />

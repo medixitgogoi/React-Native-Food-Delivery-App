@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -66,13 +67,20 @@ const Login = () => {
 
             // Handle success response
             if (response.data.status) {
-                dispatch(addUser({
+                const userInfo = {
                     name: response?.data?.data?.name,
                     email: response?.data?.data?.email,
                     mobileNumber: mobileNumber,
                     password: password,
                     accessToken: response?.data?.access_token,
-                }))
+                };
+
+                dispatch(addUser(userInfo));
+                await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+                setMobileNumber('');
+                setPassword('');
+
             } else {
                 Alert.alert(response?.data?.message || 'Something went wrong.', 'Please check your credentials and try again.');
             }
