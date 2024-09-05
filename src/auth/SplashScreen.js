@@ -68,7 +68,7 @@ const SplashScreen = () => {
                     backgroundColor="transparent"
                 />
 
-                <View style={{ height: '90%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 
                     {/* Animated Image */}
                     <Animated.Image

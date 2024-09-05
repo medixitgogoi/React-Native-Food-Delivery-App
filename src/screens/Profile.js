@@ -32,18 +32,9 @@ const Profile = () => {
 
     const logOutHandler = async () => {
         try {
-            // Clear the cart and user details in Redux store
             dispatch(deleteAllItemsFromCart());
             dispatch(logoutUser());
-
-            // Remove user details from AsyncStorage
             await AsyncStorage.removeItem('userDetails');
-
-            // Navigate directly to the Login screen after logout
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login' }],
-            });
         } catch (error) {
             Alert.alert('Failed to logout', 'Please try again');
         }

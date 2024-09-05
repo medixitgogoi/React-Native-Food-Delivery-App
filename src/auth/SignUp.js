@@ -11,6 +11,7 @@ import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = ({ route }) => {
 
@@ -21,7 +22,7 @@ const SignUp = ({ route }) => {
 
     const dispatch = useDispatch();
 
-    const userDetails = useSelector(state => state.user); 
+    const userDetails = useSelector(state => state.user);
 
     const [checked, setChecked] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -81,16 +82,27 @@ const SignUp = ({ route }) => {
 
             // Handle success response
             if (response.data.status) {
-                dispatch(addUser({
-                    name: name,
-                    email: email,
+                const userInfo = {
+                    name: response?.data?.data?.name,
+                    email: response?.data?.data?.email,
+                    mobileNumber: mobileNumber,
                     password: password,
                     accessToken: response?.data?.access_token,
-                    mobileNumber: mobileNumber,
-                }))
+                };
+
+                dispatch(addUser(userInfo));
+                await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+                setName('');
+                setPassword('');
+                setConfirmPassword('');
+                setEmail('');
+            } else {
+                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
             }
 
             setLoading(false);
+
         } catch (error) {
             // Handle error response
             if (error.response) {
@@ -227,7 +239,7 @@ const SignUp = ({ route }) => {
                                 >
                                     <TouchableOpacity onPress={registerUser} disabled={loading} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                         {loading ? (
-                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Registering...</Text>
+                                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Signing you up ...</Text>
                                         ) : (
                                             <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', }}>Sign up</Text>
                                         )}

@@ -86,6 +86,7 @@ const Login = () => {
             }
 
             setLoading(false);
+            
         } catch (error) {
             // Handle error response
             if (error.response) {

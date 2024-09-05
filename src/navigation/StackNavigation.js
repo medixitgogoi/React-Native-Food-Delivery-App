@@ -39,6 +39,14 @@ const StackNavigation = () => {
         loadLoginDetails();
     }, [dispatch]);
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     if (isLoading) {
         return (
             <NavigationContainer>
@@ -49,11 +57,7 @@ const StackNavigation = () => {
 
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? (
-                <GuestStackNavigator cartItemCount={cartItemCount} />
-            ) : (
-                <AuthStackNavigator initialRoute="Login" />
-            )}
+            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
         </NavigationContainer>
     );
 };
