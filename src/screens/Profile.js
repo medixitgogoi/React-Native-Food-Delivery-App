@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { useCallback, useState } from 'react';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import { logoutUser } from '../redux/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
 
@@ -29,9 +30,15 @@ const Profile = () => {
         }, [])
     );
 
-    const logOutHandler = () => {
-        dispatch(deleteAllItemsFromCart());
-        dispatch(logoutUser());
+    const logOutHandler = async () => {
+        try {
+            dispatch(deleteAllItemsFromCart());
+            dispatch(logoutUser());
+            await AsyncStorage.removeItem('userDetails');
+        } catch {
+            Alert.alert('Failed to logout', 'Plese try again');
+        }
+
     };
 
     return (

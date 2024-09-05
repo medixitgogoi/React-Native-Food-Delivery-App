@@ -1,3 +1,4 @@
+// AuthStackNavigator.js
 import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../auth/Login';
@@ -9,12 +10,17 @@ import TermsAndConditions from '../auth/TermsAndConditions';
 import PrivacyPolicy from '../auth/PrivacyPolicy';
 
 const AuthStackNavigator = ({ initialRoute }) => {
-
+    
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRoute ? initialRoute : "Login"}>
-            <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRoute || "Login"}>
+            {initialRoute === "SplashScreen" && (
+                <Stack.Screen
+                    name="SplashScreen"
+                    component={SplashScreen}
+                />
+            )}
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
@@ -22,7 +28,7 @@ const AuthStackNavigator = ({ initialRoute }) => {
             <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         </Stack.Navigator>
-    )
+    );
 }
 
 export default AuthStackNavigator;

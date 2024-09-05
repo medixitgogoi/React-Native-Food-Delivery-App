@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Text, View, ImageBackground, StatusBar, Image, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -10,10 +10,15 @@ const SplashScreen = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        setTimeout(() => {
-            navigation.navigate('Login');
-        }, 100)
-    }, []);
+        const timer = setTimeout(() => {
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            });
+        }, 1200); // 1200 milliseconds delay
+
+        return () => clearTimeout(timer); // Clean up the timer
+    }, [navigation]);
 
     const scaleAnim = useRef(new Animated.Value(0)).current; // Scale animation for the logo
     const translateYAnim = useRef(new Animated.Value(50)).current; // Position animation for the logo
@@ -58,9 +63,14 @@ const SplashScreen = () => {
             resizeMode="cover"
         >
             <SafeAreaView style={{ flex: 1 }}>
-                <StatusBar translucent={true} backgroundColor="transparent" />
+                <StatusBar
+                    translucent={true}
+                    backgroundColor="transparent"
+                />
 
                 <View style={{ height: '90%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+
+                    {/* Animated Image */}
                     <Animated.Image
                         source={require('../assets/logo2.png')}
                         style={{
