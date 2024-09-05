@@ -62,7 +62,7 @@ const Login = () => {
                 }
             });
 
-            console.log('response', response);
+            console.log('response', response.data);
 
             // Handle success response
             if (response.data.status) {
