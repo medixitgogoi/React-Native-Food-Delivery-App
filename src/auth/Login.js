@@ -7,14 +7,18 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon from 'react-native-vector-icons/dist/Feather';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/LoginSlice';
+import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const Login = () => {
 
     const navigation = useNavigation();
+
+    const userDetails = useSelector(state => state.user);
+    console.log('logibuser', userDetails);
 
     const [showOtpLogin, setShowOtpLogin] = useState(false);
     const [mobileNumber, setMobileNumber] = useState('');
@@ -36,18 +40,50 @@ const Login = () => {
 
     const dispatch = useDispatch();
 
-    const handleLoginSubmit = () => {
-        setLoading(true)
-        dispatch(login());
-        setLoading(false);
-        // setTimeout(() => {
-        // }, 1000);
-        // if (mobileNumber.length < 10) {
-        //     Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
-        //     return;
-        // } else {
-        //     dispatch(login());
-        // }
+    const handleLoginSubmit = async () => {
+        // Ensure all fields are filled
+        if (!mobileNumber || !password) {
+            Alert.alert("Error", "All fields are required.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                mobile: mobileNumber,
+                password: password,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`user/login`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('response', response);
+
+            // Handle success response
+            if (response.data.status) {
+                dispatch(addUser({
+                    name: name,
+                    email: email,
+                    password: password,
+                    accessToken: response?.data?.access_token,
+                    mobileNumber: mobileNumber,
+                }))
+            }
+
+            setLoading(false);
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        }
     };
 
     return (

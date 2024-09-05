@@ -10,7 +10,7 @@ axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 const StackNavigation = () => {
 
     const cartProducts = useSelector(state => state.cart);
-    const login = useSelector(state => state.login);
+    const userDetails = useSelector(state => state.user);
 
     const cartItemCount = cartProducts.length;
 
@@ -18,8 +18,7 @@ const StackNavigation = () => {
 
     return (
         <NavigationContainer>
-            {/* {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}  */}
-            {login.isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
+            {userDetails?.[0]?.accessToken ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
         </NavigationContainer>
     );
 }
