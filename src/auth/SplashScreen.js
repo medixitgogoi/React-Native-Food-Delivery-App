@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Text, View, ImageBackground, StatusBar, Image, Animated } from 'react-native';
+import { View, ImageBackground, StatusBar, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
