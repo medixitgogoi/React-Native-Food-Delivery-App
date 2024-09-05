@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStackNavigator from './AuthStackNavigator';
 import GuestStackNavigator from './GuestStackNavigator';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from npm package
 import { addUser } from '../redux/UserSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
@@ -38,14 +38,6 @@ const StackNavigation = () => {
 
         loadLoginDetails();
     }, [dispatch]);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 1500);
-
-        return () => clearTimeout(timer);
-    }, []);
 
     if (isLoading) {
         return (

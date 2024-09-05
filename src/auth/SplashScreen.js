@@ -12,7 +12,7 @@ const SplashScreen = () => {
     useEffect(() => {
         setTimeout(() => {
             navigation.navigate('Login');
-        }, 1500)
+        }, 100)
     }, []);
 
     const scaleAnim = useRef(new Animated.Value(0)).current; // Scale animation for the logo
