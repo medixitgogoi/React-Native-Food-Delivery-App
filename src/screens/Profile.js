@@ -23,6 +23,7 @@ const Profile = () => {
 
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+    // Status Bar Modifications
     useFocusEffect(
         useCallback(() => {
             StatusBar.setBackgroundColor(background);
@@ -30,10 +31,12 @@ const Profile = () => {
         }, [])
     );
 
+    // logout handler
     const logOutHandler = async () => {
         try {
             dispatch(deleteAllItemsFromCart());
             dispatch(logoutUser());
+
             await AsyncStorage.removeItem('userDetails');
         } catch (error) {
             Alert.alert('Failed to logout', 'Please try again');

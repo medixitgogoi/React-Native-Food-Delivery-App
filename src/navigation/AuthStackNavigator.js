@@ -1,4 +1,3 @@
-// AuthStackNavigator.js
 import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../auth/Login';
@@ -14,7 +13,13 @@ const AuthStackNavigator = ({ initialRoute }) => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRoute ? initialRoute : "Login"}>
+        <Stack.Navigator
+            initialRouteName={initialRoute ? initialRoute : "Login"}
+            screenOptions={{
+                headerShown: false,
+                animation: 'slide_from_right',
+            }}
+        >
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />

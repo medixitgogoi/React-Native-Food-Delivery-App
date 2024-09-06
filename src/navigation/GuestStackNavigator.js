@@ -13,7 +13,7 @@ import Wishlist from '../screens/Wishlist';
 import SearchScreen from '../screens/SearchScreen';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Checkout from '../screens/Checkout';
-import { backIconColor, darkGreen } from '../utils/colors';
+import { darkGreen } from '../utils/colors';
 import AddNewAddress from '../screens/AddNewAddress';
 import EditAddress from '../screens/EditAddress';
 import About from '../screens/About';
@@ -26,26 +26,18 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Home = () => (
-    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='HomeScreen'>
+    <Stack.Navigator
+        screenOptions={{
+            headerShown: false,
+            animation: 'slide_from_right', // Smooth slide transition
+        }}
+        initialRouteName='HomeScreen'
+    >
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="Groceries" component={Groceries} />
         <Stack.Screen name="Restaurants" component={Restaurants} />
         <Stack.Screen name="Cakes" component={Cakes} />
         {/* Add other screens here as needed */}
-    </Stack.Navigator>
-);
-
-const CartStack = () => (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Cart" component={Cart} />
-        {/* Add other screens related to Cart here as needed */}
-    </Stack.Navigator>
-);
-
-const ProfileStack = () => (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Profile" component={Profile} />
-        {/* Add other screens related to Profile here as needed */}
     </Stack.Navigator>
 );
 
@@ -101,7 +93,13 @@ const BottomTabNavigator = ({ cartItemCount }) => {
 
 const GuestStackNavigator = ({ cartItemCount }) => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="BottomTabs">
+        <Stack.Navigator
+            initialRouteName="BottomTabs"
+            screenOptions={{
+                headerShown: false,
+                animation: 'slide_from_right', // Smooth slide transition
+            }}
+        >
             <Stack.Screen name="BottomTabs">
                 {(props) => <BottomTabNavigator {...props} cartItemCount={cartItemCount} />}
             </Stack.Screen>
