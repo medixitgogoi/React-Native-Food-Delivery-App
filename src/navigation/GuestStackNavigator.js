@@ -13,7 +13,7 @@ import Wishlist from '../screens/Wishlist';
 import SearchScreen from '../screens/SearchScreen';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Checkout from '../screens/Checkout';
-import { darkGreen } from '../utils/colors';
+import { background, darkGreen } from '../utils/colors';
 import AddNewAddress from '../screens/AddNewAddress';
 import EditAddress from '../screens/EditAddress';
 import About from '../screens/About';
@@ -33,7 +33,7 @@ const Home = () => (
         }}
         initialRouteName='HomeScreen'
     >
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ statusBarColor: darkGreen, statusBarStyle: 'dark-content' }} />
         <Stack.Screen name="Groceries" component={Groceries} />
         <Stack.Screen name="Restaurants" component={Restaurants} />
         <Stack.Screen name="Cakes" component={Cakes} />
@@ -84,7 +84,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
             })}
         >
             <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Cart" component={Cart} />
+            <Tab.Screen name="Cart" component={Cart} options={{ statusBarColor: background, statusBarStyle: 'dark-content' }} />
             <Tab.Screen name="Wishlist" component={Wishlist} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
