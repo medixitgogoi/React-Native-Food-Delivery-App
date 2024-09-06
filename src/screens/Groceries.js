@@ -9,12 +9,12 @@ import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { groceries } from '../utils/groceries';
 import StarRating from '../components/StarRating';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -25,6 +25,7 @@ const Groceries = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
+    console.log('userDetails', userDetails);
 
     useFocusEffect(
         useCallback(() => {
@@ -46,13 +47,13 @@ const Groceries = () => {
 
     const [filteredNames, setFilteredNames] = useState([]);
 
-    const [groceries, setGroceries] = useState(null);
+    const [data, setData] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(groceries.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
-    }, 300), [groceries]);
+        setFilteredNames(data.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
+    }, 300), [data]);
 
     const handleSearch = (text) => {
         setSearch(text);
@@ -60,26 +61,11 @@ const Groceries = () => {
     };
 
     useEffect(() => {
-        const getGroceryProducts = async () => {
-
-            setLoading(true);
-
-            try {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/appload');
-
-                console.log('responseeee', response?.data);
-                setGroceries(response?.data?.grocery);
-                setFilteredNames(response?.data?.grocery);
-            } catch (error) {
-                Alert.alert(error.message)
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getGroceryProducts();
-
+        setTimeout(() => {
+            setData(groceries);
+            setFilteredNames(groceries);
+            setLoading(false);
+        }, 700); 
     }, []);
 
     const toggleSlider = () => {
@@ -148,7 +134,7 @@ const Groceries = () => {
 
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
                     <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                        <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
                     </View>
                 </View>
 
@@ -156,28 +142,26 @@ const Groceries = () => {
                     <View style={{ flexDirection: 'column', gap: 3 }}>
                         <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                            {/* <StarRating rating={item.starRating} /> */}
-                            <StarRating rating={4} />
+                            <StarRating rating={item.starRating} />
                             <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
                                 <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                             </View>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
-                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>Fruit</Text>
-                        {/* <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text> */}
+                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.productSize[0]?.price}</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.productSize[0]?.mrp}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
                     </View>
                 </View>
 
                 {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
                     <Icon name="add" size={20} color="#fff" />
                 </TouchableOpacity> */}
+
             </TouchableOpacity>
         );
     };
