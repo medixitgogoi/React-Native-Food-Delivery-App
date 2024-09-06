@@ -26,7 +26,7 @@ const Profile = () => {
     // Status Bar Modifications
     useFocusEffect(
         useCallback(() => {
-            StatusBar.setBackgroundColor(background);
+            StatusBar.setBackgroundColor(isLoggingOut ? '#adadad' : '#fff');
             StatusBar.setBarStyle('dark-content');
         }, [])
     );

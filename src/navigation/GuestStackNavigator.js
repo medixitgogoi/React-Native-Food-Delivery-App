@@ -33,7 +33,7 @@ const Home = () => (
         }}
         initialRouteName='HomeScreen'
     >
-        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ statusBarColor: darkGreen, statusBarStyle: 'dark-content' }} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="Groceries" component={Groceries} />
         <Stack.Screen name="Restaurants" component={Restaurants} />
         <Stack.Screen name="Cakes" component={Cakes} />
@@ -74,6 +74,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                         <Text style={[styles.tabLabel, { color }]}>{route.name}</Text>
                     </View>
                 ),
+                animation: 'slide_from_right', // Smooth slide transition
                 tabBarActiveTintColor: '#318538',
                 tabBarInactiveTintColor: '#000',
                 headerShown: false,
@@ -84,7 +85,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
             })}
         >
             <Tab.Screen name="Home" component={Home} />
-            <Tab.Screen name="Cart" component={Cart} options={{ statusBarColor: background, statusBarStyle: 'dark-content' }} />
+            <Tab.Screen name="Cart" component={Cart} />
             <Tab.Screen name="Wishlist" component={Wishlist} />
             <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>

@@ -1,13 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StatusBar, StyleSheet, Text, SafeAreaView } from 'react-native';
+import { background } from '../utils/colors';
 
 const Wishlist = () => {
     return (
-        <View>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
+            <StatusBar
+                animated={true}
+                backgroundColor={background}
+                barStyle="dark-content"
+            />
             <Text style={{ color: '#000' }}>Wishlist</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 
 export default Wishlist
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
