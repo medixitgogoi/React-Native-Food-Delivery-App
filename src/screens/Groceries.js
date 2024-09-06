@@ -145,7 +145,7 @@ const Groceries = () => {
                             </View>
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', marginBottom: 5 , marginTop: 2}}>
+                    <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
@@ -163,7 +163,7 @@ const Groceries = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}

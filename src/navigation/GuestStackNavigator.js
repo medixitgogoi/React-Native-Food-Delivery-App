@@ -25,22 +25,6 @@ import Addresses from '../screens/Addresses';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const Home = () => (
-    <Stack.Navigator
-        screenOptions={{
-            headerShown: false,
-            animation: 'slide_from_right', // Smooth slide transition
-        }}
-        initialRouteName='HomeScreen'
-    >
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="Groceries" component={Groceries} />
-        <Stack.Screen name="Restaurants" component={Restaurants} />
-        <Stack.Screen name="Cakes" component={Cakes} />
-        {/* Add other screens here as needed */}
-    </Stack.Navigator>
-);
-
 const BottomTabNavigator = ({ cartItemCount }) => {
     return (
         <Tab.Navigator
@@ -48,7 +32,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 tabBarIcon: ({ color, size }) => {
                     let iconName;
 
-                    if (route.name === 'Home') {
+                    if (route.name === 'HomeScreen') {
                         iconName = 'home';
                     } else if (route.name === 'Cart') {
                         iconName = 'shopping';
@@ -84,7 +68,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 },
             })}
         >
-            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="HomeScreen" component={HomeScreen} />
             <Tab.Screen name="Cart" component={Cart} />
             <Tab.Screen name="Wishlist" component={Wishlist} />
             <Tab.Screen name="Profile" component={Profile} />
@@ -114,6 +98,9 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             <Stack.Screen name="EditProfile" component={EditProfile} />
             <Stack.Screen name="Faq" component={FAQ} />
             <Stack.Screen name="OrderHistory" component={OrderHistory} />
+            <Stack.Screen name="Groceries" component={Groceries} />
+            <Stack.Screen name="Restaurants" component={Restaurants} />
+            <Stack.Screen name="Cakes" component={Cakes} />
             {/* Add other screens that are independent of the tab navigator */}
         </Stack.Navigator>
     );
@@ -131,7 +118,7 @@ const styles = StyleSheet.create({
     tabLabel: {
         fontSize: responsiveFontSize(1.4), // Adjust font size as needed
         marginBottom: 3, // Ensure there's no extra margin below the text
-        fontWeight: '500'
+        fontWeight: '500',
     },
     badge: {
         position: 'absolute',

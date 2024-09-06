@@ -180,7 +180,7 @@ const Cakes = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}
