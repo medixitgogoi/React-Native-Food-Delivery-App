@@ -32,7 +32,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 tabBarIcon: ({ color, size }) => {
                     let iconName;
 
-                    if (route.name === 'HomeScreen') {
+                    if (route.name === 'Home') {
                         iconName = 'home';
                     } else if (route.name === 'Cart') {
                         iconName = 'shopping';
@@ -58,7 +58,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                         <Text style={[styles.tabLabel, { color }]}>{route.name}</Text>
                     </View>
                 ),
-                animation: 'slide_from_right', // Smooth slide transition
+                animation: 'slide_from_right',
                 tabBarActiveTintColor: '#318538',
                 tabBarInactiveTintColor: '#000',
                 headerShown: false,
@@ -68,7 +68,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 },
             })}
         >
-            <Tab.Screen name="HomeScreen" component={HomeScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Cart" component={Cart} />
             <Tab.Screen name="Wishlist" component={Wishlist} />
             <Tab.Screen name="Profile" component={Profile} />
