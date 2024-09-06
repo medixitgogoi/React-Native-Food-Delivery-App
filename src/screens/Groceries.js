@@ -178,7 +178,6 @@ const Groceries = () => {
                 {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
                     <Icon name="add" size={20} color="#fff" />
                 </TouchableOpacity> */}
-
             </TouchableOpacity>
         );
     };
