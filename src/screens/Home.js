@@ -1,4 +1,4 @@
-import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, Dimensions, FlatList, ScrollView } from 'react-native';
+import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity, Dimensions, FlatList, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -6,13 +6,15 @@ import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
-import { groceries } from '../utils/groceries';
 import StarRating from '../components/StarRating';
-import { restaurants } from '../utils/restaurants';
-import { cakes } from '../utils/cakes';
+import { fetchProducts } from '../utils/fetchProducts';
+import { useSelector } from 'react-redux';
+import { fetchGroceries } from '../utils/fetchGroceries';
+import { fetchRestaurants } from '../utils/fetchRestaurants';
+import { fetchCakes } from '../utils/fetchCakes';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -20,8 +22,16 @@ const Home = () => {
 
     const navigation = useNavigation();
 
+    const userDetails = useSelector(state => state.user);
+
+    const [loading, setLoading] = useState(true);
+
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    const [cakes, setCakes] = useState(null);
+    const [restaurants, setRestaurants] = useState(null);
+    const [groceries, setGroceries] = useState(null);
 
     useFocusEffect(
         useCallback(() => {
@@ -29,6 +39,30 @@ const Home = () => {
             StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
         }, [])
     );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true); // Start loading
+            try {
+                const [groceryData, restaurantData, cakeData] = await Promise.all([
+                    fetchGroceries(userDetails),
+                    fetchRestaurants(userDetails),
+                    fetchCakes(userDetails)
+                ]);
+
+                setGroceries(groceryData || []); // Set groceries data
+                setRestaurants(restaurantData || []); // Set restaurants data
+                setCakes(cakeData || []); // Set cakes data
+
+            } catch (error) {
+                Alert.alert("Error fetching data", error.message); // Log errors if any
+            } finally {
+                setLoading(false); // Stop loading
+            }
+        };
+
+        fetchData(); // Call the async function inside useEffect
+    }, [userDetails]); // Dependency array should include userDetails if it might change
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -161,7 +195,7 @@ const Home = () => {
 
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {groceries.map(item => (
+                            {groceries?.map(item => (
                                 <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -218,7 +252,7 @@ const Home = () => {
 
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {restaurants.map(item => (
+                            {restaurants?.map(item => (
                                 <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -285,7 +319,7 @@ const Home = () => {
 
                     <ScrollView horizontal>
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {cakes.map(item => (
+                            {cakes?.map(item => (
                                 <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
