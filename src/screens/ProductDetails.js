@@ -88,7 +88,7 @@ const ProductDetails = ({ route }) => {
     const relatedProductsHandler = (item) => {
         navigation.navigate('ProductDetails', { data: item })
         setUnit(null);
-    }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -141,7 +141,7 @@ const ProductDetails = ({ route }) => {
                                         <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                     </View>
                                 )}
-                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{product.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{product?.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
                             </View>
                         )}
                     </View>
