@@ -21,9 +21,6 @@ const Home = () => {
 
     const navigation = useNavigation();
 
-    const userDetails = useSelector(state => state.user);
-    console.log('homeuser', userDetails);
-
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
