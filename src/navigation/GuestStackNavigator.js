@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import Home from '../screens/Home';
 import Cart from '../screens/Cart';
 import ProductDetails from '../screens/ProductDetails';
 import Profile from '../screens/Profile';
@@ -68,7 +68,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 },
             })}
         >
-            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Cart" component={Cart} />
             <Tab.Screen name="Wishlist" component={Wishlist} />
             <Tab.Screen name="Profile" component={Profile} />
