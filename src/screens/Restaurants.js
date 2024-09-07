@@ -13,9 +13,8 @@ import StarRating from '../components/StarRating';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { fetchProducts } from '../utils/fetchProducts';
+import { fetchRestaurants } from '../utils/fetchRestaurants';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -65,9 +64,9 @@ const Restaurants = () => {
         const fetchData = async () => {
             setLoading(true); // Start loading
             try {
-                const data = await fetchProducts(userDetails); // Await the fetchProducts function
-                setRestaurants(data?.resturants || []); // Ensure groceries are set properly
-                setFilteredNames(data?.resturants || []); // Ensure groceries are set properly
+                const data = await fetchRestaurants(userDetails); // Await the fetchProducts function
+                setRestaurants(data || []); // Ensure groceries are set properly
+                setFilteredNames(data || []); // Ensure groceries are set properly
                 console.log('restaurants', restaurants); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any

@@ -17,6 +17,7 @@ import { cakes } from '../utils/cakes';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { fetchProducts } from '../utils/fetchProducts';
+import { fetchCakes } from '../utils/fetchCakes';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -66,9 +67,9 @@ const Cakes = () => {
         const fetchData = async () => {
             setLoading(true); // Start loading
             try {
-                const data = await fetchProducts(userDetails); // Await the fetchProducts function
-                setCakes(data?.cakes || []); // Ensure groceries are set properly
-                setFilteredNames(data?.cakes || []); // Ensure groceries are set properly
+                const data = await fetchCakes(userDetails); // Await the fetchProducts function
+                setCakes(data || []); // Ensure groceries are set properly
+                setFilteredNames(data || []); // Ensure groceries are set properly
                 console.log('cakes', cakes); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any

@@ -312,3 +312,141 @@ const Groceries = () => {
 export default Groceries;
 
 const styles = StyleSheet.create({});
+
+
+// <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
+//     {product.type === 'grocery' && relatedGroceryProducts.map(item => (
+//         <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+//             <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                 <Icon name="favorite-border" size={18} color={'#019934'} />
+//             </TouchableOpacity>
+
+//             <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+//                 <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                     <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+//                 </View>
+//             </View>
+
+//             <View style={{ padding: 10 }}>
+//                 <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 2, marginBottom: 3 }}>
+//                     <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }}>{item.name}</Text>
+//                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+//                         <StarRating rating={item.starRating} />
+//                         <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+//                             <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+//                             <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+//                         </View>
+//                     </View>
+//                 </View>
+//                 <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+//                     <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+//                 </View>
+//                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+//                     <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+//                     <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+//                 </View>
+//             </View>
+
+//         </TouchableOpacity>
+//     ))}
+
+//     {product.type === 'restaurant' && relatedRestaurantProducts.map(item => (
+//         <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+//             <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                 <Icon name="favorite-border" size={18} color={'#019934'} />
+//             </TouchableOpacity>
+
+//             <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+//                 <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                     <Image source={require('../assets/rice.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+//                 </View>
+//             </View>
+
+//             <View style={{ padding: 10 }}>
+//                 <View style={{ flexDirection: 'column', gap: 3 }}>
+//                     <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+//                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+//                         <StarRating rating={item.starRating} />
+//                         <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+//                             <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+//                             <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+//                         </View>
+//                     </View>
+//                 </View>
+//                 <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
+//                     {item.subCategory === 'Veg' ? (
+//                         <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                             <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+//                             </View>
+//                         </View>
+//                     ) : (
+//                         <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+//                             <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+//                         </View>
+//                     )}
+//                     <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+//                 </View>
+//                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+//                     <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+//                     <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+//                 </View>
+//             </View>
+
+//             {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+//                                         <Icon3 name="add" size={20} color="#fff" />
+//                                     </TouchableOpacity> */}
+
+//         </TouchableOpacity>
+//     ))}
+
+//     {product.type === 'cake' && relatedCakeProducts.map(item => (
+//         <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: screenWidth / 2.23, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+
+//             <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                 <Icon name="favorite-border" size={18} color={'#019934'} />
+//             </TouchableOpacity>
+
+//             <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+//                 <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                     <Image source={require('../assets/cake.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+//                 </View>
+//             </View>
+
+//             <View style={{ padding: 10 }}>
+//                 <View style={{ flexDirection: 'column', gap: 3 }}>
+//                     <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+//                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+//                         <StarRating rating={item.starRating} />
+//                         <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+//                             <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+//                             <Icon5 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+//                         </View>
+//                     </View>
+//                 </View>
+//                 <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
+//                     {item.subCategory === 'Veg' ? (
+//                         <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//                             <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}></View>
+//                         </View>
+//                     ) : (
+//                         <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+//                             <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+//                         </View>
+//                     )}
+//                     <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
+//                 </View>
+//                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+//                     <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
+//                     <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+//                 </View>
+//             </View>
+
+//             {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
+//                                         <Icon3 name="add" size={20} color="#fff" />
+//                                     </TouchableOpacity> */}
+
+//         </TouchableOpacity>
+//     ))}
+// </View>

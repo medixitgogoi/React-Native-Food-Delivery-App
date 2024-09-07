@@ -14,8 +14,7 @@ import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { fetchProducts } from '../utils/fetchProducts';
+import { fetchGroceries } from '../utils/fetchGroceries';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -64,9 +63,9 @@ const Groceries = () => {
         const fetchData = async () => {
             setLoading(true); // Start loading
             try {
-                const data = await fetchProducts(userDetails); // Await the fetchProducts function
-                setGroceries(data?.grocery || []); // Ensure groceries are set properly
-                setFilteredNames(data?.grocery || []); // Ensure groceries are set properly
+                const data = await fetchGroceries(userDetails); // Await the fetchProducts function
+                setGroceries(data || []); // Ensure groceries are set properly
+                setFilteredNames(data || []); // Ensure groceries are set properly
                 console.log('groceries', groceries); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
