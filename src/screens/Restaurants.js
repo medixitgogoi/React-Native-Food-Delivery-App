@@ -13,7 +13,8 @@ import StarRating from '../components/StarRating';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
-import { restaurants } from '../utils/restaurants';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -22,6 +23,8 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 const Restaurants = () => {
 
     const navigation = useNavigation();
+
+    const userDetails = useSelector(state => state.user);
 
     useFocusEffect(
         useCallback(() => {
@@ -44,13 +47,13 @@ const Restaurants = () => {
 
     const [filteredNames, setFilteredNames] = useState([]);
 
-    const [data, setData] = useState(null);
+    const [restaurants, setRestaurants] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(data.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
-    }, 300), [data]);
+        setFilteredNames(restaurants.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
+    }, 300), [restaurants]);
 
     const handleSearch = (text) => {
         setSearch(text);
@@ -58,11 +61,26 @@ const Restaurants = () => {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            setData(restaurants);
-            setFilteredNames(restaurants);
-            setLoading(false);
-        }, 600);
+        const getRestaurantProducts = async () => {
+
+            setLoading(true);
+
+            try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                const response = await axios.get('/user/appload');
+
+                console.log('restaurants', response?.data);
+                setRestaurants(response?.data?.resturants);
+                setFilteredNames(response?.data?.resturants);
+            } catch (error) {
+                Alert.alert(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getRestaurantProducts();
+
     }, []);
 
     const toggleSlider = () => {
@@ -129,13 +147,15 @@ const Restaurants = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
+                {/* Wishlist */}
                 <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Icon name="favorite-border" size={18} color={'#019934'} />
                 </TouchableOpacity>
 
+                {/* Image */}
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
                     <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Image source={require('../assets/rice.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                        <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
                     </View>
                 </View>
 
@@ -143,15 +163,17 @@ const Restaurants = () => {
                     <View style={{ flexDirection: 'column', gap: 3 }}>
                         <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                            <StarRating rating={item.starRating} />
+                            {/* <StarRating rating={item.starRating} /> */}
+                            <StarRating rating={4} />
                             <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text>
+                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
                                 <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                             </View>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
-                        {item.subCategory === 'Veg' ? (
+                        {item.veg_type === '1' ? (
                             <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
                                 </View>
@@ -161,18 +183,13 @@ const Restaurants = () => {
                                 <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                             </View>
                         )}
-                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item.units[0].discountedPrice}</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item.units[0].price}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
                     </View>
                 </View>
-
-                {/* <TouchableOpacity style={{ backgroundColor: '#019934', borderTopLeftRadius: 10, width: 35, height: 35, justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, right: 0 }}>
-                    <Icon name="add" size={20} color="#fff" />
-                </TouchableOpacity> */}
-
             </TouchableOpacity>
         );
     };
@@ -315,4 +332,4 @@ const Restaurants = () => {
 
 export default Restaurants;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
