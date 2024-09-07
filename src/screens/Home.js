@@ -52,7 +52,7 @@ const Home = () => {
                 </TouchableOpacity>
             </View>
 
-            {/* searchbar and location */}
+            {/* Searchbar and location */}
             <LinearGradient
                 colors={[darkGreen, background]}
                 start={{ x: 0, y: 0 }}
@@ -61,7 +61,7 @@ const Home = () => {
                 style={{ paddingBottom: 20, }}
             >
 
-                {/* searchbar and location */}
+                {/* Searchbar and location */}
                 <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, paddingVertical: 5 }}>
                     <View style={{ width: '70%', borderColor: isSearchFocused ? '#3a9d43' : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>

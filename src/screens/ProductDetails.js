@@ -27,13 +27,16 @@ const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
     const type = product?.type;
-    console.log('type', type);
+
+    const userDetails = useSelector(state => state.user);
 
     const navigation = useNavigation();
 
     const dispatch = useDispatch();
 
     const cartProducts = useSelector(state => state.cart);
+
+    const [relatedProducts, setRelatedProducts] = useState(null);
 
     const [quantity, setQuantity] = useState(1);
 
@@ -48,8 +51,30 @@ const ProductDetails = ({ route }) => {
         }
     }, [error]);
 
-    const relatedProducts = type == 1 ? fetchCakes() : type === 2 ? fetchGroceries() : fetchRestaurants();
-    console.log('relatedProducts', relatedProducts);
+    // fetch related products
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let data = []; // Initialize an empty array to store fetched data
+
+                // Conditionally call the appropriate fetch function based on the type
+                if (type === '1') {
+                    data = await fetchCakes(userDetails); // Pass userDetails if needed
+                } else if (type === '2') {
+                    data = await fetchGroceries(userDetails); // Pass userDetails if needed
+                } else if (type === '3') {
+                    data = await fetchRestaurants(userDetails); // Pass userDetails if needed
+                }
+
+                setRelatedProducts(data || []); // Set the fetched data
+
+            } catch (error) {
+                Alert.alert("Error fetching related products", error.message); // Log errors if any
+            }
+        };
+
+        fetchData(); // Call the async function inside useEffect
+    }, [userDetails, type]);
 
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
@@ -92,6 +117,8 @@ const ProductDetails = ({ route }) => {
         navigation.navigate('ProductDetails', { data: item })
         setUnit(null);
     };
+
+    console.log('relatedProducts', relatedProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -225,8 +252,59 @@ const ProductDetails = ({ route }) => {
                     <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 80 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
+                            {relatedProducts?.map(item => (
+                                <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: '48%', marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
+                                    {/* Wishlist */}
+                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Icon name="favorite-border" size={18} color={'#019934'} />
+                                    </TouchableOpacity>
+
+                                    {/* Image */}
+                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                        </View>
+                                    </View>
+
+                                    <View style={{ padding: 10 }}>
+                                        <View style={{ flexDirection: 'column', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                {/* <StarRating rating={item.starRating} /> */}
+                                                <StarRating rating={4} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                                    {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                                    <Icon2 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                </View>
+                                            </View>
+                                        </View>
+
+                                        {type !== '2' && (
+                                            <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
+                                                {item?.veg_type === '1' ? (
+                                                    <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+                                                        </View>
+                                                    </View>
+                                                ) : (
+                                                    <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                        <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                    </View>
+                                                )}
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item?.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                                            </View>
+                                        )}
+
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: type !== '2' ? 0 : 5 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
                         </View>
                     </View>
                 </View>

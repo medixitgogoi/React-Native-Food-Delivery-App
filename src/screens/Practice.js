@@ -139,8 +139,6 @@ const Groceries = () => {
             );
         };
 
-        const stock = item.productSize.reduce((acc, curr) => acc + parseInt(curr.stock), 0);
-
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
 
