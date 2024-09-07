@@ -152,7 +152,7 @@ const ProductDetails = ({ route }) => {
                         {/* <StarRatingDetails rating={product.starRating} /> */}
                     </View>
 
-                    {/* Price */}
+                    {/* Price and quantity */}
                     <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                             <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product?.min_price}</Text>
@@ -185,7 +185,7 @@ const ProductDetails = ({ route }) => {
                         </View>
                     </View>
 
-                    {/* unit */}
+                    {/* Unit */}
                     <View style={{ marginTop: 10 }}>
                         <Text style={{ paddingHorizontal: 13, color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
 
@@ -200,7 +200,6 @@ const ProductDetails = ({ route }) => {
                         )}
 
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.productSize.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.productSize.length == 2 ? 13 : 0 }}>
-
                             {product?.productSize?.map(it => (
                                 <TouchableOpacity onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -216,7 +215,6 @@ const ProductDetails = ({ route }) => {
                                     </View>
                                 </TouchableOpacity>
                             ))}
-
                         </View>
                     </View>
 

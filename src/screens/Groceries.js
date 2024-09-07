@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -15,6 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { fetchProducts } from '../utils/fetchProducts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -60,27 +61,22 @@ const Groceries = () => {
     };
 
     useEffect(() => {
-        const getGroceryProducts = async () => {
-
-            setLoading(true);
-
+        const fetchData = async () => {
+            setLoading(true); // Start loading
             try {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/appload');
-
-                // console.log('responseeee', response?.data);
-                setGroceries(response?.data?.grocery);
-                setFilteredNames(response?.data?.grocery);
+                const data = await fetchProducts(userDetails); // Await the fetchProducts function
+                setGroceries(data?.grocery || []); // Ensure groceries are set properly
+                setFilteredNames(data?.grocery || []); // Ensure groceries are set properly
+                console.log('groceries', groceries); // Log fetched data
             } catch (error) {
-                Alert.alert(error.message);
+                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
             } finally {
-                setLoading(false);
+                setLoading(false); // Stop loading
             }
         };
 
-        getGroceryProducts();
-
-    }, []);
+        fetchData(); // Call the async function inside useEffect
+    }, [userDetails]); // Dependency array should include userDetails if it might change
 
     const toggleSlider = () => {
         if (slider) {

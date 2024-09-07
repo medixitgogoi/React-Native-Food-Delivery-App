@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ import debounce from 'lodash.debounce';
 import { cakes } from '../utils/cakes';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { fetchProducts } from '../utils/fetchProducts';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -62,27 +63,22 @@ const Cakes = () => {
     };
 
     useEffect(() => {
-        const getCakeProducts = async () => {
-
-            setLoading(true);
-
+        const fetchData = async () => {
+            setLoading(true); // Start loading
             try {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/appload');
-
-                // console.log('cakes', response?.data?.cakes);
-                setCakes(response?.data?.cakes);
-                setFilteredNames(response?.data?.cakes);
+                const data = await fetchProducts(userDetails); // Await the fetchProducts function
+                setCakes(data?.cakes || []); // Ensure groceries are set properly
+                setFilteredNames(data?.cakes || []); // Ensure groceries are set properly
+                console.log('cakes', cakes); // Log fetched data
             } catch (error) {
-                Alert.alert(error.message);
+                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
             } finally {
-                setLoading(false);
+                setLoading(false); // Stop loading
             }
         };
 
-        getCakeProducts();
-
-    }, []);
+        fetchData(); // Call the async function inside useEffect
+    }, [userDetails]); // Dependency array should include userDetails if it might change
 
     const toggleSlider = () => {
         if (slider) {
