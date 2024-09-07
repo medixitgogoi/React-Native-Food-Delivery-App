@@ -81,7 +81,7 @@ const Cart = () => {
                     <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                         <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
                         <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your cart!</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={{ elevation: 2, marginTop: 20, backgroundColor: darkGreen, paddingVertical: 10, gap: 5, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ elevation: 2, marginTop: 20, backgroundColor: darkGreen, paddingVertical: 10, gap: 5, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                             <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Go to Home</Text>
                             <Icon4 name="arrowright" size={20} color={'#000'} />
                         </TouchableOpacity>
