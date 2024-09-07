@@ -23,7 +23,6 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    console.log('product', product);
 
     const navigation = useNavigation();
 
@@ -113,20 +112,14 @@ const ProductDetails = ({ route }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '87%' }}>
-                    {product.type === 'grocery' ? (
-                        <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
-                    ) : product.type === 'restaurant' ? (
-                        <Image source={require('../assets/rice.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
-                    ) : (
-                        <Image source={require('../assets/cake.png')} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
-                    )}
+                    <Image source={{ uri: product?.image }} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
                 </View>
             </View>
 
             {/* Details */}
             <ScrollView>
                 <View style={{ paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
-                    {/* name */}
+                    {/* Name */}
                     <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
                         {product?.type != '2' && (
@@ -218,13 +211,13 @@ const ProductDetails = ({ route }) => {
                         </View>
                     </View>
 
-                    {/* product details */}
+                    {/* Product details */}
                     <View style={{ paddingHorizontal: 13, marginTop: 20, flexDirection: 'column', gap: 4, width: '100%' }}>
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
                         <Text style={{ color: '#a4a4a4', fontWeight: '400', fontSize: responsiveFontSize(1.9), width: '97%' }}>{product.long_description}</Text>
                     </View>
 
-                    {/* related products */}
+                    {/* Related products */}
                     <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 80 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
