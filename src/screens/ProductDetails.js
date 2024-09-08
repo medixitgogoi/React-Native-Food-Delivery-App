@@ -315,7 +315,7 @@ const ProductDetails = ({ route }) => {
                 <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
                     {isPresentInTheCart ? (
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{isPresentInTheCart.units.discountedPrice * isPresentInTheCart.qty}</Text>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{isPresentInTheCart.units.price * isPresentInTheCart.qty}</Text>
                     ) : (
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹0</Text>
                     )}
