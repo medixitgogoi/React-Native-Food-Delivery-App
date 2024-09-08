@@ -11,10 +11,15 @@ import { useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import GetLocation from 'react-native-get-location';
 import Geocoder from 'react-native-geocoder';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const AddNewAddress = () => {
 
     const navigation = useNavigation();
+
+    const userDetails = useSelector(state => state.user);
+    console.log('object')
 
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -44,6 +49,10 @@ const AddNewAddress = () => {
     const [location, setLocation] = useState('');
     const [error, setError] = useState('');
     const [address, setAddress] = useState('');
+
+    const [loading, setLoading] = useState(false);
+
+    const [checked, setChecked] = useState(false);
 
     const handleUseCurrentLocationClick = async () => {
         setLoadingLocation(true);
@@ -102,6 +111,11 @@ const AddNewAddress = () => {
     };
 
     useEffect(() => {
+        setName(!isExpanded && userDetails[0]?.name);
+        setContact(!isExpanded && userDetails[0]?.mobileNumber);
+    }, [isExpanded]);
+
+    useEffect(() => {
         if (address?.[0]?.formattedAddress) {
             setAddress1(address?.[0]?.formattedAddress);
         }
@@ -116,7 +130,77 @@ const AddNewAddress = () => {
         }
     }, [address]); // Only run this effect when `address` changes
 
-    const saveAddressHandler = () => {
+    const saveAddressHandler = async () => {
+
+        if (!name || !contact || !state || !city || !pinCode || !address1 || !addressType) {
+            Alert.alert("Error", "All fields are required.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                name: name,
+                mobile: contact,
+                state: state,
+                city: city,
+                pin: pinCode,
+                address: address1,
+                address_2: address2 ? address2 : null,
+                landmark: landmark ? landmark : 'lhahah',
+                address_type: addressType === 'Home' ? '1' : '2',
+                is_default: checked ? '2' : '1',
+            };
+
+            // API Call using axios
+            const response = await axios.post(`user/shippingAddress/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('response', response);
+
+            // Handle success response
+            if (response.data.status) {
+
+                setName('');
+                setContact('')
+                setState(null);
+                setCity(null);
+                setPinCode('');
+                setAddress1(null);
+                setAddress2(null);
+                setChecked(false);
+                setLandmark(null)
+
+                // const userInfo = {
+                //     name: response?.data?.data?.name,
+                //     email: response?.data?.data?.email,
+                //     mobileNumber: mobileNumber,
+                //     password: password,
+                //     accessToken: response?.data?.access_token,
+                // };
+
+                // dispatch(addUser(userInfo));
+                // await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+
+            } else {
+                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+            }
+
+            setLoading(false);
+
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        }
     };
 
     // console.log('address', address);
@@ -156,8 +240,8 @@ const AddNewAddress = () => {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
                                         <Icon4 name="phone-call" size={15} color={'#000'} />
-                                        <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500', marginLeft: 5 }}>Dixit Gogoi,</Text>
-                                        <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000' }}>6000578700</Text>
+                                        <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500', marginLeft: 5 }}>{name},</Text>
+                                        <Text style={{ textTransform: 'uppercase', fontSize: responsiveFontSize(1.9), color: '#000' }}>{contact}</Text>
                                     </View>
                                     <View>
                                         <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
@@ -341,6 +425,22 @@ const AddNewAddress = () => {
                                 />
                             </View>
                         </View>
+
+                        {/* Default */}
+                        <View style={{ marginVertical: 10, flexDirection: 'row', gap: 5, justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <TouchableOpacity onPress={() => setChecked(prev => !prev)}>
+                                {checked ? (
+                                    <View>
+                                        <Icon2 name="checkbox-marked" size={22} color={backIconColor} />
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <Icon2 name="checkbox-blank-outline" size={22} color={'#868c95'} />
+                                    </View>
+                                )}
+                            </TouchableOpacity>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>Mark as default</Text>
+                        </View>
                     </View>
 
                     {/* Save Address Button */}
@@ -350,24 +450,32 @@ const AddNewAddress = () => {
                         end={{ x: 1, y: 0 }}
                         style={{ marginBottom: 10, borderRadius: 12, elevation: 2, marginHorizontal: 10, width: '95%', height: 48, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
                     >
-                        <TouchableOpacity onPress={saveAddressHandler} style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
-                            <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
-                            <Icon5 name="arrowright" size={23} color={'#fff'} />
+                        <TouchableOpacity onPress={saveAddressHandler} disabled={!name || !contact || !state || !city || !pinCode || !address1 || !addressType} style={{ borderRadius: 8, alignItems: 'center', width: '100%', alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', gap: 3 }}>
+                            {loading ? (
+                                <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Saving address ...</Text>
+                            ) : (
+                                <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', fontWeight: '600', textTransform: 'uppercase' }}>Save address</Text>
+                            )}
+                            {!loading && (
+                                <Icon5 name="arrowright" size={23} color={'#fff'} />
+                            )}
                         </TouchableOpacity>
                     </LinearGradient>
                 </ScrollView>
             </KeyboardAvoidingView>
 
             {/* Location loading spinner */}
-            {loadingLocation && (
-                <View style={{ position: 'absolute', alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
-                    <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
-                        <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
-                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
+            {
+                loadingLocation && (
+                    <View style={{ position: 'absolute', alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
+                        <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
+                            <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
+                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
+                        </View>
                     </View>
-                </View>
-            )}
-        </SafeAreaView>
+                )
+            }
+        </SafeAreaView >
     )
 }
 

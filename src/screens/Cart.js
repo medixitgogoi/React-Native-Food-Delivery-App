@@ -53,6 +53,10 @@ const Cart = () => {
         return cartProducts.reduce((total, item) => total + item.qty * item.units.price, 0);
     };
 
+    const totalDiscount = () => {
+        return cartProducts.reduce((total, item) => total + (item.units.mrp - item.units.price), 0);
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
             <StatusBar
@@ -170,12 +174,12 @@ const Cart = () => {
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
                                 <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Discount</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹120.00</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹{totalDiscount()}.00</Text>
                             </View>
                             <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 5 }}>
                                 <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>Final Total</Text>
-                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>₹{cartProductsSubTotal() + 50 - 120}.00</Text>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>₹{cartProductsSubTotal() + 50 - totalDiscount()}.00</Text>
                             </View>
                         </View>
                     </View>
