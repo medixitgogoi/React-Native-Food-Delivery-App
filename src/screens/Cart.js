@@ -50,7 +50,7 @@ const Cart = () => {
     }, [moveAnim]);
 
     const cartProductsSubTotal = () => {
-        return cartProducts.reduce((total, item) => total + item.qty * item.units.discountedPrice, 0);
+        return cartProducts.reduce((total, item) => total + item.qty * item.units.price, 0);
     };
 
     return (
@@ -93,7 +93,7 @@ const Cart = () => {
                     {cartProducts?.map(item => (
                         <View key={item.id} style={{ marginBottom: 8, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
                             <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
-                                <Image source={require('../assets/orange.png')} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
+                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
                             </View>
 
                             <View style={{ flex: 3, flexDirection: 'column', height: '100%', paddingHorizontal: 10, paddingVertical: 6 }}>
@@ -104,13 +104,8 @@ const Cart = () => {
                                 <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingTop: 3 }}>
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                                         <View style={{ flexDirection: 'column', gap: 3 }}>
-                                            {item.type === 'grocery' ? (
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                                                    <Icon2 name="food-apple" size={16} color={backIconColor} style={{ marginLeft: -1 }} />
-                                                    <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.subCategory}</Text>
-                                                </View>
-                                            ) : (
-                                                item.subCategory === 'Veg' ? (
+                                            {item?.type != "2" && (
+                                                item?.veg_type === '1' ? (
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
                                                         <View style={{ width: 13, height: 13, borderColor: '#000', borderWidth: 1.2, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                                             <View style={{ backgroundColor: 'green', width: 6, height: 6, borderRadius: 10, }}>
@@ -125,13 +120,13 @@ const Cart = () => {
                                                         </View>
                                                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Non-veg</Text>
                                                     </View>
-                                                )
-                                            )}
+                                                ))
+                                            }
                                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
                                                 {/* <View style={{ borderColor: '#000', borderWidth: 1.2, borderRadius: 3, width: 15, height: 15, alignItems: 'center', justifyContent: 'center' }}> */}
                                                 <Icon2 name="scale" size={13} color={backIconColor} style={{}} />
                                                 {/* </View> */}
-                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.units.unit}</Text>
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.units.size_name}</Text>
                                             </View>
                                         </View>
                                         <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.6, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4, paddingHorizontal: 5, borderRadius: 7 }}>
@@ -145,7 +140,7 @@ const Cart = () => {
                                         </View>
                                     </View>
                                     <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingBottom: 25 }}>
-                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹{item.units.discountedPrice}.00</Text>
+                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹{item.units.price * item.qty}.00</Text>
                                     </View>
                                 </View>
                             </View>
