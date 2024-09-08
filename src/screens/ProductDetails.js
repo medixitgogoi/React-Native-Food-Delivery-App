@@ -310,7 +310,7 @@ const ProductDetails = ({ route }) => {
                 </View>
             </ScrollView>
 
-            {/* Total price and add to cart */}
+            {/* Total price and add to cart button */}
             <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
                 <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
@@ -322,7 +322,6 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-
                     <TouchableOpacity
                         style={{
                             gap: 5,
