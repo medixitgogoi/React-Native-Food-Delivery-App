@@ -29,7 +29,7 @@ export const cartSlice = createSlice({
         deleteAllItemsFromCart: (state) => {
             return state = [];
         },
-        updateProduct: (state, action) => {
+        updateProduct: (state, action) => {s
             const { id, updatedUnits } = action.payload;
 
             // Find the product by id and update its units
