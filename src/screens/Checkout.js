@@ -1,24 +1,47 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { data } from '../utils/address';
+import axios from 'axios';
 
 const Checkout = () => {
 
     const navigation = useNavigation();
 
-    const [address, setAddress] = useState(null);
+    const userDetails = useSelector(state => state.user);
 
-    useEffect(() => {
-        setAddress(data[0]);
-    }, []);
+    const [addresses, setAddresses] = useState(null);
+    const [selectedAddress, setSelectedAddress] = useState(null);
 
+    const [loading, setLoading] = useState(true);
+
+    useFocusEffect(
+        useCallback(() => {
+            const getAddresses = async () => {
+                try {
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                    const response = await axios.get('/user/shippingAddress/fetch');
+
+                    console.log('addresssss', response);
+                    setAddresses(response?.data?.data);
+                } catch (error) {
+                    Alert.alert(error.message)
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            getAddresses();
+
+        }, [userDetails])
+    );
     // console.log('address', address);
 
     return (
@@ -51,10 +74,16 @@ const Checkout = () => {
                         </TouchableOpacity>
                     </View>
 
-                    {data.map(item => (
+                    {loading && (
+                        <View>
+                            <ActivityIndicator size='small' color={backIconColor} />
+                        </View>
+                    )}
+
+                    {!loading && addresses.length > 0 && addresses?.map(item => (
                         <View key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
-                            <TouchableOpacity onPress={() => setAddress(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
-                                {address?.id === item?.id ? (
+                            <TouchableOpacity onPress={() => setSelectedAddress(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
+                                {selectedAddress?.id === item?.id ? (
                                     <View>
                                         <Icon2 name="checkbox-marked" size={20} color={backIconColor} />
                                     </View>
@@ -69,16 +98,20 @@ const Checkout = () => {
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 4 }}>
                                         <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.name},</Text>
-                                        <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>{item.type}</Text>
+                                        <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>{item.address_type === '2' ? 'Work' : 'Home'}</Text>
                                     </View>
-                                    {item.default && (
+                                    {item.is_default === '2' && (
                                         <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.8, borderRadius: 4, paddingVertical: 2, paddingHorizontal: 4, marginTop: 2 }}>
                                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '600' }}>Default</Text>
                                         </View>
                                     )}
                                 </View>
 
-                                <Text style={{ color: address?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address}</Text>
+                                <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{`${item.address}.`}{item.landmark && ` Nearby ${item.landmark}`}</Text>
+
+                                {item.address_2 && (
+                                    <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address_2}</Text>
+                                )}
                             </View>
 
                             <TouchableOpacity onPress={() => navigation.navigate('EditAddress')} style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>

@@ -41,7 +41,6 @@ const Home = () => {
     );
 
     useEffect(() => {
-        setLoading(true); // Start loading
         const fetchData = async () => {
             try {
                 const [groceryData, restaurantData, cakeData] = await Promise.all([
