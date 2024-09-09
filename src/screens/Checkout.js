@@ -45,7 +45,6 @@ const Checkout = () => {
 
         }, [userDetails])
     );
-    // console.log('address', address);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -79,7 +78,7 @@ const Checkout = () => {
 
                     {loading && (
                         <View>
-                            <ActivityIndicator size='small' color={backIconColor} />
+                            <ActivityIndicator size='large' color={backIconColor} />
                         </View>
                     )}
 

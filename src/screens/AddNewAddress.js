@@ -221,7 +221,7 @@ const AddNewAddress = () => {
             >
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     {/* Header */}
-                    <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ paddingHorizontal: 12, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                         <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                             <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
                         </TouchableOpacity>
@@ -232,7 +232,7 @@ const AddNewAddress = () => {
                     </View>
 
                     {/* Content */}
-                    <View style={{ padding: 10 }}>
+                    <View style={{ padding: 12 }}>
                         {/* Unexpanded */}
                         {!isExpanded && (
                             <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)} style={{ backgroundColor: lightGreen, paddingHorizontal: 13, paddingVertical: 12, flexDirection: 'column', elevation: 2, borderRadius: 12, gap: 6 }}>
@@ -477,7 +477,7 @@ const AddNewAddress = () => {
                     </View>
                 )
             }
-        </SafeAreaView >
+        </SafeAreaView>
     )
 }
 
