@@ -9,7 +9,6 @@ import Icon4 from 'react-native-vector-icons/dist/FontAwesome5';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import Modal from "react-native-modal";
 import { useCallback, useState } from 'react';
 
 const Addresses = () => {
@@ -45,12 +44,6 @@ const Addresses = () => {
 
         }, [userDetails])
     );
-
-    const editHandler = (item) => {
-        setEditAddress(item);
-        setModal(true);
-        console.log('editAddress', editAddress);
-    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -118,7 +111,7 @@ const Addresses = () => {
                                 </View>
 
                                 {/* Edit button */}
-                                <TouchableOpacity onPress={() => editHandler(item)} style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('EditAddress', { data: item })} style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
                                     <Icon2 name="pencil" size={15} color={'#868c95'} />
                                 </TouchableOpacity>
                             </View>
@@ -126,67 +119,6 @@ const Addresses = () => {
                     </View>
                 )}
             </ScrollView>
-
-            {/* Edit Address Modal*/}
-            <Modal
-                isVisible={modal}
-                onBackdropPress={() => {
-                    setModal(false);
-                }}
-                onSwipeComplete={() => {
-                    setModal(false);
-                }}
-                onRequestClose={() => {
-                    setModal(false);
-                }}
-                animationType="slide"
-                swipeDirection={['down']}
-                backdropOpacity={0.5}
-                style={{ justifyContent: 'flex-end', margin: 0, }}
-            >
-                <View style={{ width: "100%", }}>
-
-                    {/* Close Button */}
-                    <TouchableOpacity
-                        style={{ alignSelf: 'center', backgroundColor: '#000', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: 35, height: 35, borderRadius: 50, marginBottom: 10 }}
-                        onPress={() => {
-                            setModal(false);
-                        }}>
-
-                        <Icon5 name="close" size={20} style={{ color: '#fff' }} />
-                    </TouchableOpacity>
-
-                    {/* Main content */}
-                    <View style={{ backgroundColor: background, borderTopLeftRadius: 20, borderTopRightRadius: 20, }}>
-
-                        <ScrollView style={{ marginTop: 5, padding: 15, flexDirection: 'column', gap: 10 }}>
-
-                            {/* Modal Header */}
-                            <Text style={{ textAlign: 'center', color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.6), marginBottom: 20 }}>Enter details</Text>
-
-                            <View style={{ flexDirection: 'column', gap: 8, padding: 2 }}>
-                                {/* Name */}
-                                <Text style={{ color: '#000' }}>{editAddress?.name}</Text>
-                                <Text style={{ color: '#000' }}>{editAddress?.address}</Text>
-                                {/* <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderRadius: 15, paddingHorizontal: 15, paddingVertical: 10, gap: 4, elevation: 1 }}>
-                                    <Text style={{ color: '#517c84', fontSize: responsiveFontSize(2.2), fontWeight: '500' }}>Enter your PARTY name</Text>
-                                    <View style={{ alignSelf: "center", width: "100%", paddingHorizontal: 14, backgroundColor: background, elevation: 1, borderRadius: 8, borderColor: isPartyNameFocused ? zomatoRed : "", borderWidth: isPartyNameFocused ? 1 : 0, marginVertical: 2 }}>
-                                        <TextInput
-                                            style={{ paddingVertical: 5, fontSize: responsiveFontSize(2.1), fontWeight: "500", color: "#000", }}
-                                            onChangeText={setPartyName}
-                                            value={partyName}
-                                            placeholderTextColor="#abb0ba"
-                                            onFocus={() => setIsPartyNameFocused(true)}
-                                            onBlur={() => setIsPartyNameFocused(false)}
-                                        />
-                                    </View>
-                                </View> */}
-
-                            </View>
-                        </ScrollView>
-                    </View>
-                </View>
-            </Modal>
 
         </SafeAreaView>
     )
