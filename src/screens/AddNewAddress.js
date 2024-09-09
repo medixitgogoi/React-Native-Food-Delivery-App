@@ -165,6 +165,8 @@ const AddNewAddress = () => {
             // Handle success response
             if (response.data.status) {
 
+                navigation.navigate('Checkout');
+
                 setName('');
                 setContact('')
                 setState(null);
