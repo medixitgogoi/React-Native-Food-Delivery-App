@@ -19,7 +19,6 @@ const AddNewAddress = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
-    console.log('object');
 
     const [isExpanded, setIsExpanded] = useState(false);
 
