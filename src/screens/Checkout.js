@@ -31,6 +31,9 @@ const Checkout = () => {
 
                     console.log('addresssss', response);
                     setAddresses(response?.data?.data);
+
+                    const defaultAddress = response?.data?.data?.find(item => item.is_default === '2');
+                    setSelectedAddress(defaultAddress);
                 } catch (error) {
                     Alert.alert(error.message)
                 } finally {
