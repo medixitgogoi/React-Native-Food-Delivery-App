@@ -30,8 +30,6 @@ const Addresses = () => {
                 try {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
                     const response = await axios.get('/user/shippingAddress/fetch');
-
-                    console.log('addresssss', response);
                     setAddresses(response?.data?.data);
                 } catch (error) {
                     Alert.alert(error.message)
@@ -54,11 +52,14 @@ const Addresses = () => {
             />
 
             {/* Header */}
-            <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-                <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
+            <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center', position: 'relative' }}>
+                <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3, zIndex: 1 }} onPress={() => navigation.goBack()}>
                     <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
                 </TouchableOpacity>
-                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.5), textAlign: 'center', textTransform: 'uppercase', position: 'absolute', left: 0, right: 0 }}>Your Addresses</Text>
+
+                <View style={{ position: 'absolute', left: 0, right: 0, alignItems: 'center' }}>
+                    <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.5), textTransform: 'uppercase' }}>Your Addresses</Text>
+                </View>
             </View>
 
             {/* Add new addresss */}
