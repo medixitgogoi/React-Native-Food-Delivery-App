@@ -15,6 +15,9 @@ import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
 import { fetchCakes } from '../utils/fetchCakes';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { fetchDataFromEndpoint } from '../utils/fetchDataFromEndPoint';
+import { fetchCartProducts } from '../utils/fetchCartProducts';
+import { fetchProducts } from '../utils/fetchProducts';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -45,26 +48,25 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const [groceryData, restaurantData, cakeData] = await Promise.all([
-                    fetchGroceries(userDetails),
-                    fetchRestaurants(userDetails),
-                    fetchCakes(userDetails)
-                ]);
 
-                setGroceries(groceryData || []); // Set groceries data
-                setRestaurants(restaurantData || []); // Set restaurants data
-                setCakes(cakeData || []); // Set cakes data
+            try {
+                const response = await fetchProducts(userDetails);
+                console.log('response', response);
+
+                setGroceries(response?.grocery || []); // Set groceries data
+                setRestaurants(response?.resturants || []); // Set restaurants data
+                setCakes(response?.cakes || []); // Set cakes data
 
             } catch (error) {
-                Alert.alert("Error fetching data", error.message); // Log errors if any
+                Alert.alert("Error fetching data", error.message);
             } finally {
                 setLoading(false); // Stop loading
             }
         };
 
         fetchData(); // Call the async function inside useEffect
-    }, [userDetails]); // Dependency array should include userDetails if it might change
+    }, [userDetails]);
+
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -128,6 +130,7 @@ const Home = () => {
                 </View>
             </LinearGradient>
 
+            {/* Content */}
             <ScrollView>
                 {/* for you */}
                 <View style={{ marginTop: 5 }}>
@@ -203,9 +206,9 @@ const Home = () => {
                                         return (
                                             <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
                                                 <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 15, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 15, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 15, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                             </View>
                                         )
                                     }}
@@ -288,10 +291,10 @@ const Home = () => {
                                     renderItem={() => {
                                         return (
                                             <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                             </View>
                                         )
                                     }}
@@ -383,9 +386,9 @@ const Home = () => {
                                         return (
                                             <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
                                                 <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                             </View>
                                         )
                                     }}
