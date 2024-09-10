@@ -202,10 +202,10 @@ const Home = () => {
                                     renderItem={() => {
                                         return (
                                             <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 15, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 15, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 15, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                             </View>
                                         )
                                     }}
