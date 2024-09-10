@@ -202,7 +202,6 @@ const Home = () => {
                             <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                                 {groceries?.map(item => (
                                     <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
-
                                         {/* Wishlist */}
                                         <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                             <Icon3 name="favorite-border" size={18} color={'#019934'} />
@@ -211,7 +210,11 @@ const Home = () => {
                                         {/* Image */}
                                         <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
                                             <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                {loading ? (
+                                                    <Image source={require('../assets/grocery_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                ) : (
+                                                    <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                )}
                                             </View>
                                         </View>
 

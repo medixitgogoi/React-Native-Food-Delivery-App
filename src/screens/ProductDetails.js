@@ -118,7 +118,7 @@ const ProductDetails = ({ route }) => {
         setUnit(null);
     };
 
-    console.log('relatedProducts', relatedProducts);
+    // console.log('relatedProducts', relatedProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -253,7 +253,7 @@ const ProductDetails = ({ route }) => {
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
-                            {relatedProducts?.map(item => (
+                            {relatedProducts?.slice(0, 4)?.map(item => (
                                 <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: '48%', marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
 
                                     {/* Wishlist */}
