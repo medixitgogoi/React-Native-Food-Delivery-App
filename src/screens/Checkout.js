@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
-import Icon4 from 'react-native-vector-icons/dist/Ionicons';
+import Icon4 from 'react-native-vector-icons/dist/FontAwesome';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { data } from '../utils/address';
@@ -67,13 +67,12 @@ const Checkout = () => {
 
             <View style={{}}>
                 {/* address */}
-                <View style={{ paddingHorizontal: 13, marginVertical: 10 }}>
+                <View style={{ paddingHorizontal: 13, marginVertical: 14 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Add new</Text>
-                            <Icon3 name="plus" size={13} color={backIconColor} />
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                            <Icon4 name="bookmark" size={20} color={backIconColor} />
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
+                        </View>
                     </View>
 
                     {loading && (
@@ -87,7 +86,7 @@ const Checkout = () => {
                             <TouchableOpacity onPress={() => setSelectedAddress(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
                                 {selectedAddress?.id === item?.id ? (
                                     <View>
-                                        <Icon2 name="checkbox-marked" size={20} color={backIconColor} />
+                                        <Icon2 name="checkbox-marked" size={20} color={darkGreen} />
                                     </View>
                                 ) : (
                                     <View>
@@ -96,7 +95,7 @@ const Checkout = () => {
                                 )}
                             </TouchableOpacity>
 
-                            <View style={{ flex: 0.8, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 5, alignItems: 'flex-start' }}>
+                            <View style={{ flex: 0.88, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 5, alignItems: 'flex-start' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 4 }}>
                                         <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.name},</Text>
@@ -115,19 +114,18 @@ const Checkout = () => {
                                     <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address_2}</Text>
                                 )}
                             </View>
-
-                            <TouchableOpacity onPress={() => navigation.navigate('EditAddress')} style={{ flex: 0.1, paddingTop: 4, justifyContent: 'center', flexDirection: 'row' }}>
-                                <Icon3 name="pencil" size={15} color={'#868c95'} />
-                            </TouchableOpacity>
                         </View>
                     ))}
 
                 </View>
 
                 {/* payment */}
-                <View style={{ paddingHorizontal: 13, marginTop: 5 }}>
+                <View style={{ marginVertical: 10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6,  paddingHorizontal: 10 }}>
+                            <Icon name="account-balance-wallet" size={24} color={backIconColor} />
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
+                        </View>
                     </View>
                 </View>
             </View>
