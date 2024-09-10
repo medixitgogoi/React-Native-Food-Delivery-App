@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -66,7 +66,7 @@ const Checkout = () => {
             </View>
 
             <View style={{}}>
-                {/* address */}
+                {/* Address */}
                 <View style={{ paddingHorizontal: 13, marginVertical: 14 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -78,6 +78,12 @@ const Checkout = () => {
                     {loading && (
                         <View>
                             <ActivityIndicator size='large' color={backIconColor} />
+                        </View>
+                    )}
+
+                    {!addresses && (
+                        <View>
+                            <Image source={require('../assets/no_address.jpeg')} style={{ width: 400, height: 400, resizeMode: 'contain' }} />
                         </View>
                     )}
 
@@ -122,7 +128,7 @@ const Checkout = () => {
                 {/* payment */}
                 <View style={{ marginVertical: 10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6,  paddingHorizontal: 10 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
                             <Icon name="account-balance-wallet" size={24} color={backIconColor} />
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
                         </View>

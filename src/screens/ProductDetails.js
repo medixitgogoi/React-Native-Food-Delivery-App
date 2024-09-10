@@ -395,8 +395,8 @@ const ProductDetails = ({ route }) => {
                         onPress={() => {
                             if (!isPresentInTheCart) {
                                 if (unit !== null) {
-                                    addToCart();
-                                    // dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
+                                    // addToCart();
+                                    dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
                                 } else {
                                     setError(true);
                                 }
