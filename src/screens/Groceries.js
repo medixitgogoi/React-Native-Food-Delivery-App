@@ -145,7 +145,11 @@ const Groceries = () => {
                 {/* Image */}
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
                     <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                        {loading ? (
+                            <Image source={require('../assets/grocery_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                        ) : (
+                            <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                        )}
                     </View>
                 </View>
 

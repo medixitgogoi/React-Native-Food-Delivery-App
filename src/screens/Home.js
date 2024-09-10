@@ -23,7 +23,7 @@ const Home = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
-    console.log('userDetails', userDetails);
+    // console.log('userDetails', userDetails);
 
     const [loading, setLoading] = useState(true);
 
@@ -182,72 +182,72 @@ const Home = () => {
 
                 {/* Groceries */}
                 {/* to be changed */}
-                {loading ? (
-                    <View>
-                        <ActivityIndicator size='small' color={backIconColor} />
+                <View style={{ marginTop: 8 }}>
+                    <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Groceries</Text>
+                        <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Groceries')}>
+                            <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
+                            <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                ) : (
-                    <View style={{ marginTop: 8 }}>
-                        <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Groceries</Text>
-                            <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Groceries')}>
-                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View All</Text>
-                                <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+
+                    <ScrollView horizontal>
+                        <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                            {loading && (
+                                <View>
+                                    <ActivityIndicator size='small' color={backIconColor} />
                                 </View>
-                            </TouchableOpacity>
-                        </View>
+                            )}
 
-                        <ScrollView horizontal>
-                            <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                                {groceries?.map(item => (
-                                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
-                                        {/* Wishlist */}
-                                        <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Icon3 name="favorite-border" size={18} color={'#019934'} />
-                                        </TouchableOpacity>
+                            {!loading && groceries?.map(item => (
+                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
+                                    {/* Wishlist */}
+                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Icon3 name="favorite-border" size={18} color={'#019934'} />
+                                    </TouchableOpacity>
 
-                                        {/* Image */}
-                                        <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-                                            <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                {loading ? (
-                                                    <Image source={require('../assets/grocery_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                                ) : (
-                                                    <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                                )}
-                                            </View>
+                                    {/* Image */}
+                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            {loading ? (
+                                                <Image source={require('../assets/grocery_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                            ) : (
+                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                            )}
                                         </View>
+                                    </View>
 
-                                        <View style={{ padding: 10 }}>
-                                            <View style={{ flexDirection: 'column', gap: 3 }}>
-                                                <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                                    {/* <StarRating rating={item.starRating} /> */}
-                                                    <StarRating rating={4} />
-                                                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                                        <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                    </View>
+                                    <View style={{ padding: 10 }}>
+                                        <View style={{ flexDirection: 'column', gap: 3 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                {/* <StarRating rating={item.starRating} /> */}
+                                                <StarRating rating={4} />
+                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                                    {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                                    <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                                 </View>
                                             </View>
-
-                                            {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
-                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
-                                        </View> */}
-
-                                            {/* Price */}
-                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: 5 }}>
-                                                <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
-                                                <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
-                                            </View>
                                         </View>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                        </ScrollView>
-                    </View>
-                )}
+
+                                        {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                                            </View> */}
+
+                                        {/* Price */}
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: 5 }}>
+                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </ScrollView>
+                </View>
 
                 {/* Restaurants */}
                 {/* to be changed */}
