@@ -66,7 +66,7 @@ const Groceries = () => {
                 const data = await fetchGroceries(userDetails); // Await the fetchProducts function
                 setGroceries(data || []); // Ensure groceries are set properly
                 setFilteredNames(data || []); // Ensure groceries are set properly
-                console.log('groceries', groceries); // Log fetched data
+                console.log('groceries', data); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
             } finally {
