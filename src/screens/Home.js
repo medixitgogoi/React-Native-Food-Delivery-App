@@ -10,7 +10,6 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
-import { fetchProducts } from '../utils/fetchProducts';
 import { useSelector } from 'react-redux';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
@@ -185,7 +184,6 @@ const Home = () => {
                 </View>
 
                 {/* Groceries */}
-                {/* to be changed */}
                 <View style={{ marginTop: 8 }}>
                     <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Groceries</Text>
@@ -270,7 +268,6 @@ const Home = () => {
                 </View>
 
                 {/* Restaurants */}
-                {/* to be changed */}
                 <View style={{ marginTop: 12 }}>
                     {/* Heading */}
                     <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -367,7 +364,6 @@ const Home = () => {
                 </View>
 
                 {/* Cakes */}
-                {/* to be changed */}
                 <View style={{ marginTop: 12 }}>
                     <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Cakes</Text>
@@ -387,7 +383,7 @@ const Home = () => {
                                     renderItem={() => {
                                         return (
                                             <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
-                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                                <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
                                                 <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
                                                 <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                                 <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
@@ -414,7 +410,11 @@ const Home = () => {
                                     {/* Image */}
                                     <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
                                         <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                            {loading ? (
+                                                <Image source={require('../assets/cake_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                            ) : (
+                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                            )}
                                         </View>
                                     </View>
 
@@ -454,7 +454,6 @@ const Home = () => {
                         </View>
                     </ScrollView>
                 </View>
-
             </ScrollView>
 
         </SafeAreaView>
