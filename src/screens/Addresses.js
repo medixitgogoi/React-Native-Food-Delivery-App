@@ -78,7 +78,7 @@ const Addresses = () => {
                     <View style={{ marginTop: 2, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 15 }}>
                         {addresses?.map(item => (
                             <View key={item?.id} style={{ elevation: 2, backgroundColor: '#fff', paddingHorizontal: 8, marginHorizontal: 10, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, justifyContent: 'space-between' }}>
-                                <View style={{ flex: 0.9, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start' }}>
+                                <View style={{ flex: 0.9, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 13, alignItems: 'flex-start' }}>
                                     {/* Name, addressType */}
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
