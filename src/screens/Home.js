@@ -23,6 +23,7 @@ const Home = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
+    console.log('userDetails', userDetails);
 
     const [loading, setLoading] = useState(true);
 
@@ -74,7 +75,7 @@ const Home = () => {
             <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, paddingHorizontal: 12 }}>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Welcome</Text>
-                    <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>Neymar Jr.</Text>
+                    <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>{userDetails?.[0]?.name}</Text>
                 </View>
                 <TouchableOpacity
                     style={{ backgroundColor: lightGreen, width: 35, height: 35, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
