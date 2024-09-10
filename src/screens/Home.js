@@ -48,14 +48,13 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-
             try {
                 const response = await fetchProducts(userDetails);
                 console.log('response', response);
 
-                setGroceries(response?.grocery || []); // Set groceries data
-                setRestaurants(response?.resturants || []); // Set restaurants data
-                setCakes(response?.cakes || []); // Set cakes data
+                setGroceries(response?.grocery?.slice(0, 15) || []);
+                setRestaurants(response?.resturants?.slice(0, 15) || []);
+                setCakes(response?.cakes?.slice(0, 15) || []);
 
             } catch (error) {
                 Alert.alert("Error fetching data", error.message);
@@ -66,7 +65,6 @@ const Home = () => {
 
         fetchData(); // Call the async function inside useEffect
     }, [userDetails]);
-
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
