@@ -83,7 +83,7 @@ const Checkout = () => {
                     )}
 
                     {addresses.length === 0 && (
-                        <View style={{ flexDirection: 'column', alignItems: 'center'}}>
+                        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={require('../assets/no_address.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
                             <Text style={{ color: offWhite, fontWeight: '500' }}>You have not added any addresses yet!</Text>
                             <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ elevation: 2, marginHorizontal: 10, paddingHorizontal: 20, marginVertical: 10, paddingVertical: 12, gap: 6, borderRadius: 12, backgroundColor: darkGreen, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
