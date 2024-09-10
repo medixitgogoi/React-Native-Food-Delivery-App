@@ -25,7 +25,7 @@ const Home = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
-    console.log('userDetails', userDetails);
+    // console.log('userDetails', userDetails);
 
     const [loading, setLoading] = useState(true);
 
@@ -126,7 +126,6 @@ const Home = () => {
                     </View>
 
                 </View>
-
             </LinearGradient>
 
             <ScrollView>
@@ -455,7 +454,6 @@ const Home = () => {
                     </ScrollView>
                 </View>
             </ScrollView>
-
         </SafeAreaView>
     );
 };

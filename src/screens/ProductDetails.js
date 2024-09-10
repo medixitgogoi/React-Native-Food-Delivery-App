@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -20,12 +20,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
+import { fetchCartProducts } from '../utils/fetchCartProducts';
+import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
+    console.log('product', product);
+
     const type = product?.type;
 
     const userDetails = useSelector(state => state.user);
@@ -43,6 +47,8 @@ const ProductDetails = ({ route }) => {
     const [unit, setUnit] = useState(null);
 
     const [error, setError] = useState(false);
+
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (error) {
@@ -82,6 +88,56 @@ const ProductDetails = ({ route }) => {
     };
 
     const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
+
+    const addToCart = async () => {
+        try {
+            setLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                product_id: product?.id,
+                product_size_id: unit?.id,
+                quantity: quantity,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`user/cart/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('responseCart', response);
+
+            // Handle success response
+            if (response.data.status) {
+
+                // const userInfo = {
+                //     name: response?.data?.data?.name,
+                //     email: response?.data?.data?.email,
+                //     mobileNumber: mobileNumber,
+                //     password: password,
+                //     accessToken: response?.data?.access_token,
+                // };
+
+                // dispatch(addUser(userInfo));
+                // await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+
+            } else {
+                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+            }
+
+            setLoading(false);
+
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        }
+    }
 
     useEffect(() => {
         if (isPresentInTheCart) {
@@ -312,6 +368,7 @@ const ProductDetails = ({ route }) => {
 
             {/* Total price and add to cart button */}
             <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
+                {/* Total price */}
                 <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
                     {isPresentInTheCart ? (
@@ -321,6 +378,7 @@ const ProductDetails = ({ route }) => {
                     )}
                 </View>
 
+                {/* Add to cart button */}
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <TouchableOpacity
                         style={{
@@ -337,7 +395,8 @@ const ProductDetails = ({ route }) => {
                         onPress={() => {
                             if (!isPresentInTheCart) {
                                 if (unit !== null) {
-                                    dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
+                                    addToCart();
+                                    // dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
                                 } else {
                                     setError(true);
                                 }
