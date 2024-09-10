@@ -2,7 +2,6 @@ import { SafeAreaView, StatusBar, Text, TextInput, View, Image, TouchableOpacity
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
-import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
@@ -11,12 +10,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
 import { useSelector } from 'react-redux';
-import { fetchGroceries } from '../utils/fetchGroceries';
-import { fetchRestaurants } from '../utils/fetchRestaurants';
-import { fetchCakes } from '../utils/fetchCakes';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
-import { fetchDataFromEndpoint } from '../utils/fetchDataFromEndPoint';
-import { fetchCartProducts } from '../utils/fetchCartProducts';
 import { fetchProducts } from '../utils/fetchProducts';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
@@ -39,6 +33,7 @@ const Home = () => {
     const [restaurants, setRestaurants] = useState(null);
     const [groceries, setGroceries] = useState(null);
 
+    // Status bar setters
     useFocusEffect(
         useCallback(() => {
             StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
@@ -46,6 +41,7 @@ const Home = () => {
         }, [])
     );
 
+    // fetch products
     useEffect(() => {
         const fetchData = async () => {
             try {
