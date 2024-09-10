@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome';
+import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { data } from '../utils/address';
@@ -17,7 +18,7 @@ const Checkout = () => {
 
     const userDetails = useSelector(state => state.user);
 
-    const [addresses, setAddresses] = useState(null);
+    const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
 
     const [loading, setLoading] = useState(true);
@@ -81,9 +82,14 @@ const Checkout = () => {
                         </View>
                     )}
 
-                    {!addresses && (
-                        <View>
-                            <Image source={require('../assets/no_address.jpeg')} style={{ width: 400, height: 400, resizeMode: 'contain' }} />
+                    {addresses.length === 0 && (
+                        <View style={{ flexDirection: 'column', alignItems: 'center'}}>
+                            <Image source={require('../assets/no_address.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                            <Text style={{ color: offWhite, fontWeight: '500' }}>You have not added any addresses yet!</Text>
+                            <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ elevation: 2, marginHorizontal: 10, paddingHorizontal: 20, marginVertical: 10, paddingVertical: 12, gap: 6, borderRadius: 12, backgroundColor: darkGreen, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Add a New Address</Text>
+                                <Icon5 name="plussquare" size={20} color={'#000'} />
+                            </TouchableOpacity>
                         </View>
                     )}
 
