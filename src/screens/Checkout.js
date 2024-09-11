@@ -82,7 +82,7 @@ const Checkout = () => {
                         </View>
                     )}
 
-                    {addresses.length === 0 && (
+                    {!loading && addresses.length === 0 && (
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={require('../assets/no_address.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
                             <Text style={{ color: offWhite, fontWeight: '500' }}>You have not added any addresses yet!</Text>
