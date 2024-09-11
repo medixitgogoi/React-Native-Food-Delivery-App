@@ -47,13 +47,13 @@ const StackNavigation = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    if (isLoading) {
-        return (
-            <NavigationContainer>
-                <AuthStackNavigator initialRoute="SplashScreen" />
-            </NavigationContainer>
-        );
-    }
+    // if (isLoading) {
+    //     return (
+    //         <NavigationContainer>
+    //             <AuthStackNavigator initialRoute="SplashScreen" />
+    //         </NavigationContainer>
+    //     );
+    // }
 
     return (
         <NavigationContainer>
