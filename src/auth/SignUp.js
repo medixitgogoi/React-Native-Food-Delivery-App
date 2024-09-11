@@ -80,8 +80,6 @@ const SignUp = ({ route }) => {
                 }
             });
 
-            console.log('response', response);
-
             // Handle success response
             if (response.data.status) {
                 const userInfo = {

@@ -12,7 +12,7 @@ import StarRating from '../components/StarRating';
 import { useDispatch, useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { fetchProducts } from '../utils/fetchProducts';
-import { addItemToWishlist } from '../redux/WishlistSlice';
+import { addItemToWishlist, removeItemFromWishlist } from '../redux/WishlistSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -221,51 +221,62 @@ const Home = () => {
 
                         {/* Content */}
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {!loading && groceries?.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
-                                    {/* Wishlist */}
-                                    <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Icon3 name="favorite-border" size={18} color={'#019934'} />
-                                    </TouchableOpacity>
+                            {!loading && groceries?.map(item => {
 
-                                    {/* Image */}
-                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            {loading ? (
-                                                <Image source={require('../assets/grocery_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            ) : (
-                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            )}
-                                        </View>
-                                    </View>
+                                const product = wishlistProducts.find(it => it.id === item.id);
 
-                                    {/* Details */}
-                                    <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'column', gap: 3 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                                {/* <StarRating rating={item.starRating} /> */}
-                                                <StarRating rating={4} />
-                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                                    {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                                    <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                </View>
+                                return (
+                                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
+                                        {/* Wishlist */}
+                                        {product?.id === item.id ? (
+                                            <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Icon4 name="heart" size={18} color={'#3ea947'} />
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Icon4 name="heart-outline" size={18} color={'#019934'} />
+                                            </TouchableOpacity>
+                                        )}
+
+                                        {/* Image */}
+                                        <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                            <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                {loading ? (
+                                                    <Image source={require('../assets/grocery_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                ) : (
+                                                    <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                )}
                                             </View>
                                         </View>
 
-                                        {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
+                                        {/* Details */}
+                                        <View style={{ padding: 10 }}>
+                                            <View style={{ flexDirection: 'column', gap: 3 }}>
+                                                <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                    {/* <StarRating rating={item.starRating} /> */}
+                                                    <StarRating rating={4} />
+                                                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                                        <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                    </View>
+                                                </View>
+                                            </View>
+
+                                            {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
                                                 <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
                                             </View> */}
 
-                                        {/* Price */}
-                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: 5 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
-                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                                            {/* Price */}
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: 5 }}>
+                                                <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                                                <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                                            </View>
                                         </View>
-                                    </View>
-                                </TouchableOpacity>
-                            ))}
+                                    </TouchableOpacity>
+                                )
+                            })}
                         </View>
                     </ScrollView>
                 </View>
@@ -307,65 +318,76 @@ const Home = () => {
 
                         {/* Products */}
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {!loading && restaurants?.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                            {!loading && restaurants?.map(item => {
 
-                                    {/* Wishlist */}
-                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Icon3 name="favorite-border" size={18} color={'#019934'} />
-                                    </TouchableOpacity>
+                                const product = wishlistProducts.find(it => it.id === item.id);
 
-                                    {/* Image */}
-                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            {loading ? (
-                                                <Image source={require('../assets/res_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            ) : (
-                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            )}
-                                        </View>
-                                    </View>
+                                return (
+                                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                        {/* Wishlist */}
+                                        {product?.id === item.id ? (
+                                            <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Icon4 name="heart" size={18} color={'#3ea947'} />
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Icon4 name="heart-outline" size={18} color={'#019934'} />
+                                            </TouchableOpacity>
+                                        )}
 
-                                    {/* Details */}
-                                    <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'column', gap: 3 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                                {/* <StarRating rating={item.starRating} /> */}
-                                                <StarRating rating={4} />
-                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                                    {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                                    <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                </View>
+                                        {/* Image */}
+                                        <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                            <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                {loading ? (
+                                                    <Image source={require('../assets/res_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                ) : (
+                                                    <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                )}
                                             </View>
                                         </View>
-                                        <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
-                                            {item.veg_type === '1' ? (
-                                                <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+
+                                        {/* Details */}
+                                        <View style={{ padding: 10 }}>
+                                            <View style={{ flexDirection: 'column', gap: 3 }}>
+                                                <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                    {/* <StarRating rating={item.starRating} /> */}
+                                                    <StarRating rating={4} />
+                                                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                                        <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                                     </View>
                                                 </View>
-                                            ) : (
-                                                <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                                    <Icon5 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                </View>
-                                            )}
-                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
+                                                {item.veg_type === '1' ? (
+                                                    <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+                                                        </View>
+                                                    </View>
+                                                ) : (
+                                                    <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                        <Icon5 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                    </View>
+                                                )}
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                                <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                                                <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                                            </View>
                                         </View>
-                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
-                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            ))}
+                                    </TouchableOpacity>
+                                )
+                            })}
                         </View>
                     </ScrollView>
                 </View>
 
                 {/* Cakes */}
                 <View style={{ marginTop: 15 }}>
+                    {/* Heading */}
                     <TouchableOpacity style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} onPress={() => navigation.navigate('Cakes')}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Cakes</Text>
                         <View style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }}>
@@ -375,6 +397,7 @@ const Home = () => {
                     </TouchableOpacity>
 
                     <ScrollView horizontal>
+                        {/* Loading */}
                         {loading && (
                             <View style={{ paddingHorizontal: 11, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
                                 <FlatList
@@ -398,58 +421,68 @@ const Home = () => {
                         )}
 
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {cakes?.map(item => (
-                                <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                            {cakes?.map(item => {
+                                const product = wishlistProducts.find(it => it.id === item.id);
 
-                                    {/* Wishlist */}
-                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Icon3 name="favorite-border" size={18} color={'#019934'} />
-                                    </TouchableOpacity>
-
-                                    {/* Image */}
-                                    <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-                                        <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            {loading ? (
-                                                <Image source={require('../assets/cake_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            ) : (
-                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            )}
-                                        </View>
-                                    </View>
-
-                                    <View style={{ padding: 10 }}>
-                                        <View style={{ flexDirection: 'column', gap: 3 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                                {/* <StarRating rating={item.starRating} /> */}
-                                                <StarRating rating={4} />
-                                                <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                                    {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                                    <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                </View>
+                                return (
+                                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                                        {/* Wishlist */}
+                                        {product?.id === item.id ? (
+                                            <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Icon4 name="heart" size={18} color={'#3ea947'} />
+                                            </TouchableOpacity>
+                                        ) : (
+                                            <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                <Icon4 name="heart-outline" size={18} color={'#019934'} />
+                                            </TouchableOpacity>
+                                        )}
+                                        
+                                        {/* Image */}
+                                        <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                                            <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                {loading ? (
+                                                    <Image source={require('../assets/cake_fallback.png')} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                ) : (
+                                                    <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                                                )}
                                             </View>
                                         </View>
-                                        <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
 
-                                            {item.veg_type === '1' ? (
-                                                <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}></View>
+                                        {/* Details */}
+                                        <View style={{ padding: 10 }}>
+                                            <View style={{ flexDirection: 'column', gap: 3 }}>
+                                                <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                                    {/* <StarRating rating={item.starRating} /> */}
+                                                    <StarRating rating={4} />
+                                                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                                        <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                    </View>
                                                 </View>
-                                            ) : (
-                                                <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                                    <Icon5 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                </View>
-                                            )}
-                                            <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
+
+                                                {item.veg_type === '1' ? (
+                                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}></View>
+                                                    </View>
+                                                ) : (
+                                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                        <Icon5 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                    </View>
+                                                )}
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                                <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                                                <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                                            </View>
                                         </View>
-                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                            <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
-                                            <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            ))}
+                                    </TouchableOpacity>
+                                )
+                            })}
                         </View>
                     </ScrollView>
                 </View>
