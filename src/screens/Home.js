@@ -9,9 +9,10 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { fetchProducts } from '../utils/fetchProducts';
+import { addItemToWishlist } from '../redux/WishlistSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -21,7 +22,11 @@ const Home = () => {
 
     const navigation = useNavigation();
 
+    const dispatch = useDispatch();
+
     const userDetails = useSelector(state => state.user);
+    const wishlistProducts = useSelector(state => state.wishlist);
+
     // console.log('userDetails', userDetails);
 
     const [loading, setLoading] = useState(true);
@@ -181,6 +186,7 @@ const Home = () => {
 
                 {/* Groceries */}
                 <View style={{ marginTop: 8 }}>
+                    {/* Heading */}
                     <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Groceries</Text>
                         <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Groceries')}>
@@ -192,6 +198,7 @@ const Home = () => {
                     </View>
 
                     <ScrollView horizontal>
+                        {/* Skeleton loader */}
                         {loading && (
                             <View style={{ paddingHorizontal: 11, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
                                 <FlatList
@@ -214,11 +221,12 @@ const Home = () => {
                             </View>
                         )}
 
+                        {/* Content */}
                         <View style={{ paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             {!loading && groceries?.map(item => (
                                 <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
                                     {/* Wishlist */}
-                                    <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                    <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Icon3 name="favorite-border" size={18} color={'#019934'} />
                                     </TouchableOpacity>
 
@@ -233,6 +241,7 @@ const Home = () => {
                                         </View>
                                     </View>
 
+                                    {/* Details */}
                                     <View style={{ padding: 10 }}>
                                         <View style={{ flexDirection: 'column', gap: 3 }}>
                                             <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
