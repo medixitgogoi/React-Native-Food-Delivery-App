@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, Alert, Image, FlatList, Animated } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,6 +26,31 @@ const Checkout = () => {
 
     const [loading, setLoading] = useState(true);
 
+    const moveAnim = useRef(new Animated.Value(0)).current;
+
+    // Animation
+    useEffect(() => {
+        const startAnimation = () => {
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(moveAnim, {
+                        toValue: 10, // Move to the right by 10 units
+                        duration: 500,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(moveAnim, {
+                        toValue: 0, // Move back to the left
+                        duration: 500,
+                        useNativeDriver: true,
+                    }),
+                ])
+            ).start();
+        };
+
+        startAnimation();
+    }, [moveAnim]);
+
+    // Fetch address
     useFocusEffect(
         useCallback(() => {
             const getAddresses = async () => {
@@ -41,14 +66,11 @@ const Checkout = () => {
                 } catch (error) {
                     Alert.alert(error.message)
                 } finally {
-                    setTimeout(() => {
-                        setLoading(false);
-                    }, 2000)
+                    setLoading(false);
                 }
             };
 
             getAddresses();
-
         }, [userDetails])
     );
 
@@ -71,9 +93,9 @@ const Checkout = () => {
                 </TouchableOpacity>
             </View>
 
-            <View style={{}}>
+            <View>
                 {/* Address */}
-                <View style={{ paddingHorizontal: 13, marginVertical: 14 }}>
+                <View style={{ paddingHorizontal: 12, marginVertical: 13 }}>
                     {/* Heading */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -84,22 +106,28 @@ const Checkout = () => {
 
                     {/* Skeleton loader */}
                     {loading && (
-                        <View style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1 }}>
-                            {/* Shimmer for Checkbox */}
-                            <ShimmerPlaceHolder style={{ flex: 0.1, height: 17, width: 17, borderRadius: 4 }} />
+                        <FlatList
+                            data={[1, 1, 1, 1, 1]}
+                            renderItem={() => (
+                                <View style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
+                                    {/* Shimmer for Checkbox */}
+                                    <ShimmerPlaceHolder style={{ flex: 0.1, height: 17, width: 17, borderRadius: 4 }} />
 
-                            <View style={{ flex: 0.88, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 3, alignItems: 'flex-start' }}>
-                                {/* Shimmer for Name and Address Type */}
-                                <ShimmerPlaceHolder style={{ width: '60%', height: 15, marginBottom: 8 }} />
-                                <ShimmerPlaceHolder style={{ width: '30%', height: 10, marginBottom: 8 }} />
+                                    <View style={{ flex: 0.88, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 3, alignItems: 'flex-start' }}>
+                                        {/* Shimmer for Name and Address Type */}
+                                        <ShimmerPlaceHolder style={{ width: '60%', height: 15, marginBottom: 8 }} />
+                                        <ShimmerPlaceHolder style={{ width: '30%', height: 10, marginBottom: 8 }} />
 
-                                {/* Shimmer for Address Line 1 */}
-                                <ShimmerPlaceHolder style={{ width: '90%', height: 10, marginBottom: 8 }} />
+                                        {/* Shimmer for Address Line 1 */}
+                                        <ShimmerPlaceHolder style={{ width: '90%', height: 10, marginBottom: 8 }} />
 
-                                {/* Shimmer for Address Line 2 */}
-                                <ShimmerPlaceHolder style={{ width: '80%', height: 10 }} />
-                            </View>
-                        </View>
+                                        {/* Shimmer for Address Line 2 */}
+                                        <ShimmerPlaceHolder style={{ width: '80%', height: 10 }} />
+                                    </View>
+                                </View>
+                            )}
+                            keyExtractor={(item) => item.key}
+                        />
                     )}
 
                     {/* Fallback image */}
@@ -116,8 +144,8 @@ const Checkout = () => {
 
                     {/* Content */}
                     {!loading && addresses?.length > 0 && addresses?.map(item => (
-                        <View key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
-                            <TouchableOpacity onPress={() => setSelectedAddress(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
+                        <TouchableOpacity onPress={() => setSelectedAddress(item)} key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
+                            <View style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
                                 {selectedAddress?.id === item?.id ? (
                                     <View>
                                         <Icon2 name="checkbox-marked" size={20} color={darkGreen} />
@@ -127,7 +155,7 @@ const Checkout = () => {
                                         <Icon2 name="checkbox-blank-outline" size={20} color={'#868c95'} />
                                     </View>
                                 )}
-                            </TouchableOpacity>
+                            </View>
 
                             <View style={{ flex: 0.88, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 5, alignItems: 'flex-start' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
@@ -148,11 +176,11 @@ const Checkout = () => {
                                     <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address_2}</Text>
                                 )}
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </View>
 
-                {/* payment */}
+                {/* Payment */}
                 <View style={{ marginVertical: 10 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
@@ -162,6 +190,14 @@ const Checkout = () => {
                     </View>
                 </View>
             </View>
+
+            {/* Continue button*/}
+            <TouchableOpacity style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
+                <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
+                <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
+                    <Icon5 name="arrowright" size={23} color={backIconColor} />
+                </Animated.View>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }

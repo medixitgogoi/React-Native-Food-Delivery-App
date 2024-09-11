@@ -37,15 +37,14 @@ const Home = () => {
     const [groceries, setGroceries] = useState(null);
 
     // Status bar setters
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
-    //         StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
-    //     }, [])
-    // );
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
 
     // fetch products
-    
     useEffect(() => {
         const fetchData = async () => {
             try {
