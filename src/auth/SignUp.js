@@ -74,11 +74,13 @@ const SignUp = ({ route }) => {
             };
 
             // API Call using axios
-            const response = await axios.post(`user/registration/detail/update`, data, {
+            const response = await axios.post(`/user/registration/detail/update`, data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
+
+            console.log('response', response);
 
             // Handle success response
             if (response.data.status) {

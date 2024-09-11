@@ -42,18 +42,18 @@ const StackNavigation = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
-        }, 1200);
+        }, 0);
 
         return () => clearTimeout(timer);
     }, []);
 
-    // if (isLoading) {
-    //     return (
-    //         <NavigationContainer>
-    //             <AuthStackNavigator initialRoute="SplashScreen" />
-    //         </NavigationContainer>
-    //     );
-    // }
+    if (isLoading) {
+        return (
+            <NavigationContainer>
+                <AuthStackNavigator initialRoute="SplashScreen" />
+            </NavigationContainer>
+        );
+    }
 
     return (
         <NavigationContainer>
