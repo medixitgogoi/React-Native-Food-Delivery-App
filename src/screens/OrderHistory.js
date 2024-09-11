@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, StatusBar, TextInput, FlatList, Dimensions } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
