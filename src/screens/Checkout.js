@@ -9,8 +9,11 @@ import Icon4 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { data } from '../utils/address';
 import axios from 'axios';
+import LinearGradient from 'react-native-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const Checkout = () => {
 
@@ -38,7 +41,9 @@ const Checkout = () => {
                 } catch (error) {
                     Alert.alert(error.message)
                 } finally {
-                    setLoading(false);
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 2000)
                 }
             };
 
@@ -69,6 +74,7 @@ const Checkout = () => {
             <View style={{}}>
                 {/* Address */}
                 <View style={{ paddingHorizontal: 13, marginVertical: 14 }}>
+                    {/* Heading */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <Icon4 name="bookmark" size={20} color={backIconColor} />
@@ -76,13 +82,28 @@ const Checkout = () => {
                         </View>
                     </View>
 
+                    {/* Skeleton loader */}
                     {loading && (
-                        <View>
-                            <ActivityIndicator size='large' color={backIconColor} />
+                        <View style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1 }}>
+                            {/* Shimmer for Checkbox */}
+                            <ShimmerPlaceHolder style={{ flex: 0.1, height: 17, width: 17, borderRadius: 4 }} />
+
+                            <View style={{ flex: 0.88, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 3, alignItems: 'flex-start' }}>
+                                {/* Shimmer for Name and Address Type */}
+                                <ShimmerPlaceHolder style={{ width: '60%', height: 15, marginBottom: 8 }} />
+                                <ShimmerPlaceHolder style={{ width: '30%', height: 10, marginBottom: 8 }} />
+
+                                {/* Shimmer for Address Line 1 */}
+                                <ShimmerPlaceHolder style={{ width: '90%', height: 10, marginBottom: 8 }} />
+
+                                {/* Shimmer for Address Line 2 */}
+                                <ShimmerPlaceHolder style={{ width: '80%', height: 10 }} />
+                            </View>
                         </View>
                     )}
 
-                    {!loading && addresses.length === 0 && (
+                    {/* Fallback image */}
+                    {!loading && addresses?.length === 0 && (
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={require('../assets/no_address.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
                             <Text style={{ color: offWhite, fontWeight: '500' }}>You have not added any addresses yet!</Text>
@@ -93,6 +114,7 @@ const Checkout = () => {
                         </View>
                     )}
 
+                    {/* Content */}
                     {!loading && addresses?.length > 0 && addresses?.map(item => (
                         <View key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, }}>
                             <TouchableOpacity onPress={() => setSelectedAddress(item)} style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
@@ -128,7 +150,6 @@ const Checkout = () => {
                             </View>
                         </View>
                     ))}
-
                 </View>
 
                 {/* payment */}
