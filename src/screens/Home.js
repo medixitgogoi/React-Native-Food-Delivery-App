@@ -187,15 +187,13 @@ const Home = () => {
                 {/* Groceries */}
                 <View style={{ marginTop: 8 }}>
                     {/* Heading */}
-                    <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <TouchableOpacity style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} onPress={() => navigation.navigate('Groceries')}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Groceries</Text>
-                        <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Groceries')}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 3 }}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View More</Text>
-                            <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                            <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                        </View>
+                    </TouchableOpacity>
 
                     <ScrollView horizontal>
                         {/* Skeleton loader */}
@@ -273,17 +271,15 @@ const Home = () => {
                 </View>
 
                 {/* Restaurants */}
-                <View style={{ marginTop: 12 }}>
+                <View style={{ marginTop: 15 }}>
                     {/* Heading */}
-                    <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <TouchableOpacity style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} onPress={() => navigation.navigate('Restaurants')}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Restaurants</Text>
-                        <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Restaurants')}>
+                        <View style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View More</Text>
-                            <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                            <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                        </View>
+                    </TouchableOpacity>
 
                     <ScrollView horizontal>
                         {/* Loading */}
@@ -369,16 +365,14 @@ const Home = () => {
                 </View>
 
                 {/* Cakes */}
-                <View style={{ marginTop: 12 }}>
-                    <View style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View style={{ marginTop: 15 }}>
+                    <TouchableOpacity style={{ marginHorizontal: 12, marginBottom: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} onPress={() => navigation.navigate('Cakes')}>
                         <Text style={{ textTransform: 'uppercase', color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '700' }}>Cakes</Text>
-                        <TouchableOpacity style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }} onPress={() => navigation.navigate('Cakes')}>
+                        <View style={{ borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingLeft: 8, paddingVertical: 3, paddingRight: 2 }}>
                             <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>View More</Text>
-                            <View style={{ padding: 0, margin: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                            <Icon3 name="chevron-right" size={18} color={darkGreen} style={{ margin: 0, padding: 0 }} />
+                        </View>
+                    </TouchableOpacity>
 
                     <ScrollView horizontal>
                         {loading && (

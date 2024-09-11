@@ -42,7 +42,7 @@ const StackNavigation = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsLoading(false);
-        }, 0);
+        }, 1200);
 
         return () => clearTimeout(timer);
     }, []);

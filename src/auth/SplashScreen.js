@@ -15,7 +15,7 @@ const SplashScreen = () => {
                 index: 0,
                 routes: [{ name: 'Login' }],
             });
-        }, 1200); // 1200 milliseconds delay
+        }, 1300); // 1200 milliseconds delay
 
         return () => clearTimeout(timer); // Clean up the timer
     }, [navigation]);
