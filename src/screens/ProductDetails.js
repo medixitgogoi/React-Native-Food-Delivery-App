@@ -37,13 +37,15 @@ const ProductDetails = ({ route }) => {
 
     const [relatedProducts, setRelatedProducts] = useState(null);
 
-    const [quantity, setQuantity] = useState(1);
+    // const [quantity, setQuantity] = useState(1);
 
     const [unit, setUnit] = useState(null);
 
     const [error, setError] = useState(false);
 
     const [loading, setLoading] = useState(false);
+
+    const [isPresentInTheCart, setIsPresentInTheCart] = useState(null);
 
     useEffect(() => {
         if (error) {
@@ -93,7 +95,9 @@ const ProductDetails = ({ route }) => {
         getCartProducts();
     }, []);
 
-    const isPresentInTheCart = cartProducts?.find(item => item.product_id === product.id);
+    useEffect(() => {
+        setIsPresentInTheCart(cartProducts?.find(item => item.product_id === product.id))
+    }, [addToCart, cartProducts]);
 
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
@@ -109,7 +113,7 @@ const ProductDetails = ({ route }) => {
             const data = {
                 product_id: product?.id,
                 product_size_id: unit?.id,
-                quantity: quantity,
+                quantity: 1,
             };
             // API Call using axios
             const response = await axios.post(`user/cart/add`, data, {
@@ -117,6 +121,7 @@ const ProductDetails = ({ route }) => {
                     'Content-Type': 'application/json'
                 }
             });
+            console.log('responseadddd', response?.data?.data);
             setLoading(false);
         } catch (error) {
             // Handle error response
@@ -163,7 +168,7 @@ const ProductDetails = ({ route }) => {
         setUnit(null);
     };
 
-    console.log('carrtProducts', cartProducts);
+    console.log('cartProducts', cartProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -294,7 +299,7 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* Related products */}
-                    <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 80 }}>
+                    <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 55 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
@@ -355,10 +360,52 @@ const ProductDetails = ({ route }) => {
                 </View>
             </ScrollView>
 
-            {/* Total price and add to cart button */}
-            <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
-                {/* Total price */}
-                {/* <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
+            <View style={{ paddingHorizontal: 12, position: 'absolute', bottom: 3, width: '100%', backgroundColor: background }}>
+                <TouchableOpacity
+                    style={{
+                        gap: 5,
+                        backgroundColor: isPresentInTheCart ? lightGreen : darkGreen,
+                        paddingHorizontal: 30,
+                        height: 47,
+                        borderRadius: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        borderColor: isPresentInTheCart ? backIconColor : '#000',
+                        borderWidth: 1.5,
+                        width: '100%',
+                        justifyContent: 'center'
+                    }}
+                    onPress={() => {
+                        if (unit !== null) {
+                            addToCart();
+                        } else {
+                            setError(true);
+                        }
+                    }}
+                    disabled={isPresentInTheCart ? true : false}
+                >
+                    {isPresentInTheCart ? (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                            <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
+                            <Icon2 name="checkcircle" size={21} color={backIconColor} />
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
+                            <Icon name="add-shopping-cart" size={19} color={'#000'} />
+                        </View>
+                    )}
+                </TouchableOpacity>
+            </View>
+
+        </SafeAreaView>
+    )
+}
+
+export default ProductDetails;
+
+{/* Total price */ }
+{/* <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
                     {isPresentInTheCart ? (
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{isPresentInTheCart.units.price * isPresentInTheCart.qty}</Text>
@@ -366,48 +413,3 @@ const ProductDetails = ({ route }) => {
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹0</Text>
                     )}
                 </View> */}
-
-                {/* 7002750204 */}
-                {/* Add to cart button */}
-                <View style={{ width: '100%', height: '100%', flexDirection: 'row', alignItems: 'center', }}>
-                    <TouchableOpacity
-                        style={{
-                            gap: 5,
-                            backgroundColor: isPresentInTheCart ? lightGreen : '#41b24b',
-                            paddingHorizontal: 30,
-                            height: 43,
-                            borderRadius: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            borderColor: isPresentInTheCart ? backIconColor : '',
-                            borderWidth: isPresentInTheCart ? 1.5 : 0
-                        }}
-                        onPress={() => {
-                            if (unit !== null) {
-                                addToCart();
-                                // dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
-                            } else {
-                                setError(true);
-                            }
-                        }}
-                        disabled={isPresentInTheCart ? true : false}
-                    >
-                        {isPresentInTheCart ? (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                                <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
-                                <Icon2 name="checkcircle" size={21} color={backIconColor} />
-                            </View>
-                        ) : (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
-                                <Icon name="add-shopping-cart" size={19} color={'#fff'} />
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </SafeAreaView>
-    )
-}
-
-export default ProductDetails;
