@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -28,7 +28,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    console.log('product', product);
+    // console.log('product', product);
 
     const type = product?.type;
 
@@ -38,8 +38,7 @@ const ProductDetails = ({ route }) => {
 
     const dispatch = useDispatch();
 
-    const [cartProducts, setCartProducts] = useState(null);
-
+    const [isPresentInTheCart, setIsPresentInTheCart] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState(null);
 
     const [quantity, setQuantity] = useState(1);
@@ -82,7 +81,21 @@ const ProductDetails = ({ route }) => {
         fetchData(); // Call the async function inside useEffect
     }, [userDetails, type]);
 
+    // fetch cart products
     useEffect(() => {
+        const getCartProducts = async () => {
+            try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                const response = await axios.get('/user/cart/fetch');
+                console.log('cartProducts', response?.data?.data)
+
+                setIsPresentInTheCart(response?.data?.data?.find(item => item?.id == product?.id));
+                console.log('dddw', response?.data?.data?.find(item => item?.id == product?.id));
+            } catch (error) {
+                Alert.alert("Error", error.message); // Add a title to the alert
+                return null; // Return null in case of error
+            }
+        }
         getCartProducts();
     }, []);
 
@@ -91,19 +104,8 @@ const ProductDetails = ({ route }) => {
         return Math.floor(num * 100);
     };
 
-    const getCartProducts = async () => {
-        try {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-            const response = await axios.get('/user/cart/fetch');
-            setCartProducts(response?.data?.data);
-            console.log('cartData', response?.data?.data);
-        } catch (error) {
-            Alert.alert("Error", error.message); // Add a title to the alert
-            return null; // Return null in case of error
-        }
-    }
-
-    const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
+    // const isPresentInTheCart = cartProducts?.find(item => item.id === product.id);
+    console.log('dixit', isPresentInTheCart)
 
     const addToCart = async () => {
         try {
@@ -124,6 +126,23 @@ const ProductDetails = ({ route }) => {
 
             console.log('responseCart', response);
 
+            // Handle success response
+            if (response.data.status) {
+
+                // const userInfo = {
+                //     name: response?.data?.data?.name,
+                //     email: response?.data?.data?.email,
+                //     mobileNumber: mobileNumber,
+                //     password: password,
+                //     accessToken: response?.data?.access_token,
+                // };
+
+                // dispatch(addUser(userInfo));
+                // await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+            } else {
+                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+            }
             setLoading(false);
         } catch (error) {
             // Handle error response
@@ -171,6 +190,7 @@ const ProductDetails = ({ route }) => {
     };
 
     // console.log('relatedProducts', relatedProducts);
+    // console.log('cartProducts', cartProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -235,10 +255,8 @@ const ProductDetails = ({ route }) => {
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product?.min_mrp}</Text>
                         </View>
 
-                        {/* https://research.google/pubs/attention-is-all-you-need/ */}
-
                         {/* quantity */}
-                        {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     if (isPresentInTheCart) {
@@ -260,7 +278,7 @@ const ProductDetails = ({ route }) => {
                             <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                        </View> */}
+                        </View>
                     </View>
 
                     {/* Unit */}
@@ -376,6 +394,7 @@ const ProductDetails = ({ route }) => {
                     )}
                 </View>
 
+                {/* 7002750204 */}
                 {/* Add to cart button */}
                 <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <TouchableOpacity
@@ -388,7 +407,7 @@ const ProductDetails = ({ route }) => {
                             flexDirection: 'row',
                             alignItems: 'center',
                             borderColor: isPresentInTheCart ? backIconColor : '',
-                            borderWidth: isPresentInTheCart ? 1.5 : 0,
+                            borderWidth: isPresentInTheCart ? 1.5 : 0
                         }}
                         onPress={() => {
                             if (unit !== null) {
@@ -402,20 +421,13 @@ const ProductDetails = ({ route }) => {
                     >
                         {isPresentInTheCart ? (
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
+                                <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
                                 <Icon2 name="checkcircle" size={21} color={backIconColor} />
                             </View>
                         ) : (
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                                 <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
                                 <Icon name="add-shopping-cart" size={19} color={'#fff'} />
-                            </View>
-                        )}
-
-                        {loading && (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Adding to cart</Text>
-                                <ActivityIndicator color={'#fff'} size='small' />
                             </View>
                         )}
                     </TouchableOpacity>
