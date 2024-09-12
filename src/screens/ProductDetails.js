@@ -82,12 +82,28 @@ const ProductDetails = ({ route }) => {
         fetchData(); // Call the async function inside useEffect
     }, [userDetails, type]);
 
+    useEffect(() => {
+        getCartProducts();
+    }, []);
+
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
         return Math.floor(num * 100);
     };
 
     const isPresentInTheCart = cartProducts.find(item => item.id === product.id);
+
+    const getCartProducts = async () => {
+        try {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+            const response = await axios.get('/user/cart/fetch');
+            console.log('cartData', response?.data?.data);
+            return response?.data; // Return data inside the try block after receiving the response
+        } catch (error) {
+            Alert.alert("Error", error.message); // Add a title to the alert
+            return null; // Return null in case of error
+        }
+    }
 
     const addToCart = async () => {
         try {
@@ -395,8 +411,8 @@ const ProductDetails = ({ route }) => {
                         onPress={() => {
                             if (!isPresentInTheCart) {
                                 if (unit !== null) {
-                                    // addToCart();
-                                    dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
+                                    addToCart();
+                                    // dispatch(addItemToCart({ ...product, qty: quantity, units: unit }));
                                 } else {
                                     setError(true);
                                 }

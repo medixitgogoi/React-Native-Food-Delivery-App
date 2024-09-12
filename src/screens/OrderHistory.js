@@ -141,7 +141,7 @@ const OrderHistory = () => {
                             end={{ x: 1, y: 0 }}
                             style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                         >
-                            <TouchableOpacity style={{ gap: 5, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                            <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                 <Icon name="replay" size={23} color={'#fff'} />
                                 <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
                             </TouchableOpacity>
@@ -223,7 +223,7 @@ const OrderHistory = () => {
                             end={{ x: 1, y: 0 }}
                             style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                         >
-                            <TouchableOpacity style={{ gap: 5, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                            <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                 <Icon name="replay" size={23} color={'#fff'} />
                                 <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
                             </TouchableOpacity>
@@ -305,7 +305,7 @@ const OrderHistory = () => {
                             end={{ x: 1, y: 0 }}
                             style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                         >
-                            <TouchableOpacity style={{ gap: 5, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                            <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                 <Icon name="replay" size={23} color={'#fff'} />
                                 <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
                             </TouchableOpacity>
