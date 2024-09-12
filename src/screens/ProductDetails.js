@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -8,19 +8,14 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/AntDesign';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import Icon6 from 'react-native-vector-icons/dist/Entypo';
 import StarRatingDetails from '../components/StarRatingDetails';
-import { groceries } from '../utils/groceries';
-import { restaurants } from '../utils/restaurants';
-import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
 import { addItemToCart, decrementItem, updateProduct } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
-import { fetchCartProducts } from '../utils/fetchCartProducts';
 import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -38,7 +33,8 @@ const ProductDetails = ({ route }) => {
 
     const dispatch = useDispatch();
 
-    const [isPresentInTheCart, setIsPresentInTheCart] = useState(null);
+    const [cartProducts, setCartProducts] = useState(null);
+
     const [relatedProducts, setRelatedProducts] = useState(null);
 
     const [quantity, setQuantity] = useState(1);
@@ -87,10 +83,8 @@ const ProductDetails = ({ route }) => {
             try {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
                 const response = await axios.get('/user/cart/fetch');
-                console.log('cartProducts', response?.data?.data)
 
-                setIsPresentInTheCart(response?.data?.data?.find(item => item?.id == product?.id));
-                console.log('dddw', response?.data?.data?.find(item => item?.id == product?.id));
+                setCartProducts(response?.data?.data);
             } catch (error) {
                 Alert.alert("Error", error.message); // Add a title to the alert
                 return null; // Return null in case of error
@@ -99,13 +93,14 @@ const ProductDetails = ({ route }) => {
         getCartProducts();
     }, []);
 
+    const isPresentInTheCart = cartProducts?.find(item => item.product_id === product.id);
+
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
         return Math.floor(num * 100);
     };
 
-    // const isPresentInTheCart = cartProducts?.find(item => item.id === product.id);
-    console.log('dixit', isPresentInTheCart)
+    console.log('isPresentInTheCart', isPresentInTheCart);
 
     const addToCart = async () => {
         try {
@@ -116,33 +111,12 @@ const ProductDetails = ({ route }) => {
                 product_size_id: unit?.id,
                 quantity: quantity,
             };
-
             // API Call using axios
             const response = await axios.post(`user/cart/add`, data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-
-            console.log('responseCart', response);
-
-            // Handle success response
-            if (response.data.status) {
-
-                // const userInfo = {
-                //     name: response?.data?.data?.name,
-                //     email: response?.data?.data?.email,
-                //     mobileNumber: mobileNumber,
-                //     password: password,
-                //     accessToken: response?.data?.access_token,
-                // };
-
-                // dispatch(addUser(userInfo));
-                // await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
-
-            } else {
-                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
-            }
             setLoading(false);
         } catch (error) {
             // Handle error response
@@ -189,8 +163,7 @@ const ProductDetails = ({ route }) => {
         setUnit(null);
     };
 
-    // console.log('relatedProducts', relatedProducts);
-    // console.log('cartProducts', cartProducts);
+    console.log('carrtProducts', cartProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -255,8 +228,8 @@ const ProductDetails = ({ route }) => {
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product?.min_mrp}</Text>
                         </View>
 
-                        {/* quantity */}
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        {/* Quantity */}
+                        {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     if (isPresentInTheCart) {
@@ -278,7 +251,7 @@ const ProductDetails = ({ route }) => {
                             <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
 
                     {/* Unit */}
@@ -385,18 +358,18 @@ const ProductDetails = ({ route }) => {
             {/* Total price and add to cart button */}
             <View style={{ backgroundColor: '#fff', position: 'absolute', bottom: 0, width: '100%', height: 70, elevation: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15 }}>
                 {/* Total price */}
-                <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
+                {/* <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
                     <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
                     {isPresentInTheCart ? (
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{isPresentInTheCart.units.price * isPresentInTheCart.qty}</Text>
                     ) : (
                         <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹0</Text>
                     )}
-                </View>
+                </View> */}
 
                 {/* 7002750204 */}
                 {/* Add to cart button */}
-                <View style={{ width: '60%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <View style={{ width: '100%', height: '100%', flexDirection: 'row', alignItems: 'center', }}>
                     <TouchableOpacity
                         style={{
                             gap: 5,
