@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Animated, ScrollView } from 'react-native';
+import { StatusBar, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Animated, ScrollView, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -21,6 +21,8 @@ const Cart = () => {
 
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState(false);
+
     const [cartProducts, setCartProducts] = useState([]);
 
     // Status Bar setters
@@ -32,22 +34,24 @@ const Cart = () => {
     );
 
     // Get cart products
-    useEffect(() => {
-        const getCartProducts = async () => {
-            try {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/cart/fetch');
+    useFocusEffect(
+        useCallback(() => {
+            const getCartProducts = async () => {
+                try {
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                    const response = await axios.get('/user/cart/fetch');
 
-                setCartProducts(response?.data?.data);
-                console.log('cartData', response?.data?.data);
-            } catch (error) {
-                Alert.alert("Error", error.message); // Add a title to the alert
-                return null; // Return null in case of error
-            }
-        }
-        
-        getCartProducts();
-    }, []);
+                    setCartProducts(response?.data?.data);
+                    // console.log('cartData', response?.data?.data);
+                } catch (error) {
+                    Alert.alert('Error', error.message); // Add a title to the alert
+                    return null; // Return null in case of error
+                }
+            };
+
+            getCartProducts();
+        }, [userDetails, setCartProducts]) // Dependencies to watch for changes
+    );
 
     // Animation for the continue button
     useEffect(() => {
@@ -73,13 +77,43 @@ const Cart = () => {
 
     // CartProductsSubTotal
     const cartProductsSubTotal = () => {
-        return cartProducts.reduce((total, item) => total + item.qty * item.units.price, 0);
+        return cartProducts.reduce((total, item) => total + item.quantity * item.price, 0);
     };
 
     // TotalDiscount
     const totalDiscount = () => {
-        return cartProducts.reduce((total, item) => total + (item.units.mrp - item.units.price), 0);
+        return cartProducts.reduce((total, item) => total + (item.mrp - item.price), 0);
     };
+
+    const deleteItemFromCart = async (id) => {
+        try {
+            setLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                cart_id: id,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`/user/cart/delete`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('responseDelete', response);
+
+            // console.log('productDetails', response)
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
 
     console.log('cartProducts', cartProducts);
 
@@ -118,10 +152,11 @@ const Cart = () => {
                     </View>
                 )}
 
-                {/* cart products */}
+                {/* Cart products */}
                 <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                     {cartProducts?.map(item => (
                         <View key={item.id} style={{ marginBottom: 8, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
+                            {/* Image */}
                             <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
                                 <Image source={{ uri: item?.image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
                             </View>
@@ -156,27 +191,32 @@ const Cart = () => {
                                                 {/* <View style={{ borderColor: '#000', borderWidth: 1.2, borderRadius: 3, width: 15, height: 15, alignItems: 'center', justifyContent: 'center' }}> */}
                                                 <Icon2 name="scale" size={13} color={backIconColor} style={{}} />
                                                 {/* </View> */}
-                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.units.size_name}</Text>
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.size} {item.unit}</Text>
                                             </View>
                                         </View>
                                         <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.6, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4, paddingHorizontal: 5, borderRadius: 7 }}>
                                             <TouchableOpacity disabled={item.qty === 1} onPress={() => dispatch(decrementItem(item))} style={{ width: 20, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="minus" size={13} color={'#000'} />
                                             </TouchableOpacity>
-                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>{item.qty}</Text>
+                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>{item?.quantity}</Text>
                                             <TouchableOpacity onPress={() => dispatch(addItemToCart(item))} style={{ width: 20, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                     <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingBottom: 25 }}>
-                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹{item.units.price * item.qty}.00</Text>
+                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹{item?.price * item?.quantity}.00</Text>
                                     </View>
                                 </View>
                             </View>
 
-                            <TouchableOpacity onPress={() => dispatch(removeItemFromCart(item))} style={{ elevation: 2, position: 'absolute', width: 30, height: 30, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                <Icon name="delete" size={20} color={'#cb202d'} />
+                            {/* Delete button */}
+                            <TouchableOpacity onPress={() => deleteItemFromCart(item?.id)} style={{ elevation: 2, position: 'absolute', width: 30, height: 30, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                                {loading ? (
+                                    <ActivityIndicator size='small' color={'#cb202d'} />
+                                ) : (
+                                    <Icon name="delete" size={20} color={'#cb202d'} />
+                                )}
                             </TouchableOpacity>
                         </View>
                     ))}
