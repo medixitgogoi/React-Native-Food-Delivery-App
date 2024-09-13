@@ -411,7 +411,7 @@ const ProductDetails = ({ route }) => {
                     disabled={isPresentInTheCart ? true : false}
                 >
                     {addToCartLoading ? (
-                        <ActivityIndicator color={lightGreen} size="small" />
+                        <ActivityIndicator color={backIconColor} size="small" />
                     ) : (
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                             <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500' }}>{`${isPresentInTheCart ? 'Added to cart' : 'Add to cart'}`}</Text>
