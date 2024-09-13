@@ -8,8 +8,11 @@ import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemToCart, decrementItem, removeItemFromCart } from '../redux/CartSlice';
 import axios from 'axios';
+import LinearGradient from 'react-native-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const Cart = () => {
 
@@ -21,9 +24,16 @@ const Cart = () => {
 
     const dispatch = useDispatch();
 
+    const [quantity, setQuantity] = useState(1);
+
     const [loading, setLoading] = useState(false);
 
     const [cartProducts, setCartProducts] = useState([]);
+
+    const [changeQuantityId, setChangeQuantityId] = useState(null);
+    const [quantityLoading, setQuantityLoading] = useState(false);
+
+    const [deletingProductId, setDeletingProductId] = useState(null);
 
     // Status Bar setters
     useFocusEffect(
@@ -33,24 +43,31 @@ const Cart = () => {
         }, [])
     );
 
+    // getCartProducts
+    const getCartProducts = useCallback(async () => {
+        try {
+            // Set authorization header dynamically
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+
+            // Fetch cart products
+            const response = await axios.get('/user/cart/fetch');
+
+            // Update state with fetched products
+            setCartProducts(response?.data?.data);
+        } catch (error) {
+            Alert.alert('Error', error.message || 'Failed to fetch cart data.'); // Alert with error message
+        } finally {
+            setQuantityLoading(false);
+        }
+    }, [userDetails]);
+
     // Get cart products
     useFocusEffect(
         useCallback(() => {
-            const getCartProducts = async () => {
-                try {
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                    const response = await axios.get('/user/cart/fetch');
-
-                    setCartProducts(response?.data?.data);
-                    // console.log('cartData', response?.data?.data);
-                } catch (error) {
-                    Alert.alert('Error', error.message); // Add a title to the alert
-                    return null; // Return null in case of error
-                }
-            };
-
+            setLoading(true);
             getCartProducts();
-        }, [userDetails, setCartProducts]) // Dependencies to watch for changes
+            setLoading(false);
+        }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart]) // Dependencies to watch for changes
     );
 
     // Animation for the continue button
@@ -85,8 +102,10 @@ const Cart = () => {
         return cartProducts.reduce((total, item) => total + (item.mrp - item.price), 0);
     };
 
+    // DeleteItemFromCart
     const deleteItemFromCart = async (id) => {
         try {
+            setDeletingProductId(id); // Set the current deleting product ID
             setLoading(true);
             // Data object as per the API requirement
             const data = {
@@ -101,6 +120,7 @@ const Cart = () => {
             });
 
             console.log('responseDelete', response);
+            getCartProducts(); // Refresh the cart data after deleting an item
 
             // console.log('productDetails', response)
         } catch (error) {
@@ -112,6 +132,70 @@ const Cart = () => {
             }
         } finally {
             setLoading(false);
+        }
+    };
+
+    // DecrementQuantity
+    const decrementQuantity = async (id, quantity) => {
+        try {
+            setChangeQuantityId(id); // Set the current deleting product ID
+            setQuantityLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                cart_id: id,
+                quantity: parseInt(quantity) - 1,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`/user/cart/update`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('responseQuantityMinus', response);
+            getCartProducts(); // Refresh the cart data after a successful update
+
+            // console.log('productDetails', response)
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        }
+    }
+
+    // IncrementQuantity
+    const incrementQuantity = async (id, quantity) => {
+        try {
+            setChangeQuantityId(id); // Set the current deleting product ID
+            setQuantityLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                cart_id: id,
+                quantity: parseInt(quantity) + 1,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`/user/cart/update`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('responseQuantityPlus', response);
+            getCartProducts();
+
+            // console.log('productDetails', response)
+        } catch (error) {
+            // Handle error response
+            if (error?.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
         }
     }
 
@@ -140,8 +224,8 @@ const Cart = () => {
 
             {/* Content */}
             <ScrollView>
-                {/* fallback image */}
-                {cartProducts.length === 0 && (
+                {/* Fallback image */}
+                {cartProducts?.length === 0 && (
                     <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                         <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
                         <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your cart!</Text>
@@ -154,18 +238,60 @@ const Cart = () => {
 
                 {/* Cart products */}
                 <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
-                    {cartProducts?.map(item => (
-                        <View key={item.id} style={{ marginBottom: 8, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
+                    {/* Skeleton loader */}
+                    {loading && (
+                        <FlatList
+                            data={[1, 1, 1, 1, 1]}
+                            renderItem={() => (
+                                <View style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2 }}>
+                                    {/* Title Shimmer */}
+                                    <ShimmerPlaceHolder
+                                        LinearGradient={LinearGradient}
+                                        style={{ width: '60%', height: 20, marginBottom: 10, borderRadius: 4 }}
+                                    />
+
+                                    {/* Detail Lines Shimmer */}
+                                    <ShimmerPlaceHolder
+                                        LinearGradient={LinearGradient}
+                                        style={{ width: '40%', height: 15, marginBottom: 5, borderRadius: 4 }}
+                                    />
+                                    <ShimmerPlaceHolder
+                                        LinearGradient={LinearGradient}
+                                        style={{ width: '50%', height: 15, marginBottom: 5, borderRadius: 4 }}
+                                    />
+                                    
+                                    {/* Quantity Buttons and Price */}
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                                        <ShimmerPlaceHolder
+                                            LinearGradient={LinearGradient}
+                                            style={{ width: 80, height: 30, borderRadius: 6 }}
+                                        />
+                                        <ShimmerPlaceHolder
+                                            LinearGradient={LinearGradient}
+                                            style={{ width: 50, height: 30, borderRadius: 6 }}
+                                        />
+                                    </View>
+                                </View>
+                            )}
+                            keyExtractor={(item) => item.key}
+                        />
+                    )}
+
+                    {/* Content */}
+                    {!loading && cartProducts?.map(item => (
+                        <View key={item.id} style={{ marginBottom: 12, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
                             {/* Image */}
                             <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
                                 <Image source={{ uri: item?.image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
                             </View>
 
                             <View style={{ flex: 3, flexDirection: 'column', height: '100%', paddingHorizontal: 10, paddingVertical: 6 }}>
-                                <View style={{ flex: 0.8 }}>
-                                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.name}</Text>
+                                {/* Name */}
+                                <View style={{ flex: 0.8, width: '92%' }}>
+                                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
                                 </View>
 
+                                {/* To be changed */}
                                 <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingTop: 3 }}>
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                                         <View style={{ flexDirection: 'column', gap: 3 }}>
@@ -188,21 +314,29 @@ const Cart = () => {
                                                 ))
                                             }
                                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                                                {/* <View style={{ borderColor: '#000', borderWidth: 1.2, borderRadius: 3, width: 15, height: 15, alignItems: 'center', justifyContent: 'center' }}> */}
                                                 <Icon2 name="scale" size={13} color={backIconColor} style={{}} />
-                                                {/* </View> */}
                                                 <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.size} {item.unit}</Text>
                                             </View>
                                         </View>
-                                        <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.6, flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 4, paddingHorizontal: 5, borderRadius: 7 }}>
-                                            <TouchableOpacity disabled={item.qty === 1} onPress={() => dispatch(decrementItem(item))} style={{ width: 20, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
+
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
+                                            {/* minus */}
+                                            <TouchableOpacity disabled={item?.quantity === 1} onPress={() => decrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="minus" size={13} color={'#000'} />
                                             </TouchableOpacity>
-                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>{item?.quantity}</Text>
-                                            <TouchableOpacity onPress={() => dispatch(addItemToCart(item))} style={{ width: 20, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
+
+                                            {quantityLoading && item?.quantity != 1 && changeQuantityId === item?.id ? (
+                                                <ActivityIndicator size='small' color={backIconColor} />
+                                            ) : (
+                                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>{item?.quantity}</Text>
+                                            )}
+
+                                            {/* plus */}
+                                            <TouchableOpacity onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
                                         </View>
+
                                     </View>
                                     <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingBottom: 25 }}>
                                         <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹{item?.price * item?.quantity}.00</Text>
@@ -212,7 +346,7 @@ const Cart = () => {
 
                             {/* Delete button */}
                             <TouchableOpacity onPress={() => deleteItemFromCart(item?.id)} style={{ elevation: 2, position: 'absolute', width: 30, height: 30, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                {loading ? (
+                                {deletingProductId === item?.id ? (
                                     <ActivityIndicator size='small' color={'#cb202d'} />
                                 ) : (
                                     <Icon name="delete" size={20} color={'#cb202d'} />
@@ -254,7 +388,7 @@ const Cart = () => {
 
             {/* Continue button */}
             {cartProducts?.length !== 0 && (
-                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 10, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
                     <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
                     <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
                         <Icon4 name="arrowright" size={23} color={backIconColor} />
@@ -268,19 +402,3 @@ const Cart = () => {
 export default Cart;
 
 const styles = StyleSheet.create({});
-
-{/* 
-    <FlatList
-        data={cartProducts}
-        renderItem={renderOrder}
-        keyExtractor={item => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 10 }}
-    /> 
-*/}
-
-{/* <View style={{ flex: 1.2, flexDirection: 'column', paddingHorizontal: 20, gap: 1 }}>
-        <Text style={{ color: '#838a94', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Total Price</Text>
-        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.8) }}>₹{cartProductsSubTotal() + 50 - 120}.00</Text>
-    </View>
- */}
