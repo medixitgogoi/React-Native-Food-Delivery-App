@@ -1,21 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Alert, Dimensions, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/AntDesign';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import Icon6 from 'react-native-vector-icons/dist/Entypo';
 import StarRatingDetails from '../components/StarRatingDetails';
+import { groceries } from '../utils/groceries';
+import { restaurants } from '../utils/restaurants';
+import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
 import { addItemToCart, decrementItem, updateProduct } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
+import { fetchCartProducts } from '../utils/fetchCartProducts';
 import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -25,15 +30,19 @@ const ProductDetails = ({ route }) => {
     const product = route?.params?.data;
     // console.log('product', product);
 
-    const type = product?.type;
-
     const userDetails = useSelector(state => state.user);
+
+    const [cartProducts, setCartProducts] = useState([]);
+
+    const [isPresentInTheCart, setIsPresentInTheCart] = useState({});
+
+    const type = product?.type;
 
     const navigation = useNavigation();
 
-    const dispatch = useDispatch();
+    const [addToCartTrigger, setAddToCartTrigger] = useState(false);
 
-    const [cartProducts, setCartProducts] = useState(null);
+    const dispatch = useDispatch();
 
     const [relatedProducts, setRelatedProducts] = useState(null);
 
@@ -44,12 +53,15 @@ const ProductDetails = ({ route }) => {
     const [error, setError] = useState(false);
 
     const [loading, setLoading] = useState(false);
+    const [addToCartLoading, setAddToCartLoading] = useState(false);
 
-    const [isPresentInTheCart, setIsPresentInTheCart] = useState(null);
+    // const isPresentInTheCart = cartProducts.find(it => it.product_id === product.id);
+    // console.log('isPresentInTheCart', isPresentInTheCart);
 
+    // error handling
     useEffect(() => {
         if (error) {
-            const timer = setTimeout(() => setError(false), 3000); // Hide error after 3 seconds
+            const timer = setTimeout(() => setError(false), 2000); // Hide error after 3 seconds
             return () => clearTimeout(timer); // Cleanup timer if the component unmounts
         }
     }, [error]);
@@ -79,7 +91,52 @@ const ProductDetails = ({ route }) => {
         fetchData(); // Call the async function inside useEffect
     }, [userDetails, type]);
 
-    // fetch cart products
+    // AddToCart
+    const addToCart = async () => {
+        try {
+            setAddToCartLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                product_id: product?.id,
+                product_size_id: unit?.id,
+                quantity: 1,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`user/cart/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // console.log('productDetails', response)
+
+            // Handle success response
+            if (response?.data?.status) {
+                setIsPresentInTheCart(response?.data?.data);
+                setUnit(isPresentInTheCart);
+            }
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        } finally {
+            setAddToCartLoading(false);
+        }
+    }
+
+    // isPresentInTheCart
+    useFocusEffect(
+        useCallback(() => {
+            setIsPresentInTheCart(cartProducts?.find(it => it.product_id === product.id));
+            setUnit(isPresentInTheCart);
+        }, [cartProducts, product.id, addToCartTrigger]) // Dependencies for the callback
+    );
+
+    // Get cart products
     useEffect(() => {
         const getCartProducts = async () => {
             try {
@@ -95,57 +152,16 @@ const ProductDetails = ({ route }) => {
         getCartProducts();
     }, []);
 
-    useEffect(() => {
-        setIsPresentInTheCart(cartProducts?.find(item => item.product_id === product.id))
-    }, [addToCart, cartProducts]);
-
+    // DiscountPercentage
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
         return Math.floor(num * 100);
     };
 
-    console.log('isPresentInTheCart', isPresentInTheCart);
-
-    const addToCart = async () => {
-        try {
-            setLoading(true);
-            // Data object as per the API requirement
-            const data = {
-                product_id: product?.id,
-                product_size_id: unit?.id,
-                quantity: 1,
-            };
-            // API Call using axios
-            const response = await axios.post(`user/cart/add`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            console.log('responseadddd', response?.data?.data);
-            setLoading(false);
-        } catch (error) {
-            // Handle error response
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            }
-        }
-    }
-
-    useEffect(() => {
-        if (isPresentInTheCart) {
-            setUnit(isPresentInTheCart.units);
-        }
-    }, []);
-
+    // UnitSelector
     const unitSelector = (item) => {
         if (isPresentInTheCart) {
-            setUnit(item);
-            dispatch(updateProduct({
-                id: isPresentInTheCart.id, // ID of the product you want to update
-                updatedUnits: item,
-            }));
+            setUnit({ isPresentInTheCart });
         } else {
             if (unit?.id === item.id) {
                 setUnit(null); // Set to null if the IDs match
@@ -163,12 +179,16 @@ const ProductDetails = ({ route }) => {
         }
     };
 
+    // RelatedProductsHandler
     const relatedProductsHandler = (item) => {
         navigation.navigate('ProductDetails', { data: item })
         setUnit(null);
     };
 
-    console.log('cartProducts', cartProducts);
+    // console.log('relatedProducts', relatedProducts);
+    // console.log('cartProducts', cartProducts);
+    // console.log('error', error);
+    // console.log('unit', unit)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -233,7 +253,7 @@ const ProductDetails = ({ route }) => {
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product?.min_mrp}</Text>
                         </View>
 
-                        {/* Quantity */}
+                        {/* quantity */}
                         {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -261,6 +281,7 @@ const ProductDetails = ({ route }) => {
 
                     {/* Unit */}
                     <View style={{ marginTop: 10 }}>
+                        {/* Heading */}
                         <Text style={{ paddingHorizontal: 13, color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
 
                         {/* Error message */}
@@ -273,13 +294,14 @@ const ProductDetails = ({ route }) => {
                             </View>
                         )}
 
+                        {/* Units */}
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.productSize.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.productSize.length == 2 ? 13 : 0 }}>
                             {product?.productSize?.map(it => (
-                                <TouchableOpacity onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id ? 1.07 : 1 }], }} key={it.id}>
+                                <TouchableOpacity disabled={isPresentInTheCart ? true : false} onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? 1.07 : 1 }], }} key={it.id}>
                                     <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.mrp, it.price)}% off</Text>
                                     </View>
-                                    <View style={{ height: '78%', backgroundColor: unit?.id === it.id ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
+                                    <View style={{ height: '78%', backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.size_name}</Text>
                                         <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.price}</Text>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
@@ -299,7 +321,7 @@ const ProductDetails = ({ route }) => {
                     </View>
 
                     {/* Related products */}
-                    <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 55 }}>
+                    <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 60 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
@@ -360,23 +382,27 @@ const ProductDetails = ({ route }) => {
                 </View>
             </ScrollView>
 
-            <View style={{ paddingHorizontal: 12, position: 'absolute', bottom: 3, width: '100%', backgroundColor: background }}>
+            {/* Add to cart button */}
+            <View style={{ backgroundColor: '#fff' }}>
                 <TouchableOpacity
                     style={{
                         gap: 5,
-                        backgroundColor: isPresentInTheCart ? lightGreen : darkGreen,
+                        backgroundColor: isPresentInTheCart || addToCartLoading ? lightGreen : '#41b24b',
                         paddingHorizontal: 30,
-                        height: 47,
+                        height: 48,
                         borderRadius: 10,
                         flexDirection: 'row',
                         alignItems: 'center',
-                        borderColor: isPresentInTheCart ? backIconColor : '#000',
+                        justifyContent: 'center',
+                        borderColor: backIconColor,
                         borderWidth: 1.5,
-                        width: '100%',
-                        justifyContent: 'center'
+                        position: 'absolute',
+                        bottom: 8,
+                        width: '95%',
+                        alignSelf: 'center',
                     }}
                     onPress={() => {
-                        if (unit !== null) {
+                        if (unit) {
                             addToCart();
                         } else {
                             setError(true);
@@ -384,32 +410,22 @@ const ProductDetails = ({ route }) => {
                     }}
                     disabled={isPresentInTheCart ? true : false}
                 >
-                    {isPresentInTheCart ? (
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                            <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Added to cart</Text>
-                            <Icon2 name="checkcircle" size={21} color={backIconColor} />
-                        </View>
+                    {addToCartLoading ? (
+                        <ActivityIndicator color={lightGreen} size="small" />
                     ) : (
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: '500' }}>Add to cart</Text>
-                            <Icon name="add-shopping-cart" size={19} color={'#000'} />
+                            <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500' }}>{`${isPresentInTheCart ? 'Added to cart' : 'Add to cart'}`}</Text>
+                            {isPresentInTheCart ? (
+                                <Icon2 name="checkcircle" size={21} color={backIconColor} />
+                            ) : (
+                                <Icon name="add-shopping-cart" size={19} color={'#fff'} />
+                            )}
                         </View>
                     )}
                 </TouchableOpacity>
             </View>
-
         </SafeAreaView>
     )
 }
 
 export default ProductDetails;
-
-{/* Total price */ }
-{/* <View style={{ width: '40%', height: '100%', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
-                    <Text style={{ color: '#b0b0b0', fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Total Price</Text>
-                    {isPresentInTheCart ? (
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹{isPresentInTheCart.units.price * isPresentInTheCart.qty}</Text>
-                    ) : (
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(3), fontWeight: '600' }}>₹0</Text>
-                    )}
-                </View> */}
