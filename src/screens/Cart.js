@@ -6,18 +6,24 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, decrementItem, removeItemFromCart } from '../redux/CartSlice';
+import axios from 'axios';
 
 const Cart = () => {
 
     const navigation = useNavigation();
 
+    const userDetails = useSelector(state => state.user);
+
     const moveAnim = useRef(new Animated.Value(0)).current;
 
     const dispatch = useDispatch();
 
+    const [cartProducts, setCartProducts] = useState([]);
+
+    // Status Bar setters
     useFocusEffect(
         useCallback(() => {
             StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
@@ -25,9 +31,25 @@ const Cart = () => {
         }, [])
     );
 
-    const cartProducts = useSelector(state => state.cart);
-    console.log('cartProducts', cartProducts);
+    // Get cart products
+    useEffect(() => {
+        const getCartProducts = async () => {
+            try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                const response = await axios.get('/user/cart/fetch');
 
+                setCartProducts(response?.data?.data);
+                console.log('cartData', response?.data?.data);
+            } catch (error) {
+                Alert.alert("Error", error.message); // Add a title to the alert
+                return null; // Return null in case of error
+            }
+        }
+        
+        getCartProducts();
+    }, []);
+
+    // Animation for the continue button
     useEffect(() => {
         const startAnimation = () => {
             Animated.loop(
@@ -49,13 +71,17 @@ const Cart = () => {
         startAnimation();
     }, [moveAnim]);
 
+    // CartProductsSubTotal
     const cartProductsSubTotal = () => {
         return cartProducts.reduce((total, item) => total + item.qty * item.units.price, 0);
     };
 
+    // TotalDiscount
     const totalDiscount = () => {
         return cartProducts.reduce((total, item) => total + (item.units.mrp - item.units.price), 0);
-    }
+    };
+
+    console.log('cartProducts', cartProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
