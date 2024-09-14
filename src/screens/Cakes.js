@@ -63,6 +63,7 @@ const Cakes = () => {
         debouncedSearch(text);
     };
 
+    // Fetch Cakes
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true); // Start loading
@@ -120,6 +121,35 @@ const Cakes = () => {
         setNonVeg(prev => !prev);
     }
 
+    // Add To Wishlist
+    const addToWishlist = async (id) => {
+        try {
+            // setLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                product_id: id,
+            };
+
+            // API Call using axios
+            const response = await axios.post(`/user/wishlist/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('responseWishlist', response);
+
+            // console.log('productDetails', response)
+        } catch (error) {
+            // Handle error response
+            // if (error.response) {
+            //     Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            // } else {
+            //     Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            // }
+        }
+    }
+
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
     ), [search]);
@@ -144,10 +174,11 @@ const Cakes = () => {
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                {/* <Icon4 name="heart-outline" size={18} color={'#019934'} /> */}
 
                 {/* Wishlist */}
-                <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon name="favorite-border" size={18} color={'#019934'} />
+                <TouchableOpacity onPress={() => addToWishlist(item?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon5 name="heart" size={18} color={'#3ea947'} />
                 </TouchableOpacity>
 
                 {/* Image */}
