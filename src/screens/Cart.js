@@ -243,7 +243,7 @@ const Cart = () => {
                         <FlatList
                             data={[1, 1, 1, 1, 1]}
                             renderItem={() => (
-                                <View style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2 }}>
+                                <View style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
                                     {/* Title Shimmer */}
                                     <ShimmerPlaceHolder
                                         LinearGradient={LinearGradient}
@@ -259,7 +259,7 @@ const Cart = () => {
                                         LinearGradient={LinearGradient}
                                         style={{ width: '50%', height: 15, marginBottom: 5, borderRadius: 4 }}
                                     />
-                                    
+
                                     {/* Quantity Buttons and Price */}
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                                         <ShimmerPlaceHolder
@@ -357,7 +357,7 @@ const Cart = () => {
                 </View>
 
                 {/* Cart Total */}
-                {cartProducts?.length !== 0 && (
+                {cartProducts?.length != 0 && (
                     <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
                         <View style={{ backgroundColor: darkGreen, paddingTop: 10, }}>
                             <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#000', marginBottom: 10 }}>Cart Total</Text>
