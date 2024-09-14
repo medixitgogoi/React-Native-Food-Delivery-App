@@ -8,7 +8,7 @@ import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
-import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback, useLayoutEffect } from 'react';
 import StarRating from '../components/StarRating';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,33 +26,25 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 const Cakes = () => {
 
     const navigation = useNavigation();
-
     const userDetails = useSelector(state => state.user);
-
-    useFocusEffect(
-        useCallback(() => {
-            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
-            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
-        }, [])
-    );
-
+    const [wishlistProducts, setWishlistProducts] = useState([]);
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
-
     const [slider, setSlider] = useState(false);
     const sliderHeight = useRef(new Animated.Value(0)).current;
-
     const [priceLowToHigh, setPriceLowToHigh] = useState(false);
     const [priceHighToLow, setPriceHighToLow] = useState(false);
     const [ratingHighToLow, setRatingHighToLow] = useState(false);
     const [veg, setVeg] = useState(false);
     const [nonVeg, setNonVeg] = useState(false);
-
     const [filteredNames, setFilteredNames] = useState([]);
-
     const [cakes, setCakes] = useState(null);
-
     const [loading, setLoading] = useState(true);
+
+    useLayoutEffect(() => {
+        StatusBar.setBackgroundColor(darkGreen);
+        StatusBar.setBarStyle('dark-content');
+    }, []);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
         setFilteredNames(cakes.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
@@ -66,89 +58,112 @@ const Cakes = () => {
     // Fetch Cakes
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true); // Start loading
+            setLoading(true);
             try {
-                const data = await fetchCakes(userDetails); // Await the fetchProducts function
-                setCakes(data || []); // Ensure groceries are set properly
-                setFilteredNames(data || []); // Ensure groceries are set properly
-                console.log('cakes', cakes); // Log fetched data
+                const data = await fetchCakes(userDetails);
+                setCakes(data || []);
+                setFilteredNames(data || []);
+                console.log('cakes', cakes);
             } catch (error) {
-                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
+                Alert.alert("Error fetching groceries:", error.message);
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false);
             }
         };
+        fetchData();
+    }, [userDetails]);
 
-        fetchData(); // Call the async function inside useEffect
-    }, [userDetails]); // Dependency array should include userDetails if it might change
+    // Memoized Handlers
+    const priceLowToHighHandler = useCallback(() => setPriceLowToHigh(prev => !prev), []);
+    const priceHighToLowHandler = useCallback(() => setPriceHighToLow(prev => !prev), []);
+    const ratingHighToLowHandler = useCallback(() => setRatingHighToLow(prev => !prev), []);
+    const vegHandler = useCallback(() => setVeg(prev => !prev), []);
+    const nonVegHandler = useCallback(() => setNonVeg(prev => !prev), []);
 
-    const toggleSlider = () => {
+    // Toggle Slider with useNativeDriver
+    const toggleSlider = useCallback(() => {
         if (slider) {
             Animated.timing(sliderHeight, {
                 toValue: 0,
                 duration: 300,
                 easing: Easing.inOut(Easing.ease),
-                useNativeDriver: false,
+                useNativeDriver: true, // Optimized for smoother animation
             }).start(() => setSlider(false));
         } else {
             setSlider(true);
             Animated.timing(sliderHeight, {
-                toValue: 42, // Adjust this value based on your content height
+                toValue: 42,
                 duration: 300,
                 easing: Easing.inOut(Easing.ease),
-                useNativeDriver: false,
+                useNativeDriver: true,
             }).start();
         }
-    };
-
-    const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => !prev);
-    };
-
-    const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => !prev);
-    };
-
-    const ratingHighToLowHandler = () => {
-        setRatingHighToLow(prev => !prev);
-    };
-
-    const vegHandler = () => {
-        setVeg(prev => !prev);
-    };
-
-    const nonVegHandler = () => {
-        setNonVeg(prev => !prev);
-    }
+    }, [slider]);
 
     // Add To Wishlist
-    const addToWishlist = async (id) => {
+    const addToWishlist = useCallback(async (id) => {
         try {
-            // setLoading(true);
-            // Data object as per the API requirement
-            const data = {
-                product_id: id,
-            };
-
-            // API Call using axios
+            setLoading(true);
+            const data = { product_id: id };
             const response = await axios.post(`/user/wishlist/add`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' },
             });
-
+            if (response?.data?.status) {
+                getWishlistedProducts();
+            }
             console.log('responseWishlist', response);
-
-            // console.log('productDetails', response)
         } catch (error) {
-            // Handle error response
-            // if (error.response) {
-            //     Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            // } else {
-            //     Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            // }
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong.");
+            } else {
+                Alert.alert("Error", "Network error. Check your connection.");
+            }
+        } finally {
+            setLoading(false);
         }
-    }
+    }, []);
+
+    // Delete from Wishlist
+    const deleteFromWishlist = useCallback(async (id) => {
+        try {
+            setLoading(true);
+            const data = { wishlist_id: id };
+            const response = await axios.post(`/user/wishlist/delete`, data, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (response?.data?.status) {
+                getWishlistedProducts();
+            }
+            console.log('responseWishlistDelete', response);
+        } catch (error) {
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong.");
+            } else {
+                Alert.alert("Error", "Network error. Check your connection.");
+            }
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    // Get wishlist products
+    const getWishlistedProducts = useCallback(async () => {
+        try {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+            const response = await axios.get('/user/wishlist/fetch');
+            console.log('responseGetData', response?.data?.data);
+            setWishlistProducts(response?.data?.data);
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        }
+    }, [userDetails]);
+
+    useFocusEffect(
+        useCallback(() => {
+            getWishlistedProducts();
+        }, [getWishlistedProducts])
+    );
+
 
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
@@ -172,14 +187,22 @@ const Cakes = () => {
             );
         };
 
+        const product = wishlistProducts?.find(it => it.product_id === item.id);
+
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
-                {/* <Icon4 name="heart-outline" size={18} color={'#019934'} /> */}
+                {/* <Icon4 name="heart" size={18} color={'#019934'} /> */}
 
                 {/* Wishlist */}
-                <TouchableOpacity onPress={() => addToWishlist(item?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon5 name="heart" size={18} color={'#3ea947'} />
-                </TouchableOpacity>
+                {product ? (
+                    <TouchableOpacity onPress={() => deleteFromWishlist(product?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon5 name="heart" size={18} color={'#3ea947'} />
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity onPress={() => addToWishlist(item?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon5 name="heart-outline" size={18} color={'#019934'} />
+                    </TouchableOpacity>
+                )}
 
                 {/* Image */}
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>

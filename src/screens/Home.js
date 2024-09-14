@@ -5,7 +5,7 @@ import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../u
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useLayoutEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
@@ -37,12 +37,10 @@ const Home = () => {
     const [groceries, setGroceries] = useState(null);
 
     // Status bar setters
-    useFocusEffect(
-        useCallback(() => {
-            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
-            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
-        }, [])
-    );
+    useLayoutEffect(() => {
+        StatusBar.setBackgroundColor(darkGreen);
+        StatusBar.setBarStyle('dark-content');
+    }, []);
 
     // fetch products
     useEffect(() => {

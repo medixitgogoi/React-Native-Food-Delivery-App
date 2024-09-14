@@ -54,7 +54,10 @@ const Cart = () => {
             const response = await axios.get('/user/cart/fetch');
 
             // Update state with fetched products
-            setCartProducts(response?.data?.data);
+            if (response?.data?.status) {
+                setCartProducts(response?.data?.data);
+                setLoading(false);
+            }
         } catch (error) {
             Alert.alert('Error', error.message || 'Failed to fetch cart data.'); // Alert with error message
         } finally {
@@ -120,7 +123,7 @@ const Cart = () => {
                 }
             });
 
-            console.log('responseDelete', response);
+            // console.log('responseDelete', response);
             getCartProducts(); // Refresh the cart data after deleting an item
 
             // console.log('productDetails', response)

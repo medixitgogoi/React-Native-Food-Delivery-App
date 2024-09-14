@@ -144,7 +144,7 @@ const Checkout = () => {
 
                     {/* Content */}
                     {!loading && addresses?.length > 0 && addresses?.map(item => (
-                        <TouchableOpacity onPress={() => setSelectedAddress(item)} key={item.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
+                        <TouchableOpacity onPress={() => setSelectedAddress(item)} key={item?.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
                             <View style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
                                 {selectedAddress?.id === item?.id ? (
                                     <View>
