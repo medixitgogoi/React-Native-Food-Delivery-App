@@ -79,26 +79,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
     );
 };
 
-const GuestStackNavigator = () => {
-
-    const userDetails = useSelector((state) => state.user);
-
-    const [cartProducts, setCartProducts] = useState([]);
-    const [cartItemCount, setCartItemCount] = useState(null);
-
-    useEffect(() => {
-        const getCartProducts = async () => {
-            const products = await fetchCartProducts(userDetails); // Fetch cart products
-            if (products) {
-                setCartProducts(products); // Set the data in the state
-                setCartItemCount(products.length);
-            } else {
-                Alert.alert("Error", "Failed to fetch cart products"); // Handle errors
-            }
-        };
-        getCartProducts(); // Call the function when component mounts
-    }, []);
-
+const GuestStackNavigator = ({ cartItemCount }) => {
     return (
         <Stack.Navigator
             initialRouteName="BottomTabs"
