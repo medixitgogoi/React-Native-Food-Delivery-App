@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchCartProducts } from '../utils/fetchCartProducts';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
@@ -13,14 +14,13 @@ const StackNavigation = () => {
 
     const dispatch = useDispatch();
 
-    const cartProducts = useSelector((state) => state.cart);
     const userDetails = useSelector((state) => state.user);
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
+    const [cartProducts, setCartProducts] = useState([]);
 
-    const cartItemCount = cartProducts.length;
+    const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
 
     useEffect(() => {
         const loadLoginDetails = async () => {
@@ -57,7 +57,7 @@ const StackNavigation = () => {
 
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
+            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartProducts?.length} /> : <AuthStackNavigator initialRoute="Login" />}
         </NavigationContainer>
     );
 };

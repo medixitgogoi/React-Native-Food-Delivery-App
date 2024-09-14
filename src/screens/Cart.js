@@ -19,6 +19,7 @@ const Cart = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
+    console.log('userDetails', userDetails);
 
     const moveAnim = useRef(new Animated.Value(0)).current;
 
@@ -285,6 +286,7 @@ const Cart = () => {
                                 <Image source={{ uri: item?.image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
                             </View>
 
+                            {/* Details */}
                             <View style={{ flex: 3, flexDirection: 'column', height: '100%', paddingHorizontal: 10, paddingVertical: 6 }}>
                                 {/* Name */}
                                 <View style={{ flex: 0.8, width: '92%' }}>
