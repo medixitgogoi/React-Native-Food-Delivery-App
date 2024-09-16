@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, Alert, Image, FlatList, Animated } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, TouchableOpacity, Alert, Image, FlatList, Animated, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -25,6 +25,7 @@ const Checkout = () => {
     const [selectedAddress, setSelectedAddress] = useState(null);
 
     const [loading, setLoading] = useState(true);
+    const [contineLoading, setContineLoading] = useState(false);
 
     const moveAnim = useRef(new Animated.Value(0)).current;
 
@@ -58,7 +59,7 @@ const Checkout = () => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
                     const response = await axios.get('/user/shippingAddress/fetch');
 
-                    console.log('addresssss', response);
+                    console.log('addresssss', response?.data?.data);
                     setAddresses(response?.data?.data);
 
                     const defaultAddress = response?.data?.data?.find(item => item.is_default === '2');
@@ -73,6 +74,39 @@ const Checkout = () => {
             getAddresses();
         }, [userDetails])
     );
+
+    const continueHandler = async () => {
+        try {
+            setContineLoading(true);
+            // Data object as per the API requirement
+            const data = {
+                address_id: selectedAddress?.id,
+                payment_type: '1',
+            };
+            // API Call using axios
+            const response = await axios.post(`user/order/place`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response?.data?.success) {
+                navigation.navigate('OrderPlaced', { data: response?.data?.data });
+            }
+
+            console.log('responseadddd', response);
+
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        } finally {
+            setContineLoading(false);
+        }
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -181,23 +215,35 @@ const Checkout = () => {
                 </View>
 
                 {/* Payment */}
-                <View style={{ marginVertical: 10 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
-                            <Icon name="account-balance-wallet" size={24} color={backIconColor} />
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
+                {!loading && (
+                    <View style={{ marginVertical: 10 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
+                                <Icon name="account-balance-wallet" size={24} color={backIconColor} />
+                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                )}
             </View>
 
             {/* Continue button*/}
-            <TouchableOpacity style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
-                <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
-                <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
-                    <Icon5 name="arrowright" size={23} color={backIconColor} />
-                </Animated.View>
-            </TouchableOpacity>
+            {!loading && addresses.length !== 0 && (
+                <TouchableOpacity onPress={continueHandler} style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, borderColor: backIconColor, borderWidth: 1.3 }}>
+                    {contineLoading ? (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, justifyContent: 'center' }}>
+                            <ActivityIndicator size="small" color={backIconColor} />
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                            <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
+                            <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
+                                <Icon5 name="arrowright" size={23} color={backIconColor} />
+                            </Animated.View>
+                        </View>
+                    )}
+                </TouchableOpacity>
+            )}
         </SafeAreaView>
     )
 }

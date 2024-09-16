@@ -298,11 +298,16 @@ const ProductDetails = ({ route }) => {
                                     </View>
                                     <View style={{ height: '78%', backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.size_name}</Text>
-                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.price}</Text>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                            <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>MRP</Text>
-                                            <Text style={{ color: offWhite, fontWeight: '400', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.mrp}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                            <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.price}</Text>
+                                            <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.mrp}</Text>
                                         </View>
+                                        {product.type !== '3' && (
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                                <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '400' }}>Available:</Text>
+                                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '700' }}>{it?.stock}</Text>
+                                            </View>
+                                        )}
                                     </View>
                                 </TouchableOpacity>
                             ))}
