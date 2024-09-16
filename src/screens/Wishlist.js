@@ -6,9 +6,15 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/Ionicons';
 import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import StarRating from '../components/StarRating';
 import { addItemToWishlist, removeItemFromWishlist } from '../redux/WishlistSlice';
+import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import LinearGradient from 'react-native-linear-gradient';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -16,26 +22,66 @@ const Wishlist = () => {
 
     const navigation = useNavigation();
 
-    const wishlistProducts = useSelector(state => state.wishlist);
+    // const wishlistProducts = useSelector(state => state.wishlist);
+    const userDetails = useSelector(state => state.user);
 
     const dispatch = useDispatch();
 
+    const [wishlistProducts, setWishlistProducts] = useState(null);
+
+    const [loading, setLoading] = useState(false);
+
+    const [clciked, setClciked] = useState(false);
+
+    const getWishlistedProducts = useCallback(async () => {
+        try {
+            setLoading(true);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+            const response = await axios.get('/user/wishlist/fetch');
+            console.log('wishlistProducts', response?.data?.data)
+            setWishlistProducts(response?.data?.data || []);
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const deleteFromWishlist = useCallback(async (id) => {
+        setClciked(true);
+        try {
+            const data = { wishlist_id: id };
+            const response = await axios.post(`/user/wishlist/delete`, data, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            console.log('delete', response);
+        } catch (error) {
+            Alert.alert("Error", error.message || "Something went wrong.");
+        } finally {
+            setClciked(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        getWishlistedProducts();
+    }, [clciked])
+
+    useFocusEffect(
+        useCallback(() => {
+            getWishlistedProducts();
+        }, [])
+    );
+
     const OrderItem = ({ item }) => {
 
-        const product = wishlistProducts.find(it => it.id === item.id);
+        const product = wishlistProducts?.find(it => it.id === item.id);
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
                 {/* Wishlist */}
-                {product?.id === item.id ? (
-                    <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon2 name="heart" size={18} color={'#3ea947'} />
-                    </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon2 name="heart-outline" size={18} color={'#019934'} />
-                    </TouchableOpacity>
-                )}
+                <TouchableOpacity onPress={() => deleteFromWishlist(product?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon2 name="heart" size={18} color={'#3ea947'} />
+                </TouchableOpacity>
 
                 {/* Image */}
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
@@ -95,22 +141,43 @@ const Wishlist = () => {
             {/* Content */}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
                 {/* Products */}
-                <FlatList
-                    data={wishlistProducts}
-                    renderItem={OrderItem}
-                    keyExtractor={item => item.id.toString()}
-                    numColumns={2}
-                    key={2}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 55, paddingTop: 5 }}
-                    columnWrapperStyle={{ justifyContent: 'space-between' }}
-                />
+                {loading ? (
+                    <FlatList
+                        data={[1, 1, 1, 1, 1, 1, 1]}
+                        renderItem={() => {
+                            return (
+                                <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                </View>
+                            )
+                        }}
+                        numColumns={2}
+                        key={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    />
+                ) : (
+                    <FlatList
+                        data={wishlistProducts}
+                        renderItem={OrderItem}
+                        keyExtractor={item => item.id.toString()}
+                        numColumns={2}
+                        key={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 55, paddingTop: 5 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    />
+                )}
             </View>
 
         </SafeAreaView>
     )
 }
 
-export default Wishlist
+export default Wishlist;
 
 const styles = StyleSheet.create({});

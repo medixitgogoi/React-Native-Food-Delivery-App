@@ -8,9 +8,8 @@ import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
-import { useState, useRef, useEffect, useMemo, useCallback, useLayoutEffect } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import StarRating from '../components/StarRating';
-import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
 import { cakes } from '../utils/cakes';
@@ -18,33 +17,49 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { fetchProducts } from '../utils/fetchProducts';
 import { fetchCakes } from '../utils/fetchCakes';
-
-const { width: screenWidth } = Dimensions.get('window');
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
+const { width: screenWidth } = Dimensions.get('window');
+
 const Cakes = () => {
 
+    console.log('component mounted in root level')
+
     const navigation = useNavigation();
+
     const userDetails = useSelector(state => state.user);
-    const [wishlistProducts, setWishlistProducts] = useState([]);
+
+    // Status bar setters
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
+
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+
     const [slider, setSlider] = useState(false);
     const sliderHeight = useRef(new Animated.Value(0)).current;
+
     const [priceLowToHigh, setPriceLowToHigh] = useState(false);
     const [priceHighToLow, setPriceHighToLow] = useState(false);
     const [ratingHighToLow, setRatingHighToLow] = useState(false);
     const [veg, setVeg] = useState(false);
     const [nonVeg, setNonVeg] = useState(false);
+
     const [filteredNames, setFilteredNames] = useState([]);
+
     const [cakes, setCakes] = useState(null);
+
     const [loading, setLoading] = useState(true);
 
-    useLayoutEffect(() => {
-        StatusBar.setBackgroundColor(darkGreen);
-        StatusBar.setBarStyle('dark-content');
-    }, []);
+    const [wishlistProducts, setWishlistProducts] = useState(null);
+
+    const [clciked, setClciked] = useState(false);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
         setFilteredNames(cakes.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
@@ -55,7 +70,45 @@ const Cakes = () => {
         debouncedSearch(text);
     };
 
-    // Fetch Cakes
+    const toggleSlider = () => {
+        if (slider) {
+            Animated.timing(sliderHeight, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: false,
+            }).start(() => setSlider(false));
+        } else {
+            setSlider(true);
+            Animated.timing(sliderHeight, {
+                toValue: 42, // Adjust this value based on your content height
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: false,
+            }).start();
+        }
+    };
+
+    const priceLowToHighHandler = () => {
+        setPriceLowToHigh(prev => !prev);
+    };
+
+    const priceHighToLowHandler = () => {
+        setPriceHighToLow(prev => !prev);
+    };
+
+    const ratingHighToLowHandler = () => {
+        setRatingHighToLow(prev => !prev);
+    };
+
+    const vegHandler = () => {
+        setVeg(prev => !prev);
+    };
+
+    const nonVegHandler = () => {
+        setNonVeg(prev => !prev);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -63,7 +116,7 @@ const Cakes = () => {
                 const data = await fetchCakes(userDetails);
                 setCakes(data || []);
                 setFilteredNames(data || []);
-                console.log('cakes', cakes);
+                // console.log('cakes', data)
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message);
             } finally {
@@ -73,57 +126,47 @@ const Cakes = () => {
         fetchData();
     }, [userDetails]);
 
-    // Memoized Handlers
-    const priceLowToHighHandler = useCallback(() => setPriceLowToHigh(prev => !prev), []);
-    const priceHighToLowHandler = useCallback(() => setPriceHighToLow(prev => !prev), []);
-    const ratingHighToLowHandler = useCallback(() => setRatingHighToLow(prev => !prev), []);
-    const vegHandler = useCallback(() => setVeg(prev => !prev), []);
-    const nonVegHandler = useCallback(() => setNonVeg(prev => !prev), []);
-
-    // Toggle Slider with useNativeDriver
-    const toggleSlider = useCallback(() => {
-        if (slider) {
-            Animated.timing(sliderHeight, {
-                toValue: 0,
-                duration: 300,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true, // Optimized for smoother animation
-            }).start(() => setSlider(false));
-        } else {
-            setSlider(true);
-            Animated.timing(sliderHeight, {
-                toValue: 42,
-                duration: 300,
-                easing: Easing.inOut(Easing.ease),
-                useNativeDriver: true,
-            }).start();
-        }
-    }, [slider]);
-
-    // Add To Wishlist
-    const addToWishlist = useCallback(async (id) => {
+    const getWishlistedProducts = useCallback(async () => {
         try {
             setLoading(true);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+            const response = await axios.get('/user/wishlist/fetch');
+            console.log('wishlistProducts', response?.data?.data);
+            setWishlistProducts(response?.data?.data || []);
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        } finally {
+            setLoading(false);
+            setClciked(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        getWishlistedProducts();
+    }, [clciked]);
+
+    const addToWishlist = useCallback(async (id) => {
+        try {
             const data = { product_id: id };
             const response = await axios.post(`/user/wishlist/add`, data, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (response?.data?.status) {
-                getWishlistedProducts();
-            }
-            console.log('responseWishlist', response);
-        } catch (error) {
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong.");
-            } else {
-                Alert.alert("Error", "Network error. Check your connection.");
-            }
-        } finally {
-            setLoading(false);
-        }
-    }, []);
 
-    // Delete from Wishlist
+            // Assuming response?.data?.data contains the full product data
+            const newProduct = response?.data?.data;
+
+            // Update the wishlistProducts state with the new product
+            setWishlistProducts((prevProducts) => [...prevProducts, newProduct]);
+
+        } catch (error) {
+            Alert.alert("Error", error.message || "Something went wrong.");
+        } finally {
+            setClciked(true);  // Trigger re-fetch of wishlist
+            console.log('Wishlist after adding', wishlistProducts);
+        }
+    }, [wishlistProducts]);
+
+
     const deleteFromWishlist = useCallback(async (id) => {
         try {
             setLoading(true);
@@ -131,39 +174,13 @@ const Cakes = () => {
             const response = await axios.post(`/user/wishlist/delete`, data, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            if (response?.data?.status) {
-                getWishlistedProducts();
-            }
-            console.log('responseWishlistDelete', response);
+            // console.log('delete', response);
         } catch (error) {
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong.");
-            } else {
-                Alert.alert("Error", "Network error. Check your connection.");
-            }
+            Alert.alert("Error", error.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
     }, []);
-
-    // Get wishlist products
-    const getWishlistedProducts = useCallback(async () => {
-        try {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-            const response = await axios.get('/user/wishlist/fetch');
-            console.log('responseGetData', response?.data?.data);
-            setWishlistProducts(response?.data?.data);
-        } catch (error) {
-            Alert.alert("Error", error.message);
-        }
-    }, [userDetails]);
-
-    useFocusEffect(
-        useCallback(() => {
-            getWishlistedProducts();
-        }, [getWishlistedProducts])
-    );
-
 
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
@@ -187,22 +204,21 @@ const Cakes = () => {
             );
         };
 
-        const product = wishlistProducts?.find(it => it.product_id === item.id);
+        const wishlistedProduct = wishlistProducts?.find((wishlistItem) => wishlistItem.product_id === item?.id);
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
-                {/* <Icon4 name="heart" size={18} color={'#019934'} /> */}
-
                 {/* Wishlist */}
-                {product ? (
-                    <TouchableOpacity onPress={() => deleteFromWishlist(product?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon5 name="heart" size={18} color={'#3ea947'} />
-                    </TouchableOpacity>
-                ) : (
-                    <TouchableOpacity onPress={() => addToWishlist(item?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon5 name="heart-outline" size={18} color={'#019934'} />
-                    </TouchableOpacity>
-                )}
+                <TouchableOpacity
+                    onPress={wishlistedProduct != null ? () => deleteFromWishlist(wishlistedProduct?.id) : () => addToWishlist(item?.id)}
+                    style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+                >
+                    <Icon5
+                        name={wishlistedProduct != null ? "heart" : "heart-outline"}
+                        size={18}
+                        color={wishlistedProduct != null ? '#3ea947' : '#019934'}
+                    />
+                </TouchableOpacity>
 
                 {/* Image */}
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
@@ -211,6 +227,7 @@ const Cakes = () => {
                     </View>
                 </View>
 
+                {/* Details */}
                 <View style={{ padding: 10 }}>
                     <View style={{ flexDirection: 'column', gap: 3 }}>
                         <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
@@ -224,8 +241,8 @@ const Cakes = () => {
                             </View>
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
 
+                    <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
                         {item.veg_type === '1' ? (
                             <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}></View>
@@ -237,6 +254,7 @@ const Cakes = () => {
                         )}
                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
                     </View>
+                    
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
                         <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
@@ -245,6 +263,8 @@ const Cakes = () => {
             </TouchableOpacity>
         );
     };
+
+    // console.log('wishlistProducts', wishlistProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>

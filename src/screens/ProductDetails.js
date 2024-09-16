@@ -28,7 +28,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    // console.log('product', product);
+    console.log('product', product);
 
     const userDetails = useSelector(state => state.user);
 
@@ -184,11 +184,6 @@ const ProductDetails = ({ route }) => {
         navigation.navigate('ProductDetails', { data: item })
         setUnit(null);
     };
-
-    // console.log('relatedProducts', relatedProducts);
-    // console.log('cartProducts', cartProducts);
-    // console.log('error', error);
-    // console.log('unit', unit)
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
