@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
@@ -60,13 +60,19 @@ const Cart = () => {
     }, [userDetails]);
 
     // Get cart products
-    useFocusEffect(
-        useCallback(() => {
-            setLoading(true);
-            getCartProducts();
-            setLoading(false);
-        }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
-    );
+    useEffect(() => {
+        setLoading(true);
+        getCartProducts();
+        setLoading(false);
+    }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
+
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         setLoading(true);
+    //         getCartProducts();
+    //         setLoading(false);
+    //     }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
+    // );
 
     // Animation for the continue button
     useEffect(() => {
@@ -131,15 +137,14 @@ const Cart = () => {
     // DecrementQuantity
     const decrementQuantity = async (id, quantity) => {
         try {
-            setChangeQuantityId(id); // Set the current deleting product ID
+            setChangeQuantityId(id);
             setQuantityLoading(true);
-            // Data object as per the API requirement
+
             const data = {
                 cart_id: id,
                 quantity: parseInt(quantity) - 1,
             };
 
-            // API Call using axios
             const response = await axios.post(`/user/cart/update`, data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -148,12 +153,9 @@ const Cart = () => {
 
             console.log('responseQuantityMinus', response);
             if (response?.data?.status) {
-                getCartProducts(); // Refresh the cart data after a successful update
+                getCartProducts();
             }
-
-            // console.log('productDetails', response)
         } catch (error) {
-            // Handle error response
             if (error.response) {
                 Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
             } else {
@@ -173,7 +175,6 @@ const Cart = () => {
                 quantity: parseInt(quantity) + 1,
             };
 
-            // API Call using axios
             const response = await axios.post(`/user/cart/update`, data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -182,12 +183,9 @@ const Cart = () => {
 
             console.log('responseQuantityPlus', response);
             if (response?.data?.status) {
-                getCartProducts(); // Refresh the cart data after a successful update
+                getCartProducts();
             }
-
-            // console.log('productDetails', response)
         } catch (error) {
-            // Handle error response
             if (error?.response) {
                 Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
             } else {
@@ -400,5 +398,3 @@ const Cart = () => {
 }
 
 export default Cart;
-
-const styles = StyleSheet.create({});

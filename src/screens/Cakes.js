@@ -205,6 +205,7 @@ const Cakes = () => {
         };
 
         const wishlistedProduct = wishlistProducts?.find((wishlistItem) => wishlistItem.product_id === item?.id);
+        console.log('wishlistedProduct', wishlistedProduct);
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
@@ -254,7 +255,7 @@ const Cakes = () => {
                         )}
                         <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
                     </View>
-                    
+
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
                         <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
