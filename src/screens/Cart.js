@@ -43,22 +43,19 @@ const Cart = () => {
     // getCartProducts
     const getCartProducts = useCallback(async () => {
         try {
-            // Set authorization header dynamically
             axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
 
-            // Fetch cart products
             const response = await axios.get('/user/cart/fetch');
 
-            // Update state with fetched products
             if (response?.data?.status) {
                 setCartProducts(response?.data?.data);
                 setLoading(false);
             }
         } catch (error) {
-            Alert.alert('Error', error.message || 'Failed to fetch cart data.'); // Alert with error message
+            Alert.alert('Error', error.message || 'Failed to fetch cart data.');
         } finally {
             setQuantityLoading(false);
-            setLoading(false)
+            setLoading(false);
         }
     }, [userDetails]);
 
@@ -68,7 +65,7 @@ const Cart = () => {
             setLoading(true);
             getCartProducts();
             setLoading(false);
-        }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart]) // Dependencies to watch for changes
+        }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
     );
 
     // Animation for the continue button
@@ -77,12 +74,12 @@ const Cart = () => {
             Animated.loop(
                 Animated.sequence([
                     Animated.timing(moveAnim, {
-                        toValue: 10, // Move to the right by 10 units
+                        toValue: 10,
                         duration: 500,
                         useNativeDriver: true,
                     }),
                     Animated.timing(moveAnim, {
-                        toValue: 0, // Move back to the left
+                        toValue: 0,
                         duration: 500,
                         useNativeDriver: true,
                     }),
@@ -150,7 +147,9 @@ const Cart = () => {
             });
 
             console.log('responseQuantityMinus', response);
-            getCartProducts(); // Refresh the cart data after a successful update
+            if (response?.data?.status) {
+                getCartProducts(); // Refresh the cart data after a successful update
+            }
 
             // console.log('productDetails', response)
         } catch (error) {
@@ -310,23 +309,27 @@ const Cart = () => {
                                             }
                                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
                                                 <Icon2 name="scale" size={13} color={backIconColor} style={{}} />
-                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item.size} {item.unit}</Text>
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item?.size} {item?.unit}</Text>
                                             </View>
                                         </View>
 
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
-                                            {/* minus */}
+                                            {/* Minus */}
                                             <TouchableOpacity disabled={item?.quantity === 1} onPress={() => decrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="minus" size={13} color={'#000'} />
                                             </TouchableOpacity>
 
-                                            {quantityLoading && item?.quantity != 1 && changeQuantityId === item?.id ? (
-                                                <ActivityIndicator size='small' color={backIconColor} />
-                                            ) : (
-                                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>{item?.quantity}</Text>
-                                            )}
+                                            <View style={{ width: 8, justifyContent: 'center', alignItems: 'center' }}>
+                                                {quantityLoading && item?.quantity != 1 && changeQuantityId === item?.id ? (
+                                                    <ActivityIndicator size='small' color={backIconColor} />
+                                                ) : (
+                                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>
+                                                        {item?.quantity}
+                                                    </Text>
+                                                )}
+                                            </View>
 
-                                            {/* plus */}
+                                            {/* Plus */}
                                             <TouchableOpacity onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
