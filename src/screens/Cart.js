@@ -19,13 +19,9 @@ const Cart = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
-    console.log('userDetails', userDetails);
+    // console.log('userDetails', userDetails);
 
     const moveAnim = useRef(new Animated.Value(0)).current;
-
-    const dispatch = useDispatch();
-
-    const [quantity, setQuantity] = useState(1);
 
     const [loading, setLoading] = useState(false);
 
@@ -62,6 +58,7 @@ const Cart = () => {
             Alert.alert('Error', error.message || 'Failed to fetch cart data.'); // Alert with error message
         } finally {
             setQuantityLoading(false);
+            setLoading(false)
         }
     }, [userDetails]);
 
@@ -134,8 +131,6 @@ const Cart = () => {
             } else {
                 Alert.alert("Error", "Network error. Please check your internet connection and try again.");
             }
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -246,8 +241,8 @@ const Cart = () => {
                     {loading && (
                         <FlatList
                             data={[1, 1, 1, 1, 1]}
-                            renderItem={() => (
-                                <View style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
+                            renderItem={(index) => (
+                                <View key={index} style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
                                     {/* Title Shimmer */}
                                     <ShimmerPlaceHolder
                                         LinearGradient={LinearGradient}
