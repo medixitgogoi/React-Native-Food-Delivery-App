@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const OrderPlaced = ({ route }) => {
 
-    console.log('route', route?.params?.data);
+    console.log('route', route);
+    const address = route?.params?.selectedAddress.address;
 
     const deliveryAddress = "Flat 23B, Sunshine Apartments, 2nd Street, Sector 10, New Town, Kolkata, West Bengal, 700156"; // Example address
 
@@ -54,7 +55,7 @@ const OrderPlaced = ({ route }) => {
                             Delivering To:
                         </Text>
                         <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6e6e6e', marginTop: 5, textAlign: 'center', paddingHorizontal: 10 }}>
-                            {deliveryAddress}
+                            {address}
                         </Text>
                     </View>
 
