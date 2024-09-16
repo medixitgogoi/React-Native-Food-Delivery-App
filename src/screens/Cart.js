@@ -106,26 +106,23 @@ const Cart = () => {
     // DeleteItemFromCart
     const deleteItemFromCart = async (id) => {
         try {
-            setDeletingProductId(id); // Set the current deleting product ID
+            setDeletingProductId(id);
             setLoading(true);
-            // Data object as per the API requirement
+
             const data = {
                 cart_id: id,
             };
 
-            // API Call using axios
             const response = await axios.post(`/user/cart/delete`, data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
-            // console.log('responseDelete', response);
-            getCartProducts(); // Refresh the cart data after deleting an item
-
-            // console.log('productDetails', response)
+            if (response?.data?.status) {
+                getCartProducts();
+            }
         } catch (error) {
-            // Handle error response
             if (error.response) {
                 Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
             } else {
@@ -197,8 +194,6 @@ const Cart = () => {
             }
         }
     }
-
-    console.log('cartProducts', cartProducts);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
