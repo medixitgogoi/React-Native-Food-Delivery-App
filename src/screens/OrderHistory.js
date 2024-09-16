@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image } from 'react-native';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -6,10 +6,11 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { orders } from '../utils/orders';
-import { reporter } from '../../metro.config';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -17,10 +18,30 @@ const OrderHistory = () => {
 
     const navigation = useNavigation();
 
+    const userDetails = useSelector(state => state.user);
+
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const getOrders = async () => {
+            try {
+                setLoading(true);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                const response = await axios.get('/user/order/fetch');
+                console.log('orders', response);
+                return response; // Return data inside the try block after receiving the response
+            } catch (error) {
+                Alert.alert("Error", error.message); // Add a title to the alert
+                return null; // Return null in case of error
+            } finally {
+                setLoading(false);
+            }
+        }
+        getOrders();
+    }, [])
 
     const renderOrder = ({ item }) => {
         <View key={item.id}>

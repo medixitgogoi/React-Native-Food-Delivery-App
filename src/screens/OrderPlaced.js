@@ -4,13 +4,15 @@ import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { backIconColor, darkGreen } from '../utils/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { toFormData } from 'axios';
 
-const OrderPlaced = ({ route }) => {
+const OrderPlaced = ({ route, navigation }) => {
 
     console.log('route', route);
-    const address = route?.params?.selectedAddress.address;
 
-    const deliveryAddress = "Flat 23B, Sunshine Apartments, 2nd Street, Sector 10, New Town, Kolkata, West Bengal, 700156"; // Example address
+    const address = route?.params?.selectedAddress?.address;
+    const deliveryCharge = route?.params?.data?.delivery_charge;
+    const totalPrice = parseInt(route?.params?.data?.total_price);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -34,7 +36,7 @@ const OrderPlaced = ({ route }) => {
                         <Text style={{ fontSize: responsiveFontSize(3), fontWeight: '700', color: '#000', }}>
                             Order Placed!
                         </Text>
-                        <Text style={{ fontSize: responsiveFontSize(2), color: '#000', fontWeight: '400', textAlign: 'center', marginVertical: 5 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2), color: '#000', fontWeight: '500', textAlign: 'center', marginVertical: 5 }}>
                             Thank you for your order. Your food is on its way.
                         </Text>
                     </View>
@@ -44,22 +46,32 @@ const OrderPlaced = ({ route }) => {
                         <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>
                             Estimated Delivery Time:
                         </Text>
-                        <Text style={{ fontSize: responsiveFontSize(2.2), color: darkGreen, marginTop: 5, fontWeight: '600' }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.2), color: backIconColor, marginTop: 5, fontWeight: '600' }}>
                             30-40 minutes
                         </Text>
                     </View>
 
                     {/* Delivery Address */}
                     <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 40 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000', textAlign: 'center' }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textAlign: 'center' }}>
                             Delivering To:
                         </Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#6e6e6e', marginTop: 5, textAlign: 'center', paddingHorizontal: 10 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2), color: backIconColor, marginTop: 3, textAlign: 'center', paddingHorizontal: 10, fontWeight: '500' }}>
                             {address}
                         </Text>
                     </View>
 
-                    {/* Track Order Button */}
+                    {/* Total price */}
+                    <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 40 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textAlign: 'center' }}>
+                            Total Price:
+                        </Text>
+                        <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: '800', color: backIconColor, marginTop: 3, textAlign: 'center', paddingHorizontal: 10 }}>
+                            ₹{deliveryCharge + totalPrice}
+                        </Text>
+                    </View>
+
+                    {/* Back to Home Button */}
                     <TouchableOpacity
                         style={{
                             backgroundColor: '#5EC467',
@@ -68,6 +80,7 @@ const OrderPlaced = ({ route }) => {
                             borderRadius: 30,
                             marginTop: 70
                         }}
+                        onPress={() => navigation.navigate('Home')}
                     >
                         <Text style={{ color: '#fff', fontSize: responsiveFontSize(2), fontWeight: '600' }}>Back to Home</Text>
                     </TouchableOpacity>
