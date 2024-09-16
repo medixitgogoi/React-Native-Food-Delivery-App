@@ -165,9 +165,9 @@ const Cart = () => {
     // IncrementQuantity
     const incrementQuantity = async (id, quantity) => {
         try {
-            setChangeQuantityId(id); // Set the current deleting product ID
+            setChangeQuantityId(id);
             setQuantityLoading(true);
-            // Data object as per the API requirement
+
             const data = {
                 cart_id: id,
                 quantity: parseInt(quantity) + 1,
@@ -181,7 +181,9 @@ const Cart = () => {
             });
 
             console.log('responseQuantityPlus', response);
-            getCartProducts();
+            if (response?.data?.status) {
+                getCartProducts(); // Refresh the cart data after a successful update
+            }
 
             // console.log('productDetails', response)
         } catch (error) {
@@ -218,7 +220,7 @@ const Cart = () => {
             {/* Content */}
             <ScrollView>
                 {/* Fallback image */}
-                {cartProducts?.length === 0 && (
+                {!loading && cartProducts?.length === 0 && (
                     <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                         <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
                         <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your cart!</Text>
