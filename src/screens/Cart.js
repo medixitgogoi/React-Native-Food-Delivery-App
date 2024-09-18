@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import Toast from 'react-native-toast-message';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -100,7 +101,7 @@ const Cart = () => {
     };
 
     // DeleteItemFromCart
-    const deleteItemFromCart = async (id) => {
+    const deleteItemFromCart = async (id, name) => {
         try {
             setLoading(true);
             setDeletingProductId(id);
@@ -117,6 +118,11 @@ const Cart = () => {
 
             if (response?.data?.status) {
                 getCartProducts();
+                Toast.show({
+                    type: 'error', // Other types include 'error' and 'info'
+                    text1: 'Item deletion',
+                    text2: `${name} deleted successfully`
+                });
             }
         } catch (error) {
             if (error.response) {
@@ -257,43 +263,6 @@ const Cart = () => {
                         </View>
                     ))}
 
-                    {loading && (
-                        <FlatList
-                            data={[1, 1, 1, 1, 1]}
-                            renderItem={() => (
-                                <View style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
-                                    {/* Title Shimmer */}
-                                    <ShimmerPlaceHolder
-                                        LinearGradient={LinearGradient}
-                                        style={{ width: '60%', height: 20, marginBottom: 10, borderRadius: 4 }}
-                                    />
-
-                                    {/* Detail Lines Shimmer */}
-                                    <ShimmerPlaceHolder
-                                        LinearGradient={LinearGradient}
-                                        style={{ width: '40%', height: 15, marginBottom: 5, borderRadius: 4 }}
-                                    />
-                                    <ShimmerPlaceHolder
-                                        LinearGradient={LinearGradient}
-                                        style={{ width: '50%', height: 15, marginBottom: 5, borderRadius: 4 }}
-                                    />
-
-                                    {/* Quantity Buttons and Price */}
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                        <ShimmerPlaceHolder
-                                            LinearGradient={LinearGradient}
-                                            style={{ width: 80, height: 30, borderRadius: 6 }}
-                                        />
-                                        <ShimmerPlaceHolder
-                                            LinearGradient={LinearGradient}
-                                            style={{ width: 50, height: 30, borderRadius: 6 }}
-                                        />
-                                    </View>
-                                </View>
-                            )}
-                        />
-                    )}
-
                     {/* Content */}
                     {!loading && cartProducts?.map(item => (
                         <View key={item.id} style={{ marginBottom: 12, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
@@ -368,7 +337,7 @@ const Cart = () => {
                             </View>
 
                             {/* Delete button */}
-                            <TouchableOpacity onPress={() => deleteItemFromCart(item?.id)} style={{ elevation: 2, position: 'absolute', width: 30, height: 30, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={() => deleteItemFromCart(item?.id, item?.name)} style={{ elevation: 2, position: 'absolute', width: 30, height: 30, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                 {deletingProductId === item?.id ? (
                                     <ActivityIndicator size='small' color={'#cb202d'} />
                                 ) : (
