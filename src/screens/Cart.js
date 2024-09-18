@@ -92,12 +92,12 @@ const Cart = () => {
 
     // CartProductsSubTotal
     const cartProductsSubTotal = () => {
-        return cartProducts.reduce((total, item) => total + item.quantity * item.price, 0);
+        return cartProducts?.reduce((total, item) => total + item.quantity * item.mrp, 0);
     };
 
     // TotalDiscount
     const totalDiscount = () => {
-        return cartProducts.reduce((total, item) => total + (item.mrp - item.price), 0);
+        return cartProducts.reduce((total, item) => total + ((item.mrp - item.price) * item.quantity), 0);
     };
 
     // DeleteItemFromCart
@@ -118,11 +118,6 @@ const Cart = () => {
 
             if (response?.data?.status) {
                 getCartProducts();
-                Toast.show({
-                    type: 'error', // Other types include 'error' and 'info'
-                    text1: 'Item deletion',
-                    text2: `${name} deleted successfully`
-                });
             }
         } catch (error) {
             if (error.response) {
@@ -164,33 +159,42 @@ const Cart = () => {
     }
 
     // IncrementQuantity
-    const incrementQuantity = async (id, quantity) => {
-        try {
-            setChangeQuantityId(id);
-            setQuantityLoading(true);
-
-            const data = {
-                cart_id: id,
-                quantity: parseInt(quantity) + 1,
-            };
-
-            const response = await axios.post(`/user/cart/update`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+    const incrementQuantity = async (id, quantity, stock, name) => {
+        if (parseInt(quantity) + 1 > parseInt(stock)) {
+            Toast.show({
+                type: 'error',
+                text1: 'Stock Limit Reached',
+                text2: `You can only add up to ${stock} units of ${name}.`
             });
+        } else {
+            try {
+                setChangeQuantityId(id);
+                setQuantityLoading(true);
 
-            console.log('responseQuantityPlus', response);
-            if (response?.data?.status) {
-                getCartProducts();
-            }
-        } catch (error) {
-            if (error?.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                const data = {
+                    cart_id: id,
+                    quantity: parseInt(quantity) + 1,
+                };
+
+                const response = await axios.post(`/user/cart/update`, data, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('responseQuantityPlus', response);
+                if (response?.data?.status) {
+                    getCartProducts();
+                }
+            } catch (error) {
+                if (error?.response) {
+                    Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+                } else {
+                    Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                }
             }
         }
+
     }
 
     return (
@@ -281,6 +285,7 @@ const Cart = () => {
                                 {/* To be changed */}
                                 <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingTop: 3 }}>
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                                        {/* Type */}
                                         <View style={{ flexDirection: 'column', gap: 3 }}>
                                             {item?.type != "2" && (
                                                 item?.veg_type === '1' ? (
@@ -306,6 +311,7 @@ const Cart = () => {
                                             </View>
                                         </View>
 
+                                        {/* Quantity updations */}
                                         <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                                             {/* Minus */}
                                             <TouchableOpacity disabled={item?.quantity === 1} onPress={() => decrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
@@ -324,7 +330,7 @@ const Cart = () => {
                                             </View>
 
                                             {/* Plus */}
-                                            <TouchableOpacity disabled={parseInt(item?.quantity) > parseInt(item?.in_stock)} onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
+                                            <TouchableOpacity onPress={() => incrementQuantity(item?.id, item?.quantity, item?.in_stock, item?.name)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
                                         </View>
@@ -351,27 +357,30 @@ const Cart = () => {
                 {/* Cart Total */}
                 {cartProducts?.length != 0 && (
                     <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
-                        <View style={{ backgroundColor: darkGreen, paddingTop: 10, }}>
-                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2.5), fontWeight: '700', textTransform: 'uppercase', color: '#000', marginBottom: 10 }}>Cart Total</Text>
+                        {/* Heading */}
+                        <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', alignItems: 'flex-end', gap: 4, justifyContent: 'center' }}>
+                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2), fontWeight: '600', textTransform: 'uppercase', color: '#000', marginBottom: 10 }}>Price Details</Text>
+                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(1.9), fontWeight: '500', color: '#000', marginBottom: 10 }}>({cartProducts?.length} items)</Text>
                         </View>
 
-                        <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 8 }}>
+                        {/* Total Details */}
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 7 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Sub Total</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹{cartProductsSubTotal()}.00</Text>
+                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Total MRP</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹{cartProductsSubTotal()}.00</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Delivery Charges</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹50.00</Text>
+                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Discount on MRP</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹{totalDiscount()}.00</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#A0A0A0', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Discount</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>₹{totalDiscount()}.00</Text>
+                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Delivery Charges</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹20.00</Text>
                             </View>
                             <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 5 }}>
-                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>Final Total</Text>
-                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.3) }}>₹{cartProductsSubTotal() + 50 - totalDiscount()}.00</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 3 }}>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>Total Amount</Text>
+                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>₹{cartProductsSubTotal() + 20 - totalDiscount()}.00</Text>
                             </View>
                         </View>
                     </View>
@@ -380,10 +389,10 @@ const Cart = () => {
 
             {/* Continue button */}
             {cartProducts?.length !== 0 && (
-                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 10, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
-                    <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 10, backgroundColor: lightGreen, borderRadius: 12, width: '95%', padding: 10, height: 40, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
+                    <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.2), textTransform: 'uppercase' }}>Continue</Text>
                     <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
-                        <Icon4 name="arrowright" size={23} color={backIconColor} />
+                        <Icon4 name="arrowright" size={20} color={backIconColor} />
                     </Animated.View>
                 </TouchableOpacity>
             )}
