@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Animated, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { StatusBar, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Animated, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -19,11 +19,10 @@ const Cart = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
-    // console.log('userDetails', userDetails);
 
     const moveAnim = useRef(new Animated.Value(0)).current;
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [cartProducts, setCartProducts] = useState([]);
 
@@ -69,7 +68,7 @@ const Cart = () => {
 
     useFocusEffect(
         useCallback(() => {
-            setLoading(true);
+            // setLoading(true);
             getCartProducts();
             setLoading(false);
         }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
@@ -236,8 +235,8 @@ const Cart = () => {
                     {loading && (
                         <FlatList
                             data={[1, 1, 1, 1, 1]}
-                            renderItem={(index) => (
-                                <View key={index} style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
+                            renderItem={() => (
+                                <View style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
                                     {/* Title Shimmer */}
                                     <ShimmerPlaceHolder
                                         LinearGradient={LinearGradient}
@@ -267,7 +266,6 @@ const Cart = () => {
                                     </View>
                                 </View>
                             )}
-                            keyExtractor={(item) => item.key}
                         />
                     )}
 
@@ -332,7 +330,7 @@ const Cart = () => {
                                             </View>
 
                                             {/* Plus */}
-                                            <TouchableOpacity disabled={item?.quantity > item?.in_stock} onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
+                                            <TouchableOpacity disabled={parseInt(item?.quantity) > parseInt(item?.in_stock)} onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
                                         </View>
