@@ -23,7 +23,7 @@ const Cart = () => {
 
     const moveAnim = useRef(new Animated.Value(0)).current;
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [cartProducts, setCartProducts] = useState([]);
 
@@ -50,6 +50,8 @@ const Cart = () => {
             if (response?.data?.status) {
                 setCartProducts(response?.data?.data);
             }
+
+            console.log('cartProducts', response?.data?.data);
         } catch (error) {
             Alert.alert('Error', error.message || 'Failed to fetch cart data.');
         } finally {
@@ -59,19 +61,19 @@ const Cart = () => {
     }, [userDetails]);
 
     // Get cart products
-    useEffect(() => {
-        setLoading(true);
-        getCartProducts();
-        setLoading(false);
-    }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
+    // useFocusEffect(() => {
+    //     setLoading(true);
+    //     getCartProducts();
+    //     setLoading(false);
+    // }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         setLoading(true);
-    //         getCartProducts();
-    //         setLoading(false);
-    //     }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
-    // );
+    useFocusEffect(
+        useCallback(() => {
+            setLoading(true);
+            getCartProducts();
+            setLoading(false);
+        }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
+    );
 
     // Animation for the continue button
     useEffect(() => {
@@ -330,7 +332,7 @@ const Cart = () => {
                                             </View>
 
                                             {/* Plus */}
-                                            <TouchableOpacity onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
+                                            <TouchableOpacity disabled={item?.quantity > item?.in_stock} onPress={() => incrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
                                         </View>

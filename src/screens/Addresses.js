@@ -22,12 +22,10 @@ const Addresses = () => {
     const userDetails = useSelector(state => state.user);
 
     const [addresses, setAddresses] = useState([]);
-    const [editAddress, setEditAddress] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
-    const [modal, setModal] = useState(false);
-
+    // get Addresses
     useFocusEffect(
         useCallback(() => {
             const getAddresses = async () => {
@@ -43,7 +41,6 @@ const Addresses = () => {
             };
 
             getAddresses();
-
         }, [userDetails])
     );
 
