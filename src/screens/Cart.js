@@ -49,7 +49,6 @@ const Cart = () => {
 
             if (response?.data?.status) {
                 setCartProducts(response?.data?.data);
-                setLoading(false);
             }
         } catch (error) {
             Alert.alert('Error', error.message || 'Failed to fetch cart data.');
@@ -313,15 +312,16 @@ const Cart = () => {
                                             </View>
                                         </View>
 
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                                             {/* Minus */}
                                             <TouchableOpacity disabled={item?.quantity === 1} onPress={() => decrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
                                                 <Icon3 name="minus" size={13} color={'#000'} />
                                             </TouchableOpacity>
 
-                                            <View style={{ width: 8, justifyContent: 'center', alignItems: 'center' }}>
+                                            {/* Quantity */}
+                                            <View style={{ width: 27, justifyContent: 'center', alignItems: 'center' }}>
                                                 {quantityLoading && item?.quantity != 1 && changeQuantityId === item?.id ? (
-                                                    <ActivityIndicator size='small' color={backIconColor} />
+                                                    <ActivityIndicator size='small' color={darkGreen} />
                                                 ) : (
                                                     <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>
                                                         {item?.quantity}

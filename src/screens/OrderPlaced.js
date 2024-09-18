@@ -1,10 +1,11 @@
 import { View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { backIconColor, darkGreen } from '../utils/colors';
+import { background, backIconColor, darkGreen } from '../utils/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { toFormData } from 'axios';
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 const OrderPlaced = ({ route, navigation }) => {
 
@@ -14,6 +15,14 @@ const OrderPlaced = ({ route, navigation }) => {
     const deliveryCharge = route?.params?.data?.delivery_charge;
     const totalPrice = parseInt(route?.params?.data?.total_price);
 
+    // Status Bar setters
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor("#fff"); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar
@@ -21,6 +30,7 @@ const OrderPlaced = ({ route, navigation }) => {
                 backgroundColor="#fff"
                 barStyle="dark-content"
             />
+
             <LinearGradient
                 colors={['#fff', '#c7e6c4']}
                 style={{ flex: 1 }}
@@ -78,7 +88,10 @@ const OrderPlaced = ({ route, navigation }) => {
                             paddingVertical: 15,
                             paddingHorizontal: 40,
                             borderRadius: 30,
-                            marginTop: 70
+                            marginTop: 70,
+                            elevation: 5,
+                            borderColor: backIconColor,
+                            borderWidth: 1
                         }}
                         onPress={() => navigation.navigate('Home')}
                     >
