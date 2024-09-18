@@ -28,7 +28,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ProductDetails = ({ route }) => {
 
     const product = route?.params?.data;
-    console.log('product', product);
+    // console.log('product', product);
 
     const userDetails = useSelector(state => state.user);
 
@@ -140,6 +140,7 @@ const ProductDetails = ({ route }) => {
     useEffect(() => {
         const getCartProducts = async () => {
             try {
+                setLoading(true);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
                 const response = await axios.get('/user/cart/fetch');
 
@@ -147,10 +148,12 @@ const ProductDetails = ({ route }) => {
             } catch (error) {
                 Alert.alert("Error", error.message); // Add a title to the alert
                 return null; // Return null in case of error
+            } finally {
+                setLoading(false);
             }
         }
         getCartProducts();
-    }, []);
+    }, [addToCartTrigger]);
 
     // DiscountPercentage
     const discountPercentage = (price, discountedPrice) => {
