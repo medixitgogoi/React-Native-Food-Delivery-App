@@ -22,7 +22,7 @@ const Cart = () => {
 
     const moveAnim = useRef(new Animated.Value(0)).current;
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [cartProducts, setCartProducts] = useState([]);
 
@@ -59,18 +59,11 @@ const Cart = () => {
         }
     }, [userDetails]);
 
-    // Get cart products
-    // useFocusEffect(() => {
-    //     setLoading(true);
-    //     getCartProducts();
-    //     setLoading(false);
-    // }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
-
+    // getCartProducts useFocusEffect()
     useFocusEffect(
         useCallback(() => {
-            // setLoading(true);
+            setLoading(true);
             getCartProducts();
-            setLoading(false);
         }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
     );
 
@@ -109,8 +102,8 @@ const Cart = () => {
     // DeleteItemFromCart
     const deleteItemFromCart = async (id) => {
         try {
-            setDeletingProductId(id);
             setLoading(true);
+            setDeletingProductId(id);
 
             const data = {
                 cart_id: id,
@@ -232,6 +225,38 @@ const Cart = () => {
                 {/* Cart products */}
                 <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
                     {/* Skeleton loader */}
+                    {loading && [1, 1, 1, 1, 1].map((item, index) => (
+                        <View key={index} style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
+                            {/* Title Shimmer */}
+                            <ShimmerPlaceHolder
+                                LinearGradient={LinearGradient}
+                                style={{ width: '60%', height: 20, marginBottom: 10, borderRadius: 4 }}
+                            />
+
+                            {/* Detail Lines Shimmer */}
+                            <ShimmerPlaceHolder
+                                LinearGradient={LinearGradient}
+                                style={{ width: '40%', height: 15, marginBottom: 5, borderRadius: 4 }}
+                            />
+                            <ShimmerPlaceHolder
+                                LinearGradient={LinearGradient}
+                                style={{ width: '50%', height: 15, marginBottom: 5, borderRadius: 4 }}
+                            />
+
+                            {/* Quantity Buttons and Price */}
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                                <ShimmerPlaceHolder
+                                    LinearGradient={LinearGradient}
+                                    style={{ width: 80, height: 30, borderRadius: 6 }}
+                                />
+                                <ShimmerPlaceHolder
+                                    LinearGradient={LinearGradient}
+                                    style={{ width: 50, height: 30, borderRadius: 6 }}
+                                />
+                            </View>
+                        </View>
+                    ))}
+
                     {loading && (
                         <FlatList
                             data={[1, 1, 1, 1, 1]}
