@@ -164,7 +164,9 @@ const Cart = () => {
             Toast.show({
                 type: 'error',
                 text1: 'Stock Limit Reached',
-                text2: `You can only add up to ${stock} units of ${name}.`
+                text2: `You can only add up to ${stock} units of ${name}.`,
+                position: 'top', // Adjusts to the bottom by default
+                topOffset: 10, // Moves the toast 10 units down from the bottom
             });
         } else {
             try {
@@ -198,7 +200,7 @@ const Cart = () => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 60 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 50 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={background}
@@ -279,7 +281,7 @@ const Cart = () => {
                             <View style={{ flex: 3, flexDirection: 'column', height: '100%', paddingHorizontal: 10, paddingVertical: 6 }}>
                                 {/* Name */}
                                 <View style={{ flex: 0.8, width: '92%' }}>
-                                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
+                                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
                                 </View>
 
                                 {/* To be changed */}
@@ -290,24 +292,24 @@ const Cart = () => {
                                             {item?.type != "2" && (
                                                 item?.veg_type === '1' ? (
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                                        <View style={{ width: 13, height: 13, borderColor: '#000', borderWidth: 1.2, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                            <View style={{ backgroundColor: 'green', width: 6, height: 6, borderRadius: 10, }}>
+                                                        <View style={{ width: 12, height: 12, borderColor: '#000', borderWidth: 1.2, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <View style={{ backgroundColor: 'green', width: 5, height: 5, borderRadius: 10, }}>
                                                             </View>
                                                         </View>
-                                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Veg</Text>
+                                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.6) }}>Veg</Text>
                                                     </View>
                                                 ) : (
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                                        <View style={{ width: 13, height: 13, borderColor: '#000', borderWidth: 1.2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                                            <Icon4 name="caretup" size={9} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                                        <View style={{ width: 12, height: 12, borderColor: '#000', borderWidth: 1.2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                                            <Icon4 name="caretup" size={8} color={'#cb202d'} style={{ margin: 0, paddingTop: 1, alignSelf: 'center' }} />
                                                         </View>
-                                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>Non-veg</Text>
+                                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.6) }}>Non-veg</Text>
                                                     </View>
                                                 ))
                                             }
                                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                                                <Icon2 name="scale" size={13} color={backIconColor} style={{}} />
-                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.7) }}>{item?.size} {item?.unit}</Text>
+                                                <Icon2 name="scale-bathroom" size={14} color={'#000'} style={{ marginLeft: -1.5 }} />
+                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.6) }}>{item?.size} {item?.unit}</Text>
                                             </View>
                                         </View>
 
@@ -334,20 +336,21 @@ const Cart = () => {
                                                 <Icon3 name="plus" size={13} color={'#000'} />
                                             </TouchableOpacity>
                                         </View>
-
                                     </View>
+
+                                    {/* Price */}
                                     <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingBottom: 25 }}>
-                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.4) }}>₹{item?.price * item?.quantity}.00</Text>
+                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{item?.price * item?.quantity}.00</Text>
                                     </View>
                                 </View>
                             </View>
 
                             {/* Delete button */}
-                            <TouchableOpacity onPress={() => deleteItemFromCart(item?.id, item?.name)} style={{ elevation: 2, position: 'absolute', width: 30, height: 30, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={() => deleteItemFromCart(item?.id, item?.name)} style={{ elevation: 2, position: 'absolute', width: 27, height: 27, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                 {deletingProductId === item?.id ? (
                                     <ActivityIndicator size='small' color={'#cb202d'} />
                                 ) : (
-                                    <Icon name="delete" size={20} color={'#cb202d'} />
+                                    <Icon name="delete" size={18} color={'#cb202d'} />
                                 )}
                             </TouchableOpacity>
                         </View>
@@ -360,7 +363,7 @@ const Cart = () => {
                         {/* Heading */}
                         <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', alignItems: 'flex-end', gap: 4, justifyContent: 'center' }}>
                             <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2), fontWeight: '600', textTransform: 'uppercase', color: '#000', marginBottom: 10 }}>Price Details</Text>
-                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(1.9), fontWeight: '500', color: '#000', marginBottom: 10 }}>({cartProducts?.length} items)</Text>
+                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(1.9), fontWeight: '500', color: '#000', marginBottom: 10 }}>({cartProducts?.length} {cartProducts?.length === 1 ? 'item' : 'items'})</Text>
                         </View>
 
                         {/* Total Details */}
