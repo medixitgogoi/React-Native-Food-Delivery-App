@@ -11,8 +11,11 @@ import { orders } from '../utils/orders';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 
 const { width: screenWidth } = Dimensions.get('window');
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const OrderHistory = () => {
 
@@ -27,7 +30,7 @@ const OrderHistory = () => {
 
     const [orders, setOrders] = useState(null);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     // Fetch Orders
     useFocusEffect(
@@ -127,7 +130,7 @@ const OrderHistory = () => {
                 </LinearGradient>
             </TouchableOpacity>
         )
-    }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 0 }}>
@@ -167,9 +170,60 @@ const OrderHistory = () => {
             {/* Content */}
             <View style={{ flex: 1 }}>
                 {loading ? (
-                    <View>
-                        <Text style={{ color: '#000', textAlign: 'center' }}>Loading ...</Text>
-                    </View>
+                    <FlatList
+                        data={[1, 1, 1, 1, 1]}
+                        renderItem={({ index }) => (
+                            <View key={index} style={{ backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
+                                {/* Details */}
+                                <View style={{ flexDirection: 'column', gap: 8, backgroundColor: '#EDF7EC', padding: 10, borderRadius: 12 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                        <ShimmerPlaceHolder
+                                            style={{ width: 30, height: 30, backgroundColor: '#F9FAFD', borderRadius: 8 }}
+                                            autoRun={true}
+                                            visible={false} // Set to true when data is loaded
+                                        />
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                            <ShimmerPlaceHolder
+                                                style={{ width: '90%', height: 20, backgroundColor: '#F9FAFD', borderRadius: 5 }}
+                                                autoRun={true}
+                                                visible={false}
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
+
+                                {/* Date, status, price */}
+                                <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                            <ShimmerPlaceHolder
+                                                style={{ width: '90%', height: 20, backgroundColor: '#F9FAFD', borderRadius: 5 }}
+                                                autoRun={true}
+                                                visible={false}
+                                            />
+                                        </View>
+                                        <ShimmerPlaceHolder
+                                            style={{ width: 80, height: 20, backgroundColor: '#F9FAFD', borderRadius: 5 }}
+                                            autoRun={true}
+                                            visible={false}
+                                        />
+                                    </View>
+                                </View>
+
+                                {/* Divider */}
+                                <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }} />
+
+                                {/* Reorder button */}
+                                <ShimmerPlaceHolder
+                                    style={{ borderRadius: 12, height: 35, width: '100%', paddingHorizontal: 0, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                                    autoRun={true}
+                                    visible={false}
+                                />
+                            </View>
+                        )}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
+                        keyExtractor={(item) => item.key}
+                    />
                 ) : (
                     <FlatList
                         data={filteredNames}
