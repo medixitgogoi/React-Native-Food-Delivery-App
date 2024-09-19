@@ -77,7 +77,7 @@ const OrderHistory = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('OrderDetails', { detail: item })} style={{ backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
                 {/* Details */}
-                <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12, }}>
+                <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12 }}>
                     {item.order_detail.map(it => (
                         <View key={it?.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             {/* Image */}
@@ -87,8 +87,8 @@ const OrderHistory = () => {
 
                             {/* Details */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>{it?.product_name}</Text>
-                                <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x {it?.quantity}</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>{it?.product_name}</Text>
+                                <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2) }}>x {it?.quantity}</Text>
                             </View>
                         </View>
                     ))}
@@ -107,9 +107,9 @@ const OrderHistory = () => {
                     </View>
 
                     {/* Price */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '600' }}>₹{item?.total_price}.00</Text>
-                        <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2), fontWeight: '600' }}>₹{item?.total_price}.00</Text>
+                        <Icon name="keyboard-arrow-right" size={19} color={'#000'} />
                     </View>
                 </View>
 
@@ -118,14 +118,14 @@ const OrderHistory = () => {
 
                 {/* Reorder button */}
                 <LinearGradient
-                    colors={[darkGreen, '#3a9f43']}
+                    colors={['#76cd7d', '#3a9f43']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 >
-                    <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                        <Icon name="replay" size={23} color={'#fff'} />
-                        <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
+                    <TouchableOpacity style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                        <Icon name="replay" size={22} color={'#fff'} />
+                        <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
                     </TouchableOpacity>
                 </LinearGradient>
             </TouchableOpacity>
@@ -240,14 +240,3 @@ const OrderHistory = () => {
 }
 
 export default OrderHistory;
-
-{/* <FlatList
-    data={filteredNames}
-    renderItem={renderOrder}
-    keyExtractor={item => item.id.toString()}
-    numColumns={2}
-    showsVerticalScrollIndicator={false}
-    contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
-    columnWrapperStyle={{ justifyContent: 'space-between' }}
-    key={2}
-/> */}
