@@ -37,10 +37,12 @@ const Home = () => {
     const [groceries, setGroceries] = useState(null);
 
     // Status bar setters
-    useLayoutEffect(() => {
-        StatusBar.setBackgroundColor(darkGreen);
-        StatusBar.setBarStyle('dark-content');
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
+    );
 
     // fetch products
     useEffect(() => {
@@ -71,7 +73,7 @@ const Home = () => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, paddingHorizontal: 12 }}>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Welcome</Text>
