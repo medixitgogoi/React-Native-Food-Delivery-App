@@ -14,7 +14,9 @@ import Geocoder from 'react-native-geocoder';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-const AddNewAddress = () => {
+const AddNewAddress = ({ route }) => {
+
+    const to = route?.params?.to;
 
     const navigation = useNavigation();
 
@@ -164,7 +166,7 @@ const AddNewAddress = () => {
             // Handle success response
             if (response.data.status) {
 
-                navigation.navigate('Checkout');
+                navigation.navigate(to);
 
                 setName('');
                 setContact('')
