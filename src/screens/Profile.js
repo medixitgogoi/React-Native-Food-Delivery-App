@@ -80,7 +80,7 @@ const Profile = () => {
                         </View>
 
                         {/* Profile */}
-                        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 12 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, backgroundColor: '#FFFFFF', paddingVertical: 9, paddingHorizontal: 10, borderRadius: 12, elevation: 1 }}>
                             <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                 <Icon name="person-outline" size={15} color={backIconColor} style={{}} />
                             </View>
@@ -89,7 +89,7 @@ const Profile = () => {
                         </TouchableOpacity>
 
                         {/* Food Orders */}
-                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 12 }}>
+                        <View style={{ elevation: 1, width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 12 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
                                 <View style={{ backgroundColor: backIconColor, height: 24, width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
@@ -119,7 +119,7 @@ const Profile = () => {
                         </View>
 
                         {/* More */}
-                        <View style={{ width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 12 }}>
+                        <View style={{ elevation: 1, width: '100%', gap: 8, marginTop: 10, backgroundColor: '#FFFFFF', paddingVertical: 12, borderRadius: 12 }}>
                             {/* Headline */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 9 }}>
                                 <View style={{ backgroundColor: backIconColor, height: 24, width: 3, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}></View>
@@ -170,13 +170,13 @@ const Profile = () => {
                         <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2), marginBottom: 30 }}>Are you sure you want to log out?</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                             {/* Cancel */}
-                            <TouchableOpacity onPress={() => setIsLoggingOut(false)} style={{ width: '50%', backgroundColor: lightGreen, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 13, paddingHorizontal: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 5 }}>
-                                <Text style={{ color: backIconColor, fontWeight: '600' }}>Cancel</Text>
+                            <TouchableOpacity onPress={() => setIsLoggingOut(false)} style={{ width: '50%', backgroundColor: lightGreen, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 13, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 5 }}>
+                                <Text style={{ color: backIconColor, fontWeight: '600' }}>No, Thank You</Text>
                             </TouchableOpacity>
 
                             {/* Confirm */}
-                            <TouchableOpacity onPress={logOutHandler} style={{ width: '50%', backgroundColor: backIconColor, paddingVertical: 13, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 5 }}>
-                                <Text style={{ color: '#fff', fontWeight: '600' }}>Confirm</Text>
+                            <TouchableOpacity onPress={logOutHandler} style={{ width: '50%', backgroundColor: backIconColor, paddingVertical: 13, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 5 }}>
+                                <Text style={{ color: '#fff', fontWeight: '600' }}>Yes, See you again!</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
