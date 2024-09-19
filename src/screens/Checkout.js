@@ -59,13 +59,23 @@ const Checkout = () => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
                     const response = await axios.get('/user/shippingAddress/fetch');
 
-                    console.log('addresssss', response?.data?.data);
-                    setAddresses(response?.data?.data);
+                    const allAddresses = response?.data?.data;
+                    console.log('Addresses:', allAddresses);
 
-                    const defaultAddress = response?.data?.data?.find(item => item.is_default === '2');
-                    setSelectedAddress(defaultAddress);
+                    // Separate default and non-default addresses
+                    const defaultAddresses = allAddresses.filter(item => item.is_default === '2');
+                    const nonDefaultAddresses = allAddresses.filter(item => item.is_default !== '2');
+
+                    // Combine default addresses at the top and non-default at the bottom
+                    const sortedAddresses = [...defaultAddresses, ...nonDefaultAddresses];
+                    setAddresses(sortedAddresses);
+
+                    // Automatically select the first default address
+                    if (defaultAddresses.length > 0) {
+                        setSelectedAddress(defaultAddresses[0]);
+                    }
                 } catch (error) {
-                    Alert.alert(error.message)
+                    Alert.alert(error.message);
                 } finally {
                     setLoading(false);
                 }
@@ -109,7 +119,7 @@ const Checkout = () => {
         } finally {
             setContineLoading(false);
         }
-    }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
@@ -124,7 +134,7 @@ const Checkout = () => {
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                     <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
                 </TouchableOpacity>
-                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.5), textAlign: 'center', textTransform: 'uppercase' }}>Checkout</Text>
+                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.3), textAlign: 'center', textTransform: 'uppercase' }}>Checkout</Text>
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.navigate('Profile')}>
                     <Icon2 name="account" size={23} color={'#000'} />
                 </TouchableOpacity>
@@ -137,12 +147,12 @@ const Checkout = () => {
                         {/* Heading */}
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                <Icon4 name="bookmark" size={20} color={backIconColor} />
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
+                                <Icon4 name="bookmark" size={19} color={backIconColor} />
+                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Saved Addresses</Text>
                             </View>
                             <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress', { to: 'Checkout' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                <Text style={{ color: darkGreen, fontWeight: '600', fontSize: responsiveFontSize(2) }}>Add New</Text>
-                                <Icon3 name="plus" size={15} color={darkGreen} />
+                                <Text style={{ color: darkGreen, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Add New</Text>
+                                <Icon3 name="plus" size={14} color={darkGreen} />
                             </TouchableOpacity>
                         </View>
 
@@ -187,35 +197,35 @@ const Checkout = () => {
                         {/* Content */}
                         {!loading && addresses?.length > 0 && addresses?.map(item => (
                             <TouchableOpacity onPress={() => setSelectedAddress(item)} key={item?.id} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
-                                <View style={{ flex: 0.1, justifyContent: 'center', flexDirection: 'row' }}>
+                                <View style={{ flex: 0.09, justifyContent: 'center', flexDirection: 'row' }}>
                                     {selectedAddress?.id === item?.id ? (
                                         <View>
-                                            <Icon2 name="checkbox-marked" size={20} color={darkGreen} />
+                                            <Icon2 name="checkbox-marked" size={19} color={darkGreen} />
                                         </View>
                                     ) : (
                                         <View>
-                                            <Icon2 name="checkbox-blank-outline" size={20} color={'#868c95'} />
+                                            <Icon2 name="checkbox-blank-outline" size={19} color={'#868c95'} />
                                         </View>
                                     )}
                                 </View>
 
-                                <View style={{ flex: 0.88, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 5, alignItems: 'flex-start' }}>
+                                <View style={{ flex: 0.89, paddingHorizontal: 4, flexDirection: 'column', justifyContent: 'space-between', gap: 5, alignItems: 'flex-start' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 4 }}>
-                                            <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item.name},</Text>
-                                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>{item.address_type === '2' ? 'Work' : 'Home'}</Text>
+                                            <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2) }}>{item.name},</Text>
+                                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.6) }}>{item.address_type === '2' ? 'Work' : 'Home'}</Text>
                                         </View>
                                         {item.is_default === '2' && (
                                             <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.8, borderRadius: 4, paddingVertical: 2, paddingHorizontal: 4, marginTop: 2 }}>
-                                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '600' }}>Default</Text>
+                                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.3), fontWeight: '600' }}>Default</Text>
                                             </View>
                                         )}
                                     </View>
 
-                                    <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{`${item.address}.`}{item.landmark && ` Nearby ${item.landmark}`}</Text>
+                                    <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.7), fontWeight: '500' }}>{`${item.address}.`}{item.landmark && ` Nearby ${item.landmark}`}</Text>
 
                                     {item.address_2 && (
-                                        <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item.address_2}</Text>
+                                        <Text style={{ color: selectedAddress?.id === item?.id ? backIconColor : '#878787', textAlign: 'justify', fontSize: responsiveFontSize(1.7), fontWeight: '500' }}>{item.address_2}</Text>
                                     )}
                                 </View>
                             </TouchableOpacity>
@@ -227,8 +237,8 @@ const Checkout = () => {
                         <View style={{ marginVertical: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
-                                    <Icon name="account-balance-wallet" size={24} color={backIconColor} />
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Payment</Text>
+                                    <Icon name="account-balance-wallet" size={21} color={backIconColor} />
+                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Payment</Text>
                                 </View>
                             </View>
                         </View>
