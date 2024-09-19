@@ -65,7 +65,7 @@ const Addresses = () => {
 
             {/* Add new addresss */}
             {addresses?.length != 0 && (
-                <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress')} style={{ elevation: 2, marginHorizontal: 10, marginVertical: 10, paddingVertical: 11, gap: 4, borderRadius: 12, backgroundColor: darkGreen, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress', { to: 'Addresses' })} style={{ elevation: 2, marginHorizontal: 10, marginVertical: 10, paddingVertical: 11, gap: 4, borderRadius: 12, backgroundColor: darkGreen, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Add a New Address</Text>
                     <Icon3 name="plussquare" size={20} color={'#000'} />
                 </TouchableOpacity>
