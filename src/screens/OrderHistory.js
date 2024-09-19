@@ -1,12 +1,12 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image, FlatList } from 'react-native';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { orders } from '../utils/orders';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
@@ -23,34 +23,114 @@ const OrderHistory = () => {
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
+    const [filteredNames, setFilteredNames] = useState([]);
+
+    const [orders, setOrders] = useState(null);
+
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const getOrders = async () => {
-            try {
-                setLoading(true);
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/order/fetch');
-                console.log('orders', response);
-                return response; // Return data inside the try block after receiving the response
-            } catch (error) {
-                Alert.alert("Error", error.message); // Add a title to the alert
-                return null; // Return null in case of error
-            } finally {
-                setLoading(false);
+    // Fetch Orders
+    useFocusEffect(
+        useCallback(() => {
+            const getOrders = async () => {
+                try {
+                    setLoading(true);
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+
+                    const response = await axios.get('/user/order/fetch');
+                    console.log('orders', response?.data?.data);
+
+                    setOrders(response?.data?.data || []);
+                    setFilteredNames(response?.data?.data || []);
+                } catch (error) {
+                    Alert.alert("Error", error.message); // Add a title to the alert
+                } finally {
+                    setLoading(false);
+                }
             }
-        }
-        getOrders();
-    }, [])
+            getOrders();
+        }, [])
+    );
 
     const renderOrder = ({ item }) => {
-        <View key={item.id}>
-            <Text style={{ color: '#000' }}>{item.name}</Text>
-        </View>
+
+        const timestamp = item?.order_detail[0]?.created_at;
+
+        const dateObj = new Date(timestamp);
+
+        const day = dateObj.getUTCDate();
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const month = monthNames[dateObj.getUTCMonth()];
+        const year = dateObj.getUTCFullYear();
+        const formattedDate = `${day} ${month}, ${year}`;
+
+        // Format the time as 'HH:MMam/pm'
+        let hours = dateObj.getUTCHours();
+        const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+        const period = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12 || 12; // Convert to 12-hour format
+        const formattedTime = `${hours}:${minutes}${period}`;
+
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('OrderDetails', { detail: item })} style={{ backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
+                {/* Details */}
+                <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12, }}>
+                    {item.order_detail.map(it => (
+                        <View key={it?.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                            {/* Image */}
+                            <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
+                                <Image source={require('../assets/orange.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
+                            </View>
+
+                            {/* Details */}
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>{it?.product_name}</Text>
+                                <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x {it?.quantity}</Text>
+                            </View>
+                        </View>
+                    ))}
+                </View>
+
+                {/* Date, status, price */}
+                <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>{formattedDate} at {formattedTime}</Text>
+                        </View>
+                        <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
+                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>Delivered</Text>
+                        </View>
+                    </View>
+
+                    {/* Price */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 1 }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '600' }}>₹{item?.total_price}.00</Text>
+                        <Icon name="keyboard-arrow-right" size={20} color={'#000'} />
+                    </View>
+                </View>
+
+                {/* Divider */}
+                <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }}></View>
+
+                {/* Reorder button */}
+                <LinearGradient
+                    colors={[darkGreen, '#3a9f43']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                        <Icon name="replay" size={23} color={'#fff'} />
+                        <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
+                    </TouchableOpacity>
+                </LinearGradient>
+            </TouchableOpacity>
+        )
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 0 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={background}
@@ -84,277 +164,36 @@ const OrderHistory = () => {
                 </View>
             </View>
 
-            {/* Temporary */}
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ paddingHorizontal: 13 }}>
-                    {/* Card */}
-                    <View style={{ marginVertical: 5, backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
-                        {/* Details */}
-                        <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12, }}>
-                            {/* Orange */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/orange.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Orange</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 2</Text>
-                                </View>
-                            </View>
-
-                            {/* Chicken fried rice */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/rice.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Chicken fried rice</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 1</Text>
-                                </View>
-                            </View>
-
-                            {/* Chicken fried rice */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/cake.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Chocolate cake</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 1</Text>
-                                </View>
-                            </View>
-                        </View>
-
-                        {/* Date, status, price */}
-                        <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>28 Sept, 2024 at 9:14pm</Text>
-                                </View>
-                                <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
-                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>Delivered</Text>
-                                </View>
-                            </View>
-
-                            {/* Price */}
-                            <View style={{}}>
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '600' }}>₹1350.00</Text>
-                            </View>
-                        </View>
-
-                        {/* Divider */}
-                        <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }}></View>
-
-                        {/* Reorder button */}
-                        <LinearGradient
-                            colors={[darkGreen, '#3a9f43']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
-                        >
-                            <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                                <Icon name="replay" size={23} color={'#fff'} />
-                                <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-                    </View>
-
-                    {/* Card */}
-                    <View style={{ marginVertical: 5, backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
-                        {/* Details */}
-                        <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12, }}>
-                            {/* Orange */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/orange.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Mango</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 2</Text>
-                                </View>
-                            </View>
-
-                            {/* Chicken fried rice */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/rice.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Egg fried rice</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 1</Text>
-                                </View>
-                            </View>
-
-                            {/* Chicken fried rice */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/cake.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Chocolate Truffle cake</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 1</Text>
-                                </View>
-                            </View>
-                        </View>
-
-                        {/* Date, status, price */}
-                        <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>8 Sept, 2024 at 12:14pm</Text>
-                                </View>
-                                <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
-                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>Delivered</Text>
-                                </View>
-                            </View>
-
-                            {/* Price */}
-                            <View style={{}}>
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '600' }}>₹1150.00</Text>
-                            </View>
-                        </View>
-
-                        {/* Divider */}
-                        <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }}></View>
-
-                        {/* Reorder button */}
-                        <LinearGradient
-                            colors={[darkGreen, '#3a9f43']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
-                        >
-                            <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                                <Icon name="replay" size={23} color={'#fff'} />
-                                <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-                    </View>
-
-                    {/* Card */}
-                    <View style={{ marginVertical: 5, backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
-                        {/* Details */}
-                        <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12, }}>
-                            {/* Orange */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/orange.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Banana</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 3</Text>
-                                </View>
-                            </View>
-
-                            {/* Chicken fried rice */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/rice.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Pork noodles</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 1</Text>
-                                </View>
-                            </View>
-
-                            {/* Chicken fried rice */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                {/* Image */}
-                                <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                    <Image source={require('../assets/cake.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
-                                </View>
-
-                                {/* Details */}
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Vanilla cake</Text>
-                                    <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2.1) }}>x 1</Text>
-                                </View>
-                            </View>
-                        </View>
-
-                        {/* Date, status, price */}
-                        <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>28 Aug, 2024 at 5:10pm</Text>
-                                </View>
-                                <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
-                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>Delivered</Text>
-                                </View>
-                            </View>
-
-                            {/* Price */}
-                            <View style={{}}>
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '600' }}>₹130.00</Text>
-                            </View>
-                        </View>
-
-                        {/* Divider */}
-                        <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }}></View>
-
-                        {/* Reorder button */}
-                        <LinearGradient
-                            colors={[darkGreen, '#3a9f43']}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
-                        >
-                            <TouchableOpacity style={{ gap: 3, height: 42, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                                <Icon name="replay" size={23} color={'#fff'} />
-                                <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.2) }}>Reorder</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-                    </View>
-                </View>
-            </ScrollView>
-
             {/* Content */}
-            {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
+            <View style={{ flex: 1 }}>
                 {loading ? (
                     <View>
                         <Text style={{ color: '#000', textAlign: 'center' }}>Loading ...</Text>
                     </View>
                 ) : (
                     <FlatList
-                        data={orders}
+                        data={filteredNames}
                         renderItem={renderOrder}
                         keyExtractor={item => item.id.toString()}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
-                    // columnWrapperStyle={{ justifyContent: 'space-between' }}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
                     />
                 )}
-            </View> */}
+            </View>
 
         </SafeAreaView>
     )
 }
 
 export default OrderHistory;
+
+{/* <FlatList
+    data={filteredNames}
+    renderItem={renderOrder}
+    keyExtractor={item => item.id.toString()}
+    numColumns={2}
+    showsVerticalScrollIndicator={false}
+    contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+    columnWrapperStyle={{ justifyContent: 'space-between' }}
+    key={2}
+/> */}
