@@ -222,7 +222,7 @@ const OrderHistory = () => {
                             </View>
                         )}
                         contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
-                        keyExtractor={(item) => item.key}
+                        keyExtractor={(item, index) => String(index)}
                     />
                 ) : (
                     <FlatList
