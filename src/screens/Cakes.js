@@ -166,7 +166,6 @@ const Cakes = () => {
         }
     }, [wishlistProducts]);
 
-
     const deleteFromWishlist = useCallback(async (id) => {
         try {
             setLoading(true);
@@ -268,7 +267,7 @@ const Cakes = () => {
     // console.log('wishlistProducts', wishlistProducts);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, }}>
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}
@@ -366,7 +365,7 @@ const Cakes = () => {
             </View>
 
             {/* Content */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
+            <View style={{ flex: 1 }}>
                 {loading ? (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1, 1]}
@@ -391,11 +390,11 @@ const Cakes = () => {
                         data={filteredNames}
                         renderItem={renderOrder}
                         keyExtractor={item => item.id.toString()}
+                        key={2}
                         numColumns={2}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 10, paddingTop: 5 }}
                         columnWrapperStyle={{ justifyContent: 'space-between' }}
-                        key={2}
                     />
                 )}
             </View>
