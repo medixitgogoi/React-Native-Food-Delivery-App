@@ -140,6 +140,10 @@ const Checkout = () => {
                                 <Icon4 name="bookmark" size={20} color={backIconColor} />
                                 <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '700' }}>Saved Addresses</Text>
                             </View>
+                            <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress', { to: 'Checkout' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                <Text style={{ color: darkGreen, fontWeight: '600', fontSize: responsiveFontSize(2) }}>Add New</Text>
+                                <Icon3 name="plus" size={15} color={darkGreen} />
+                            </TouchableOpacity>
                         </View>
 
                         {/* Skeleton loader */}
