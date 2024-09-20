@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image, FlatList, Linking } from 'react-native';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -43,6 +43,11 @@ const OrderDetails = ({ route }) => {
     const period = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12 || 12; // Convert to 12-hour format
     const formattedTime = `${hours}:${minutes}${period}`;
+
+    const handleCallPress = () => {
+        const phoneNumber = '+916003526622'; // Add your phone number here
+        Linking.openURL(`tel:${phoneNumber}`);
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -180,8 +185,8 @@ const OrderDetails = ({ route }) => {
                     <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 6 }}></View>
 
                     {/* Call Skercart */}
-                    <TouchableOpacity style={{ marginVertical: 15, alignSelf: 'center' }}>
-                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 111111111)</Text>
+                    <TouchableOpacity onPress={handleCallPress} style={{ marginVertical: 15, alignSelf: 'center' }}>
+                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 6003526622)</Text>
                     </TouchableOpacity>
 
                     {/* Divider */}
