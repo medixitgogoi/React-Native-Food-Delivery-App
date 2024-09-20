@@ -54,7 +54,7 @@ const OrderHistory = () => {
 
     const renderOrder = ({ item }) => {
 
-        const timestamp = item?.order_detail[0]?.created_at;
+        const timestamp = item?.address_detail?.created_at;
 
         const dateObj = new Date(timestamp);
 

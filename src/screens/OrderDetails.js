@@ -27,6 +27,23 @@ const OrderDetails = ({ route }) => {
         }, [])
     );
 
+    const timestamp = detail?.address_detail?.created_at;
+
+    const dateObj = new Date(timestamp);
+
+    const day = dateObj.getUTCDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[dateObj.getUTCMonth()];
+    const year = dateObj.getUTCFullYear();
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    // Format the time as 'HH:MMam/pm'
+    let hours = dateObj.getUTCHours();
+    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+    const period = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedTime = `${hours}:${minutes}${period}`;
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
@@ -45,22 +62,22 @@ const OrderDetails = ({ route }) => {
 
             {/* Content */}
             <ScrollView style={{ paddingHorizontal: 14, marginTop: 15 }}>
-                <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: '600', color: '#000' }}>Your Order</Text>
+                <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Your Order</Text>
 
                 {/* Divider */}
                 {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
 
                 {detail?.order_detail?.map(it => (
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
+                    <View key={it?.id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
                         <View style={{ flexDirection: 'column', gap: 2 }}>
-                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', }}>{it?.product_name}</Text>
-                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000' }}>Quantity: {it?.product_size}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>Quantity: {it?.product_size}</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
                                 <View style={{ backgroundColor: lightGreen, width: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 18, borderRadius: 3, borderColor: '#40af4a', elevation: 1, borderWidth: 0.8 }}>
                                     <Text style={{ fontSize: responsiveFontSize(1.5), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
                                 </View>
-                                <Text style={{ fontSize: 12, color: '#000' }}>x</Text>
-                                <Text style={{ fontSize: 12, color: '#000' }}>₹{it?.price}</Text>
+                                <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>x</Text>
+                                <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{it?.price}</Text>
                             </View>
                         </View>
                         <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>₹{it?.price * parseInt(it?.quantity)}</Text>
@@ -78,18 +95,18 @@ const OrderDetails = ({ route }) => {
                 </View> */}
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Total MRP</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.total_mrp}.00</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Total MRP</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.total_mrp}.00</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Discount on MRP</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}.00</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Discount on MRP</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.total_mrp - detail?.total_price}.00</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Delivery Charge</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.delivery_charge}.00</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Delivery Charge</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.delivery_charge}.00</Text>
                 </View>
 
                 {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
@@ -98,8 +115,8 @@ const OrderDetails = ({ route }) => {
                 </View> */}
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Additional charges</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.addl_charge}.00</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Additional charges</Text>
+                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.addl_charge}.00</Text>
                 </View>
 
                 {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -120,30 +137,49 @@ const OrderDetails = ({ route }) => {
                     <Text style={{ fontSize: responsiveFontSize(1.6), fontWeight: '500', color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}</Text>
                 </View>
 
+                {/* Order Details */}
                 <View style={{ marginTop: 15 }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: '600', color: '#000' }}>Order Details</Text>
+                    <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Order Details</Text>
                 </View>
 
                 {/* Divider */}
                 <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View>
 
+                {/* Order Number */}
                 <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>Order Number</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '600' }}>{detail?.o_uu_id || 123577373}</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Order Number</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.o_uu_id || 123577373}</Text>
                 </View>
 
-                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>Order Number</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '600' }}>{detail?.o_uu_id || 123577373}</Text>
+                {/* Payment */}
+                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Paid using : Using Upi_qr (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
                 </View>
 
-                <Text style={{ fontSize: 12, color: '#000' }}>Date: Today</Text>
+                {/* Date */}
+                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Date</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{formattedDate} at {formattedTime}</Text>
+                </View>
 
-                <TouchableOpacity style={{ padding: 16, backgroundColor: '#E74C3C', marginVertical: 16, borderRadius: 8 }}>
-                    <Text style={{ fontSize: 14, color: '#fff', textAlign: 'center' }}>Repeat Order</Text>
-                    <Text style={{ fontSize: 12, color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
-                </TouchableOpacity>
+                {/* Phone Number */}
+                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Phone Number</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.address_detail?.mobile}</Text>
+                </View>
+
+                {/* Deliver to */}
+                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Deliver to</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.address_detail?.name} : {detail?.address_detail?.address}</Text>
+                </View>
             </ScrollView>
+
+            <TouchableOpacity style={{ padding: 16, backgroundColor: '#E74C3C', marginVertical: 16, borderRadius: 8, position: 'absolute', bottom: 0, width: '93%', alignSelf: 'center' }}>
+                <Text style={{ fontSize: 14, color: '#fff', textAlign: 'center' }}>Repeat Order</Text>
+                <Text style={{ fontSize: 12, color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
+            </TouchableOpacity>
 
         </SafeAreaView>
     )
