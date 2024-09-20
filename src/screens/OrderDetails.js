@@ -62,125 +62,153 @@ const OrderDetails = ({ route }) => {
 
             {/* Content */}
             <ScrollView style={{ paddingHorizontal: 14, marginTop: 15 }}>
-                <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Your Order</Text>
+                <View style={{ paddingBottom: 75 }}>
+                    <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Your Order</Text>
 
-                {/* Divider */}
-                {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
+                    {/* Divider */}
+                    {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
 
-                {detail?.order_detail?.map(it => (
-                    <View key={it?.id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
-                        <View style={{ flexDirection: 'column', gap: 2 }}>
-                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
-                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>Quantity: {it?.product_size}</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
-                                <View style={{ backgroundColor: lightGreen, width: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 18, borderRadius: 3, borderColor: '#40af4a', elevation: 1, borderWidth: 0.8 }}>
-                                    <Text style={{ fontSize: responsiveFontSize(1.5), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
+                    {detail?.order_detail?.map(it => (
+                        <View key={it?.id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
+                            <View style={{ flexDirection: 'column', gap: 2 }}>
+                                <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
+                                <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>Quantity: {it?.product_size}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
+                                    <View style={{ backgroundColor: lightGreen, width: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 18, borderRadius: 3, borderColor: '#40af4a', elevation: 1, borderWidth: 0.8 }}>
+                                        <Text style={{ fontSize: responsiveFontSize(1.5), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>x</Text>
+                                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{it?.price}</Text>
                                 </View>
-                                <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>x</Text>
-                                <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{it?.price}</Text>
                             </View>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>₹{it?.price * parseInt(it?.quantity)}</Text>
                         </View>
-                        <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>₹{it?.price * parseInt(it?.quantity)}</Text>
+                    ))}
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: '500', color: '#000' }}>Item total</Text>
+                        <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: '500', color: '#000' }}>₹{detail?.total_price}</Text>
                     </View>
-                ))}
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: '500', color: '#000' }}>Item total</Text>
-                    <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: '500', color: '#000' }}>₹{detail?.total_price}</Text>
-                </View>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                        <Text style={{ fontSize: 12, color: '#000' }}>Coupon - (JUST4U)</Text>
+                        <Text style={{ fontSize: 12, color: '#5EC467' }}>You saved ₹120.00</Text>
+                    </View> */}
 
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Coupon - (JUST4U)</Text>
-                    <Text style={{ fontSize: 12, color: '#5EC467' }}>You saved ₹120.00</Text>
-                </View> */}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Total MRP</Text>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.total_mrp}.00</Text>
+                    </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Total MRP</Text>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.total_mrp}.00</Text>
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Discount on MRP</Text>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.total_mrp - detail?.total_price}.00</Text>
+                    </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Discount on MRP</Text>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.total_mrp - detail?.total_price}.00</Text>
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Delivery Charge</Text>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.delivery_charge}.00</Text>
+                    </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Delivery Charge</Text>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.delivery_charge}.00</Text>
-                </View>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                        <Text style={{ fontSize: 12, color: '#000' }}>Restaurant Packaging Charges</Text>
+                        <Text style={{ fontSize: 12, color: '#000' }}>₹30.00</Text>
+                    </View> */}
 
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Restaurant Packaging Charges</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹30.00</Text>
-                </View> */}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8, paddingLeft: 5 }}>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Additional charges</Text>
+                        <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.addl_charge}.00</Text>
+                    </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8, paddingLeft: 5 }}>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>Additional charges</Text>
-                    <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{detail?.addl_charge}.00</Text>
-                </View>
-
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Cash round off</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹0.37</Text>
                 </View> */}
 
-                {/* Divider */}
-                <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 5 }}></View>
+                    {/* Divider */}
+                    <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 5 }}></View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>Grand Total</Text>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00</Text>
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>Grand Total</Text>
+                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00</Text>
+                    </View>
 
-                <View style={{ paddingVertical: 4, paddingHorizontal: 8, backgroundColor: lightGreen, marginVertical: 8, borderColor: darkGreen, borderWidth: 1, borderRadius: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: backIconColor, fontWeight: '500' }}>Your total savings 🎉🎉</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.6), fontWeight: '500', color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}</Text>
-                </View>
+                    <View style={{ paddingVertical: 6, paddingHorizontal: 8, backgroundColor: lightGreen, marginVertical: 8, borderColor: darkGreen, borderWidth: 1, borderRadius: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: backIconColor, fontWeight: '500' }}>Your total savings 🎉🎉</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.6), fontWeight: '500', color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}</Text>
+                    </View>
 
-                {/* Order Details */}
-                <View style={{ marginTop: 15 }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Order Details</Text>
-                </View>
+                    {/* Order Details */}
+                    <View style={{ marginTop: 15 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Order Details</Text>
+                    </View>
 
-                {/* Divider */}
-                <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View>
+                    {/* Divider */}
+                    <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View>
 
-                {/* Order Number */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Order Number</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.o_uu_id || 123577373}</Text>
-                </View>
+                    {/* Order Number */}
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Order Number</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.o_uu_id || 123577373}</Text>
+                    </View>
 
-                {/* Payment */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Paid using : Using Upi_qr (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
-                </View>
+                    {/* Payment */}
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Paid using : Using Upi_qr (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
+                    </View>
 
-                {/* Date */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Date</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{formattedDate} at {formattedTime}</Text>
-                </View>
+                    {/* Date */}
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Date</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{formattedDate} at {formattedTime}</Text>
+                    </View>
 
-                {/* Phone Number */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Phone Number</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.address_detail?.mobile}</Text>
-                </View>
+                    {/* Phone Number */}
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Phone Number</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.address_detail?.mobile}</Text>
+                    </View>
 
-                {/* Deliver to */}
-                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Deliver to</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.address_detail?.name} : {detail?.address_detail?.address}</Text>
+                    {/* Deliver to */}
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginVertical: 10 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Deliver to</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.address_detail?.name} : {detail?.address_detail?.address}</Text>
+                    </View>
+
+                    {/* Divider */}
+                    <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 6 }}></View>
+
+                    {/* Call Skercart */}
+                    <TouchableOpacity style={{ marginVertical: 15, alignSelf: 'center' }}>
+                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 111111111)</Text>
+                    </TouchableOpacity>
+
+                    {/* Divider */}
+                    <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginBottom: 8 }}></View>
+
+                    {/* Footer */}
+                    <View style={{ flexDirection: 'column', marginTop: 6, gap: 3 }}>
+                        <Text style={{ color: offWhite, fontSize: responsiveHeight(1.7), fontWeight: '500' }}>Skercart</Text>
+                        <Image source={require('../assets/fssai.png')} style={{ width: 29, height: 18, resizeMode: 'contain', opacity: 0.5 }} />
+                        <Text style={{ color: offWhite, fontSize: responsiveHeight(1.7), fontWeight: '500' }}>Lic. No. 37453728745363</Text>
+                    </View>
+
                 </View>
             </ScrollView>
 
-            <TouchableOpacity style={{ padding: 16, backgroundColor: '#E74C3C', marginVertical: 16, borderRadius: 8, position: 'absolute', bottom: 0, width: '93%', alignSelf: 'center' }}>
-                <Text style={{ fontSize: 14, color: '#fff', textAlign: 'center' }}>Repeat Order</Text>
-                <Text style={{ fontSize: 12, color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
-            </TouchableOpacity>
-
+            {/* Repeat Order Button */}
+            <LinearGradient
+                colors={['#67c770', '#3a9f43']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ borderRadius: 12, height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, elevation: 2, position: 'absolute', bottom: 10, width: '93%', alignSelf: 'center' }}
+            >
+                <TouchableOpacity style={{ flexDirection: 'column', gap: 1 }}>
+                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', textAlign: 'center', fontWeight: '600' }}>Repeat Order</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
+                </TouchableOpacity>
+            </LinearGradient>
         </SafeAreaView>
     )
 }
