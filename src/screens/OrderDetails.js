@@ -16,14 +16,16 @@ const OrderDetails = ({ route }) => {
 
     const navigation = useNavigation();
 
-    // console.log('route', route?.params?.detail);
+    console.log('route', route?.params?.detail);
 
     const [detail, setDetail] = useState(null);
 
     // setDetail
-    useEffect(() => {
-        setDetail(route?.params?.detail);
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            setDetail(route?.params?.detail);
+        }, [])
+    );
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
@@ -41,35 +43,29 @@ const OrderDetails = ({ route }) => {
                 <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Order Summary</Text>
             </View>
 
-            <ScrollView style={{ padding: 16, backgroundColor: '#fff' }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <TouchableOpacity>
-                        <Text style={{ fontSize: 14, color: '#000' }}>{'<'}</Text>
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 14, color: '#000' }}>Support</Text>
-                </View>
+            {/* Content */}
+            <ScrollView style={{ padding: 14, }}>
+                <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: 'bold', color: '#000' }}>Your Order</Text>
 
-                <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: 'bold', color: '#000' }}>Your Order</Text>
+                {/* Divider */}
+                {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
 
-                {/* Item 1 */}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <View>
-                        <Text style={{ fontSize: 14, color: '#000' }}>Chicken Curry</Text>
-                        <Text style={{ fontSize: 12, color: '#000' }}>Quantity: Full</Text>
-                        <Text style={{ fontSize: 12, color: '#000' }}>1 X ₹340</Text>
+                {detail?.order_detail?.map(it => (
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
+                        <View style={{ flexDirection: 'column', gap: 2 }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000' }}>Quantity: {it?.product_size}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
+                                <View style={{ backgroundColor: lightGreen, paddingVertical: 1, paddingHorizontal: 5, borderRadius: 3, borderColor: darkGreen, elevation: 1, borderWidth: 0.7 }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.7), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
+                                </View>
+                                <Text style={{ fontSize: 12, color: '#000' }}>x</Text>
+                                <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{it?.price}.00</Text>
+                            </View>
+                        </View>
+                        <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000' , fontWeight: '500'}}>₹{it?.price * parseInt(it?.quantity)}.00</Text>
                     </View>
-                    <Text style={{ fontSize: 14, color: '#000' }}>₹340</Text>
-                </View>
-
-                {/* Item 2 */}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <View>
-                        <Text style={{ fontSize: 14, color: '#000' }}>Chicken Dry Fry</Text>
-                        <Text style={{ fontSize: 12, color: '#000' }}>Quantity: Half</Text>
-                        <Text style={{ fontSize: 12, color: '#000' }}>1 X ₹200</Text>
-                    </View>
-                    <Text style={{ fontSize: 14, color: '#000' }}>₹200</Text>
-                </View>
+                ))}
 
                 <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: 'bold', color: '#000' }}>Item total</Text>
 
