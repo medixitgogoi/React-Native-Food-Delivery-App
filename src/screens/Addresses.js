@@ -39,7 +39,6 @@ const Addresses = () => {
                     setLoading(false);
                 }
             };
-
             getAddresses();
         }, [userDetails])
     );
@@ -76,7 +75,7 @@ const Addresses = () => {
                 {/* Skeleton loader */}
                 {loading && (
                     <FlatList
-                        data={[1, 1, 1, 1, 1]}
+                        data={[1, 1, 1, 1, 1, 1]}
                         renderItem={() => (
                             <View style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
                                 {/* Shimmer for Checkbox */}
@@ -96,6 +95,7 @@ const Addresses = () => {
                             </View>
                         )}
                         keyExtractor={(item) => item.key}
+                        contentContainerStyle={{ paddingHorizontal: 10 }}
                     />
                 )}
 

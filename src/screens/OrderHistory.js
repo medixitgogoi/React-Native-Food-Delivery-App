@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image, FlatList } from 'react-native';
-import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, Alert, Image, FlatList } from 'react-native';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -7,13 +7,10 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import { useCallback, useEffect, useState } from 'react';
-import { orders } from '../utils/orders';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
-
-const { width: screenWidth } = Dimensions.get('window');
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -215,7 +212,7 @@ const OrderHistory = () => {
 
                                 {/* Reorder button */}
                                 <ShimmerPlaceHolder
-                                    style={{ borderRadius: 12, height: 35, width: '100%', paddingHorizontal: 0, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                                    style={{ borderRadius: 10, height: 35, width: '100%', paddingHorizontal: 0, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                                     autoRun={true}
                                     visible={false}
                                 />
