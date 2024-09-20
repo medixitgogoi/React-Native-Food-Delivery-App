@@ -64,8 +64,8 @@ const OrderDetails = ({ route }) => {
             </View>
 
             {/* Content */}
-            <ScrollView style={{ paddingHorizontal: 14, marginTop: 15 }}>
-                <View style={{ paddingBottom: 75 }}>
+            <ScrollView style={{ paddingHorizontal: 14, paddingTop: 15 }}>
+                <View style={{ paddingBottom: 80 }}>
                     <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Your Order</Text>
 
                     {/* Divider */}
@@ -205,11 +205,11 @@ const OrderDetails = ({ route }) => {
                 colors={['#67c770', '#3a9f43']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 12, height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, elevation: 2, position: 'absolute', bottom: 10, width: '93%', alignSelf: 'center' }}
+                style={{ borderRadius: 12, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, elevation: 2, position: 'absolute', bottom: 10, width: '93%', alignSelf: 'center' }}
             >
                 <TouchableOpacity style={{ flexDirection: 'column', gap: 1 }}>
                     <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', textAlign: 'center', fontWeight: '600' }}>Repeat Order</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.4), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
                 </TouchableOpacity>
             </LinearGradient>
         </SafeAreaView>
