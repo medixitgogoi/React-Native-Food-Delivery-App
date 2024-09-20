@@ -7,10 +7,7 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import { useCallback, useEffect, useState } from 'react';
-import { orders } from '../utils/orders';
 import LinearGradient from 'react-native-linear-gradient';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
 
 const OrderDetails = ({ route }) => {
 
@@ -44,8 +41,9 @@ const OrderDetails = ({ route }) => {
     hours = hours % 12 || 12; // Convert to 12-hour format
     const formattedTime = `${hours}:${minutes}${period}`;
 
+    // handleCallPress
     const handleCallPress = () => {
-        const phoneNumber = '+916003526622'; // Add your phone number here
+        const phoneNumber = '+910000000000'; // Add your phone number here
         Linking.openURL(`tel:${phoneNumber}`);
     };
 
@@ -186,7 +184,7 @@ const OrderDetails = ({ route }) => {
 
                     {/* Call Skercart */}
                     <TouchableOpacity onPress={handleCallPress} style={{ marginVertical: 15, alignSelf: 'center' }}>
-                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 6003526622)</Text>
+                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 00000000000)</Text>
                     </TouchableOpacity>
 
                     {/* Divider */}
