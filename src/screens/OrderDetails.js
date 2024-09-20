@@ -77,17 +77,17 @@ const OrderDetails = ({ route }) => {
                     <Text style={{ fontSize: 12, color: '#5EC467' }}>You saved ₹120.00</Text>
                 </View> */}
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Total MRP</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.total_mrp}.00</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Discount on MRP</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}.00</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, paddingLeft: 5 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Delivery Charge</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.delivery_charge}.00</Text>
                 </View>
@@ -97,12 +97,12 @@ const OrderDetails = ({ route }) => {
                     <Text style={{ fontSize: 12, color: '#000' }}>₹30.00</Text>
                 </View> */}
 
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Platform fee</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹6.00</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8, paddingLeft: 5 }}>
+                    <Text style={{ fontSize: 12, color: '#000' }}>Additional charges</Text>
+                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.addl_charge}.00</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Cash round off</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹0.37</Text>
                 </View> */}
@@ -124,10 +124,20 @@ const OrderDetails = ({ route }) => {
                     <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: 'bold', color: '#000' }}>Order Details</Text>
                 </View>
 
-                <View>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Order Number: 6174821894</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Date: Today</Text>
+                {/* Divider */}
+                <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View>
+
+                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>Order Number</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '600' }}>{detail?.o_uu_id || 123577373}</Text>
                 </View>
+                
+                <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>Order Number</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '600' }}>{detail?.o_uu_id || 123577373}</Text>
+                </View>
+
+                <Text style={{ fontSize: 12, color: '#000' }}>Date: Today</Text>
 
                 <TouchableOpacity style={{ padding: 16, backgroundColor: '#E74C3C', marginVertical: 16, borderRadius: 8 }}>
                     <Text style={{ fontSize: 14, color: '#fff', textAlign: 'center' }}>Repeat Order</Text>
