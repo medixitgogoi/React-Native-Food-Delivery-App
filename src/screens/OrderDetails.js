@@ -45,7 +45,7 @@ const OrderDetails = ({ route }) => {
 
             {/* Content */}
             <ScrollView style={{ paddingHorizontal: 14, marginTop: 15 }}>
-                <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: 'bold', color: '#000' }}>Your Order</Text>
+                <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: '600', color: '#000' }}>Your Order</Text>
 
                 {/* Divider */}
                 {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
@@ -121,7 +121,7 @@ const OrderDetails = ({ route }) => {
                 </View>
 
                 <View style={{ marginTop: 15 }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: 'bold', color: '#000' }}>Order Details</Text>
+                    <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: '600', color: '#000' }}>Order Details</Text>
                 </View>
 
                 {/* Divider */}
@@ -131,7 +131,7 @@ const OrderDetails = ({ route }) => {
                     <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>Order Number</Text>
                     <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '600' }}>{detail?.o_uu_id || 123577373}</Text>
                 </View>
-                
+
                 <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
                     <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>Order Number</Text>
                     <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '600' }}>{detail?.o_uu_id || 123577373}</Text>
