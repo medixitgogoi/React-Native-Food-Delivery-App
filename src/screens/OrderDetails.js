@@ -44,57 +44,60 @@ const OrderDetails = ({ route }) => {
             </View>
 
             {/* Content */}
-            <ScrollView style={{ padding: 14, }}>
+            <ScrollView style={{ paddingHorizontal: 14, marginTop: 15 }}>
                 <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: 'bold', color: '#000' }}>Your Order</Text>
 
                 {/* Divider */}
                 {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
 
                 {detail?.order_detail?.map(it => (
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
                         <View style={{ flexDirection: 'column', gap: 2 }}>
-                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', }}>{it?.product_name}</Text>
                             <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000' }}>Quantity: {it?.product_size}</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
-                                <View style={{ backgroundColor: lightGreen, paddingVertical: 1, paddingHorizontal: 5, borderRadius: 3, borderColor: darkGreen, elevation: 1, borderWidth: 0.7 }}>
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
+                                <View style={{ backgroundColor: lightGreen, width: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 18, borderRadius: 3, borderColor: '#40af4a', elevation: 1, borderWidth: 0.8 }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.5), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
                                 </View>
                                 <Text style={{ fontSize: 12, color: '#000' }}>x</Text>
-                                <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{it?.price}.00</Text>
+                                <Text style={{ fontSize: 12, color: '#000' }}>₹{it?.price}</Text>
                             </View>
                         </View>
-                        <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000' , fontWeight: '500'}}>₹{it?.price * parseInt(it?.quantity)}.00</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>₹{it?.price * parseInt(it?.quantity)}</Text>
                     </View>
                 ))}
 
-                <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: 'bold', color: '#000' }}>Item total</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: '500', color: '#000' }}>Item total</Text>
+                    <Text style={{ fontSize: 16, marginVertical: 8, fontWeight: '500', color: '#000' }}>₹{detail?.total_price}</Text>
+                </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Coupon - (JUST4U)</Text>
                     <Text style={{ fontSize: 12, color: '#5EC467' }}>You saved ₹120.00</Text>
+                </View> */}
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                    <Text style={{ fontSize: 12, color: '#000' }}>Total MRP</Text>
+                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.total_mrp}.00</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Taxes</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹24.63</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
+                    <Text style={{ fontSize: 12, color: '#000' }}>Discount on MRP</Text>
+                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}.00</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Delivery Charge</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹41.00</Text>
+                    <Text style={{ fontSize: 12, color: '#000' }}>₹{detail?.delivery_charge}.00</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Restaurant Packaging Charges</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹30.00</Text>
-                </View>
+                </View> */}
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Donate ₹2 to Feeding India</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹2.00</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Platform fee</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹6.00</Text>
                 </View>
@@ -102,19 +105,24 @@ const OrderDetails = ({ route }) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
                     <Text style={{ fontSize: 12, color: '#000' }}>Cash round off</Text>
                     <Text style={{ fontSize: 12, color: '#000' }}>₹0.37</Text>
-                </View>
+                </View> */}
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
+                {/* Divider */}
+                <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 5 }}></View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
                     <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>Grand Total</Text>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>₹524.00</Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00</Text>
                 </View>
 
-                <View style={{ padding: 16, backgroundColor: '#EDF7EC', marginVertical: 8 }}>
-                    <Text style={{ fontSize: 14, color: '#000' }}>Your total savings</Text>
-                    <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#000' }}>₹120</Text>
+                <View style={{ paddingVertical: 4, paddingHorizontal: 8, backgroundColor: lightGreen, marginVertical: 8, borderColor: darkGreen, borderWidth: 1, borderRadius: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: responsiveFontSize(1.7), color: backIconColor, fontWeight: '500' }}>Your total savings 🎉🎉</Text>
+                    <Text style={{ fontSize: responsiveFontSize(1.6), fontWeight: '500', color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}</Text>
                 </View>
 
-                <Text style={{ fontSize: 14, marginVertical: 8, color: '#000' }}>Order Details</Text>
+                <View style={{ marginTop: 15 }}>
+                    <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: 'bold', color: '#000' }}>Order Details</Text>
+                </View>
 
                 <View>
                     <Text style={{ fontSize: 12, color: '#000' }}>Order Number: 6174821894</Text>
