@@ -76,8 +76,8 @@ const Addresses = () => {
                 {loading && (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1]}
-                        renderItem={() => (
-                            <View style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
+                        renderItem={({ index}) => (
+                            <View key={index} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
                                 {/* Shimmer for Checkbox */}
                                 <ShimmerPlaceHolder style={{ flex: 0.1, height: 17, width: 17, borderRadius: 4 }} />
 
@@ -94,7 +94,7 @@ const Addresses = () => {
                                 </View>
                             </View>
                         )}
-                        keyExtractor={(item) => item.key}
+                        keyExtractor={(item, index) => String(index)}
                         contentContainerStyle={{ paddingHorizontal: 10 }}
                     />
                 )}
