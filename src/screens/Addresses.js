@@ -76,7 +76,7 @@ const Addresses = () => {
                 {loading && (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1]}
-                        renderItem={({ index}) => (
+                        renderItem={({ index }) => (
                             <View key={index} style={{ marginTop: 9, backgroundColor: '#fff', paddingHorizontal: 8, paddingVertical: 15, borderRadius: 12, flexDirection: 'row', alignItems: 'flex-start', elevation: 1, margin: 1 }}>
                                 {/* Shimmer for Checkbox */}
                                 <ShimmerPlaceHolder style={{ flex: 0.1, height: 17, width: 17, borderRadius: 4 }} />
@@ -117,14 +117,16 @@ const Addresses = () => {
                             <View style={{ flex: 0.9, paddingHorizontal: 5, flexDirection: 'column', justifyContent: 'space-between', gap: 13, alignItems: 'flex-start' }}>
                                 {/* Name, addressType */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', gap: 4 }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                                             <View style={{ backgroundColor: backIconColor, width: 23, height: 23, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 40 }}>
                                                 <Icon4 name="user-alt" size={12} color={'#fff'} />
                                             </View>
                                             <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.2) }}>{item?.name},</Text>
                                         </View>
-                                        <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>{item?.address_type === '2' ? 'Work' : 'Home'}</Text>
+                                        <View style={{ paddingBottom: 3 }}>
+                                            <Text style={{ color: backIconColor, fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>{item?.address_type === '2' ? 'Work' : 'Home'}</Text>
+                                        </View>
                                     </View>
                                     {item.is_default === '2' && (
                                         <View style={{ backgroundColor: lightGreen, borderColor: backIconColor, borderWidth: 0.8, borderRadius: 4, paddingVertical: 2, paddingHorizontal: 4, marginTop: 2 }}>
@@ -139,9 +141,9 @@ const Addresses = () => {
                                         <Icon5 name="location-sharp" size={15} color={'#fff'} />
                                     </View>
                                     <View style={{ flexDirection: 'column' }}>
-                                        <Text style={{ color: backIconColor, textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{`${item.address}.`}{item?.landmark && ` Nearby ${item.landmark}`}</Text>
-                                        {item.address_2 && (
-                                            <Text style={{ color: backIconColor, textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item?.address_2}</Text>
+                                        <Text style={{ color: '#000', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{`${item.address}.`}{item?.landmark && ` Nearby ${item.landmark}`}</Text>
+                                        {item?.address_2 && (
+                                            <Text style={{ color: '#000', textAlign: 'justify', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>{item?.address_2}</Text>
                                         )}
                                     </View>
                                 </View>
