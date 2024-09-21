@@ -65,7 +65,7 @@ const OrderDetails = ({ route }) => {
 
             {/* Content */}
             <ScrollView style={{ paddingHorizontal: 14, paddingTop: 15 }}>
-                <View style={{ paddingBottom: 80 }}>
+                <View style={{ paddingBottom: 100 }}>
                     <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Your Order</Text>
 
                     {/* Divider */}
@@ -76,6 +76,7 @@ const OrderDetails = ({ route }) => {
                             <View style={{ flexDirection: 'column', gap: 2 }}>
                                 <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
                                 <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>Quantity: {it?.product_size}</Text>
+                                {/* <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>MRP: {it?.mrp}</Text> */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
                                     <View style={{ backgroundColor: lightGreen, width: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 18, borderRadius: 3, borderColor: '#40af4a', elevation: 1, borderWidth: 0.8 }}>
                                         <Text style={{ fontSize: responsiveFontSize(1.5), fontWeight: '500', color: '#000' }}>{it?.quantity}</Text>
@@ -124,9 +125,9 @@ const OrderDetails = ({ route }) => {
                     </View>
 
                     {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 12, color: '#000' }}>Cash round off</Text>
-                    <Text style={{ fontSize: 12, color: '#000' }}>₹0.37</Text>
-                </View> */}
+                        <Text style={{ fontSize: 12, color: '#000' }}>Cash round off</Text>
+                        <Text style={{ fontSize: 12, color: '#000' }}>₹0.37</Text>
+                    </View> */}
 
                     {/* Divider */}
                     <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 5 }}></View>
@@ -191,7 +192,7 @@ const OrderDetails = ({ route }) => {
                     <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginBottom: 8 }}></View>
 
                     {/* Footer */}
-                    <View style={{ flexDirection: 'column', marginTop: 6, gap: 3 }}>
+                    <View style={{ flexDirection: 'column', marginTop: 10, gap: 3 }}>
                         <Text style={{ color: offWhite, fontSize: responsiveHeight(1.7), fontWeight: '500' }}>Skercart</Text>
                         <Image source={require('../assets/fssai.png')} style={{ width: 29, height: 18, resizeMode: 'contain', opacity: 0.5 }} />
                         <Text style={{ color: offWhite, fontSize: responsiveHeight(1.7), fontWeight: '500' }}>Lic. No. 37453728745363</Text>
