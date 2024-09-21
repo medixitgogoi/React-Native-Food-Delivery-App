@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
@@ -51,6 +50,7 @@ const Restaurants = () => {
 
     const [loading, setLoading] = useState(true);
 
+    // Debounced Search
     const debouncedSearch = useMemo(() => debounce((text) => {
         setFilteredNames(restaurants.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
     }, 300), [restaurants]);
@@ -65,8 +65,8 @@ const Restaurants = () => {
             setLoading(true); // Start loading
             try {
                 const data = await fetchRestaurants(userDetails); // Await the fetchProducts function
-                setRestaurants(data || []); // Ensure groceries are set properly
-                setFilteredNames(data || []); // Ensure groceries are set properly
+                setRestaurants(data.slice(0, 50) || []); // Ensure groceries are set properly
+                setFilteredNames(data.slice(0, 50) || []); // Ensure groceries are set properly
                 console.log('restaurants', restaurants); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
@@ -197,7 +197,7 @@ const Restaurants = () => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
                 {/* headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
