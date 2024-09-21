@@ -47,6 +47,9 @@ const Groceries = () => {
     const [filteredNames, setFilteredNames] = useState([]);
 
     const [groceries, setGroceries] = useState(null);
+    const [originalGroceries, setOriginalGroceries] = useState([]);
+
+    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
     const [loading, setLoading] = useState(true);
 
@@ -66,6 +69,8 @@ const Groceries = () => {
                 const data = await fetchGroceries(userDetails); // Await the fetchProducts function
                 setGroceries(data || []); // Ensure groceries are set properly
                 setFilteredNames(data || []); // Ensure groceries are set properly
+                setOriginalGroceries(data || []); // Ensure groceries are set properly
+                
                 console.log('groceries', data); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
