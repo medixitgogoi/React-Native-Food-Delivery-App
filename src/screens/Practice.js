@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
@@ -13,13 +14,13 @@ import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
 import { useSelector } from 'react-redux';
-import { fetchRestaurants } from '../utils/fetchRestaurants';
+import { fetchGroceries } from '../utils/fetchGroceries';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-const Restaurants = () => {
+const Groceries = () => {
 
     const navigation = useNavigation();
 
@@ -41,19 +42,17 @@ const Restaurants = () => {
     const [priceLowToHigh, setPriceLowToHigh] = useState(false);
     const [priceHighToLow, setPriceHighToLow] = useState(false);
     const [ratingHighToLow, setRatingHighToLow] = useState(false);
-    const [veg, setVeg] = useState(false);
-    const [nonVeg, setNonVeg] = useState(false);
+    const [rated, setRated] = useState(false);
 
     const [filteredNames, setFilteredNames] = useState([]);
 
-    const [restaurants, setRestaurants] = useState(null);
+    const [groceries, setGroceries] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
-    // Debounced Search
     const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(restaurants.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
-    }, 300), [restaurants]);
+        setFilteredNames(groceries.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
+    }, 300), [groceries]);
 
     const handleSearch = (text) => {
         setSearch(text);
@@ -64,11 +63,10 @@ const Restaurants = () => {
         const fetchData = async () => {
             setLoading(true); // Start loading
             try {
-                const data = await fetchRestaurants(userDetails); // Await the fetchProducts function
-                setRestaurants(data.slice(0, 50) || []); // Ensure groceries are set properly
-                setFilteredNames(data.slice(0, 50) || []); // Ensure groceries are set properly
-
-                console.log('restaurants', data.slice(0, 50)); // Log fetched data
+                const data = await fetchGroceries(userDetails); // Await the fetchProducts function
+                setGroceries(data || []); // Ensure groceries are set properly
+                setFilteredNames(data || []); // Ensure groceries are set properly
+                console.log('groceries', data); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
             } finally {
@@ -98,116 +96,20 @@ const Restaurants = () => {
         }
     };
 
-    // Price Low To High
-    useEffect(() => {
-        if (priceLowToHigh) {
-            setLoading(true);
-
-            // Sort restaurants array by min_price in ascending order
-            const sortedRestaurants = [...restaurants].sort((a, b) => a.min_price - b.min_price);
-
-            setRestaurants(sortedRestaurants);
-            setFilteredNames(sortedRestaurants);
-
-            // Simulate some delay if necessary (e.g., for API calls)
-            setTimeout(() => {
-                setLoading(false); // Make sure loading is set to false after sorting is done
-            }, 300); // Timeout added just for demonstration
-        }
-    }, [priceLowToHigh]);
-
     const priceLowToHighHandler = () => {
         setPriceLowToHigh(prev => !prev);
-
-        if (priceHighToLow) {
-            setPriceHighToLow(false);
-        }
     };
-
-    // Price high to low
-    useEffect(() => {
-        if (priceHighToLow) {
-            setLoading(true);
-            console.log('Sorting from high to low...');
-
-            // Sort restaurants array by min_price in descending order
-            const sortedRestaurants = [...restaurants].sort((a, b) => b.min_price - a.min_price);
-
-            setRestaurants(sortedRestaurants);
-            setFilteredNames(sortedRestaurants);
-
-            // Simulate some delay if necessary (e.g., for API calls)
-            setTimeout(() => {
-                setLoading(false); // Set loading to false after sorting is done
-            }, 300); // Timeout added just for demonstration
-        }
-    }, [priceHighToLow]);
 
     const priceHighToLowHandler = () => {
         setPriceHighToLow(prev => !prev);
-
-        // Disable the low to high flag if it's enabled
-        if (priceLowToHigh) {
-            setPriceLowToHigh(false);
-        }
     };
 
-    // Veg Handler
-    useEffect(() => {
-        if (veg) {
-            setLoading(true);
-
-            // Filter restaurants array by veg_type === '1' (veg)
-            const filteredVegRestaurants = restaurants.filter(item => item.veg_type === '1');
-            console.log('filteredVegRestaurants', filteredVegRestaurants);
-
-            setRestaurants(filteredVegRestaurants);
-            setFilteredNames(filteredVegRestaurants);
-
-            // Simulate some delay if necessary
-            setTimeout(() => {
-                setLoading(false); // Set loading to false after filtering
-            }, 300); // Timeout added just for demonstration
-        }
-    }, [veg]);
-
-    const vegHandler = () => {
-        const newVegState = !veg;
-        setVeg(newVegState);
-
-        // Disable the nonVeg flag if it's enabled
-        if (nonVeg) {
-            setNonVeg(false);
-        }
+    const ratingHighToLowHandler = () => {
+        setRatingHighToLow(prev => !prev);
     };
 
-    // Non Veg Handler
-    useEffect(() => {
-        if (nonVeg) {
-            setLoading(true);
-
-            // Filter restaurants array by veg_type === '2' (non-veg)
-            const filteredNonVegRestaurants = restaurants?.filter(item => item.veg_type === '2');
-            console.log('filteredNonVegRestaurants', filteredNonVegRestaurants);
-
-            setRestaurants(filteredNonVegRestaurants);
-            setFilteredNames(filteredNonVegRestaurants);
-
-            // Simulate some delay if necessary
-            setTimeout(() => {
-                setLoading(false); // Set loading to false after filtering
-            }, 300); // Timeout added just for demonstration
-        }
-    }, [nonVeg]);
-
-    const nonVegHandler = () => {
-        const newNonVegState = !nonVeg;
-        setNonVeg(newNonVegState);
-
-        // Disable the veg flag if it's enabled
-        if (veg) {
-            setVeg(false);
-        }
+    const rateHandler = () => {
+        setRated(prev => !prev);
     };
 
     const renderOrder = useCallback(({ item }) => (
@@ -233,7 +135,7 @@ const Restaurants = () => {
         };
 
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
 
                 {/* Wishlist */}
                 <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -260,20 +162,13 @@ const Restaurants = () => {
                             </View>
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
-                        {item.veg_type === '1' ? (
-                            <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
-                                </View>
-                            </View>
-                        ) : (
-                            <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                            </View>
-                        )}
-                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+
+                    {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>
+                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.subCategory}</Text>
+                    </View> */}
+
+                    {/* Price */}
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: 5 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
                         <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
                     </View>
@@ -281,10 +176,6 @@ const Restaurants = () => {
             </TouchableOpacity>
         );
     };
-
-    // const ratingHighToLowHandler = () => {
-    //     setRatingHighToLow(prev => !prev);
-    // };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
@@ -302,7 +193,7 @@ const Restaurants = () => {
                         <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                             <Icon name="keyboard-arrow-left" size={23} color={backIconColor} />
                         </TouchableOpacity>
-                        <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', width: '83%', textTransform: 'uppercase' }}>Restaurants</Text>
+                        <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', width: '83%', textTransform: 'uppercase' }}>Groceries</Text>
                     </View>
                 </View>
 
@@ -314,7 +205,7 @@ const Restaurants = () => {
                         </View>
                         <TextInput
                             style={{ paddingVertical: 0, height: 35, color: '#000', fontWeight: '400', width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
-                            placeholder="Search for dishes, snacks or drinks"
+                            placeholder="Search for Apple, Banana or Orange"
                             placeholderTextColor="#a0abb7"
                             onChangeText={handleSearch}
                             value={search}
@@ -349,31 +240,18 @@ const Restaurants = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                {/* <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
+                                <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
                                     <Icon3 name="star" size={16} color={'#FFA41C'} />
                                     <Text style={{ color: ratingHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rating - high to low</Text>
                                     {ratingHighToLow && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
-                                </TouchableOpacity> */}
-
-                                <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }} onPress={vegHandler}>
-                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
-                                        </View>
-                                    </View>
-                                    <Text style={{ color: veg ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Veg</Text>
-                                    {veg && (
-                                        <Icon5 name="close" size={16} color={'#cb202d'} />
-                                    )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: nonVeg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: nonVeg ? backIconColor : '', borderWidth: nonVeg ? 0.4 : 0 }} onPress={nonVegHandler}>
-                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                        <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                    </View>
-                                    <Text style={{ color: nonVeg ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Non-veg</Text>
-                                    {nonVeg && (
+                                <TouchableOpacity style={{ backgroundColor: rated ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: rated ? backIconColor : '', borderWidth: rated ? 0.4 : 0 }} onPress={rateHandler}>
+                                    <Icon3 name="star" size={16} color={'#FFA41C'} />
+                                    <Text style={{ color: rated ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rated 4+</Text>
+                                    {rated && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
                                 </TouchableOpacity>
@@ -392,10 +270,10 @@ const Restaurants = () => {
                         renderItem={() => {
                             return (
                                 <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
-                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '100%', height: 140, borderRadius: 14 }} />
-                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                 </View>
                             )
                         }}
@@ -411,10 +289,10 @@ const Restaurants = () => {
                         renderItem={renderOrder}
                         keyExtractor={item => item.id.toString()}
                         numColumns={2}
+                        key={2}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
                         columnWrapperStyle={{ justifyContent: 'space-between' }}
-                        key={2}
                     />
                 )}
             </View>
@@ -422,6 +300,6 @@ const Restaurants = () => {
     )
 }
 
-export default Restaurants;
+export default Groceries;
 
 const styles = StyleSheet.create({});
