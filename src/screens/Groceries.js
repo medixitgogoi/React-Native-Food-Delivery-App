@@ -185,9 +185,9 @@ const Groceries = () => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
-                {/* headline */}
+                {/* Headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
                     <View style={{ paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
                         <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
@@ -197,7 +197,7 @@ const Groceries = () => {
                     </View>
                 </View>
 
-                {/* searchbar */}
+                {/* Searchbar */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 35, width: 23, }}>
@@ -218,7 +218,7 @@ const Groceries = () => {
                     </TouchableOpacity>
                 </View>
 
-                {/* sliders */}
+                {/* Sliders */}
                 <Animated.View style={{ height: sliderHeight, overflow: 'hidden', marginTop: 5 }}>
                     {slider && (
                         <ScrollView horizontal>
