@@ -50,6 +50,7 @@ const Restaurants = () => {
 
     const [loading, setLoading] = useState(true);
 
+    // Debounced Search
     const debouncedSearch = useMemo(() => debounce((text) => {
         setFilteredNames(restaurants.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
     }, 300), [restaurants]);
@@ -64,9 +65,10 @@ const Restaurants = () => {
             setLoading(true); // Start loading
             try {
                 const data = await fetchRestaurants(userDetails); // Await the fetchProducts function
-                setRestaurants(data || []); // Ensure groceries are set properly
-                setFilteredNames(data || []); // Ensure groceries are set properly
-                console.log('restaurants', restaurants); // Log fetched data
+                setRestaurants(data.slice(0, 50) || []); // Ensure groceries are set properly
+                setFilteredNames(data.slice(0, 50) || []); // Ensure groceries are set properly
+
+                console.log('restaurants', data.slice(0, 50)); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
             } finally {
@@ -96,24 +98,116 @@ const Restaurants = () => {
         }
     };
 
+    // Price Low To High
+    useEffect(() => {
+        if (priceLowToHigh) {
+            setLoading(true);
+
+            // Sort restaurants array by min_price in ascending order
+            const sortedRestaurants = [...restaurants].sort((a, b) => a.min_price - b.min_price);
+
+            setRestaurants(sortedRestaurants);
+            setFilteredNames(sortedRestaurants);
+
+            // Simulate some delay if necessary (e.g., for API calls)
+            setTimeout(() => {
+                setLoading(false); // Make sure loading is set to false after sorting is done
+            }, 300); // Timeout added just for demonstration
+        }
+    }, [priceLowToHigh]);
+
     const priceLowToHighHandler = () => {
         setPriceLowToHigh(prev => !prev);
+
+        if (priceHighToLow) {
+            setPriceHighToLow(false);
+        }
     };
+
+    // Price high to low
+    useEffect(() => {
+        if (priceHighToLow) {
+            setLoading(true);
+            console.log('Sorting from high to low...');
+
+            // Sort restaurants array by min_price in descending order
+            const sortedRestaurants = [...restaurants].sort((a, b) => b.min_price - a.min_price);
+
+            setRestaurants(sortedRestaurants);
+            setFilteredNames(sortedRestaurants);
+
+            // Simulate some delay if necessary (e.g., for API calls)
+            setTimeout(() => {
+                setLoading(false); // Set loading to false after sorting is done
+            }, 300); // Timeout added just for demonstration
+        }
+    }, [priceHighToLow]);
 
     const priceHighToLowHandler = () => {
         setPriceHighToLow(prev => !prev);
+
+        // Disable the low to high flag if it's enabled
+        if (priceLowToHigh) {
+            setPriceLowToHigh(false);
+        }
     };
 
-    const ratingHighToLowHandler = () => {
-        setRatingHighToLow(prev => !prev);
-    };
+    // Veg Handler
+    useEffect(() => {
+        if (veg) {
+            setLoading(true);
+
+            // Filter restaurants array by veg_type === '1' (veg)
+            const filteredVegRestaurants = restaurants.filter(item => item.veg_type === '1');
+            console.log('filteredVegRestaurants', filteredVegRestaurants);
+
+            setRestaurants(filteredVegRestaurants);
+            setFilteredNames(filteredVegRestaurants);
+
+            // Simulate some delay if necessary
+            setTimeout(() => {
+                setLoading(false); // Set loading to false after filtering
+            }, 300); // Timeout added just for demonstration
+        }
+    }, [veg]);
 
     const vegHandler = () => {
-        setVeg(prev => !prev);
+        const newVegState = !veg;
+        setVeg(newVegState);
+
+        // Disable the nonVeg flag if it's enabled
+        if (nonVeg) {
+            setNonVeg(false);
+        }
     };
 
+    // Non Veg Handler
+    useEffect(() => {
+        if (nonVeg) {
+            setLoading(true);
+
+            // Filter restaurants array by veg_type === '2' (non-veg)
+            const filteredNonVegRestaurants = restaurants?.filter(item => item.veg_type === '2');
+            console.log('filteredNonVegRestaurants', filteredNonVegRestaurants);
+
+            setRestaurants(filteredNonVegRestaurants);
+            setFilteredNames(filteredNonVegRestaurants);
+
+            // Simulate some delay if necessary
+            setTimeout(() => {
+                setLoading(false); // Set loading to false after filtering
+            }, 300); // Timeout added just for demonstration
+        }
+    }, [nonVeg]);
+
     const nonVegHandler = () => {
-        setNonVeg(prev => !prev);
+        const newNonVegState = !nonVeg;
+        setNonVeg(newNonVegState);
+
+        // Disable the veg flag if it's enabled
+        if (veg) {
+            setVeg(false);
+        }
     };
 
     const renderOrder = useCallback(({ item }) => (
@@ -188,6 +282,10 @@ const Restaurants = () => {
         );
     };
 
+    // const ratingHighToLowHandler = () => {
+    //     setRatingHighToLow(prev => !prev);
+    // };
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
             <StatusBar
@@ -196,9 +294,9 @@ const Restaurants = () => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
-                {/* headline */}
+                {/* Headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
                     <View style={{ paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
                         <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
@@ -208,7 +306,7 @@ const Restaurants = () => {
                     </View>
                 </View>
 
-                {/* searchbar */}
+                {/* Searchbar */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 35, width: 23, }}>
@@ -229,7 +327,7 @@ const Restaurants = () => {
                     </TouchableOpacity>
                 </View>
 
-                {/* sliders */}
+                {/* Sliders */}
                 <Animated.View style={{ height: sliderHeight, overflow: 'hidden', marginTop: 5 }}>
                     {slider && (
                         <ScrollView horizontal>
@@ -251,13 +349,13 @@ const Restaurants = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
+                                {/* <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
                                     <Icon3 name="star" size={16} color={'#FFA41C'} />
                                     <Text style={{ color: ratingHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rating - high to low</Text>
                                     {ratingHighToLow && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
 
                                 <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }} onPress={vegHandler}>
                                     <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -294,10 +392,10 @@ const Restaurants = () => {
                         renderItem={() => {
                             return (
                                 <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                 </View>
                             )
                         }}
