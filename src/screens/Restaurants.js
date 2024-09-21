@@ -47,8 +47,10 @@ const Restaurants = () => {
     const [filteredNames, setFilteredNames] = useState([]);
 
     const [restaurants, setRestaurants] = useState(null);
+    const [originalRestaurants, setOriginalRestaurants] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
     // Debounced Search
     const debouncedSearch = useMemo(() => debounce((text) => {
@@ -65,9 +67,11 @@ const Restaurants = () => {
             setLoading(true); // Start loading
             try {
                 const data = await fetchRestaurants(userDetails); // Await the fetchProducts function
-                setRestaurants(data.slice(0, 50) || []); // Ensure groceries are set properly
-                setFilteredNames(data.slice(0, 50) || []); // Ensure groceries are set properly
-                console.log('restaurants', restaurants); // Log fetched data
+                setRestaurants(data || []); // Ensure groceries are set properly
+                setFilteredNames(data || []); // Ensure groceries are set properly
+                setOriginalRestaurants(data || []); // Ensure groceries are set properly
+
+                console.log('restaurants', data); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
             } finally {
@@ -97,24 +101,79 @@ const Restaurants = () => {
         }
     };
 
-    const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => !prev);
+    useEffect(() => {
+        setTimeout(() => {
+            setInitialLoading(false);
+            setLoading(false); // Stop skeleton loader after initial loading
+        }, 500); // 1/2 seconds
+    }, []);
+
+    // Function to apply both filter and sort after initial loading
+    const applyFilterAndSort = () => {
+        if (initialLoading) return; // Don't apply filter/sort until initial load is done
+
+        setLoading(true);
+
+        // Step 1: Filter based on veg/non-veg
+        let filteredRestaurants = originalRestaurants;
+
+        if (veg) {
+            filteredRestaurants = filteredRestaurants.filter(item => item.veg_type === '1');
+        } else if (nonVeg) {
+            filteredRestaurants = filteredRestaurants.filter(item => item.veg_type === '2');
+        }
+
+        // Step 2: Apply sorting
+        if (priceLowToHigh) {
+            filteredRestaurants.sort((a, b) => a.min_price - b.min_price);
+        } else if (priceHighToLow) {
+            filteredRestaurants.sort((a, b) => b.min_price - a.min_price);
+        }
+
+        setRestaurants(filteredRestaurants);
+        setFilteredNames(filteredRestaurants);
+
+        setTimeout(() => {
+            setLoading(false); // Stop the loading spinner after sorting/filtering
+        }, 500); // Simulate a small delay after filtering/sorting
     };
 
-    const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => !prev);
-    };
+    // UseEffect for applying filter/sort logic after initial loading
+    useEffect(() => {
+        applyFilterAndSort();
+    }, [veg, nonVeg, priceLowToHigh, priceHighToLow, initialLoading]);
 
-    const ratingHighToLowHandler = () => {
-        setRatingHighToLow(prev => !prev);
-    };
-
+    // Handlers for veg, nonVeg, and sorting
     const vegHandler = () => {
-        setVeg(prev => !prev);
+        setVeg(prev => {
+            const newVeg = !prev;
+            if (newVeg && nonVeg) setNonVeg(false); // Disable nonVeg if veg is enabled
+            return newVeg;
+        });
     };
 
     const nonVegHandler = () => {
-        setNonVeg(prev => !prev);
+        setNonVeg(prev => {
+            const newNonVeg = !prev;
+            if (newNonVeg && veg) setVeg(false); // Disable veg if nonVeg is enabled
+            return newNonVeg;
+        });
+    };
+
+    const priceLowToHighHandler = () => {
+        setPriceLowToHigh(prev => {
+            const newPriceLowToHigh = !prev;
+            if (newPriceLowToHigh) setPriceHighToLow(false); // Disable high to low sorting if low to high is selected
+            return newPriceLowToHigh;
+        });
+    };
+
+    const priceHighToLowHandler = () => {
+        setPriceHighToLow(prev => {
+            const newPriceHighToLow = !prev;
+            if (newPriceHighToLow) setPriceLowToHigh(false); // Disable low to high sorting if high to low is selected
+            return newPriceHighToLow;
+        });
     };
 
     const renderOrder = useCallback(({ item }) => (
@@ -189,8 +248,12 @@ const Restaurants = () => {
         );
     };
 
+    // const ratingHighToLowHandler = () => {
+    //     setRatingHighToLow(prev => !prev);
+    // };
+
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: slider ? 55 : 20 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}
@@ -199,7 +262,7 @@ const Restaurants = () => {
 
             {/* Header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
-                {/* headline */}
+                {/* Headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
                     <View style={{ paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
                         <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
@@ -209,7 +272,7 @@ const Restaurants = () => {
                     </View>
                 </View>
 
-                {/* searchbar */}
+                {/* Searchbar */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 35, width: 23, }}>
@@ -230,7 +293,7 @@ const Restaurants = () => {
                     </TouchableOpacity>
                 </View>
 
-                {/* sliders */}
+                {/* Sliders */}
                 <Animated.View style={{ height: sliderHeight, overflow: 'hidden', marginTop: 5 }}>
                     {slider && (
                         <ScrollView horizontal>
@@ -252,13 +315,13 @@ const Restaurants = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
+                                {/* <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
                                     <Icon3 name="star" size={16} color={'#FFA41C'} />
                                     <Text style={{ color: ratingHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rating - high to low</Text>
                                     {ratingHighToLow && (
                                         <Icon5 name="close" size={16} color={'#cb202d'} />
                                     )}
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
 
                                 <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }} onPress={vegHandler}>
                                     <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -295,10 +358,10 @@ const Restaurants = () => {
                         renderItem={() => {
                             return (
                                 <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
                                 </View>
                             )
                         }}
