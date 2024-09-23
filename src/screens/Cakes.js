@@ -324,8 +324,6 @@ const Cakes = () => {
         );
     };
 
-    // console.log('wishlistProducts', wishlistProducts);
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, }}>
             <StatusBar
@@ -334,7 +332,7 @@ const Cakes = () => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
                 {/* headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
