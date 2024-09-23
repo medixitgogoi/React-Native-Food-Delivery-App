@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchCartProducts } from '../utils/fetchCartProducts';
+import { addItemToCart } from '../redux/CartSlice';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
@@ -20,7 +22,27 @@ const StackNavigation = () => {
 
     const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchCartProducts(userDetails); // Await the fetchProducts function
+
+                if (data) {
+                    dispatch(addItemToCart(data));
+                }
+                // console.log('cartProducts', cartProducts);
+
+                // console.log('cartData', data); // Log fetched data
+            } catch (error) {
+                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
+            }
+        };
+
+        fetchData(); // Call the async function inside useEffect
+    }, []); // Dependency array should include userDetails if it might change
+
     const cartItemCount = cartProducts?.length;
+    console.log('cartItemCount', cartItemCount);
 
     useEffect(() => {
         const loadLoginDetails = async () => {
