@@ -150,10 +150,12 @@ const Checkout = () => {
                                 <Icon4 name="bookmark" size={19} color={backIconColor} />
                                 <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Saved Addresses</Text>
                             </View>
-                            <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress', { to: 'Checkout' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                <Text style={{ color: darkGreen, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Add New</Text>
-                                <Icon3 name="plus" size={14} color={darkGreen} />
-                            </TouchableOpacity>
+                            {!loading && addresses?.length > 0 && (
+                                <TouchableOpacity onPress={() => navigation.navigate('AddNewAddress', { to: 'Checkout' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                    <Text style={{ color: darkGreen, fontWeight: '600', fontSize: responsiveFontSize(1.9) }}>Add New</Text>
+                                    <Icon3 name="plus" size={14} color={darkGreen} />
+                                </TouchableOpacity>
+                            )}
                         </View>
 
                         {/* Skeleton loader */}
@@ -233,7 +235,7 @@ const Checkout = () => {
                     </View>
 
                     {/* Payment */}
-                    {!loading && (
+                    {!loading && addresses?.length > 0 && (
                         <View style={{ marginVertical: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>

@@ -164,6 +164,23 @@ const OrderHistory = () => {
                 </View>
             </View>
 
+            {!loading && orders.length === 0 && (
+                <View style={{ flexDirection: 'column', alignItems: 'center', gap: 30, flex: 1, marginTop: 30 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Image source={require('../assets/orders-fallback.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                    </View>
+                    <View style={{ width: '90%' }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.9), textAlign: 'center', color: '#000', fontWeight: '500' }}>
+                            You haven't placed any orders yet! Hungry? Explore our menu and start your first order now.
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ elevation: 2, backgroundColor: darkGreen, paddingVertical: 10, gap: 8, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon4 name="arrowleft" size={20} color={'#000'} />
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Go to Home</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
             {/* Content */}
             <View style={{ flex: 1 }}>
                 {loading ? (
