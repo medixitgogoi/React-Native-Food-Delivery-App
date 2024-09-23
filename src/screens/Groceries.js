@@ -49,9 +49,8 @@ const Groceries = () => {
     const [groceries, setGroceries] = useState(null);
     const [originalGroceries, setOriginalGroceries] = useState([]);
 
-    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
-
     const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
     const debouncedSearch = useMemo(() => debounce((text) => {
         setFilteredNames(groceries.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
@@ -70,7 +69,7 @@ const Groceries = () => {
                 setGroceries(data || []); // Ensure groceries are set properly
                 setFilteredNames(data || []); // Ensure groceries are set properly
                 setOriginalGroceries(data || []); // Ensure groceries are set properly
-                
+
                 console.log('groceries', data); // Log fetched data
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message); // Log errors if any
@@ -101,8 +100,53 @@ const Groceries = () => {
         }
     };
 
+    useEffect(() => {
+        setTimeout(() => {
+            setInitialLoading(false);
+            setLoading(false); // Stop skeleton loader after initial loading
+        }, 100); // 1/2 seconds
+    }, []);
+
+    useEffect(() => {
+        applyFilterAndSort();
+    }, [priceLowToHigh, priceHighToLow, initialLoading]);
+
+    // Function to apply both filter and sort after initial loading
+    const applyFilterAndSort = () => {
+        if (initialLoading) return; // Don't apply filter/sort until initial load is done
+
+        setLoading(true);
+
+        // Step 1: Filter based on veg/non-veg
+        let filteredGroceries = originalGroceries;
+
+        // if (veg) {
+        //     filteredGroceries = filteredGroceries.filter(item => item.veg_type === '1');
+        // } else if (nonVeg) {
+        //     filteredGroceries = filteredGroceries.filter(item => item.veg_type === '2');
+        // }
+
+        // Step 2: Apply sorting
+        if (priceLowToHigh) {
+            filteredGroceries.sort((a, b) => a.min_price - b.min_price);
+        } else if (priceHighToLow) {
+            filteredGroceries.sort((a, b) => b.min_price - a.min_price);
+        }
+
+        setGroceries(filteredGroceries);
+        setFilteredNames(filteredGroceries);
+
+        setTimeout(() => {
+            setLoading(false); // Stop the loading spinner after sorting/filtering
+        }, 500); // Simulate a small delay after filtering/sorting
+    };
+
     const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => !prev);
+        setPriceLowToHigh(prev => {
+            const newPriceLowToHigh = !prev;
+            if (newPriceLowToHigh) setPriceHighToLow(false); // Disable high to low sorting if low to high is selected
+            return newPriceLowToHigh;
+        });
     };
 
     const priceHighToLowHandler = () => {
