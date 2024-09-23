@@ -187,7 +187,7 @@ const Restaurants = () => {
 
             if (response?.data?.status) {
                 Toast.show({
-                    type: 'info',
+                    type: 'success',
                     text1: 'Added item to wishlist',
                     text2: `${name} has been added to your wishlist!`,
                     position: 'top',
@@ -377,7 +377,7 @@ const Restaurants = () => {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
                 {loading ? (
                     <FlatList
-                        data={[1, 1, 1, 1, 1, 1, 1]}
+                        data={[1, 1, 1, 1, 1, 1]}
                         renderItem={() => {
                             return (
                                 <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
