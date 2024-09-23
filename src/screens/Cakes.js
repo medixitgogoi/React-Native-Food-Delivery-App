@@ -53,8 +53,10 @@ const Cakes = () => {
     const [filteredNames, setFilteredNames] = useState([]);
 
     const [cakes, setCakes] = useState(null);
+    const [originalCakes, setOriginalCakes] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
     const [wishlistProducts, setWishlistProducts] = useState(null);
 
@@ -88,24 +90,40 @@ const Cakes = () => {
         }
     };
 
-    const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => !prev);
-    };
-
-    const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => !prev);
-    };
-
     const ratingHighToLowHandler = () => {
         setRatingHighToLow(prev => !prev);
     };
 
     const vegHandler = () => {
-        setVeg(prev => !prev);
+        setVeg(prev => {
+            const newVeg = !prev;
+            if (newVeg && nonVeg) setNonVeg(false); // Disable nonVeg if veg is enabled
+            return newVeg;
+        });
     };
 
     const nonVegHandler = () => {
-        setNonVeg(prev => !prev);
+        setNonVeg(prev => {
+            const newNonVeg = !prev;
+            if (newNonVeg && veg) setVeg(false); // Disable veg if nonVeg is enabled
+            return newNonVeg;
+        });
+    };
+
+    const priceLowToHighHandler = () => {
+        setPriceLowToHigh(prev => {
+            const newPriceLowToHigh = !prev;
+            if (newPriceLowToHigh) setPriceHighToLow(false); // Disable high to low sorting if low to high is selected
+            return newPriceLowToHigh;
+        });
+    };
+
+    const priceHighToLowHandler = () => {
+        setPriceHighToLow(prev => {
+            const newPriceHighToLow = !prev;
+            if (newPriceHighToLow) setPriceLowToHigh(false); // Disable low to high sorting if high to low is selected
+            return newPriceHighToLow;
+        });
     };
 
     useEffect(() => {
@@ -115,7 +133,9 @@ const Cakes = () => {
                 const data = await fetchCakes(userDetails);
                 setCakes(data || []);
                 setFilteredNames(data || []);
-                // console.log('cakes', data)
+                setOriginalCakes(data || []);
+
+                console.log('cakes', data)
             } catch (error) {
                 Alert.alert("Error fetching groceries:", error.message);
             } finally {
@@ -124,6 +144,47 @@ const Cakes = () => {
         };
         fetchData();
     }, [userDetails]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setInitialLoading(false);
+            setLoading(false); // Stop skeleton loader after initial loading
+        }, 100); // 1/2 seconds
+    }, []);
+
+    // Function to apply both filter and sort after initial loading
+    const applyFilterAndSort = () => {
+        if (initialLoading) return; // Don't apply filter/sort until initial load is done
+
+        setLoading(true);
+
+        // Step 1: Filter based on veg/non-veg
+        let filteredCakes = originalCakes;
+
+        if (veg) {
+            filteredCakes = filteredCakes.filter(item => item.veg_type === '1');
+        } else if (nonVeg) {
+            filteredCakes = filteredCakes.filter(item => item.veg_type === '2');
+        }
+
+        // Step 2: Apply sorting
+        if (priceLowToHigh) {
+            filteredCakes.sort((a, b) => a.min_price - b.min_price);
+        } else if (priceHighToLow) {
+            filteredCakes.sort((a, b) => b.min_price - a.min_price);
+        }
+
+        setCakes(filteredCakes);
+        setFilteredNames(filteredCakes);
+
+        setTimeout(() => {
+            setLoading(false); // Stop the loading spinner after sorting/filtering
+        }, 10); // Simulate a small delay after filtering/sorting
+    };
+
+    useEffect(() => {
+        applyFilterAndSort();
+    }, [veg, nonVeg, priceLowToHigh, priceHighToLow, initialLoading]);
 
     const getWishlistedProducts = useCallback(async () => {
         try {
