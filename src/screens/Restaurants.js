@@ -105,7 +105,7 @@ const Restaurants = () => {
         setTimeout(() => {
             setInitialLoading(false);
             setLoading(false); // Stop skeleton loader after initial loading
-        }, 500); // 1/2 seconds
+        }, 100); // 1/2 seconds
     }, []);
 
     // Function to apply both filter and sort after initial loading
