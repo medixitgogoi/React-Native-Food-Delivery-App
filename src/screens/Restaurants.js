@@ -135,7 +135,7 @@ const Restaurants = () => {
 
         setTimeout(() => {
             setLoading(false); // Stop the loading spinner after sorting/filtering
-        }, 500); // Simulate a small delay after filtering/sorting
+        }, 10); // Simulate a small delay after filtering/sorting
     };
 
     // UseEffect for applying filter/sort logic after initial loading
