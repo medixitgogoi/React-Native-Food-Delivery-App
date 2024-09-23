@@ -424,7 +424,7 @@ const Cakes = () => {
 
             {/* Content */}
             <View style={{ flex: 1 }}>
-                {loading || initialLoading ? (
+                {loading ? (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1, 1]}
                         renderItem={() => {
