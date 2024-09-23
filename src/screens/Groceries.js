@@ -120,12 +120,6 @@ const Groceries = () => {
         // Step 1: Filter based on veg/non-veg
         let filteredGroceries = originalGroceries;
 
-        // if (veg) {
-        //     filteredGroceries = filteredGroceries.filter(item => item.veg_type === '1');
-        // } else if (nonVeg) {
-        //     filteredGroceries = filteredGroceries.filter(item => item.veg_type === '2');
-        // }
-
         // Step 2: Apply sorting
         if (priceLowToHigh) {
             filteredGroceries.sort((a, b) => a.min_price - b.min_price);
@@ -138,7 +132,7 @@ const Groceries = () => {
 
         setTimeout(() => {
             setLoading(false); // Stop the loading spinner after sorting/filtering
-        }, 500); // Simulate a small delay after filtering/sorting
+        }, 10); // Simulate a small delay after filtering/sorting
     };
 
     const priceLowToHighHandler = () => {
