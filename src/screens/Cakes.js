@@ -12,7 +12,6 @@ import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import StarRating from '../components/StarRating';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
-import { cakes } from '../utils/cakes';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { fetchProducts } from '../utils/fetchProducts';

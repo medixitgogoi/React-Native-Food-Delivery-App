@@ -150,7 +150,11 @@ const Groceries = () => {
     };
 
     const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => !prev);
+        setPriceHighToLow(prev => {
+            const newPriceHighToLow = !prev;
+            if (newPriceHighToLow) setPriceLowToHigh(false); // Disable low to high sorting if high to low is selected
+            return newPriceHighToLow;
+        });
     };
 
     const ratingHighToLowHandler = () => {
