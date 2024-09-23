@@ -317,7 +317,7 @@ const Groceries = () => {
 
             {/* Content */}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
-                {loading ? (
+                {loading || initialLoading ? (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1, 1]}
                         renderItem={() => {
