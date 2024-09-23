@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { fetchProducts } from '../utils/fetchProducts';
 import { fetchCakes } from '../utils/fetchCakes';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import Toast from 'react-native-toast-message';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -61,7 +62,7 @@ const Cakes = () => {
     const [clciked, setClciked] = useState(false);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(cakes?.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
+        setFilteredNames(cakes.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
     }, 300), [cakes]);
 
     const handleSearch = (text) => {
@@ -181,50 +182,66 @@ const Cakes = () => {
         }, 10); // Simulate a small delay after filtering/sorting
     };
 
-    // call applyFilterAndSort
     useEffect(() => {
         applyFilterAndSort();
     }, [veg, nonVeg, priceLowToHigh, priceHighToLow, initialLoading]);
 
-    const getWishlistedProducts = useCallback(async () => {
-        try {
-            setLoading(true);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-            const response = await axios.get('/user/wishlist/fetch');
-            console.log('wishlistProducts', response?.data?.data);
-            setWishlistProducts(response?.data?.data || []);
-        } catch (error) {
-            Alert.alert("Error", error.message);
-        } finally {
-            setLoading(false);
-            setClciked(false);
-        }
-    }, []);
+    // const getWishlistedProducts = useCallback(async () => {
+    //     try {
+    //         setLoading(true);
+    //         axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+    //         const response = await axios.get('/user/wishlist/fetch');
+    //         console.log('wishlistProducts', response?.data?.data);
+    //         setWishlistProducts(response?.data?.data || []);
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message);
+    //     } finally {
+    //         setLoading(false);
+    //         setClciked(false);
+    //     }
+    // }, []);
 
-    useEffect(() => {
-        getWishlistedProducts();
-    }, [wishlistProducts]);
-
-    const addToWishlist = useCallback(async (id) => {
+    const addToWishlist = async (id, name) => {
         try {
             const data = { product_id: id };
             const response = await axios.post(`/user/wishlist/add`, data, {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            // Assuming response?.data?.data contains the full product data
-            const newProduct = response?.data?.data;
-
-            // Update the wishlistProducts state with the new product
-            setWishlistProducts((prevProducts) => [...prevProducts, newProduct]);
-
+            if (response?.data?.status) {
+                Toast.show({
+                    type: 'info',
+                    text1: 'Added item to wishlist',
+                    text2: `${name} has been added to your wishlist!`,
+                    position: 'top',
+                    topOffset: 10,
+                });
+            }
         } catch (error) {
             Alert.alert("Error", error.message || "Something went wrong.");
-        } finally {
-            setClciked(true);  // Trigger re-fetch of wishlist
-            console.log('Wishlist after adding', wishlistProducts);
         }
-    }, [wishlistProducts]);
+    };
+
+    // const addToWishlist = useCallback(async (id) => {
+    //     try {
+    //         const data = { product_id: id };
+    //         const response = await axios.post(`/user/wishlist/add`, data, {
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
+
+    //         // Assuming response?.data?.data contains the full product data
+    //         const newProduct = response?.data?.data;
+
+    //         // Update the wishlistProducts state with the new product
+    //         setWishlistProducts((prevProducts) => [...prevProducts, newProduct]);
+
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message || "Something went wrong.");
+    //     } finally {
+    //         setClciked(true);  // Trigger re-fetch of wishlist
+    //         console.log('Wishlist after adding', wishlistProducts);
+    //     }
+    // }, [wishlistProducts]);
 
     const deleteFromWishlist = useCallback(async (id) => {
         try {
@@ -263,14 +280,14 @@ const Cakes = () => {
             );
         };
 
-        const wishlistedProduct = wishlistProducts?.find((wishlistItem) => wishlistItem.product_id === item?.id);
+        const wishlistedProduct = wishlistProducts?.find((wishlistItem) => (wishlistItem?.product_id) === item?.id);
         console.log('wishlistedProduct', wishlistedProduct);
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                 {/* Wishlist */}
                 <TouchableOpacity
-                    onPress={wishlistedProduct != null ? () => deleteFromWishlist(wishlistedProduct?.id) : () => addToWishlist(item?.id)}
+                    onPress={wishlistedProduct != null ? () => deleteFromWishlist(wishlistedProduct?.id) : () => addToWishlist(item?.id, item?.name)}
                     style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
                 >
                     <Icon5
@@ -324,6 +341,8 @@ const Cakes = () => {
         );
     };
 
+    // console.log('wishlistProducts', wishlistProducts);
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, }}>
             <StatusBar
@@ -332,7 +351,7 @@ const Cakes = () => {
                 barStyle="dark-content"
             />
 
-            {/* Header */}
+            {/* header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
                 {/* headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
