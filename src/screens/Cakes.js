@@ -24,8 +24,6 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const Cakes = () => {
 
-    console.log('component mounted in root level')
-
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
@@ -63,7 +61,7 @@ const Cakes = () => {
     const [clciked, setClciked] = useState(false);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(cakes.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
+        setFilteredNames(cakes?.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
     }, 300), [cakes]);
 
     const handleSearch = (text) => {
@@ -126,6 +124,7 @@ const Cakes = () => {
         });
     };
 
+    // Fetch Data
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -182,6 +181,7 @@ const Cakes = () => {
         }, 10); // Simulate a small delay after filtering/sorting
     };
 
+    // call applyFilterAndSort
     useEffect(() => {
         applyFilterAndSort();
     }, [veg, nonVeg, priceLowToHigh, priceHighToLow, initialLoading]);
@@ -203,7 +203,7 @@ const Cakes = () => {
 
     useEffect(() => {
         getWishlistedProducts();
-    }, [clciked]);
+    }, [wishlistProducts]);
 
     const addToWishlist = useCallback(async (id) => {
         try {
