@@ -7,7 +7,7 @@ import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCartProducts } from '../utils/fetchCartProducts';
-import { addItemToCart } from '../redux/CartSlice';
+import { setCartItems } from '../redux/CartSlice';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
@@ -16,34 +16,28 @@ const StackNavigation = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
-    const cartProducts = useSelector(state => state.cart);
+    const cartProducts = useSelector(state => state.cart.items); // Use cart items from Redux
+    const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
-
+    // Fetch Cart Products from API and update Redux
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchCartProducts(userDetails); // Await the fetchProducts function
-
-                if (data) {
-                    dispatch(addItemToCart(data));
-                }
-                // console.log('cartProducts', cartProducts);
-
-                // console.log('cartData', data); // Log fetched data
+                const data = await fetchCartProducts(userDetails);
+                dispatch(setCartItems(data)); // Dispatch action to update cart in Redux
             } catch (error) {
-                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
+                Alert.alert("Error fetching groceries:", error.message);
             }
         };
 
-        fetchData(); // Call the async function inside useEffect
-    }, []); // Dependency array should include userDetails if it might change
+        if (isUserLoggedIn) {
+            fetchData(); // Fetch data only if user is logged in
+        }
+    }, [dispatch, userDetails, isUserLoggedIn]); // Include dependencies that may change
 
-    const cartItemCount = cartProducts?.length;
-    console.log('cartItemCount', cartItemCount);
-
+    // Load login details from AsyncStorage
     useEffect(() => {
         const loadLoginDetails = async () => {
             try {
@@ -77,11 +71,13 @@ const StackNavigation = () => {
         );
     }
 
-    console.log('cartProducts', cartProducts);
-
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? <GuestStackNavigator cartItemCount={cartItemCount} /> : <AuthStackNavigator initialRoute="Login" />}
+            {isUserLoggedIn ? (
+                <GuestStackNavigator cartItemCount={cartProducts.length} />
+            ) : (
+                <AuthStackNavigator initialRoute="Login" />
+            )}
         </NavigationContainer>
     );
 };

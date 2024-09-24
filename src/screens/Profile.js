@@ -34,6 +34,7 @@ const Profile = () => {
     // logout handler
     const logOutHandler = async () => {
         try {
+            dispatch(deleteAllItemsFromCart());
             dispatch(logoutUser());
 
             await AsyncStorage.removeItem('userDetails');

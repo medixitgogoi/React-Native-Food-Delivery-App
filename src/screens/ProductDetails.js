@@ -15,7 +15,7 @@ import { groceries } from '../utils/groceries';
 import { restaurants } from '../utils/restaurants';
 import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
-import { addItemToCart, decrementItem, updateProduct } from '../redux/CartSlice';
+import { addItemToCart, decrementItem } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
@@ -27,8 +27,10 @@ const { width: screenWidth } = Dimensions.get('window');
 
 const ProductDetails = ({ route }) => {
 
+    const dispatch = useDispatch();
+
     const product = route?.params?.data;
-    // console.log('product', product);
+    console.log('product', product);
 
     const userDetails = useSelector(state => state.user);
 
@@ -41,8 +43,6 @@ const ProductDetails = ({ route }) => {
     const navigation = useNavigation();
 
     const [addToCartTrigger, setAddToCartTrigger] = useState(false);
-
-    const dispatch = useDispatch();
 
     const [relatedProducts, setRelatedProducts] = useState(null);
 
@@ -113,7 +113,13 @@ const ProductDetails = ({ route }) => {
 
             // Handle success response
             if (response?.data?.status) {
-                setIsPresentInTheCart(response?.data?.data);
+                const cartItem = response?.data?.data; // Extract the cart item from the response
+
+                // Update the cart in Redux
+                dispatch(addItemToCart(cartItem)); // Dispatch the action to update the cart in the Redux store
+
+                // Update local states if necessary
+                setIsPresentInTheCart(cartItem);
                 setUnit(isPresentInTheCart);
             }
         } catch (error) {

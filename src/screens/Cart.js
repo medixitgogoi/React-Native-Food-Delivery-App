@@ -7,15 +7,18 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import Toast from 'react-native-toast-message';
+import { removeItemFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const Cart = () => {
+
+    const dispatch = useDispatch();
 
     const navigation = useNavigation();
 
@@ -117,6 +120,8 @@ const Cart = () => {
             });
 
             if (response?.data?.status) {
+                dispatch(removeItemFromCart(id));
+
                 getCartProducts();
             }
         } catch (error) {
