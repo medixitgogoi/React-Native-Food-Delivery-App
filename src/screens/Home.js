@@ -5,7 +5,7 @@ import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../u
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
-import { useState, useCallback, useEffect, useLayoutEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
