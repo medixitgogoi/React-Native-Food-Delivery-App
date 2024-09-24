@@ -46,7 +46,7 @@ const Cart = () => {
         }, [])
     );
 
-    // getCartProducts
+    // Get Cart Products
     const getCartProducts = useCallback(async () => {
         try {
             axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
