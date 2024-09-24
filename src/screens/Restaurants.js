@@ -35,6 +35,8 @@ const Restaurants = () => {
         }, [])
     );
 
+    const pageSize = 20;
+
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
@@ -57,6 +59,7 @@ const Restaurants = () => {
 
     const [loading, setLoading] = useState(true);
 
+    // Toggle Slider
     const toggleSlider = () => {
         if (slider) {
             Animated.timing(sliderHeight, {
@@ -76,8 +79,6 @@ const Restaurants = () => {
         }
     };
 
-    const pageSize = 20;
-
     // Fetch data
     useEffect(() => {
         const fetchData = async () => {
@@ -86,8 +87,8 @@ const Restaurants = () => {
                 const data = await fetchRestaurants(userDetails); // Fetch all products
                 setOriginalRestaurants(data);
                 setRestaurants(data);
-                setFilteredNames(data.slice(0, pageSize)); // Load initial set of restaurants
-                setHasMore(data.length > pageSize); // Check if more data is available
+                setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
+                setHasMore(data?.length > pageSize); // Check if more data is available
             } catch (error) {
                 Alert.alert('Error fetching restaurants:', error.message);
             } finally {
