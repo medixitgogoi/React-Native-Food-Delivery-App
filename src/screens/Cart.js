@@ -20,9 +20,6 @@ const Cart = () => {
 
     const dispatch = useDispatch();
 
-    const cartProduct = useSelector(state => state.cart.items); // Use cart items from Redux
-    console.log('cartProducts', cartProduct);
-
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);

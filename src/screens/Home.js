@@ -129,7 +129,7 @@ const Home = () => {
 
             {/* Content */}
             <ScrollView>
-                {/* for you */}
+                {/* For you */}
                 <View style={{ marginTop: 5 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Text style={{ color: '#ebedf0', }}>___________ </Text>
@@ -175,7 +175,7 @@ const Home = () => {
                     </View>
                 </View>
 
-                {/* explore */}
+                {/* Explore */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10 }}>
                     <Text style={{ color: '#ebedf0', }}>________________________ </Text>
                     <Text style={{ color: '#8593a2', fontWeight: '500', fontSize: responsiveFontSize(1.9), textTransform: 'uppercase', letterSpacing: 1.1 }}> Explore </Text>
