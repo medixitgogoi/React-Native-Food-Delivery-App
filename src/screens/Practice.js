@@ -7,7 +7,6 @@ import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCartProducts } from '../utils/fetchCartProducts';
-import { addItemToCart, deleteAllItemsFromCart } from '../redux/CartSlice';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
