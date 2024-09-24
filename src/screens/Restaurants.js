@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -37,6 +37,9 @@ const Restaurants = () => {
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+
     const [slider, setSlider] = useState(false);
     const sliderHeight = useRef(new Animated.Value(0)).current;
 
@@ -53,36 +56,6 @@ const Restaurants = () => {
 
     const [loading, setLoading] = useState(true);
     const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
-
-    // Debounced Search
-    const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(restaurants.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
-    }, 300), [restaurants]);
-
-    const handleSearch = (text) => {
-        setSearch(text);
-        debouncedSearch(text);
-    };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true); // Start loading
-            try {
-                const data = await fetchRestaurants(userDetails); // Await the fetchProducts function
-                setRestaurants(data || []); // Ensure groceries are set properly
-                setFilteredNames(data || []); // Ensure groceries are set properly
-                setOriginalRestaurants(data || []); // Ensure groceries are set properly
-
-                console.log('restaurants', data); // Log fetched data
-            } catch (error) {
-                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
-            } finally {
-                setLoading(false); // Stop loading
-            }
-        };
-
-        fetchData(); // Call the async function inside useEffect
-    }, [userDetails]); // Dependency array should include userDetails if it might change
 
     const toggleSlider = () => {
         if (slider) {
@@ -103,79 +76,109 @@ const Restaurants = () => {
         }
     };
 
+    const pageSize = 20; // Number of items per page
+
+    // Fetch data
     useEffect(() => {
-        setTimeout(() => {
-            setInitialLoading(false);
-            setLoading(false); // Stop skeleton loader after initial loading
-        }, 100); // 1/2 seconds
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchRestaurants(userDetails); // Fetch all products
+                setOriginalRestaurants(data);
+                setRestaurants(data);
+                setFilteredNames(data.slice(0, pageSize)); // Load initial set of restaurants
+            } catch (error) {
+                Alert.alert('Error fetching restaurants:', error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
-    // Function to apply both filter and sort after initial loading
-    const applyFilterAndSort = () => {
-        if (initialLoading) return; // Don't apply filter/sort until initial load is done
+    // Lazy loading on scroll
+    const loadMoreData = () => {
+        if (!hasMore || loading || restaurants.length === 0) return; // Check if there is no data to paginate
 
         setLoading(true);
+        const nextPage = page + 1;
+        const start = nextPage * pageSize;
+        const newRestaurants = restaurants.slice(start, start + pageSize); // Get next set of data
 
-        // Step 1: Filter based on veg/non-veg
-        let filteredRestaurants = originalRestaurants;
-
-        if (veg) {
-            filteredRestaurants = filteredRestaurants.filter(item => item.veg_type === '1');
-        } else if (nonVeg) {
-            filteredRestaurants = filteredRestaurants.filter(item => item.veg_type === '2');
+        if (newRestaurants.length > 0) {
+            setFilteredNames(prev => [...prev, ...newRestaurants]); // Append new data
+            setPage(nextPage);
+        } else {
+            setHasMore(false); // No more data to load
         }
-
-        // Step 2: Apply sorting
-        if (priceLowToHigh) {
-            filteredRestaurants.sort((a, b) => a.min_price - b.min_price);
-        } else if (priceHighToLow) {
-            filteredRestaurants.sort((a, b) => b.min_price - a.min_price);
-        }
-
-        setRestaurants(filteredRestaurants);
-        setFilteredNames(filteredRestaurants);
-
-        setTimeout(() => {
-            setLoading(false); // Stop the loading spinner after sorting/filtering
-        }, 10); // Simulate a small delay after filtering/sorting
+        setLoading(false);
     };
 
-    // UseEffect for applying filter/sort logic after initial loading
+    // Debounced Search
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((text) => {
+                setFilteredNames(
+                    restaurants.filter(order =>
+                        order.name.toLowerCase().includes(text.toLowerCase())
+                    )
+                );
+            }, 300),
+        [restaurants]
+    );
+
+    const handleSearch = (text) => {
+        setSearch(text);
+        debouncedSearch(text);
+    };
+
+    // Apply filters and sort logic
+    const applyFilterAndSort = () => {
+        let filteredData = originalRestaurants;
+
+        // Filter by veg/non-veg
+        if (veg) {
+            filteredData = filteredData.filter(item => item.veg_type === '1');
+        } else if (nonVeg) {
+            filteredData = filteredData.filter(item => item.veg_type === '2');
+        }
+
+        // Sort by price
+        if (priceLowToHigh) {
+            filteredData.sort((a, b) => a.min_price - b.min_price);
+        } else if (priceHighToLow) {
+            filteredData.sort((a, b) => b.min_price - a.min_price);
+        }
+
+        setRestaurants(filteredData);
+        setFilteredNames(filteredData.slice(0, pageSize)); // Reset the paginated data
+        setPage(1);
+        setHasMore(filteredData.length > pageSize);
+    };
+
     useEffect(() => {
         applyFilterAndSort();
-    }, [veg, nonVeg, priceLowToHigh, priceHighToLow, initialLoading]);
+    }, [veg, nonVeg, priceLowToHigh, priceHighToLow]);
 
-    // Handlers for veg, nonVeg, and sorting
+    // Handlers for filters
     const vegHandler = () => {
-        setVeg(prev => {
-            const newVeg = !prev;
-            if (newVeg && nonVeg) setNonVeg(false); // Disable nonVeg if veg is enabled
-            return newVeg;
-        });
+        setVeg(prev => !prev);
+        setNonVeg(false); // Disable nonVeg if veg is enabled
     };
 
     const nonVegHandler = () => {
-        setNonVeg(prev => {
-            const newNonVeg = !prev;
-            if (newNonVeg && veg) setVeg(false); // Disable veg if nonVeg is enabled
-            return newNonVeg;
-        });
+        setNonVeg(prev => !prev);
+        setVeg(false); // Disable veg if nonVeg is enabled
     };
 
     const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => {
-            const newPriceLowToHigh = !prev;
-            if (newPriceLowToHigh) setPriceHighToLow(false); // Disable high to low sorting if low to high is selected
-            return newPriceLowToHigh;
-        });
+        setPriceLowToHigh(prev => !prev);
+        setPriceHighToLow(false);
     };
 
     const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => {
-            const newPriceHighToLow = !prev;
-            if (newPriceHighToLow) setPriceLowToHigh(false); // Disable low to high sorting if high to low is selected
-            return newPriceHighToLow;
-        });
+        setPriceHighToLow(prev => !prev);
+        setPriceLowToHigh(false);
     };
 
     const addToWishlist = async (id, name) => {
@@ -401,9 +404,12 @@ const Restaurants = () => {
                         keyExtractor={item => item.id.toString()}
                         numColumns={2}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 100, paddingTop: 4 }}
                         columnWrapperStyle={{ justifyContent: 'space-between' }}
                         key={2}
+                        onEndReached={loadMoreData}
+                        onEndReachedThreshold={0.5}
+                        ListFooterComponent={hasMore && <ActivityIndicator size="small" color={darkGreen} />}
                     />
                 )}
             </View>
