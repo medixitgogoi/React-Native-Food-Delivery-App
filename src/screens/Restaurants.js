@@ -99,23 +99,27 @@ const Restaurants = () => {
     }, []);
 
     // Lazy loading on scroll
-    const loadMoreData = () => {
-        if (!hasMore || loading || restaurants.length === 0) return; // Check if there is no data to paginate
-
-        setLoading(true);
+    const loadMoreData = useCallback(() => {
+        if (!hasMore || loading) return;
 
         const nextPage = page + 1;
-        const start = nextPage * pageSize;
-        const newRestaurants = restaurants.slice(start, start + pageSize); // Get next set of data
+        setLoading(true);
 
-        if (newRestaurants.length > 0) {
-            setFilteredNames(prev => [...prev, ...newRestaurants]); // Append new data
-            setPage(nextPage);
-        } else {
-            setHasMore(false); // No more data to load
-        }
-        setLoading(false);
-    };
+        setTimeout(() => {
+            const start = nextPage * pageSize;
+            const newRestaurants = restaurants.slice(start, start + pageSize);
+
+            if (newRestaurants.length > 0) {
+                setFilteredNames(prev => [...prev, ...newRestaurants]);
+                setPage(nextPage);
+                setHasMore(newRestaurants.length === pageSize); // Only set `hasMore` to false when there's no full page of data
+            } else {
+                setHasMore(false);
+            }
+
+            setLoading(false);
+        }, 300); // Add slight delay to improve perception of smooth loading
+    }, [hasMore, loading, page, pageSize, restaurants]);
 
     // Debounced Search
     const debouncedSearch = useMemo(
