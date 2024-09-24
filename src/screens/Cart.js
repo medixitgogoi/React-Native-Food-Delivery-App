@@ -20,6 +20,9 @@ const Cart = () => {
 
     const dispatch = useDispatch();
 
+    const cartProduct = useSelector(state => state.cart.items); // Use cart items from Redux
+    console.log('cartProducts', cartProduct);
+
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
@@ -54,7 +57,7 @@ const Cart = () => {
                 setCartProducts(response?.data?.data);
             }
 
-            console.log('cartProducts', response?.data?.data);
+            console.log('getCartProducts', response?.data?.data);
         } catch (error) {
             Alert.alert('Error', error.message || 'Failed to fetch cart data.');
         } finally {
@@ -104,7 +107,7 @@ const Cart = () => {
     };
 
     // DeleteItemFromCart
-    const deleteItemFromCart = async (id, name) => {
+    const deleteItemFromCart = async (id) => {
         try {
             setLoading(true);
             setDeletingProductId(id);
@@ -120,9 +123,8 @@ const Cart = () => {
             });
 
             if (response?.data?.status) {
-                dispatch(removeItemFromCart(id));
-
                 getCartProducts();
+                dispatch(removeItemFromCart(id));
             }
         } catch (error) {
             if (error.response) {
@@ -351,7 +353,7 @@ const Cart = () => {
                             </View>
 
                             {/* Delete button */}
-                            <TouchableOpacity onPress={() => deleteItemFromCart(item?.id, item?.name)} style={{ elevation: 2, position: 'absolute', width: 27, height: 27, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={() => deleteItemFromCart(item.id)} style={{ elevation: 2, position: 'absolute', width: 27, height: 27, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
                                 {deletingProductId === item?.id ? (
                                     <ActivityIndicator size='small' color={'#cb202d'} />
                                 ) : (
