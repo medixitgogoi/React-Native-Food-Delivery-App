@@ -27,6 +27,7 @@ const Restaurants = () => {
 
     const userDetails = useSelector(state => state.user);
 
+    // Status Bar setter
     useFocusEffect(
         useCallback(() => {
             StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
@@ -55,7 +56,6 @@ const Restaurants = () => {
     const [originalRestaurants, setOriginalRestaurants] = useState([]);
 
     const [loading, setLoading] = useState(true);
-    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
     const toggleSlider = () => {
         if (slider) {
@@ -76,7 +76,7 @@ const Restaurants = () => {
         }
     };
 
-    const pageSize = 20; // Number of items per page
+    const pageSize = 20;
 
     // Fetch data
     useEffect(() => {
@@ -87,6 +87,7 @@ const Restaurants = () => {
                 setOriginalRestaurants(data);
                 setRestaurants(data);
                 setFilteredNames(data.slice(0, pageSize)); // Load initial set of restaurants
+                setHasMore(data.length > pageSize); // Check if more data is available
             } catch (error) {
                 Alert.alert('Error fetching restaurants:', error.message);
             } finally {
@@ -101,6 +102,7 @@ const Restaurants = () => {
         if (!hasMore || loading || restaurants.length === 0) return; // Check if there is no data to paginate
 
         setLoading(true);
+
         const nextPage = page + 1;
         const start = nextPage * pageSize;
         const newRestaurants = restaurants.slice(start, start + pageSize); // Get next set of data
