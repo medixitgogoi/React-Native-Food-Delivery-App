@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/dist/Octicons';
 import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
@@ -58,8 +57,6 @@ const Cakes = () => {
     const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
     const [wishlistProducts, setWishlistProducts] = useState(null);
-
-    const [clciked, setClciked] = useState(false);
 
     const debouncedSearch = useMemo(() => debounce((text) => {
         setFilteredNames(cakes.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
@@ -243,20 +240,20 @@ const Cakes = () => {
     //     }
     // }, [wishlistProducts]);
 
-    const deleteFromWishlist = useCallback(async (id) => {
-        try {
-            setLoading(true);
-            const data = { wishlist_id: id };
-            const response = await axios.post(`/user/wishlist/delete`, data, {
-                headers: { 'Content-Type': 'application/json' },
-            });
-            // console.log('delete', response);
-        } catch (error) {
-            Alert.alert("Error", error.message || "Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+    // const deleteFromWishlist = useCallback(async (id) => {
+    //     try {
+    //         setLoading(true);
+    //         const data = { wishlist_id: id };
+    //         const response = await axios.post(`/user/wishlist/delete`, data, {
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
+    //         // console.log('delete', response);
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message || "Something went wrong.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }, []);
 
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
@@ -349,7 +346,7 @@ const Cakes = () => {
                 barStyle="dark-content"
             />
 
-            {/* header */}
+            {/* Header */}
             <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
                 {/* headline */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
@@ -388,7 +385,7 @@ const Cakes = () => {
                         <ScrollView horizontal>
                             <View style={{ width: '100%', flexDirection: 'row', gap: 8, alignItems: 'center' }}>
 
-                                <TouchableOpacity style={{ backgroundColor: priceLowToHigh ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceLowToHigh ? backIconColor : '', borderWidth: priceLowToHigh ? 0.4 : 0 }}>
+                                <TouchableOpacity style={{ backgroundColor: priceLowToHigh ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceLowToHigh ? backIconColor : '', borderWidth: priceLowToHigh ? 0.4 : 0 }} onPress={priceLowToHighHandler}>
                                     <Icon4 name="arrow-trend-up" size={16} color={'#FF6F61'} />
                                     <Text style={{ color: priceLowToHigh ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - low to high</Text>
                                     {priceLowToHigh && (
@@ -396,7 +393,7 @@ const Cakes = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: priceHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceHighToLow ? backIconColor : '', borderWidth: priceHighToLow ? 0.4 : 0 }}>
+                                <TouchableOpacity style={{ backgroundColor: priceHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceHighToLow ? backIconColor : '', borderWidth: priceHighToLow ? 0.4 : 0 }} onPress={priceHighToLowHandler}>
                                     <Icon4 name="arrow-trend-down" size={16} color={'#FF6F61'} />
                                     <Text style={{ color: priceHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - high to low</Text>
                                     {priceHighToLow && (
@@ -412,7 +409,7 @@ const Cakes = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }}>
+                                <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }} onPress={vegHandler}>
                                     <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                         <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
                                         </View>
@@ -423,7 +420,7 @@ const Cakes = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ backgroundColor: nonVeg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: nonVeg ? backIconColor : '', borderWidth: nonVeg ? 0.4 : 0 }}>
+                                <TouchableOpacity style={{ backgroundColor: nonVeg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: nonVeg ? backIconColor : '', borderWidth: nonVeg ? 0.4 : 0 }} onPress={nonVegHandler}>
                                     <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
                                         <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                                     </View>

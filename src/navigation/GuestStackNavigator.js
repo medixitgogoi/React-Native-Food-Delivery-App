@@ -68,7 +68,7 @@ const BottomTabNavigator = ({ cartItemCount }) => {
                 tabBarInactiveTintColor: '#000',
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: '#f8fcf7',
+                    backgroundColor: '#fff',
                     display: route.name === 'Cart' ? 'none' : 'flex', // Hide the tab bar on the Cart page
                 },
             })}
