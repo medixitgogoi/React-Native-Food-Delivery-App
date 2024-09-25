@@ -1,26 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/AntDesign';
-import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import Icon6 from 'react-native-vector-icons/dist/Entypo';
 import StarRatingDetails from '../components/StarRatingDetails';
-import { groceries } from '../utils/groceries';
-import { restaurants } from '../utils/restaurants';
-import { cakes } from '../utils/cakes';
 import StarRating from '../components/StarRating';
 import { addItemToCart, decrementItem } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
-import { fetchCartProducts } from '../utils/fetchCartProducts';
 import axios from 'axios';
 
 const { width: screenWidth } = Dimensions.get('window');
