@@ -396,7 +396,7 @@ const Cart = () => {
 
             {/* Continue button */}
             {cartProducts?.length !== 0 && (
-                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 10, backgroundColor: lightGreen, borderRadius: 12, width: '95%', padding: 10, height: 40, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 10, backgroundColor: lightGreen, borderRadius: 12, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
                     <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.2), textTransform: 'uppercase' }}>Continue</Text>
                     <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
                         <Icon4 name="arrowright" size={20} color={backIconColor} />
