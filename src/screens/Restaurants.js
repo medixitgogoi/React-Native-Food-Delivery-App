@@ -105,20 +105,18 @@ const Restaurants = () => {
         const nextPage = page + 1;
         setLoading(true);
 
-        setTimeout(() => {
-            const start = nextPage * pageSize;
-            const newRestaurants = restaurants.slice(start, start + pageSize);
+        const start = nextPage * pageSize;
+        const newRestaurants = restaurants.slice(start, start + pageSize);
 
-            if (newRestaurants.length > 0) {
-                setFilteredNames(prev => [...prev, ...newRestaurants]);
-                setPage(nextPage);
-                setHasMore(newRestaurants.length === pageSize); // Only set `hasMore` to false when there's no full page of data
-            } else {
-                setHasMore(false);
-            }
+        if (newRestaurants.length > 0) {
+            setFilteredNames(prev => [...prev, ...newRestaurants]);
+            setPage(nextPage);
+            setHasMore(newRestaurants.length === pageSize); // Only set `hasMore` to false when there's no full page of data
+        } else {
+            setHasMore(false);
+        }
 
-            setLoading(false);
-        }, 300); // Add slight delay to improve perception of smooth loading
+        setLoading(false);
     }, [hasMore, loading, page, pageSize, restaurants]);
 
     // Debounced Search
