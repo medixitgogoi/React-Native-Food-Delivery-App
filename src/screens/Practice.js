@@ -4,16 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import phonepeSDK from 'react-native-phonepe-pg'
 import Base64 from 'react-native-base64'
 import sha256 from 'sha256'
-import { responsiveHeight, responsiveWidth, responsiveFontSize } from "react-native-responsive-dimensions";
+import { responsiveHeight, responsiveFontSize } from "react-native-responsive-dimensions";
 
 const DonateForm = () => {
 
     const [statusBarStyle, setStatusBarStyle] = useState();
     const navigation = useNavigation();
-    const [environment, setenvironment] = useState("SANDBOX")
-    const [merchantId, setmerchantId] = useState("PGTESTPAYUAT86")
-    const [appId, setappId] = useState(null)
-    const [enableLogging, setenableLogging] = useState(true)
+    const [environment, setenvironment] = useState("SANDBOX");
+    const [merchantId, setmerchantId] = useState("PGTESTPAYUAT86");
+    const [appId, setappId] = useState(null);
+    const [enableLogging, setenableLogging] = useState(true);
 
     const [data, setData] = useState({
         name: "",

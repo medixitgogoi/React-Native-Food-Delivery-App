@@ -200,26 +200,26 @@ const Restaurants = () => {
         setPriceLowToHigh(false);
     };
 
-    const addToWishlist = async (id, name) => {
-        try {
-            const data = { product_id: id };
-            const response = await axios.post(`/user/wishlist/add`, data, {
-                headers: { 'Content-Type': 'application/json' },
-            });
+    // const addToWishlist = async (id, name) => {
+    //     try {
+    //         const data = { product_id: id };
+    //         const response = await axios.post(`/user/wishlist/add`, data, {
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
 
-            if (response?.data?.status) {
-                Toast.show({
-                    type: 'success',
-                    text1: 'Added item to wishlist',
-                    text2: `${name} has been added to your wishlist!`,
-                    position: 'top',
-                    topOffset: 10,
-                });
-            }
-        } catch (error) {
-            Alert.alert("Error", error.message || "Something went wrong.");
-        }
-    };
+    //         if (response?.data?.status) {
+    //             Toast.show({
+    //                 type: 'success',
+    //                 text1: 'Added item to wishlist',
+    //                 text2: `${name} has been added to your wishlist!`,
+    //                 position: 'top',
+    //                 topOffset: 10,
+    //             });
+    //         }
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message || "Something went wrong.");
+    //     }
+    // };
 
     const renderOrder = useCallback(({ item }) => (
         <OrderItem item={item} search={search} />
@@ -246,7 +246,7 @@ const Restaurants = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                 {/* Wishlist */}
-                <TouchableOpacity onPress={() => addToWishlist(item?.id, item?.name)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Icon name="favorite-border" size={18} color={'#019934'} />
                 </TouchableOpacity>
 
