@@ -384,6 +384,10 @@ const Cart = () => {
                                 <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Delivery Charges</Text>
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹20.00</Text>
                             </View>
+                            {/* <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Additional Charges</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹20.00</Text>
+                            </View> */}
                             <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
                             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 3 }}>
                                 <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>Total Amount</Text>

@@ -12,6 +12,9 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import phonepeSDK from 'react-native-phonepe-pg';
+import Base64 from 'react-native-base64';
+import sha256 from 'sha256';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -20,12 +23,18 @@ const Checkout = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
+    console.log('userDetails', userDetails);
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [contineLoading, setContineLoading] = useState(false);
+
+    const [environment, setenvironment] = useState("SANDBOX");
+    const [merchantId, setmerchantId] = useState("PGTESTPAYUAT86");
+    const [appId, setappId] = useState(null);
+    const [enableLogging, setenableLogging] = useState(true);
 
     const moveAnim = useRef(new Animated.Value(0)).current;
 
@@ -85,6 +94,13 @@ const Checkout = () => {
         }, [userDetails])
     );
 
+    const generatetransactionId = () => {
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * 1000000);
+        const merchantPrefix = "T";
+        return `${merchantPrefix}${timestamp}${random}`
+    }
+
     const continueHandler = async () => {
         try {
             setContineLoading(true);
@@ -93,6 +109,7 @@ const Checkout = () => {
                 address_id: selectedAddress?.id,
                 payment_type: '1',
             };
+
             // API Call using axios
             const response = await axios.post(`user/order/place`, data, {
                 headers: {
@@ -100,11 +117,63 @@ const Checkout = () => {
                 }
             });
 
+            console.log('orderPlaced', response?.data?.data);
+
             if (response?.data?.success) {
-                navigation.navigate('OrderPlaced', {
-                    data: response?.data?.data,
-                    selectedAddress: selectedAddress
-                });
+                const totalAmount = response?.data?.data?.total_price + response?.data?.data?.delivery_charge + response?.data?.data?.addl_charge;
+
+                const submitHandler = async () => {
+                    try {
+                        console.log('Initializing PhonePe SDK...');
+                        const initResponse = await phonepeSDK.init(environment, merchantId, appId, enableLogging);
+                        console.log('PhonePe SDK initialized:', initResponse);
+
+                        const requestBody = {
+                            merchantId: merchantId,
+                            merchantTransactionId: generatetransactionId(),
+                            merchantUserId: "",
+                            amount: totalAmount * 100,
+                            callbackurl: "https://webhook.site/callback-url",
+                            mobileNumber: userDetails?.mobileNumber,
+                            paymentInstrument: {
+                                type: "PAY_PAGE",
+                            },
+                        }
+
+                        const salt_key = "96434309-7796-489d-8924-ab56988a6076";
+                        const salt_Index = 1;
+                        const payload = JSON.stringify(requestBody);
+                        console.log('payload: ', payload);
+                        const payload_main = Base64.encode(payload);
+                        console.log('payload_main: ', payload_main);
+                        const string = payload_main + "/pg/v1/pay" + salt_key;
+
+                        const checksum = sha256(string) + "###" + salt_Index;
+
+                        console.log('checksum: ', checksum);
+                        console.log('Starting transaction with payload: ', payload_main);
+
+                        const transactionResponse = await phonepeSDK.startTransaction(
+                            payload_main,
+                            checksum,
+                            null,
+                            null
+                        );
+
+                        // console.log('Transaction response: ', transactionResponse);
+
+                        if (transactionResponse.status) {
+                            navigation.navigate('OrderPlaced', {
+                                data: response?.data?.data,
+                                selectedAddress: selectedAddress
+                            });
+                        }
+                    } catch (err) {
+                        console.error('Error during PhonePe transaction: ', err);
+                    }
+                }
+
+                submitHandler();
             }
 
             console.log('responseadddd', response);
@@ -117,7 +186,9 @@ const Checkout = () => {
                 Alert.alert("Error", "Network error. Please check your internet connection and try again.");
             }
         } finally {
-            setContineLoading(false);
+            setTimeout(() => {
+                setContineLoading(false);
+            }, 2000)
         }
     };
 
@@ -134,7 +205,7 @@ const Checkout = () => {
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                     <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
                 </TouchableOpacity>
-                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.3), textAlign: 'center', textTransform: 'uppercase' }}>Checkout</Text>
+                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.3), textAlign: 'center', textTransform: 'uppercase' }}>Select Address</Text>
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.navigate('Profile')}>
                     <Icon2 name="account" size={23} color={'#000'} />
                 </TouchableOpacity>
@@ -235,7 +306,7 @@ const Checkout = () => {
                     </View>
 
                     {/* Payment */}
-                    {!loading && addresses?.length > 0 && (
+                    {/* {!loading && addresses?.length > 0 && (
                         <View style={{ marginVertical: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
@@ -244,20 +315,20 @@ const Checkout = () => {
                                 </View>
                             </View>
                         </View>
-                    )}
+                    )} */}
                 </View>
             </ScrollView>
 
             {/* Continue button*/}
             {!loading && addresses.length !== 0 && (
-                <TouchableOpacity onPress={continueHandler} style={{ alignSelf: 'center', position: 'absolute', bottom: 12, backgroundColor: lightGreen, borderRadius: 14, width: '95%', padding: 10, height: 45, borderColor: backIconColor, borderWidth: 1.3 }}>
+                <TouchableOpacity onPress={continueHandler} style={{ alignSelf: 'center', position: 'absolute', bottom: 9, backgroundColor: lightGreen, borderRadius: 14, width: '94%', padding: 10, height: 45, borderColor: backIconColor, borderWidth: 1.3 }}>
                     {contineLoading ? (
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, justifyContent: 'center' }}>
                             <ActivityIndicator size="small" color={backIconColor} />
                         </View>
                     ) : (
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                            <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue</Text>
+                            <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.4), textTransform: 'uppercase' }}>Continue to payment</Text>
                             <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
                                 <Icon5 name="arrowright" size={23} color={backIconColor} />
                             </Animated.View>
