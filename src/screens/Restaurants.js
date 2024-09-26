@@ -58,6 +58,7 @@ const Restaurants = () => {
     const [originalRestaurants, setOriginalRestaurants] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [searching, setSearching] = useState(false);
 
     // Toggle Slider
     const toggleSlider = () => {
@@ -98,38 +99,49 @@ const Restaurants = () => {
         fetchData();
     }, []);
 
-    // Lazy loading on scroll
+    // Load more data when scrolling to the end
     const loadMoreData = useCallback(() => {
-        if (!hasMore || loading) return;
+        if (!hasMore || loading || searching) return; // Prevent loading more if in search mode
 
-        const nextPage = page + 1;
         setLoading(true);
 
+        const nextPage = page + 1;
         const start = nextPage * pageSize;
         const newRestaurants = restaurants.slice(start, start + pageSize);
 
         if (newRestaurants.length > 0) {
             setFilteredNames(prev => [...prev, ...newRestaurants]);
             setPage(nextPage);
-            setHasMore(newRestaurants.length === pageSize); // Only set `hasMore` to false when there's no full page of data
+            setHasMore(newRestaurants.length === pageSize);
         } else {
             setHasMore(false);
         }
 
         setLoading(false);
-    }, [hasMore, loading, page, pageSize, restaurants]);
+    }, [hasMore, loading, page, pageSize, restaurants, searching]);
 
     // Debounced Search
     const debouncedSearch = useMemo(
         () =>
             debounce((text) => {
-                setFilteredNames(
-                    restaurants.filter(order =>
+                setSearching(true); // Set searching to true when the search begins
+
+                if (text.trim() === '') {
+                    // If search is cleared, reset to full data or initial page data
+                    setFilteredNames(restaurants.slice(0, pageSize));
+                    setHasMore(restaurants.length > pageSize);
+                } else {
+                    // Filter cakes based on search query
+                    const filtered = restaurants.filter(order =>
                         order.name.toLowerCase().includes(text.toLowerCase())
-                    )
-                );
+                    );
+                    setFilteredNames(filtered);
+                    setHasMore(false); // Disable load more data during search
+                }
+
+                setSearching(false); // Set searching to false after search completes
             }, 300),
-        [restaurants]
+        [restaurants, pageSize]
     );
 
     // Handle Search
@@ -380,6 +392,16 @@ const Restaurants = () => {
 
             {/* Content */}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
+
+                {/* Show ActivityIndicator if searching is true */}
+                {searching && (
+                    <ActivityIndicator
+                        size="large"
+                        color={darkGreen}
+                        style={{ marginTop: 20, alignSelf: 'center' }}
+                    />
+                )}
+
                 {loading ? (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1]}
@@ -400,19 +422,29 @@ const Restaurants = () => {
                         key={2}
                     />
                 ) : (
-                    <FlatList
-                        data={filteredNames}
-                        renderItem={renderOrder}
-                        keyExtractor={item => item.id.toString()}
-                        numColumns={2}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 100, paddingTop: 4 }}
-                        columnWrapperStyle={{ justifyContent: 'space-between' }}
-                        key={2}
-                        onEndReached={loadMoreData}
-                        onEndReachedThreshold={0.5}
-                        ListFooterComponent={hasMore && <ActivityIndicator size="small" color={darkGreen} />}
-                    />
+                    !searching && (
+                        <FlatList
+                            data={filteredNames}
+                            renderItem={filteredNames.length > 0 ? renderOrder : null} // Only render items if available
+                            keyExtractor={item => item.id.toString()}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 100, paddingTop: 4 }}
+                            columnWrapperStyle={{ justifyContent: 'space-between' }}
+                            key={2}
+                            onEndReached={!hasMore || searching ? null : loadMoreData} // Disable loadMore during search
+                            onEndReachedThreshold={0.5}
+                            ListFooterComponent={hasMore && !searching && <ActivityIndicator size="small" color={darkGreen} />}
+                            ListEmptyComponent={!loading && !searching && (
+                                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 20, }}>
+                                    <Image source={require('../assets/fallback_search.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                                    <Text style={{ textAlign: 'center', marginTop: 20, fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>
+                                        No products match your search.
+                                    </Text>
+                                </View>
+                            )}
+                        />
+                    )
                 )}
             </View>
         </SafeAreaView>

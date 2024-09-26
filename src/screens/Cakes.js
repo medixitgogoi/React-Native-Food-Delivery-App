@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -36,6 +36,11 @@ const Cakes = () => {
         }, [])
     );
 
+    const pageSize = 20;
+
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
@@ -54,13 +59,33 @@ const Cakes = () => {
     const [originalCakes, setOriginalCakes] = useState([]);
 
     const [loading, setLoading] = useState(true);
-    const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
+    const [searching, setSearching] = useState(false);
 
     const [wishlistProducts, setWishlistProducts] = useState(null);
 
-    const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(cakes.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
-    }, 300), [cakes]);
+    // Debounced Search
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((text) => {
+                setSearching(true); // Set searching to true when the search begins
+
+                if (text.trim() === '') {
+                    // If search is cleared, reset to full data or initial page data
+                    setFilteredNames(cakes.slice(0, pageSize));
+                    setHasMore(cakes.length > pageSize);
+                } else {
+                    // Filter cakes based on search query
+                    const filtered = cakes.filter(order =>
+                        order.name.toLowerCase().includes(text.toLowerCase())
+                    );
+                    setFilteredNames(filtered);
+                    setHasMore(false); // Disable load more data during search
+                }
+
+                setSearching(false); // Set searching to false after search completes
+            }, 300),
+        [cakes, pageSize]
+    );
 
     const handleSearch = (text) => {
         setSearch(text);
@@ -90,98 +115,98 @@ const Cakes = () => {
         setRatingHighToLow(prev => !prev);
     };
 
-    const vegHandler = () => {
-        setVeg(prev => {
-            const newVeg = !prev;
-            if (newVeg && nonVeg) setNonVeg(false); // Disable nonVeg if veg is enabled
-            return newVeg;
-        });
-    };
-
-    const nonVegHandler = () => {
-        setNonVeg(prev => {
-            const newNonVeg = !prev;
-            if (newNonVeg && veg) setVeg(false); // Disable veg if nonVeg is enabled
-            return newNonVeg;
-        });
-    };
-
-    const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => {
-            const newPriceLowToHigh = !prev;
-            if (newPriceLowToHigh) setPriceHighToLow(false); // Disable high to low sorting if low to high is selected
-            return newPriceLowToHigh;
-        });
-    };
-
-    const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => {
-            const newPriceHighToLow = !prev;
-            if (newPriceHighToLow) setPriceLowToHigh(false); // Disable low to high sorting if high to low is selected
-            return newPriceHighToLow;
-        });
-    };
-
-    // Fetch Data
+    // Fetch data
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const data = await fetchCakes(userDetails);
-                setCakes(data || []);
-                setFilteredNames(data || []);
-                setOriginalCakes(data || []);
-
-                console.log('cakes', data)
+                const data = await fetchCakes(userDetails); // Fetch all products
+                setOriginalCakes(data);
+                setCakes(data);
+                setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
+                setHasMore(data?.length > pageSize); // Check if more data is available
             } catch (error) {
-                Alert.alert("Error fetching groceries:", error.message);
+                Alert.alert('Error fetching cakes:', error.message);
             } finally {
                 setLoading(false);
             }
         };
         fetchData();
-    }, [userDetails]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setInitialLoading(false);
-            setLoading(false); // Stop skeleton loader after initial loading
-        }, 100); // 1/2 seconds
     }, []);
 
-    // Function to apply both filter and sort after initial loading
-    const applyFilterAndSort = () => {
-        if (initialLoading) return; // Don't apply filter/sort until initial load is done
+    // Load more data when scrolling to the end
+    const loadMoreData = useCallback(() => {
+        if (!hasMore || loading || searching) return; // Prevent loading more if in search mode
 
         setLoading(true);
 
-        // Step 1: Filter based on veg/non-veg
-        let filteredCakes = originalCakes;
+        const nextPage = page + 1;
+        const start = nextPage * pageSize;
+        const newCakes = cakes.slice(start, start + pageSize);
 
+        if (newCakes.length > 0) {
+            setFilteredNames(prev => [...prev, ...newCakes]);
+            setPage(nextPage);
+            setHasMore(newCakes.length === pageSize);
+        } else {
+            setHasMore(false);
+        }
+
+        setLoading(false);
+    }, [hasMore, loading, page, pageSize, cakes, searching]);
+
+    // Apply filters and sort logic
+    const applyFilterAndSort = () => {
+        let filteredData = originalCakes;
+
+        // Filter by veg/non-veg
         if (veg) {
-            filteredCakes = filteredCakes.filter(item => item.veg_type === '1');
+            filteredData = filteredData.filter(item => item.veg_type === '1');
         } else if (nonVeg) {
-            filteredCakes = filteredCakes.filter(item => item.veg_type === '2');
+            filteredData = filteredData.filter(item => item.veg_type === '2');
         }
 
-        // Step 2: Apply sorting
+        // Sort by price
         if (priceLowToHigh) {
-            filteredCakes.sort((a, b) => a.min_price - b.min_price);
+            filteredData.sort((a, b) => a.min_price - b.min_price);
         } else if (priceHighToLow) {
-            filteredCakes.sort((a, b) => b.min_price - a.min_price);
+            filteredData.sort((a, b) => b.min_price - a.min_price);
         }
 
-        setCakes(filteredCakes);
-        setFilteredNames(filteredCakes);
-
-        setTimeout(() => {
-            setLoading(false); // Stop the loading spinner after sorting/filtering
-        }, 10); // Simulate a small delay after filtering/sorting
+        setCakes(filteredData);
+        setFilteredNames(filteredData.slice(0, pageSize)); // Reset the paginated data
+        setPage(1);
+        setHasMore(filteredData.length > pageSize);
     };
 
+    // vegHandler
+    const vegHandler = () => {
+        setVeg(prev => !prev);
+        setNonVeg(false); // Disable nonVeg if veg is enabled
+    };
+
+    // nonVegHandler
+    const nonVegHandler = () => {
+        setNonVeg(prev => !prev);
+        setVeg(false); // Disable veg if nonVeg is enabled
+    };
+
+    // priceLowToHighHandler
+    const priceLowToHighHandler = () => {
+        setPriceLowToHigh(prev => !prev);
+        setPriceHighToLow(false);
+    };
+
+    // priceHighToLowHandler
+    const priceHighToLowHandler = () => {
+        setPriceHighToLow(prev => !prev);
+        setPriceLowToHigh(false);
+    };
+
+    // applyFilterAndSort useEffect
     useEffect(() => {
         applyFilterAndSort();
-    }, [veg, nonVeg, priceLowToHigh, priceHighToLow, initialLoading]);
+    }, [veg, nonVeg, priceLowToHigh, priceHighToLow]);
 
     // const getWishlistedProducts = useCallback(async () => {
     //     try {
@@ -278,7 +303,7 @@ const Cakes = () => {
         };
 
         const wishlistedProduct = wishlistProducts?.find((wishlistItem) => (wishlistItem?.product_id) === item?.id);
-        console.log('wishlistedProduct', wishlistedProduct);
+        // console.log('wishlistedProduct', wishlistedProduct);
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
@@ -437,6 +462,16 @@ const Cakes = () => {
 
             {/* Content */}
             <View style={{ flex: 1 }}>
+
+                {/* Show ActivityIndicator if searching is true */}
+                {searching && (
+                    <ActivityIndicator
+                        size="large"
+                        color={darkGreen}
+                        style={{ marginTop: 20, alignSelf: 'center' }}
+                    />
+                )}
+
                 {loading ? (
                     <FlatList
                         data={[1, 1, 1, 1, 1, 1]}
@@ -457,16 +492,29 @@ const Cakes = () => {
                         columnWrapperStyle={{ justifyContent: 'space-between' }}
                     />
                 ) : (
-                    <FlatList
-                        data={filteredNames}
-                        renderItem={renderOrder}
-                        keyExtractor={item => item.id.toString()}
-                        key={2}
-                        numColumns={2}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 10, paddingTop: 5 }}
-                        columnWrapperStyle={{ justifyContent: 'space-between' }}
-                    />
+                    !searching && (
+                        <FlatList
+                            data={filteredNames}
+                            renderItem={filteredNames.length > 0 ? renderOrder : null} // Only render items if available
+                            keyExtractor={item => item.id.toString()}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 100, paddingTop: 4 }}
+                            columnWrapperStyle={{ justifyContent: 'space-between' }}
+                            key={2}
+                            onEndReached={!hasMore || searching ? null : loadMoreData} // Disable loadMore during search
+                            onEndReachedThreshold={0.5}
+                            ListFooterComponent={hasMore && !searching && <ActivityIndicator size="small" color={darkGreen} />}
+                            ListEmptyComponent={!loading && !searching && (
+                                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 20, }}>
+                                    <Image source={require('../assets/fallback_search.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                                    <Text style={{ textAlign: 'center', marginTop: 20, fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>
+                                        No products match your search.
+                                    </Text>
+                                </View>
+                            )}
+                        />
+                    )
                 )}
             </View>
         </SafeAreaView>
