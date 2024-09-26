@@ -11,12 +11,9 @@ import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import StarRating from '../components/StarRating';
 import LinearGradient from 'react-native-linear-gradient';
 import debounce from 'lodash.debounce';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { fetchProducts } from '../utils/fetchProducts';
 import { fetchCakes } from '../utils/fetchCakes';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
-import Toast from 'react-native-toast-message';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -60,8 +57,6 @@ const Cakes = () => {
 
     const [loading, setLoading] = useState(true);
     const [searching, setSearching] = useState(false);
-
-    const [wishlistProducts, setWishlistProducts] = useState(null);
 
     // Debounced Search
     const debouncedSearch = useMemo(
@@ -223,26 +218,26 @@ const Cakes = () => {
     //     }
     // }, []);
 
-    const addToWishlist = async (id, name) => {
-        try {
-            const data = { product_id: id };
-            const response = await axios.post(`/user/wishlist/add`, data, {
-                headers: { 'Content-Type': 'application/json' },
-            });
+    // const addToWishlist = async (id, name) => {
+    //     try {
+    //         const data = { product_id: id };
+    //         const response = await axios.post(`/user/wishlist/add`, data, {
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
 
-            if (response?.data?.status) {
-                Toast.show({
-                    type: 'success',
-                    text1: 'Added item to wishlist',
-                    text2: `${name} has been added to your wishlist!`,
-                    position: 'top',
-                    topOffset: 10,
-                });
-            }
-        } catch (error) {
-            Alert.alert("Error", error.message || "Something went wrong.");
-        }
-    };
+    //         if (response?.data?.status) {
+    //             Toast.show({
+    //                 type: 'success',
+    //                 text1: 'Added item to wishlist',
+    //                 text2: `${name} has been added to your wishlist!`,
+    //                 position: 'top',
+    //                 topOffset: 10,
+    //             });
+    //         }
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message || "Something went wrong.");
+    //     }
+    // };
 
     // const addToWishlist = useCallback(async (id) => {
     //     try {
@@ -302,21 +297,11 @@ const Cakes = () => {
             );
         };
 
-        const wishlistedProduct = wishlistProducts?.find((wishlistItem) => (wishlistItem?.product_id) === item?.id);
-        // console.log('wishlistedProduct', wishlistedProduct);
-
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                 {/* Wishlist */}
-                <TouchableOpacity
-                    onPress={wishlistedProduct != null ? () => deleteFromWishlist(wishlistedProduct?.id) : () => addToWishlist(item?.id, item?.name)}
-                    style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-                >
-                    <Icon5
-                        name={wishlistedProduct != null ? "heart" : "heart-outline"}
-                        size={18}
-                        color={wishlistedProduct != null ? '#3ea947' : '#019934'}
-                    />
+                <TouchableOpacity onPress={() => addToWishlist(item?.id, item?.name)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name="favorite-border" size={18} color={'#019934'} />
                 </TouchableOpacity>
 
                 {/* Image */}
