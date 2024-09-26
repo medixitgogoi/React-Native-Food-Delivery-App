@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -28,6 +28,7 @@ const Groceries = () => {
 
     const userDetails = useSelector(state => state.user);
 
+    // Status Bar setters
     useFocusEffect(
         useCallback(() => {
             StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
@@ -54,34 +55,85 @@ const Groceries = () => {
     const [loading, setLoading] = useState(true);
     const [initialLoading, setInitialLoading] = useState(true); // New state for the 10-second initial load
 
-    const debouncedSearch = useMemo(() => debounce((text) => {
-        setFilteredNames(groceries.filter(order => order.name.toLowerCase().includes(text.toLowerCase())));
-    }, 300), [groceries]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+
+    const pageSize = 20;
+
+    // Debounced Search
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((text) => {
+                setFilteredNames(
+                    groceries.filter(order =>
+                        order.name.toLowerCase().includes(text.toLowerCase())
+                    )
+                );
+            }, 300),
+        [groceries]
+    );
 
     const handleSearch = (text) => {
         setSearch(text);
         debouncedSearch(text);
     };
 
+    // Apply filters and sort logic
+    const applyFilterAndSort = () => {
+        let filteredData = originalGroceries;
+
+        // Sort by price
+        if (priceLowToHigh) {
+            filteredData.sort((a, b) => a.min_price - b.min_price);
+        } else if (priceHighToLow) {
+            filteredData.sort((a, b) => b.min_price - a.min_price);
+        }
+
+        setGroceries(filteredData);
+        setFilteredNames(filteredData.slice(0, pageSize)); // Reset the paginated data
+        setPage(1);
+        setHasMore(filteredData.length > pageSize);
+    };
+
+    // Fetch data
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true); // Start loading
+            setLoading(true);
             try {
-                const data = await fetchGroceries(userDetails); // Await the fetchProducts function
-                setGroceries(data || []); // Ensure groceries are set properly
-                setFilteredNames(data || []); // Ensure groceries are set properly
-                setOriginalGroceries(data || []); // Ensure groceries are set properly
-
-                console.log('groceries', data); // Log fetched data
+                const data = await fetchGroceries(userDetails); // Fetch all products
+                setOriginalGroceries(data);
+                setGroceries(data);
+                setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
+                setHasMore(data?.length > pageSize); // Check if more data is available
             } catch (error) {
-                Alert.alert("Error fetching groceries:", error.message); // Log errors if any
+                Alert.alert('Error fetching groceries:', error.message);
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false);
             }
         };
+        fetchData();
+    }, []);
 
-        fetchData(); // Call the async function inside useEffect
-    }, [userDetails]); // Dependency array should include userDetails if it might change
+    // Lazy loading on scroll
+    const loadMoreData = useCallback(() => {
+        if (!hasMore || loading) return;
+
+        const nextPage = page + 1;
+        setLoading(true);
+
+        const start = nextPage * pageSize;
+        const newGroceries = groceries.slice(start, start + pageSize);
+
+        if (newGroceries.length > 0) {
+            setFilteredNames(prev => [...prev, ...newGroceries]);
+            setPage(nextPage);
+            setHasMore(newGroceries.length === pageSize); // Only set `hasMore` to false when there's no full page of data
+        } else {
+            setHasMore(false);
+        }
+
+        setLoading(false);
+    }, [hasMore, loading, page, pageSize, groceries]);
 
     const toggleSlider = () => {
         if (slider) {
@@ -103,54 +155,17 @@ const Groceries = () => {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            setInitialLoading(false);
-            setLoading(false); // Stop skeleton loader after initial loading
-        }, 100); // 1/2 seconds
-    }, []);
-
-    useEffect(() => {
         applyFilterAndSort();
-    }, [priceLowToHigh, priceHighToLow, initialLoading]);
-
-    // Function to apply both filter and sort after initial loading
-    const applyFilterAndSort = () => {
-        if (initialLoading) return; // Don't apply filter/sort until initial load is done
-
-        setLoading(true);
-
-        // Step 1: Filter based on veg/non-veg
-        let filteredGroceries = originalGroceries;
-
-        // Step 2: Apply sorting
-        if (priceLowToHigh) {
-            filteredGroceries.sort((a, b) => a.min_price - b.min_price);
-        } else if (priceHighToLow) {
-            filteredGroceries.sort((a, b) => b.min_price - a.min_price);
-        }
-
-        setGroceries(filteredGroceries);
-        setFilteredNames(filteredGroceries);
-
-        setTimeout(() => {
-            setLoading(false); // Stop the loading spinner after sorting/filtering
-        }, 10); // Simulate a small delay after filtering/sorting
-    };
+    }, [priceLowToHigh, priceHighToLow]);
 
     const priceLowToHighHandler = () => {
-        setPriceLowToHigh(prev => {
-            const newPriceLowToHigh = !prev;
-            if (newPriceLowToHigh) setPriceHighToLow(false); // Disable high to low sorting if low to high is selected
-            return newPriceLowToHigh;
-        });
+        setPriceLowToHigh(prev => !prev);
+        setPriceHighToLow(false);
     };
 
     const priceHighToLowHandler = () => {
-        setPriceHighToLow(prev => {
-            const newPriceHighToLow = !prev;
-            if (newPriceHighToLow) setPriceLowToHigh(false); // Disable low to high sorting if high to low is selected
-            return newPriceHighToLow;
-        });
+        setPriceHighToLow(prev => !prev);
+        setPriceLowToHigh(false);
     };
 
     const ratingHighToLowHandler = () => {
@@ -247,7 +262,7 @@ const Groceries = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 20 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: slider ? 55 : 20 }}>
             <StatusBar
                 animated={true}
                 backgroundColor={darkGreen}
@@ -358,10 +373,13 @@ const Groceries = () => {
                         renderItem={renderOrder}
                         keyExtractor={item => item.id.toString()}
                         numColumns={2}
-                        key={2}
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 100, paddingTop: 4 }}
                         columnWrapperStyle={{ justifyContent: 'space-between' }}
+                        key={2}
+                        onEndReached={loadMoreData}
+                        onEndReachedThreshold={0.5}
+                        ListFooterComponent={hasMore && <ActivityIndicator size="small" color={darkGreen} />}
                     />
                 )}
             </View>
