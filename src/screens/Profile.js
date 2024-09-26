@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/Ionicons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { deleteAllItemsFromCart } from '../redux/CartSlice';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -34,7 +33,6 @@ const Profile = () => {
     // logout handler
     const logOutHandler = async () => {
         try {
-            dispatch(deleteAllItemsFromCart());
             dispatch(logoutUser());
 
             await AsyncStorage.removeItem('userDetails');
