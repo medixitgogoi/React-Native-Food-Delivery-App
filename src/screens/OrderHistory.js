@@ -133,7 +133,7 @@ const OrderHistory = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 0 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
                 backgroundColor={background}
@@ -252,7 +252,6 @@ const OrderHistory = () => {
                     />
                 )}
             </View>
-
         </SafeAreaView>
     )
 }
