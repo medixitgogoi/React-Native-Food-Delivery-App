@@ -226,15 +226,9 @@ const Home = () => {
                                 return (
                                     <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
                                         {/* Wishlist */}
-                                        {product?.id === item.id ? (
-                                            <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Icon4 name="heart" size={18} color={'#3ea947'} />
-                                            </TouchableOpacity>
-                                        ) : (
-                                            <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Icon4 name="heart-outline" size={18} color={'#019934'} />
-                                            </TouchableOpacity>
-                                        )}
+                                        <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Icon3 name="favorite-border" size={18} color={'#019934'} />
+                                        </TouchableOpacity>
 
                                         {/* Image */}
                                         <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
@@ -323,15 +317,9 @@ const Home = () => {
                                 return (
                                     <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                                         {/* Wishlist */}
-                                        {product?.id === item.id ? (
-                                            <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Icon4 name="heart" size={18} color={'#3ea947'} />
-                                            </TouchableOpacity>
-                                        ) : (
-                                            <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Icon4 name="heart-outline" size={18} color={'#019934'} />
-                                            </TouchableOpacity>
-                                        )}
+                                        <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Icon3 name="favorite-border" size={18} color={'#019934'} />
+                                        </TouchableOpacity>
 
                                         {/* Image */}
                                         <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
@@ -425,15 +413,9 @@ const Home = () => {
                                 return (
                                     <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                                         {/* Wishlist */}
-                                        {product?.id === item.id ? (
-                                            <TouchableOpacity onPress={() => dispatch(removeItemFromWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Icon4 name="heart" size={18} color={'#3ea947'} />
-                                            </TouchableOpacity>
-                                        ) : (
-                                            <TouchableOpacity onPress={() => dispatch(addItemToWishlist(item))} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Icon4 name="heart-outline" size={18} color={'#019934'} />
-                                            </TouchableOpacity>
-                                        )}
+                                        <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Icon3 name="favorite-border" size={18} color={'#019934'} />
+                                        </TouchableOpacity>
 
                                         {/* Image */}
                                         <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
