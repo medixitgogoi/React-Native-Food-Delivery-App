@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -54,6 +54,7 @@ const OrderHistory = () => {
         }, [])
     );
 
+    // Render Order
     const renderOrder = ({ item }) => {
 
         const timestamp = item?.address_detail?.created_at;
@@ -70,7 +71,7 @@ const OrderHistory = () => {
         let hours = dateObj.getUTCHours();
         const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
         const period = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12 || 12; // Convert to 12-hour format
+        hours = hours % 12 || 12; 
         const formattedTime = `${hours}:${minutes}${period}`;
 
         return (
