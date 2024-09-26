@@ -107,7 +107,7 @@ const OrderHistory = () => {
 
                     {/* Price */}
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2), fontWeight: '600' }}>₹{item?.total_price}.00</Text>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2), fontWeight: '600' }}>₹{item?.total_price + item?.delivery_charge + item?.addl_charge}.00</Text>
                         <Icon name="keyboard-arrow-right" size={19} color={'#000'} />
                     </View>
                 </View>

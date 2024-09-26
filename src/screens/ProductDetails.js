@@ -277,7 +277,8 @@ const ProductDetails = ({ route }) => {
                             <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
                                 <Icon3 name="circle-plus" size={30} color={backIconColor} />
                             </TouchableOpacity>
-                        </View> */}
+                                </View> 
+                            */}
                         </View>
 
                         {/* Unit */}
@@ -302,16 +303,22 @@ const ProductDetails = ({ route }) => {
                                         <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.mrp, it.price)}% off</Text>
                                         </View>
+
                                         <View style={{ height: '78%', backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
                                             <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.size_name}</Text>
                                             <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                                                 <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.price}</Text>
-                                                <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.mrp}</Text>
+                                                {product.type !== '3' && <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.mrp}</Text>}
                                             </View>
-                                            {product.type !== '3' && (
+                                            {product.type !== '3' ? (
                                                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                                                     <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '400' }}>Available:</Text>
                                                     <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '700' }}>{it?.stock}</Text>
+                                                </View>
+                                            ) : (
+                                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                                                    <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '400' }}>MRP</Text>
+                                                        <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '600', textDecorationLine: 'line-through' }}>₹{it?.mrp}</Text>
                                                 </View>
                                             )}
                                         </View>
