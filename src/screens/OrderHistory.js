@@ -40,8 +40,10 @@ const OrderHistory = () => {
                     const response = await axios.get('/user/order/fetch');
                     console.log('orders', response?.data?.data);
 
-                    setOrders(response?.data?.data || []);
-                    setFilteredNames(response?.data?.data || []);
+                    const reversedOrders = response?.data?.data.reverse() || [];
+
+                    setOrders(reversedOrders);
+                    setFilteredNames(reversedOrders);
                 } catch (error) {
                     Alert.alert("Error", error.message); // Add a title to the alert
                 } finally {
@@ -164,6 +166,7 @@ const OrderHistory = () => {
                 </View>
             </View>
 
+            {/* Fallback image */}
             {!loading && orders.length === 0 && (
                 <View style={{ flexDirection: 'column', alignItems: 'center', gap: 30, flex: 1, marginTop: 30 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>

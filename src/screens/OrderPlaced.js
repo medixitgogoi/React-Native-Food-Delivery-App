@@ -14,6 +14,7 @@ const OrderPlaced = ({ route, navigation }) => {
     const address = route?.params?.selectedAddress?.address;
     const deliveryCharge = route?.params?.data?.delivery_charge;
     const totalPrice = parseInt(route?.params?.data?.total_price);
+    const additionalPrice = parseInt(route?.params?.data?.addl_charge);
 
     // Status Bar setters
     useFocusEffect(
@@ -77,7 +78,7 @@ const OrderPlaced = ({ route, navigation }) => {
                             Total Price:
                         </Text>
                         <Text style={{ fontSize: responsiveFontSize(2.2), fontWeight: '800', color: backIconColor, marginTop: 3, textAlign: 'center', paddingHorizontal: 10 }}>
-                            ₹{deliveryCharge + totalPrice}
+                            ₹{deliveryCharge + totalPrice + additionalPrice}
                         </Text>
                     </View>
 
