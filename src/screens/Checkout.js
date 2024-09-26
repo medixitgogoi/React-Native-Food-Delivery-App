@@ -131,7 +131,7 @@ const Checkout = () => {
                         const requestBody = {
                             merchantId: merchantId,
                             merchantTransactionId: generatetransactionId(),
-                            merchantUserId: "",
+                            merchantUserId: "MUID123",
                             amount: totalAmount * 100,
                             callbackurl: "https://webhook.site/callback-url",
                             mobileNumber: userDetails?.mobileNumber,
