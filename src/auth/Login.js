@@ -3,11 +3,10 @@ import { StyleSheet, Text, View, Image, SafeAreaView, StatusBar, Animated, Touch
 import { darkGreen, lightGreen, backIconColor } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon from 'react-native-vector-icons/dist/Feather';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,9 +16,6 @@ const { width: screenWidth } = Dimensions.get('window');
 const Login = () => {
 
     const navigation = useNavigation();
-
-    // const userDetails = useSelector(state => state.user);
-    // console.log('logibuser', userDetails);
 
     const [showOtpLogin, setShowOtpLogin] = useState(false);
     const [mobileNumber, setMobileNumber] = useState('');
@@ -80,13 +76,11 @@ const Login = () => {
 
                 setMobileNumber('');
                 setPassword('');
-
             } else {
                 Alert.alert(response?.data?.message || 'Something went wrong.', 'Please check your credentials and try again.');
             }
 
             setLoading(false);
-            
         } catch (error) {
             // Handle error response
             if (error.response) {
@@ -126,7 +120,7 @@ const Login = () => {
                                         </View>
 
                                         <View>
-                                            <Text style={{ color: '#444444', fontSize: responsiveFontSize(2), fontWeight: 500, textAlign: 'center' }}>Order delicious cakes, fresh groceries, and meals from your favorite restaurants — all in one convenient app!</Text>
+                                            <Text style={{ color: '#444444', fontSize: responsiveFontSize(2), fontWeight: 500, textAlign: 'center' }}>Order delicious cakes, fresh groceries, and meals from your favorite restaurant — all in one convenient app!</Text>
                                         </View>
                                     </View>
 

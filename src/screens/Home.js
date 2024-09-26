@@ -9,10 +9,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { fetchProducts } from '../utils/fetchProducts';
-import { addItemToWishlist, removeItemFromWishlist } from '../redux/WishlistSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -22,8 +21,6 @@ const Home = () => {
 
     const navigation = useNavigation();
 
-    const dispatch = useDispatch();
-
     const userDetails = useSelector(state => state.user);
     const wishlistProducts = useSelector(state => state.wishlist);
 
@@ -31,6 +28,10 @@ const Home = () => {
 
     const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    // Filtering
+    // Payment Gateway(For testing purposes)
+    // For Card payment - use 4592-0001-6891-4253 and OTP (any four digit number)
 
     const [cakes, setCakes] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
