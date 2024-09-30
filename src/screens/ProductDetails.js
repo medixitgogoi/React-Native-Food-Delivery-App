@@ -278,7 +278,6 @@ const ProductDetails = ({ route }) => {
                     </View>
                 )}
 
-
                 {!loading && product != null && (
                     <View style={{ paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
                         {/* Name */}
