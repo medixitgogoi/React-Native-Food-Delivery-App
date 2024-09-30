@@ -344,6 +344,7 @@ const Checkout = () => {
                     {/* Payment */}
                     {!loading && addresses?.length > 0 && (
                         <View style={{ marginVertical: 10 }}>
+                            {/* Heading */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
                                     <Icon name="account-balance-wallet" size={21} color={backIconColor} />
