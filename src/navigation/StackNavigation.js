@@ -16,6 +16,7 @@ const StackNavigation = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
+
     const cartProducts = useSelector(state => state.cart.items); // Use cart items from Redux
     const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
 
