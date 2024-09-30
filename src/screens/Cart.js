@@ -275,7 +275,7 @@ const Cart = () => {
 
                     {/* Content */}
                     {!loading && cartProducts?.map(item => (
-                        <View key={item.id} style={{ marginBottom: 12, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.product_id })} key={item.id} style={{ marginBottom: 12, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
                             {/* Image */}
                             <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
                                 <Image source={{ uri: item?.image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
@@ -357,7 +357,7 @@ const Cart = () => {
                                     <Icon name="delete" size={18} color={'#cb202d'} />
                                 )}
                             </TouchableOpacity>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </View>
 
