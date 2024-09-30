@@ -362,7 +362,7 @@ const Cart = () => {
                 </View>
 
                 {/* Cart Total */}
-                {cartProducts?.length != 0 && (
+                {!loading && cartProducts?.length != 0 && (
                     <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
                         {/* Heading */}
                         <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', alignItems: 'flex-end', gap: 4, justifyContent: 'center' }}>

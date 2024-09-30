@@ -191,6 +191,43 @@ const Checkout = () => {
         }
     };
 
+    const cod = async () => {
+        try {
+            setContineLoading(true);
+
+            // Data object as per the API requirement
+            const data = {
+                address_id: selectedAddress?.id,
+                payment_type: '2',
+            };
+
+            // API Call using axios
+            const response = await axios.post(`user/order/place`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response?.data?.success) {
+                navigation.navigate('OrderPlaced', {
+                    data: response?.data?.data,
+                    selectedAddress: selectedAddress
+                });
+            }
+
+            console.log('responseCOD', response);
+        } catch (error) {
+            // Handle error response
+            if (error.response) {
+                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
+        } finally {
+            setContineLoading(false);
+        }
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: 10 }}>
             <StatusBar
@@ -319,7 +356,7 @@ const Checkout = () => {
                                 {/* Cash on Delivery Option */}
                                 <TouchableOpacity
                                     style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 12, gap: 8, elevation: 1, paddingHorizontal: 10, borderRadius: 10, backgroundColor: '#fff', justifyContent: 'space-between' }}
-                                    onPress={() => setPaymentMethod('COD')}
+                                    onPress={cod}
                                 >
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}>
                                         <View style={{ paddingHorizontal: 10, paddingVertical: 3, borderColor: '#e5e5e5', borderWidth: 0.8, borderRadius: 7 }}>
