@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon5 from 'react-native-vector-icons/dist/Ionicons';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -20,7 +20,6 @@ const OrderHistory = () => {
 
     const userDetails = useSelector(state => state.user);
 
-    const [search, setSearch] = useState('');
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
     const [filteredNames, setFilteredNames] = useState([]);
@@ -28,6 +27,57 @@ const OrderHistory = () => {
     const [orders, setOrders] = useState(null);
 
     const [loading, setLoading] = useState(true);
+
+    const [searchQuery, setSearchQuery] = useState(''); // State for search query
+    const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered results
+    const [debouncedQuery, setDebouncedQuery] = useState(''); // State for debounced query
+
+    // Handle search input and debounce it
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedQuery(searchQuery); // Set debounced query after delay
+        }, 300); // 300ms delay
+
+        return () => {
+            clearTimeout(handler); // Clear the timeout if user types again
+        };
+    }, [searchQuery]); // Effect runs when searchQuery changes
+
+    // Filter orders based on debounced query
+    useEffect(() => {
+        if (debouncedQuery.trim() === '') {
+            setFilteredOrders(orders); // If search query is empty, show all orders
+            return;
+        }
+
+        const filtered = orders.filter(order =>
+            order.order_detail.some(product =>
+                product.product_name.toLowerCase().includes(debouncedQuery.toLowerCase())
+            )
+        );
+
+        setFilteredOrders(filtered); // Update state with filtered orders
+    }, [debouncedQuery, orders]); // Effect runs when debouncedQuery or orders change
+
+    // Function to highlight matching text
+    const highlightText = (text, query) => {
+        if (!query) return <Text>{text}</Text>; // If no query, return plain text
+
+        const regex = new RegExp(`(${query})`, 'gi'); // Case-insensitive regex for query
+        const parts = text.split(regex); // Split text by matching query
+
+        return (
+            <Text>
+                {parts.map((part, index) =>
+                    part.toLowerCase() === query.toLowerCase() ? (
+                        <Text key={index} style={{ backgroundColor: 'yellow' }}>{part}</Text>
+                    ) : (
+                        <Text key={index}>{part}</Text>
+                    )
+                )}
+            </Text>
+        );
+    };
 
     // Fetch Orders
     useFocusEffect(
@@ -71,7 +121,7 @@ const OrderHistory = () => {
         let hours = dateObj.getUTCHours();
         const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
         const period = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12 || 12; 
+        hours = hours % 12 || 12;
         const formattedTime = `${hours}:${minutes}${period}`;
 
         return (
@@ -87,7 +137,7 @@ const OrderHistory = () => {
 
                             {/* Details */}
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>{it?.product_name}</Text>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>{highlightText(it.product_name, debouncedQuery)}</Text>
                                 <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2) }}>x {it?.quantity}</Text>
                             </View>
                         </View>
@@ -155,12 +205,11 @@ const OrderHistory = () => {
                         <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                     </View>
                     <TextInput
-                        style={{ paddingVertical: 0, height: 40, color: '#000', fontWeight: '500', letterSpacing: 0.3, width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
+                        style={{ height: 40, color: '#000', fontWeight: '500', letterSpacing: 0.3, width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
                         placeholder="Search by dish, cake or grocery"
                         placeholderTextColor="#a0abb7"
-                        // onChangeText={handleSearch}
-                        onChangeText={setSearch}
-                        value={search}
+                        value={searchQuery}
+                        onChangeText={setSearchQuery} // Handle text input directly
                         onFocus={() => setIsSearchFocused(true)}
                         onBlur={() => setIsSearchFocused(false)}
                     />
@@ -244,9 +293,9 @@ const OrderHistory = () => {
                     />
                 ) : (
                     <FlatList
-                        data={filteredNames}
+                        data={filteredOrders}
+                        keyExtractor={(item) => item.id.toString()}
                         renderItem={renderOrder}
-                        keyExtractor={item => item.id.toString()}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
                     />
