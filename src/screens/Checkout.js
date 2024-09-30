@@ -172,7 +172,6 @@ const Checkout = () => {
                         console.error('Error during PhonePe transaction: ', err);
                     }
                 }
-
                 submitHandler();
             }
 
@@ -205,7 +204,7 @@ const Checkout = () => {
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
                     <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
                 </TouchableOpacity>
-                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.3), textAlign: 'center', textTransform: 'uppercase' }}>Select Address</Text>
+                <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.3), textAlign: 'center', textTransform: 'uppercase' }}>Checkout</Text>
                 <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.navigate('Profile')}>
                     <Icon2 name="account" size={23} color={'#000'} />
                 </TouchableOpacity>
@@ -306,7 +305,7 @@ const Checkout = () => {
                     </View>
 
                     {/* Payment */}
-                    {/* {!loading && addresses?.length > 0 && (
+                    {!loading && addresses?.length > 0 && (
                         <View style={{ marginVertical: 10 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10 }}>
@@ -315,7 +314,7 @@ const Checkout = () => {
                                 </View>
                             </View>
                         </View>
-                    )} */}
+                    )}
                 </View>
             </ScrollView>
 

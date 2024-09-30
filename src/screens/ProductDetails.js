@@ -10,15 +10,14 @@ import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon6 from 'react-native-vector-icons/dist/Entypo';
 import StarRatingDetails from '../components/StarRatingDetails';
 import StarRating from '../components/StarRating';
-import { addItemToCart, decrementItem } from '../redux/CartSlice';
+import { addItemToCart } from '../redux/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
-import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
-import OrderDetails from './OrderDetails';
+import axios from 'axios';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -29,14 +28,9 @@ const ProductDetails = ({ route }) => {
     const dispatch = useDispatch();
 
     const productId = route?.params?.data;
-    console.log('productId', productId);
+    // console.log('productId', productId);
 
     const [product, setProduct] = useState(null);
-
-    // const product = route?.params?.data;
-    // console.log('product', product);
-
-    // const [product, setProduct] = useState(null);
 
     const userDetails = useSelector(state => state.user);
     // console.log('userDetails', userDetails);
@@ -128,7 +122,7 @@ const ProductDetails = ({ route }) => {
         };
 
         fetchData(); // Call the async function inside useEffect
-    }, [userDetails, type]);
+    }, [userDetails, type, productId]);
 
     // AddToCart
     const addToCart = async () => {
@@ -190,23 +184,23 @@ const ProductDetails = ({ route }) => {
             }
         }
         getCartProducts();
-    }, [addToCartTrigger]);
+    }, [addToCartTrigger, productId]);
 
     // isPresentInTheCart
     useFocusEffect(
         useCallback(() => {
             setIsPresentInTheCart(cartProducts?.find(it => it?.product_id === product?.id));
             setUnit(isPresentInTheCart);
-        }, [cartProducts, addToCartTrigger]) // Dependencies for the callback
+        }, [cartProducts, addToCartTrigger, productId]) // Dependencies for the callback
     );
 
-    // DiscountPercentage
+    // Discount Percentage
     const discountPercentage = (price, discountedPrice) => {
         const num = (price - discountedPrice) / price;
         return Math.floor(num * 100);
     };
 
-    // UnitSelector
+    // Unit Selector
     const unitSelector = (item) => {
         if (isPresentInTheCart) {
             setUnit({ isPresentInTheCart });
@@ -216,14 +210,6 @@ const ProductDetails = ({ route }) => {
             } else {
                 setUnit(item); // Otherwise, update unit with the new item
             }
-        }
-    };
-
-    const decrementQuantity = (item) => {
-        if (isPresentInTheCart.qty === 1) {
-            return;
-        } else {
-            dispatch(decrementItem(item));
         }
     };
 
@@ -257,10 +243,9 @@ const ProductDetails = ({ route }) => {
                 </View>
 
                 {loading && (
-                    <ShimmerPlaceHolder
-                        visible={loading} // Shimmer disappears when the content is loaded
-                        style={{ width: 250, height: 200, borderRadius: 10, alignSelf: 'center' }} // Rounded corners for the box
-                    />
+                    <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <ActivityIndicator size={'large'} color={backIconColor} />
+                    </View>
                 )}
 
                 {!loading && product != null && (
