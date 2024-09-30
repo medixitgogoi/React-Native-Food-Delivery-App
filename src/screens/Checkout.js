@@ -7,6 +7,7 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
+import Icon6 from 'react-native-vector-icons/dist/Ionicons';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -104,6 +105,7 @@ const Checkout = () => {
     const continueHandler = async () => {
         try {
             setContineLoading(true);
+
             // Data object as per the API requirement
             const data = {
                 address_id: selectedAddress?.id,
@@ -185,9 +187,7 @@ const Checkout = () => {
                 Alert.alert("Error", "Network error. Please check your internet connection and try again.");
             }
         } finally {
-            setTimeout(() => {
-                setContineLoading(false);
-            }, 2000)
+            setContineLoading(false);
         }
     };
 
@@ -211,7 +211,7 @@ const Checkout = () => {
             </View>
 
             <ScrollView style={{ flex: 1 }}>
-                <View style={{ paddingBottom: 40 }}>
+                <View style={{ paddingBottom: 20 }}>
                     {/* Address */}
                     <View style={{ paddingHorizontal: 12, marginVertical: 13 }}>
                         {/* Heading */}
@@ -313,13 +313,45 @@ const Checkout = () => {
                                     <Text style={{ color: '#000', fontSize: responsiveFontSize(2.2), fontWeight: '700' }}>Payment</Text>
                                 </View>
                             </View>
+
+                            {/* Payment Options */}
+                            <View style={{ paddingHorizontal: 10, marginTop: 8 }}>
+                                {/* Cash on Delivery Option */}
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 12, gap: 8, elevation: 1, paddingHorizontal: 10, borderRadius: 10, backgroundColor: '#fff', justifyContent: 'space-between' }}
+                                    onPress={() => setPaymentMethod('COD')}
+                                >
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}>
+                                        <View style={{ paddingHorizontal: 10, paddingVertical: 3, borderColor: '#e5e5e5', borderWidth: 0.8, borderRadius: 7 }}>
+                                            <Icon2 name="cash-multiple" size={20} color={"#000"} />
+                                        </View>
+                                        <Text style={{ fontSize: responsiveFontSize(2), color: '#000', fontWeight: '500' }}>
+                                            Pay on Delivery
+                                        </Text>
+                                    </View>
+                                    <Icon name="keyboard-arrow-right" size={20} color={'#5a5a5a'} />
+                                </TouchableOpacity>
+
+                                {/* Online Payment Option */}
+                                <TouchableOpacity onPress={continueHandler} style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', paddingVertical: 12, gap: 8, elevation: 1, paddingHorizontal: 10, borderRadius: 10, backgroundColor: '#fff', justifyContent: 'space-between' }} >
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}>
+                                        <View style={{ paddingHorizontal: 10, paddingVertical: 3, borderColor: '#e5e5e5', borderWidth: 0.8, borderRadius: 7 }}>
+                                            <Icon6 name="card-outline" size={20} color={"#000"} />
+                                        </View>
+                                        <Text style={{ fontSize: responsiveFontSize(2), color: '#000', fontWeight: '500' }}>
+                                            Online Payment
+                                        </Text>
+                                    </View>
+                                    <Icon name="keyboard-arrow-right" size={20} color={'#5a5a5a'} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     )}
                 </View>
             </ScrollView>
 
             {/* Continue button*/}
-            {!loading && addresses.length !== 0 && (
+            {/* {!loading && addresses.length !== 0 && (
                 <TouchableOpacity onPress={continueHandler} style={{ alignSelf: 'center', position: 'absolute', bottom: 9, backgroundColor: lightGreen, borderRadius: 14, width: '94%', padding: 10, height: 45, borderColor: backIconColor, borderWidth: 1.3 }}>
                     {contineLoading ? (
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, justifyContent: 'center' }}>
@@ -334,7 +366,7 @@ const Checkout = () => {
                         </View>
                     )}
                 </TouchableOpacity>
-            )}
+            )} */}
         </SafeAreaView>
     )
 }
