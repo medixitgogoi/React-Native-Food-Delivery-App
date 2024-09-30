@@ -16,6 +16,11 @@ import { fetchCakes } from '../utils/fetchCakes';
 import { fetchGroceries } from '../utils/fetchGroceries';
 import { fetchRestaurants } from '../utils/fetchRestaurants';
 import axios from 'axios';
+import LinearGradient from 'react-native-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import OrderDetails from './OrderDetails';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -23,10 +28,18 @@ const ProductDetails = ({ route }) => {
 
     const dispatch = useDispatch();
 
-    const product = route?.params?.data;
-    console.log('product', product);
+    const productId = route?.params?.data;
+    console.log('productId', productId);
+
+    const [product, setProduct] = useState(null);
+
+    // const product = route?.params?.data;
+    // console.log('product', product);
+
+    // const [product, setProduct] = useState(null);
 
     const userDetails = useSelector(state => state.user);
+    // console.log('userDetails', userDetails);
 
     const [cartProducts, setCartProducts] = useState([]);
 
@@ -49,8 +62,40 @@ const ProductDetails = ({ route }) => {
     const [loading, setLoading] = useState(false);
     const [addToCartLoading, setAddToCartLoading] = useState(false);
 
-    // const isPresentInTheCart = cartProducts.find(it => it.product_id === product.id);
-    // console.log('isPresentInTheCart', isPresentInTheCart);
+    // fetch Product details
+    const getProductDetails = async () => {
+        try {
+            setLoading(true);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+
+            const data = {
+                product_id: productId,
+            };
+
+            const response = await axios.post(`/user/product/details`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('productDetails', response);
+
+            if (response?.data?.status) {
+                setProduct(response?.data?.data);
+            }
+        } catch (error) {
+            Alert.alert('Error', error.message || 'Failed to fetch product details.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // getProductDetails useFocusEffect()
+    useFocusEffect(
+        useCallback(() => {
+            getProductDetails();
+        }, [userDetails, productId])
+    );
 
     // error handling
     useEffect(() => {
@@ -128,14 +173,6 @@ const ProductDetails = ({ route }) => {
         }
     }
 
-    // isPresentInTheCart
-    useFocusEffect(
-        useCallback(() => {
-            setIsPresentInTheCart(cartProducts?.find(it => it.product_id === product.id));
-            setUnit(isPresentInTheCart);
-        }, [cartProducts, product.id, addToCartTrigger]) // Dependencies for the callback
-    );
-
     // Get cart products
     useEffect(() => {
         const getCartProducts = async () => {
@@ -154,6 +191,14 @@ const ProductDetails = ({ route }) => {
         }
         getCartProducts();
     }, [addToCartTrigger]);
+
+    // isPresentInTheCart
+    useFocusEffect(
+        useCallback(() => {
+            setIsPresentInTheCart(cartProducts?.find(it => it?.product_id === product?.id));
+            setUnit(isPresentInTheCart);
+        }, [cartProducts, addToCartTrigger]) // Dependencies for the callback
+    );
 
     // DiscountPercentage
     const discountPercentage = (price, discountedPrice) => {
@@ -184,7 +229,7 @@ const ProductDetails = ({ route }) => {
 
     // RelatedProductsHandler
     const relatedProductsHandler = (item) => {
-        navigation.navigate('ProductDetails', { data: item })
+        navigation.navigate('ProductDetails', { data: item?.id })
         setUnit(null);
     };
 
@@ -210,16 +255,46 @@ const ProductDetails = ({ route }) => {
                         <Icon4 name="shopping" size={20} color={'#000'} />
                     </TouchableOpacity>
                 </View>
-                <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '87%' }}>
-                    <Image source={{ uri: product?.image }} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
-                </View>
+
+                {loading && (
+                    <ShimmerPlaceHolder
+                        visible={loading} // Shimmer disappears when the content is loaded
+                        style={{ width: 250, height: 200, borderRadius: 10, alignSelf: 'center' }} // Rounded corners for the box
+                    />
+                )}
+
+                {!loading && product != null && (
+                    <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '87%' }}>
+                        <Image source={{ uri: product?.image }} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
+                    </View>
+                )}
             </View>
 
             {/* Details */}
             <ScrollView>
-                {loading && <ActivityIndicator size={'small'} color={backIconColor} />}
+                {/* Loading */}
+                {loading && (
+                    <View style={{ paddingHorizontal: 11, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
+                        {/* First shimmer card */}
+                        <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                        </View>
 
-                {!loading && (
+                        {/* Second shimmer card */}
+                        <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                        </View>
+                    </View>
+                )}
+
+
+                {!loading && product != null && (
                     <View style={{ paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
                         {/* Name */}
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
@@ -253,32 +328,6 @@ const ProductDetails = ({ route }) => {
                                 <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product?.min_price}</Text>
                                 <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product?.min_mrp}</Text>
                             </View>
-
-                            {/* quantity */}
-                            {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (isPresentInTheCart) {
-                                        decrementQuantity(product);
-                                    } else if (quantity > 1) {
-                                        setQuantity(prev => prev - 1);
-                                    }
-                                }}
-                            >
-                                <Icon3 name="circle-minus" size={30} color={backIconColor} />
-                            </TouchableOpacity>
-
-                            {isPresentInTheCart ? (
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart.qty}</Text>
-                            ) : (
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{quantity}</Text>
-                            )}
-
-                            <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
-                                <Icon3 name="circle-plus" size={30} color={backIconColor} />
-                            </TouchableOpacity>
-                                </View> 
-                            */}
                         </View>
 
                         {/* Unit */}
@@ -306,9 +355,9 @@ const ProductDetails = ({ route }) => {
 
                                         <View style={{ height: '78%', backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
                                             <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.size_name}</Text>
-                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                                <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.price}</Text>
-                                                {product.type !== '3' && <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.mrp}</Text>}
+                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 5 }}>
+                                                <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.1) }}>₹{it.price}</Text>
+                                                {product.type !== '3' && <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.7), textDecorationLine: 'line-through', paddingBottom: 1 }}>₹{it.mrp}</Text>}
                                             </View>
                                             {product.type !== '3' ? (
                                                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
@@ -318,7 +367,7 @@ const ProductDetails = ({ route }) => {
                                             ) : (
                                                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
                                                     <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '400' }}>MRP</Text>
-                                                        <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '600', textDecorationLine: 'line-through' }}>₹{it?.mrp}</Text>
+                                                    <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '600', textDecorationLine: 'line-through' }}>₹{it?.mrp}</Text>
                                                 </View>
                                             )}
                                         </View>
@@ -335,12 +384,11 @@ const ProductDetails = ({ route }) => {
 
                         {/* Related products */}
                         <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 60 }}>
-                            <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
+                            <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products : </Text>
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
                                 {relatedProducts?.slice(0, 4)?.map(item => (
                                     <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: '48%', marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
-
                                         {/* Wishlist */}
                                         <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                             <Icon name="favorite-border" size={18} color={'#019934'} />
