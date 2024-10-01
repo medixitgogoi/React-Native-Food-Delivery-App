@@ -36,6 +36,7 @@ const Home = () => {
     const [cakes, setCakes] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
     const [groceries, setGroceries] = useState(null);
+    const [branch, setBranch] = useState(null);
 
     // Status bar setters
     useFocusEffect(
@@ -56,6 +57,7 @@ const Home = () => {
                 setRestaurants(response?.resturants?.slice(0, 15) || []);
                 setCakes(response?.cakes?.slice(0, 15) || []);
 
+                setBranch(response?.branch?.area);
             } catch (error) {
                 Alert.alert("Error fetching data", error.message);
             } finally {
@@ -88,7 +90,7 @@ const Home = () => {
                 </TouchableOpacity>
             </View>
 
-            {/* Searchbar and location */}
+            {/* Searchbar and Location */}
             <LinearGradient
                 colors={[darkGreen, background]}
                 start={{ x: 0, y: 0 }}
@@ -96,9 +98,8 @@ const Home = () => {
                 locations={[0, 0.99]}
                 style={{ paddingBottom: 20, }}
             >
-
-                {/* Searchbar and location */}
                 <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, paddingVertical: 5 }}>
+                    {/* Searchbar */}
                     <View style={{ width: '70%', borderColor: isSearchFocused ? '#3a9d43' : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
                             <Icon4 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
@@ -114,14 +115,15 @@ const Home = () => {
                         />
                     </View>
 
+                    {/* Location */}
                     <View style={{ width: '29%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Icon3 name="location-pin" size={30} color={'#cb202d'} />
                         <TouchableOpacity style={{ width: '70%', flexDirection: 'column' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '600' }}>Nongpoh</Text>
+                                <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '600' }}>{branch}</Text>
                                 <Icon4 name="caret-down-outline" size={15} color={'#000'} />
                             </View>
-                            <Text style={{ color: '#768697', fontWeight: '600', fontSize: responsiveFontSize(1.5) }}>Meghalaya</Text>
+                            <Text style={{ color: '#768697', fontWeight: '600', fontSize: responsiveFontSize(1.5) }}>Assam</Text>
                         </TouchableOpacity>
                     </View>
 
