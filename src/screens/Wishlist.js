@@ -173,7 +173,6 @@ const Wishlist = () => {
                     />
                 )}
             </View>
-
         </SafeAreaView>
     )
 }

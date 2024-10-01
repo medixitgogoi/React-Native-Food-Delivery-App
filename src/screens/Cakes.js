@@ -280,6 +280,10 @@ const Cakes = () => {
         <OrderItem item={item} search={search} />
     ), [search]);
 
+    const addToWishlist = () => {
+
+    }
+
     const OrderItem = ({ item, search }) => {
 
         // search text

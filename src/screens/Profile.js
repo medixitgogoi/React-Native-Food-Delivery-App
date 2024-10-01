@@ -12,6 +12,7 @@ import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import { logoutUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const Profile = () => {
 
@@ -30,14 +31,20 @@ const Profile = () => {
         }, [])
     );
 
-    // logout handler
+    // Logout Handler
     const logOutHandler = async () => {
         try {
             dispatch(logoutUser());
-
             await AsyncStorage.removeItem('userDetails');
-        } catch (error) {
-            Alert.alert('Failed to logout', 'Please try again');
+        } catch {
+            Toast.show({
+                type: 'error',
+                text1: 'Failed to log out',
+                text2: `Please try again`,
+                position: 'top', // Adjusts to the bottom by default
+                topOffset: 35, // Moves the toast 10 units down from the bottom
+            });
+            setIsLoggingOut(false);
         }
     };
 
