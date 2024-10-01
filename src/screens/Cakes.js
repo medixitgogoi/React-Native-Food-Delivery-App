@@ -26,12 +26,10 @@ const Cakes = () => {
 
     const navigation = useNavigation();
 
+    const dispatch = useDispatch();
+
     const userDetails = useSelector(state => state.user);
     const wishlisted = useSelector(state => state.wishlist);
-
-    console.log('wishlisted', wishlisted);
-
-    const dispatch = useDispatch();
 
     // Status bar setters
     useFocusEffect(
@@ -57,6 +55,8 @@ const Cakes = () => {
     const [ratingHighToLow, setRatingHighToLow] = useState(false);
     const [veg, setVeg] = useState(false);
     const [nonVeg, setNonVeg] = useState(false);
+
+    const [ids, setIds] = useState([]);
 
     const [filteredNames, setFilteredNames] = useState([]);
 
@@ -139,7 +139,7 @@ const Cakes = () => {
     useFocusEffect(
         useCallback(() => {
             fetchData(); // Fetch or refresh the product list when the component is focused
-        }, [userDetails, wishlistProducts]) // Add wishlistProducts to dependency array
+        }, [userDetails, wishlistProducts, wishlisted]) // Add wishlistProducts to dependency array
     );
 
     // Fetch data
@@ -239,16 +239,20 @@ const Cakes = () => {
     // get Wishlisted Products
     const getWishlistedProducts = useCallback(async () => {
         try {
-            // setLoading(true);
+            setLoading(true);
             axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
             const response = await axios.get('/user/wishlist/fetch');
-            console.log('wishlistProducts', response?.data?.data);
+            // console.log('wishlistProducts', response);
             setWishlistProducts(response?.data?.data || []);
+
+            if (response?.data?.status) {
+                const productIds = wishlistProducts?.map(product => product.product_id);
+                setIds(productIds);
+            }
         } catch (error) {
             Alert.alert("Error", error.message);
         } finally {
-            // setLoading(false);
-            // setClciked(false);
+            setLoading(false);
         }
     }, []);
 
@@ -257,50 +261,50 @@ const Cakes = () => {
         getWishlistedProducts();
     }, [])
 
-    const addToWishlist = async (id, name) => {
-        try {
-            const data = { product_id: id };
-            const response = await axios.post(`/user/wishlist/add`, data, {
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (response?.data?.status) {
-                Toast.show({
-                    type: 'info',
-                    text1: 'Added item to wishlist',
-                    text2: `${name} has been added to your wishlist!`,
-                    position: 'top',
-                    topOffset: 10,
-                });
-            }
-        } catch (error) {
-            Alert.alert("Error", error.message || "Something went wrong.");
-        }
-    };
-
-    // const addToWishlist = async (id, item) => {
+    // const addToWishlist = async (id, name) => {
     //     try {
     //         const data = { product_id: id };
     //         const response = await axios.post(`/user/wishlist/add`, data, {
     //             headers: { 'Content-Type': 'application/json' },
     //         });
 
-    //         // Assuming response?.data?.data contains the full product data
-    //         const newProduct = response?.data?.data;
-    //         console.log('newProduct', newProduct);
-
-    //         dispatch(addItemToWishlist(item));
-
-    //         // Update the wishlistProducts state with the new product to trigger re-render
-    //         setWishlistProducts(prev => [...prev, newProduct]);
+    //         if (response?.data?.status) {
+    //             Toast.show({
+    //                 type: 'info',
+    //                 text1: 'Added item to wishlist',
+    //                 text2: `${name} has been added to your wishlist!`,
+    //                 position: 'top',
+    //                 topOffset: 10,
+    //             });
+    //         }
     //     } catch (error) {
     //         Alert.alert("Error", error.message || "Something went wrong.");
-    //     } finally {
-    //         // Optionally trigger other re-renders or log as needed
     //     }
     // };
 
-    // console.log('wishlist products', wishlistProducts);
+    const addToWishlist = async (id, item) => {
+        try {
+            const data = { product_id: id };
+            const response = await axios.post(`/user/wishlist/add`, data, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            // Assuming response?.data?.data contains the full product data
+            // const newProduct = response?.data?.data;
+            // console.log('newProduct', newProduct);
+
+            dispatch(addItemToWishlist(item));
+
+            // Update the wishlistProducts state with the new product to trigger re-render
+            // setWishlistProducts(prev => [...prev, newProduct]);
+        } catch (error) {
+            Alert.alert("Error: ", error.message || "Something went wrong.");
+        } finally {
+            // Optionally trigger other re-renders or log as needed
+        }
+    };
+
+    console.log('wishlist products', wishlisted);
 
     // const deleteFromWishlist = useCallback(async (id) => {
     //     try {
@@ -318,11 +322,10 @@ const Cakes = () => {
     // }, []);
 
     const renderOrder = useCallback(({ item }) => (
-        <OrderItem item={item} search={search} wishlistProducts={wishlistProducts} addToWishlist={addToWishlist} />
+        <OrderItem item={item} search={search} />
     ), [search]);
 
     const OrderItem = ({ item, search }) => {
-
         // Search text
         const getHighlightedText = (text, highlight) => {
             const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
@@ -339,21 +342,22 @@ const Cakes = () => {
             );
         };
 
-        // const wishlistedProduct = wishlistProducts?.find(product => product?.product_id === item?.id);
-        // if (wishlistedProduct) {
-        // }
-        
-        console.log('wishlisted Product', wishlistProducts?.find(product => product?.product_id === item?.id));
+        const wishlistedProduct = wishlisted?.find(it => it.product_id === item?.id);
+        if (wishlistedProduct) {
+            console.log('wishlisted Product', wishlistedProduct);
+        }
+
+        // console.log('wishlisted Product', wishlistProducts?.find(product => product?.product_id === item?.id));
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                 {/* Wishlist */}
-                <TouchableOpacity onPress={() => addToWishlist(item?.id, item?.name)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    {/* {wishlistedProduct ? (
+                <TouchableOpacity onPress={() => addToWishlist(item?.id, item)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    {wishlistedProduct ? (
                         <Icon5 name="heart" size={18} color={'#3ea947'} />
                     ) : (
-                    )} */}
-                    <Icon name="favorite-border" size={18} color={'#019934'} />
+                        <Icon name="favorite-border" size={18} color={'#019934'} />
+                    )}
                 </TouchableOpacity>
 
                 {/* Image */}
