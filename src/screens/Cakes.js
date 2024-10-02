@@ -297,6 +297,7 @@ const Cakes = () => {
         };
 
         const product = wishlistProductsFromRedux.find(it => it.product_id === item.id);
+        
         useEffect(() => {
             if (product) {
                 console.log('product', product);
