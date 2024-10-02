@@ -239,6 +239,7 @@ const Cakes = () => {
     const addToWishlist = async (id) => {
         try {
             const data = { product_id: id };
+            
             const response = await axios.post(`/user/wishlist/add`, data, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -297,12 +298,9 @@ const Cakes = () => {
         };
 
         const product = wishlistProductsFromRedux.find(it => it.product_id === item.id);
-        
-        useEffect(() => {
-            if (product) {
-                console.log('product', product);
-            }
-        }, []);
+        if (product) {
+            console.log('product', product);
+        }
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
