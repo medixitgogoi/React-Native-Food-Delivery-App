@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Alert } from "react-native"; // Import Alert if you're using React Native
 
-export const fetchCakes = async (userDetails) => { // Pass userDetails as a parameter
+export const fetchCakes = async (userDetails, wishlistProducts) => { // Pass userDetails as a parameter
+    console.log('wishlistProducts from fetchCakes', wishlistProducts);
     try {
         axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
         const response = await axios.get('/user/appload');

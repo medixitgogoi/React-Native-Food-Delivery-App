@@ -120,17 +120,36 @@ const Cakes = () => {
         setRatingHighToLow(prev => !prev);
     };
 
+    const getWishlistedProducts = useCallback(async () => {
+        try {
+            setLoading(true);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+            const response = await axios.get('/user/wishlist/fetch');
+            console.log('wishlistProductssdqq', response);
+            setWishlistProducts(response?.data?.data || []);
+
+            if (response?.data?.status) {
+                const productIds = wishlistProducts?.map(product => product.product_id);
+                setIds(productIds);
+            }
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
     const fetchData = async () => {
         setLoading(true);
         try {
-            const data = await fetchCakes(userDetails); // Fetch all products
+            const data = await fetchCakes(userDetails, wishlistProducts); // Fetch all products
             console.log('cakes', data);
             setOriginalCakes(data);
             setCakes(data);
             setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
             setHasMore(data?.length > pageSize); // Check if more data is available
         } catch (error) {
-            Alert.alert('Error fetching cakes:', error.message);
+            Alert.alert('Error fetching cakes: ', error.message);
         } finally {
             setLoading(false);
         }
@@ -138,8 +157,9 @@ const Cakes = () => {
 
     useFocusEffect(
         useCallback(() => {
+            getWishlistedProducts();
             fetchData(); // Fetch or refresh the product list when the component is focused
-        }, [userDetails, wishlistProducts]) // Add wishlistProducts to dependency array
+        }, [userDetails]) // Add wishlistProducts to dependency array
     );
 
     // Fetch data
@@ -237,24 +257,7 @@ const Cakes = () => {
     }, [veg, nonVeg, priceLowToHigh, priceHighToLow]);
 
     // get Wishlisted Products
-    const getWishlistedProducts = useCallback(async () => {
-        try {
-            setLoading(true);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-            const response = await axios.get('/user/wishlist/fetch');
-            console.log('wishlistProductssdqq', response);
-            setWishlistProducts(response?.data?.data || []);
 
-            if (response?.data?.status) {
-                const productIds = wishlistProducts?.map(product => product.product_id);
-                setIds(productIds);
-            }
-        } catch (error) {
-            Alert.alert("Error", error.message);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
 
     // useEffect getWishlistedProducts
     useEffect(() => {
@@ -338,20 +341,6 @@ const Cakes = () => {
 
         console.log('itemmmm', item?.id);
         console.log('wishlist id', wishlistProducts);
-
-        const getWishlistedProducts = useCallback(async () => {
-            try {
-                setLoading(true);
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/wishlist/fetch');
-                console.log('wishlistProductssdqq', response);
-                setWishlistProducts(response?.data?.data || []);
-            } catch (error) {
-                Alert.alert("Error", error.message);
-            } finally {
-                setLoading(false);
-            }
-        }, []);
 
         // Search text
         const getHighlightedText = (text, highlight) => {
