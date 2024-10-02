@@ -37,6 +37,7 @@ const Home = () => {
     const [restaurants, setRestaurants] = useState(null);
     const [groceries, setGroceries] = useState(null);
     const [branch, setBranch] = useState(null);
+    const [pin, setPin] = useState(null);
 
     // Status bar setters
     useFocusEffect(
@@ -58,6 +59,7 @@ const Home = () => {
                 setCakes(response?.cakes?.slice(0, 15) || []);
 
                 setBranch(response?.branch?.area);
+                setPin(response?.branch?.pin);
             } catch (error) {
                 Alert.alert("Error fetching data", error.message);
             } finally {
@@ -77,7 +79,7 @@ const Home = () => {
             />
 
             {/* Header */}
-            <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, paddingHorizontal: 12 }}>
+            {/* <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, paddingHorizontal: 12 }}>
                 <View style={{ flexDirection: 'column' }}>
                     <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Welcome</Text>
                     <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>{userDetails?.[0]?.name}</Text>
@@ -88,7 +90,7 @@ const Home = () => {
                 >
                     <Icon name="user-alt" size={15} color={'#000'} />
                 </TouchableOpacity>
-            </View>
+            </View> */}
 
             {/* Searchbar and Location */}
             <LinearGradient
@@ -100,7 +102,7 @@ const Home = () => {
             >
                 <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, paddingVertical: 5 }}>
                     {/* Searchbar */}
-                    <View style={{ width: '70%', borderColor: isSearchFocused ? '#3a9d43' : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
+                    {/* <View style={{ width: '70%', borderColor: isSearchFocused ? '#3a9d43' : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
                             <Icon4 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                         </View>
@@ -113,6 +115,12 @@ const Home = () => {
                             onFocus={() => setIsSearchFocused(true)}
                             onBlur={() => setIsSearchFocused(false)}
                         />
+                    </View> */}
+
+                    {/* Welcome */}
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Welcome</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>{userDetails?.[0]?.name}</Text>
                     </View>
 
                     {/* Location */}
@@ -127,6 +135,13 @@ const Home = () => {
                         </TouchableOpacity>
                     </View>
 
+                    {/* Profile */}
+                    <TouchableOpacity
+                        style={{ backgroundColor: lightGreen, width: 35, height: 35, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
+                        onPress={() => navigation.navigate('Profile')}
+                    >
+                        <Icon name="user-alt" size={15} color={'#000'} />
+                    </TouchableOpacity>
                 </View>
             </LinearGradient>
 
