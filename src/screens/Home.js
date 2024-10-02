@@ -90,7 +90,8 @@ const Home = () => {
                 >
                     <Icon name="user-alt" size={15} color={'#000'} />
                 </TouchableOpacity>
-            </View> */}
+                </View> 
+            */}
 
             {/* Searchbar and Location */}
             <LinearGradient

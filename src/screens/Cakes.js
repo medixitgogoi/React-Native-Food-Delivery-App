@@ -55,6 +55,7 @@ const Cakes = () => {
     const [ratingHighToLow, setRatingHighToLow] = useState(false);
     const [veg, setVeg] = useState(false);
     const [nonVeg, setNonVeg] = useState(false);
+    const [clicked, setClicked] = useState(false);
 
     const [ids, setIds] = useState([]);
 
@@ -138,7 +139,7 @@ const Cakes = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [clicked]);
 
     // Load more data when scrolling to the end
     const loadMoreData = useCallback(() => {
@@ -251,6 +252,8 @@ const Cakes = () => {
             }
         } catch (error) {
             Alert.alert("Error: ", error.message || "Something went wrong.");
+        } finally {
+            setClicked(true);
         }
     };
 
