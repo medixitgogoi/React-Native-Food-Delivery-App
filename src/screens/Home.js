@@ -22,7 +22,7 @@ const Home = () => {
     const navigation = useNavigation();
 
     const userDetails = useSelector(state => state.user);
-    const wishlistProducts = useSelector(state => state.wishlist);
+    const wishlistProducts = useSelector(state => state.wishlist.items);
 
     const [loading, setLoading] = useState(true);
 

@@ -26,7 +26,7 @@ const Cakes = () => {
 
     const navigation = useNavigation();
 
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
     // const wishlisted = useSelector(state => state.wishlist);
@@ -120,67 +120,25 @@ const Cakes = () => {
         setRatingHighToLow(prev => !prev);
     };
 
-    const getWishlistedProducts = useCallback(async () => {
-        try {
-            setLoading(true);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-            const response = await axios.get('/user/wishlist/fetch');
-            console.log('wishlistProductssdqq', response);
-            setWishlistProducts(response?.data?.data || []);
-
-            if (response?.data?.status) {
-                const productIds = wishlistProducts?.map(product => product.product_id);
-                setIds(productIds);
-            }
-        } catch (error) {
-            Alert.alert("Error", error.message);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const data = await fetchCakes(userDetails, wishlistProducts); // Fetch all products
-            console.log('cakes', data);
-            setOriginalCakes(data);
-            setCakes(data);
-            setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
-            setHasMore(data?.length > pageSize); // Check if more data is available
-        } catch (error) {
-            Alert.alert('Error fetching cakes: ', error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useFocusEffect(
-        useCallback(() => {
-            getWishlistedProducts();
-            fetchData(); // Fetch or refresh the product list when the component is focused
-        }, [userDetails]) // Add wishlistProducts to dependency array
-    );
-
     // Fetch data
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         setLoading(true);
-    //         try {
-    //             const data = await fetchCakes(userDetails); // Fetch all products
-    //             console.log('cakes', data);
-    //             setOriginalCakes(data);
-    //             setCakes(data);
-    //             setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
-    //             setHasMore(data?.length > pageSize); // Check if more data is available
-    //         } catch (error) {
-    //             Alert.alert('Error fetching cakes:', error.message);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchCakes(userDetails); // Fetch all products
+                // console.log('cakes', data);
+                setOriginalCakes(data);
+                setCakes(data);
+                setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
+                setHasMore(data?.length > pageSize); // Check if more data is available
+            } catch (error) {
+                Alert.alert('Error fetching cakes:', error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     // Load more data when scrolling to the end
     const loadMoreData = useCallback(() => {
@@ -256,14 +214,6 @@ const Cakes = () => {
         applyFilterAndSort();
     }, [veg, nonVeg, priceLowToHigh, priceHighToLow]);
 
-    // get Wishlisted Products
-
-
-    // useEffect getWishlistedProducts
-    useEffect(() => {
-        getWishlistedProducts();
-    }, [])
-
     // const addToWishlist = async (id, name) => {
     //     try {
     //         const data = { product_id: id };
@@ -294,29 +244,17 @@ const Cakes = () => {
                 },
             });
 
+            console.log('wislssdsddsdsd', response?.data?.data)
+
             if (response?.data?.status) {
-                getWishlistedProducts();
-                // const newProduct = response?.data?.data;
-                // console.log('newProduct', newProduct);
-                // setWishlistProducts(prev => [...prev, newProduct]);
+                dispatch(addItemToWishlist(response?.data?.data))
             }
-
-            // Assuming response?.data?.data contains the full product data
-            // const newProduct = response?.data?.data;
-            // console.log('newProduct', newProduct);
-
-            // dispatch(addItemToWishlist(item));
-
-            // Update the wishlistProducts state with the new product to trigger re-render
-            // setWishlistProducts(prev => [...prev, newProduct]);
         } catch (error) {
             Alert.alert("Error: ", error.message || "Something went wrong.");
-        } finally {
-            // Optionally trigger other re-renders or log as needed
         }
     };
 
-    console.log('wishlist products', wishlistProducts);
+    // console.log('wishlist products', wishlistProducts);
 
     // const deleteFromWishlist = useCallback(async (id) => {
     //     try {
@@ -339,9 +277,6 @@ const Cakes = () => {
 
     const OrderItem = ({ item, search }) => {
 
-        console.log('itemmmm', item?.id);
-        console.log('wishlist id', wishlistProducts);
-
         // Search text
         const getHighlightedText = (text, highlight) => {
             const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
@@ -358,22 +293,17 @@ const Cakes = () => {
             );
         };
 
-        const wishlistedProduct = wishlistProducts?.find(it => it.product_id === item?.id);
-        if (wishlistedProduct) {
-            console.log('wishlisted Product', wishlistedProduct);
-        }
-
-        // console.log('wishlisted Product', wishlistProducts?.find(product => product?.product_id === item?.id));
-
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                 {/* Wishlist */}
                 <TouchableOpacity onPress={() => addToWishlist(item?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    {wishlistedProduct ? (
+                    <Icon name="favorite-border" size={18} color={'#019934'} />
+
+                    {/* {wishlistedProduct ? (
                         <Icon5 name="heart" size={18} color={'#3ea947'} />
                     ) : (
                         <Icon name="favorite-border" size={18} color={'#019934'} />
-                    )}
+                    )} */}
                 </TouchableOpacity>
 
                 {/* Image */}
