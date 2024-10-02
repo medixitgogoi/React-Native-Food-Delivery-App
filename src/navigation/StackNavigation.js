@@ -8,6 +8,7 @@ import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCartProducts } from '../utils/fetchCartProducts';
 import { setCartItems } from '../redux/CartSlice';
+import { setWishlist } from '../redux/WishlistSlice';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
@@ -18,6 +19,8 @@ const StackNavigation = () => {
     const userDetails = useSelector(state => state.user);
 
     const cartProducts = useSelector(state => state.cart.items); // Use cart items from Redux
+    const wishlistItems = useSelector(state => state.wishlist.items);
+
     const isUserLoggedIn = userDetails?.length > 0 && userDetails?.some(item => item.accessToken);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +38,26 @@ const StackNavigation = () => {
 
         if (isUserLoggedIn) {
             fetchData(); // Fetch data only if user is logged in
+        }
+    }, [dispatch, userDetails, isUserLoggedIn]); // Include dependencies that may change
+
+    // Fetch Wishlist Products from API and update Redux
+    useEffect(() => {
+        const fetchWishlistProducts = async () => {
+            try {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                const response = await axios.get('/user/wishlist/fetch');
+
+                if (response?.data?.status) {
+                    dispatch(setWishlist(response?.data?.data));
+                }
+            } catch (error) {
+                Alert.alert("Error", error.message);
+            }
+        };
+
+        if (isUserLoggedIn) {
+            fetchWishlistProducts(); // Fetch data only if user is logged in
         }
     }, [dispatch, userDetails, isUserLoggedIn]); // Include dependencies that may change
 

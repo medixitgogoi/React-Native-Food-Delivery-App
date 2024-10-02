@@ -1,7 +1,11 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import { useSelector } from 'react-redux';
 
 const About = () => {
+
+    const wishlistItems = useSelector(state => state.wishlist.items);
+    console.log('wishlistItems', wishlistItems);
+
     return (
         <View>
             <Text style={{ color: '#000' }}>About</Text>
@@ -9,4 +13,4 @@ const About = () => {
     )
 }
 
-export default About
+export default About;
