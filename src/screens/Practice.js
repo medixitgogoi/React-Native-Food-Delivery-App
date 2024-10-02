@@ -1,445 +1,514 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar, StyleSheet, TouchableOpacity, View, Text, TextInput, Image, ScrollView, Dimensions, Animated, Easing, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/dist/AntDesign';
-import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import Icon6 from 'react-native-vector-icons/dist/Entypo';
-import StarRatingDetails from '../components/StarRatingDetails';
+import Icon3 from 'react-native-vector-icons/dist/AntDesign';
+import Icon4 from 'react-native-vector-icons/dist/FontAwesome6';
+import Icon5 from 'react-native-vector-icons/dist/Ionicons';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import StarRating from '../components/StarRating';
-import { addItemToCart, decrementItem } from '../redux/CartSlice';
+import LinearGradient from 'react-native-linear-gradient';
+import debounce from 'lodash.debounce';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCakes } from '../utils/fetchCakes';
-import { fetchGroceries } from '../utils/fetchGroceries';
-import { fetchRestaurants } from '../utils/fetchRestaurants';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import axios from 'axios';
+import { addItemToWishlist } from '../redux/WishlistSlice';
+import Toast from 'react-native-toast-message';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const ProductDetails = ({ route }) => {
-
-    const dispatch = useDispatch();
-
-    const product = route?.params?.data;
-    console.log('product', product);
-
-    const userDetails = useSelector(state => state.user);
-
-    const [cartProducts, setCartProducts] = useState([]);
-
-    const [isPresentInTheCart, setIsPresentInTheCart] = useState({});
-
-    const type = product?.type;
+const Cakes = () => {
 
     const navigation = useNavigation();
 
-    const [addToCartTrigger, setAddToCartTrigger] = useState(false);
+    const dispatch = useDispatch();
 
-    const [relatedProducts, setRelatedProducts] = useState(null);
+    const userDetails = useSelector(state => state.user);
+    const wishlistProductsFromRedux = useSelector(state => state.wishlist.items);
 
-    // const [quantity, setQuantity] = useState(1);
-
-    const [unit, setUnit] = useState(null);
-
-    const [error, setError] = useState(false);
-
-    const [loading, setLoading] = useState(false);
-    const [addToCartLoading, setAddToCartLoading] = useState(false);
-
-    // const isPresentInTheCart = cartProducts.find(it => it.product_id === product.id);
-    // console.log('isPresentInTheCart', isPresentInTheCart);
-
-    // error handling
-    useEffect(() => {
-        if (error) {
-            const timer = setTimeout(() => setError(false), 2000); // Hide error after 3 seconds
-            return () => clearTimeout(timer); // Cleanup timer if the component unmounts
-        }
-    }, [error]);
-
-    // fetch related products
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let data = []; // Initialize an empty array to store fetched data
-
-                // Conditionally call the appropriate fetch function based on the type
-                if (type === '1') {
-                    data = await fetchCakes(userDetails); // Pass userDetails if needed
-                } else if (type === '2') {
-                    data = await fetchGroceries(userDetails); // Pass userDetails if needed
-                } else if (type === '3') {
-                    data = await fetchRestaurants(userDetails); // Pass userDetails if needed
-                }
-
-                setRelatedProducts(data || []); // Set the fetched data
-
-            } catch (error) {
-                Alert.alert("Error fetching related products", error.message); // Log errors if any
-            }
-        };
-
-        fetchData(); // Call the async function inside useEffect
-    }, [userDetails, type]);
-
-    // AddToCart
-    const addToCart = async () => {
-        try {
-            setAddToCartLoading(true);
-            // Data object as per the API requirement
-            const data = {
-                product_id: product?.id,
-                product_size_id: unit?.id,
-                quantity: 1,
-            };
-
-            // API Call using axios
-            const response = await axios.post(`user/cart/add`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            // console.log('productDetails', response)
-
-            // Handle success response
-            if (response?.data?.status) {
-                const cartItem = response?.data?.data; // Extract the cart item from the response
-
-                // Update the cart in Redux
-                dispatch(addItemToCart(cartItem)); // Dispatch the action to update the cart in the Redux store
-
-                // Update local states if necessary
-                setIsPresentInTheCart(cartItem);
-                setUnit(isPresentInTheCart);
-            }
-        } catch (error) {
-            // Handle error response
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            }
-        } finally {
-            setAddToCartLoading(false);
-        }
-    }
-
-    // isPresentInTheCart
+    // Status bar setters
     useFocusEffect(
         useCallback(() => {
-            setIsPresentInTheCart(cartProducts?.find(it => it.product_id === product.id));
-            setUnit(isPresentInTheCart);
-        }, [cartProducts, product.id, addToCartTrigger]) // Dependencies for the callback
+            StatusBar.setBackgroundColor(darkGreen); // Set your cart screen status bar color
+            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+        }, [])
     );
 
-    // Get cart products
-    useEffect(() => {
-        const getCartProducts = async () => {
-            try {
-                setLoading(true);
-                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-                const response = await axios.get('/user/cart/fetch');
+    const pageSize = 20;
 
-                setCartProducts(response?.data?.data);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+
+    const [search, setSearch] = useState('');
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    const [slider, setSlider] = useState(false);
+    const sliderHeight = useRef(new Animated.Value(0)).current;
+
+    const [priceLowToHigh, setPriceLowToHigh] = useState(false);
+    const [priceHighToLow, setPriceHighToLow] = useState(false);
+    const [ratingHighToLow, setRatingHighToLow] = useState(false);
+    const [veg, setVeg] = useState(false);
+    const [nonVeg, setNonVeg] = useState(false);
+
+    const [ids, setIds] = useState([]);
+
+    const [filteredNames, setFilteredNames] = useState([]);
+
+    // const [wishlistProducts, setWishlistProducts] = useState([]);
+
+    const [cakes, setCakes] = useState(null);
+    const [originalCakes, setOriginalCakes] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+    const [searching, setSearching] = useState(false);
+
+    // Debounced Search
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((text) => {
+                setSearching(true); // Set searching to true when the search begins
+
+                if (text.trim() === '') {
+                    // If search is cleared, reset to full data or initial page data
+                    setFilteredNames(cakes.slice(0, pageSize));
+                    setHasMore(cakes.length > pageSize);
+                } else {
+                    // Filter cakes based on search query
+                    const filtered = cakes.filter(order =>
+                        order.name.toLowerCase().includes(text.toLowerCase())
+                    );
+                    setFilteredNames(filtered);
+                    setHasMore(false); // Disable load more data during search
+                }
+
+                setSearching(false); // Set searching to false after search completes
+            }, 300),
+        [cakes, pageSize]
+    );
+
+    const handleSearch = (text) => {
+        setSearch(text);
+        debouncedSearch(text);
+    };
+
+    const toggleSlider = () => {
+        if (slider) {
+            Animated.timing(sliderHeight, {
+                toValue: 0,
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: false,
+            }).start(() => setSlider(false));
+        } else {
+            setSlider(true);
+            Animated.timing(sliderHeight, {
+                toValue: 42, // Adjust this value based on your content height
+                duration: 300,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: false,
+            }).start();
+        }
+    };
+
+    const ratingHighToLowHandler = () => {
+        setRatingHighToLow(prev => !prev);
+    };
+
+    // Fetch data
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchCakes(userDetails); // Fetch all products
+                // console.log('cakes', data);
+                setOriginalCakes(data);
+                setCakes(data);
+                setFilteredNames(data?.slice(0, pageSize)); // Load initial set of restaurants
+                setHasMore(data?.length > pageSize); // Check if more data is available
             } catch (error) {
-                Alert.alert("Error", error.message); // Add a title to the alert
-                return null; // Return null in case of error
+                Alert.alert('Error fetching cakes:', error.message);
             } finally {
                 setLoading(false);
             }
-        }
-        getCartProducts();
-    }, [addToCartTrigger]);
+        };
+        fetchData();
+    }, []);
 
-    // DiscountPercentage
-    const discountPercentage = (price, discountedPrice) => {
-        const num = (price - discountedPrice) / price;
-        return Math.floor(num * 100);
+    // Load more data when scrolling to the end
+    const loadMoreData = useCallback(() => {
+        if (!hasMore || loading || searching) return; // Prevent loading more if in search mode
+
+        setLoading(true);
+
+        const nextPage = page + 1;
+        const start = nextPage * pageSize;
+        const newCakes = cakes.slice(start, start + pageSize);
+
+        if (newCakes.length > 0) {
+            setFilteredNames(prev => [...prev, ...newCakes]);
+            setPage(nextPage);
+            setHasMore(newCakes.length === pageSize);
+        } else {
+            setHasMore(false);
+        }
+
+        setLoading(false);
+    }, [hasMore, loading, page, pageSize, cakes, searching]);
+
+    // Apply filters and sort logic
+    const applyFilterAndSort = () => {
+        let filteredData = originalCakes;
+
+        // Filter by veg/non-veg
+        if (veg) {
+            filteredData = filteredData.filter(item => item.veg_type === '1');
+        } else if (nonVeg) {
+            filteredData = filteredData.filter(item => item.veg_type === '2');
+        }
+
+        // Sort by price
+        if (priceLowToHigh) {
+            filteredData.sort((a, b) => a.min_price - b.min_price);
+        } else if (priceHighToLow) {
+            filteredData.sort((a, b) => b.min_price - a.min_price);
+        }
+
+        setCakes(filteredData);
+        setFilteredNames(filteredData.slice(0, pageSize)); // Reset the paginated data
+        setPage(1);
+        setHasMore(filteredData.length > pageSize);
     };
 
-    // UnitSelector
-    const unitSelector = (item) => {
-        if (isPresentInTheCart) {
-            setUnit({ isPresentInTheCart });
-        } else {
-            if (unit?.id === item.id) {
-                setUnit(null); // Set to null if the IDs match
-            } else {
-                setUnit(item); // Otherwise, update unit with the new item
+    // vegHandler
+    const vegHandler = () => {
+        setVeg(prev => !prev);
+        setNonVeg(false); // Disable nonVeg if veg is enabled
+    };
+
+    // nonVegHandler
+    const nonVegHandler = () => {
+        setNonVeg(prev => !prev);
+        setVeg(false); // Disable veg if nonVeg is enabled
+    };
+
+    // priceLowToHighHandler
+    const priceLowToHighHandler = () => {
+        setPriceLowToHigh(prev => !prev);
+        setPriceHighToLow(false);
+    };
+
+    // priceHighToLowHandler
+    const priceHighToLowHandler = () => {
+        setPriceHighToLow(prev => !prev);
+        setPriceLowToHigh(false);
+    };
+
+    // applyFilterAndSort useEffect
+    useEffect(() => {
+        applyFilterAndSort();
+    }, [veg, nonVeg, priceLowToHigh, priceHighToLow]);
+
+    // const addToWishlist = async (id, name) => {
+    //     try {
+    //         const data = { product_id: id };
+    //         const response = await axios.post(`/user/wishlist/add`, data, {
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
+
+    //         if (response?.data?.status) {
+    //             Toast.show({
+    //                 type: 'info',
+    //                 text1: 'Added item to wishlist',
+    //                 text2: `${name} has been added to your wishlist!`,
+    //                 position: 'top',
+    //                 topOffset: 10,
+    //             });
+    //         }
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message || "Something went wrong.");
+    //     }
+    // };
+
+    const addToWishlist = async (id) => {
+        try {
+            const data = { product_id: id };
+            const response = await axios.post(`/user/wishlist/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            console.log('wislssdsddsdsd', response?.data?.data);
+
+            if (response?.data?.status) {
+                dispatch(addItemToWishlist(response?.data?.data));
             }
+        } catch (error) {
+            Alert.alert("Error: ", error.message || "Something went wrong.");
         }
     };
 
-    const decrementQuantity = (item) => {
-        if (isPresentInTheCart.qty === 1) {
-            return;
-        } else {
-            dispatch(decrementItem(item));
-        }
-    };
+    // console.log('wishlist products', wishlistProducts);
 
-    // RelatedProductsHandler
-    const relatedProductsHandler = (item) => {
-        navigation.navigate('ProductDetails', { data: item })
-        setUnit(null);
-    };
+    // const deleteFromWishlist = useCallback(async (id) => {
+    //     try {
+    //         setLoading(true);
+    //         const data = { wishlist_id: id };
+    //         const response = await axios.post(`/user/wishlist/delete`, data, {
+    //             headers: { 'Content-Type': 'application/json' },
+    //         });
+    //         // console.log('delete', response);
+    //     } catch (error) {
+    //         Alert.alert("Error", error.message || "Something went wrong.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }, []);
 
-    return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
-            <StatusBar
-                animated={true}
-                backgroundColor='#dff1dd'
-                barStyle="dark-content"
-            />
+    const renderOrder = useCallback(({ item }) => (
+        <OrderItem item={item} search={search} />
+    ), [search]);
 
-            {/* Header and Image */}
-            <View style={{ paddingHorizontal: 10, backgroundColor: '#dff1dd', height: '40%', width: '100%', flexDirection: 'column', paddingVertical: 8, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '13%' }}>
-                    <TouchableOpacity style={{ width: 32, height: 32, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
-                        <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '600' }}>Details</Text>
-                    <TouchableOpacity
-                        style={{ backgroundColor: '#fff', width: 32, height: 32, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
-                        onPress={() => navigation.navigate('Cart')}
-                    >
-                        <Icon4 name="shopping" size={20} color={'#000'} />
-                    </TouchableOpacity>
+    const OrderItem = ({ item, search }) => {
+
+        // Search text
+        const getHighlightedText = (text, highlight) => {
+            const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+            return (
+                <Text>
+                    {parts.map((part, index) =>
+                        part.toLowerCase() === highlight.toLowerCase() ? (
+                            <Text key={index} style={{ backgroundColor: 'yellow' }}>{part}</Text>
+                        ) : (
+                            <Text key={index}>{part}</Text>
+                        )
+                    )}
+                </Text>
+            );
+        };
+
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
+                {/* Wishlist */}
+                <TouchableOpacity onPress={() => addToWishlist(item?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name="favorite-border" size={18} color={'#019934'} />
+
+                    {/* {wishlistedProduct ? (
+                        <Icon5 name="heart" size={18} color={'#3ea947'} />
+                    ) : (
+                        <Icon name="favorite-border" size={18} color={'#019934'} />
+                    )} */}
+                </TouchableOpacity>
+
+                {/* Image */}
+                <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
+                    <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
+                    </View>
                 </View>
-                <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '87%' }}>
-                    <Image source={{ uri: product?.image }} style={{ width: '100%', height: 200, resizeMode: 'contain' }} />
-                </View>
-            </View>
 
-            {/* Details */}
-            <ScrollView>
-                {loading && <ActivityIndicator size={'small'} color={backIconColor} />}
-
-                {!loading && (
-                    <View style={{ paddingTop: 10, flexDirection: 'column', alignItems: 'flex-start', gap: 6, }}>
-                        {/* Name */}
-                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.6), fontWeight: '700' }}>{product.name}</Text>
-                            {product?.type != '2' && (
-                                <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3, backgroundColor: '#fff', borderColor: offWhite, borderWidth: 0.8, padding: 5, borderRadius: 7 }}>
-                                    {product?.veg_type === '1' ? (
-                                        <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
-                                            </View>
-                                        </View>
-                                    ) : (
-                                        <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                            <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                        </View>
-                                    )}
-                                    <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{product?.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
-                                </View>
-                            )}
-                        </View>
-
-                        {/* Star rating */}
-                        <View style={{ paddingHorizontal: 13, }}>
-                            <StarRatingDetails rating={4} />
-                            {/* <StarRatingDetails rating={product.starRating} /> */}
-                        </View>
-
-                        {/* Price and quantity */}
-                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                <Text style={{ fontSize: responsiveFontSize(2.8), color: '#019934', fontWeight: '800' }}>₹{product?.min_price}</Text>
-                                <Text style={{ fontSize: responsiveFontSize(1.8), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{product?.min_mrp}</Text>
-                            </View>
-
-                            {/* quantity */}
-                            {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    if (isPresentInTheCart) {
-                                        decrementQuantity(product);
-                                    } else if (quantity > 1) {
-                                        setQuantity(prev => prev - 1);
-                                    }
-                                }}
-                            >
-                                <Icon3 name="circle-minus" size={30} color={backIconColor} />
-                            </TouchableOpacity>
-
-                            {isPresentInTheCart ? (
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{isPresentInTheCart.qty}</Text>
-                            ) : (
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>{quantity}</Text>
-                            )}
-
-                            <TouchableOpacity onPress={() => isPresentInTheCart ? dispatch(addItemToCart(product)) : setQuantity(prev => prev + 1)}>
-                                <Icon3 name="circle-plus" size={30} color={backIconColor} />
-                            </TouchableOpacity>
-                                </View> 
-                            */}
-                        </View>
-
-                        {/* Unit */}
-                        <View style={{ marginTop: 10 }}>
-                            {/* Heading */}
-                            <Text style={{ paddingHorizontal: 13, color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2.3), textTransform: 'uppercase' }}>Select Unit:</Text>
-
-                            {/* Error message */}
-                            {error && (
-                                <View style={{ marginHorizontal: 13, paddingLeft: 10, paddingRight: 4, backgroundColor: '#fceced', borderRadius: 7, borderColor: '#cb202d', borderWidth: 0.5, marginTop: 4, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center', paddingVertical: 2 }}>
-                                    <Text style={{ color: '#cb202d', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>Please select a unit</Text>
-                                    <TouchableOpacity onPress={() => setError(false)}>
-                                        <Icon6 name="squared-cross" size={23} color={'#cb202d'} />
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-
-                            {/* Units */}
-                            <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', paddingTop: 10, justifyContent: product.productSize.length == 2 ? '' : 'space-between', width: screenWidth, gap: product.productSize.length == 2 ? 13 : 0 }}>
-                                {product?.productSize?.map(it => (
-                                    <TouchableOpacity disabled={isPresentInTheCart ? true : false} onPress={() => unitSelector(it)} style={{ elevation: 1, backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? darkGreen : '#d8f4f8', width: screenWidth / 3.5, height: screenWidth / 3.5, overflow: 'hidden', borderRadius: 12, flexDirection: 'column', transform: [{ scale: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? 1.07 : 1 }], }} key={it.id}>
-                                        <View style={{ height: '22%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '600' }}>{discountPercentage(it.mrp, it.price)}% off</Text>
-                                        </View>
-
-                                        <View style={{ height: '78%', backgroundColor: unit?.id === it.id || isPresentInTheCart?.mrp === it.mrp ? lightGreen : '#fff', borderRadius: 12, borderColor: unit?.id === it.id ? backIconColor : offWhite, borderWidth: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 3 }}>
-                                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '500' }}>{it.size_name}</Text>
-                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                                <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{it.price}</Text>
-                                                {product.type !== '3' && <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(1.8), textDecorationLine: 'line-through', }}>₹{it.mrp}</Text>}
-                                            </View>
-                                            {product.type !== '3' ? (
-                                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '400' }}>Available:</Text>
-                                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '700' }}>{it?.stock}</Text>
-                                                </View>
-                                            ) : (
-                                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
-                                                    <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '400' }}>MRP</Text>
-                                                    <Text style={{ color: offWhite, fontSize: responsiveFontSize(1.8), fontWeight: '600', textDecorationLine: 'line-through' }}>₹{it?.mrp}</Text>
-                                                </View>
-                                            )}
-                                        </View>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                        </View>
-
-                        {/* Product details */}
-                        <View style={{ paddingHorizontal: 13, marginTop: 20, flexDirection: 'column', gap: 4, width: '100%' }}>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.3), fontWeight: '600', textTransform: 'uppercase' }}>Product Details :</Text>
-                            <Text style={{ color: '#a4a4a4', fontWeight: '400', fontSize: responsiveFontSize(1.9), width: '97%' }}>{product.long_description}</Text>
-                        </View>
-
-                        {/* Related products */}
-                        <View style={{ paddingHorizontal: 13, flexDirection: 'column', gap: 5, marginTop: 20, marginBottom: 60 }}>
-                            <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000', textTransform: 'uppercase', marginBottom: 5 }}>Related Products :</Text>
-
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
-                                {relatedProducts?.slice(0, 4)?.map(item => (
-                                    <TouchableOpacity onPress={() => relatedProductsHandler(item)} key={item?.id} style={{ width: '48%', marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
-
-                                        {/* Wishlist */}
-                                        <TouchableOpacity style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Icon name="favorite-border" size={18} color={'#019934'} />
-                                        </TouchableOpacity>
-
-                                        {/* Image */}
-                                        <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
-                                            <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 100, resizeMode: 'contain' }} />
-                                            </View>
-                                        </View>
-
-                                        <View style={{ padding: 10 }}>
-                                            <View style={{ flexDirection: 'column', gap: 3 }}>
-                                                <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                                    {/* <StarRating rating={item.starRating} /> */}
-                                                    <StarRating rating={4} />
-                                                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                                        <Icon2 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                    </View>
-                                                </View>
-                                            </View>
-
-                                            {type !== '2' && (
-                                                <View style={{ flexDirection: 'row', marginVertical: 6, alignItems: 'center', gap: 3 }}>
-                                                    {item?.veg_type === '1' ? (
-                                                        <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                            <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
-                                                            </View>
-                                                        </View>
-                                                    ) : (
-                                                        <View style={{ width: 17, height: 17, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                                            <Icon2 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                        </View>
-                                                    )}
-                                                    <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item?.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
-                                                </View>
-                                            )}
-
-                                            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3, marginTop: type !== '2' ? 0 : 5 }}>
-                                                <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
-                                                <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                ))}
+                {/* Details */}
+                <View style={{ padding: 10 }}>
+                    <View style={{ flexDirection: 'column', gap: 3 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                            {/* <StarRating rating={item.starRating} /> */}
+                            <StarRating rating={4} />
+                            <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                                {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
+                                <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
                             </View>
                         </View>
                     </View>
-                )}
-            </ScrollView>
 
-            {/* Add to cart button */}
-            <View style={{ backgroundColor: '#fff' }}>
-                <TouchableOpacity
-                    style={{
-                        gap: 5,
-                        backgroundColor: isPresentInTheCart || addToCartLoading ? lightGreen : '#41b24b',
-                        paddingHorizontal: 30,
-                        height: 48,
-                        borderRadius: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderColor: backIconColor,
-                        borderWidth: 1.5,
-                        position: 'absolute',
-                        bottom: 8,
-                        width: '95%',
-                        alignSelf: 'center',
-                    }}
-                    onPress={() => {
-                        if (unit) {
-                            addToCart();
-                        } else {
-                            setError(true);
-                        }
-                    }}
-                    disabled={isPresentInTheCart ? true : false}
-                >
-                    {addToCartLoading ? (
-                        <ActivityIndicator color={backIconColor} size="small" />
-                    ) : (
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                            <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500' }}>{`${isPresentInTheCart ? 'Added to cart' : 'Add to cart'}`}</Text>
-                            {isPresentInTheCart ? (
-                                <Icon2 name="checkcircle" size={21} color={backIconColor} />
-                            ) : (
-                                <Icon name="add-shopping-cart" size={19} color={'#fff'} />
-                            )}
+                    <View style={{ flexDirection: 'row', marginVertical: 8, alignItems: 'center', gap: 3 }}>
+                        {item.veg_type === '1' ? (
+                            <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}></View>
+                            </View>
+                        ) : (
+                            <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                            </View>
+                        )}
+                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.8) }}>{item.veg_type === '1' ? 'Veg' : 'Non-Veg'}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), color: '#019934', fontWeight: '800' }}>₹{item?.min_price}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.5), color: offWhite, fontWeight: '600', paddingBottom: 2, textDecorationLine: 'line-through' }}>₹{item?.min_mrp}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    console.log('wishlistProductsFromRedux', wishlistProductsFromRedux);
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: background, }}>
+            <StatusBar
+                animated={true}
+                backgroundColor={darkGreen}
+                barStyle="dark-content"
+            />
+
+            {/* Header */}
+            <View style={{ flexDirection: "column", backgroundColor: darkGreen, elevation: 1, paddingHorizontal: 10, paddingTop: 5, paddingBottom: 5 }}>
+                {/* headline */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: "100%", }}>
+                    <View style={{ paddingVertical: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
+                        <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
+                            <Icon name="keyboard-arrow-left" size={23} color={backIconColor} />
+                        </TouchableOpacity>
+                        <Text style={{ color: '#fff', fontWeight: "600", fontSize: responsiveFontSize(2.7), textAlign: 'center', width: '83%', textTransform: 'uppercase' }}>Cakes</Text>
+                    </View>
+                </View>
+
+                {/* searchbar */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ width: '86%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 35, width: 23, }}>
+                            <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                         </View>
+                        <TextInput
+                            style={{ paddingVertical: 0, height: 35, color: '#000', fontWeight: '400', width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
+                            placeholder="Search for cakes"
+                            placeholderTextColor="#a0abb7"
+                            onChangeText={handleSearch}
+                            value={search}
+                            onFocus={() => setIsSearchFocused(true)}
+                            onBlur={() => setIsSearchFocused(false)}
+                        />
+                    </View>
+                    <TouchableOpacity style={{ backgroundColor: '#fff', borderRadius: 8, width: 38, height: 35, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }} onPress={toggleSlider}>
+                        <Icon4 name="sliders" size={16} color={backIconColor} />
+                    </TouchableOpacity>
+                </View>
+
+                {/* sliders */}
+                <Animated.View style={{ height: sliderHeight, overflow: 'hidden', marginTop: 5 }}>
+                    {slider && (
+                        <ScrollView horizontal>
+                            <View style={{ width: '100%', flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+
+                                <TouchableOpacity style={{ backgroundColor: priceLowToHigh ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceLowToHigh ? backIconColor : '', borderWidth: priceLowToHigh ? 0.4 : 0 }} onPress={priceLowToHighHandler}>
+                                    <Icon4 name="arrow-trend-up" size={16} color={'#FF6F61'} />
+                                    <Text style={{ color: priceLowToHigh ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - low to high</Text>
+                                    {priceLowToHigh && (
+                                        <Icon5 name="close" size={16} color={'#cb202d'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{ backgroundColor: priceHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, height: 30, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 5, borderColor: priceHighToLow ? backIconColor : '', borderWidth: priceHighToLow ? 0.4 : 0 }} onPress={priceHighToLowHandler}>
+                                    <Icon4 name="arrow-trend-down" size={16} color={'#FF6F61'} />
+                                    <Text style={{ color: priceHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Price - high to low</Text>
+                                    {priceHighToLow && (
+                                        <Icon5 name="close" size={16} color={'#cb202d'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{ backgroundColor: ratingHighToLow ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: ratingHighToLow ? backIconColor : '', borderWidth: ratingHighToLow ? 0.4 : 0 }} onPress={ratingHighToLowHandler}>
+                                    <Icon3 name="star" size={16} color={'#FFA41C'} />
+                                    <Text style={{ color: ratingHighToLow ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Rating - high to low</Text>
+                                    {ratingHighToLow && (
+                                        <Icon5 name="close" size={16} color={'#cb202d'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{ backgroundColor: veg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: veg ? backIconColor : '', borderWidth: veg ? 0.4 : 0 }} onPress={vegHandler}>
+                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                        <View style={{ backgroundColor: 'green', width: 9, height: 9, borderRadius: 10, }}>
+                                        </View>
+                                    </View>
+                                    <Text style={{ color: veg ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Veg</Text>
+                                    {veg && (
+                                        <Icon5 name="close" size={16} color={'#cb202d'} />
+                                    )}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{ backgroundColor: nonVeg ? '#eaf6e9' : '#fff', paddingHorizontal: 10, paddingVertical: 7, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 3, borderColor: nonVeg ? backIconColor : '', borderWidth: nonVeg ? 0.4 : 0 }} onPress={nonVegHandler}>
+                                    <View style={{ width: 17, height: 16, borderColor: '#000', borderWidth: 1.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
+                                        <Icon3 name="caretup" size={12} color={'#cb202d'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                                    </View>
+                                    <Text style={{ color: nonVeg ? backIconColor : '#000', fontWeight: '500', fontSize: responsiveFontSize(1.8) }}>Non-veg</Text>
+                                    {nonVeg && (
+                                        <Icon5 name="close" size={16} color={'#cb202d'} />
+                                    )}
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
                     )}
-                </TouchableOpacity>
+                </Animated.View>
+            </View>
+
+            {/* Content */}
+            <View style={{ flex: 1 }}>
+                {/* Show ActivityIndicator if searching is true */}
+                {searching && (
+                    <ActivityIndicator
+                        size="large"
+                        color={darkGreen}
+                        style={{ marginTop: 20, alignSelf: 'center' }}
+                    />
+                )}
+
+                {loading ? (
+                    <FlatList
+                        data={[1, 1, 1, 1, 1, 1]}
+                        renderItem={() => {
+                            return (
+                                <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1 }}>
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 140, borderRadius: 14 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 20, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                    <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 20, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                                </View>
+                            )
+                        }}
+                        numColumns={2}
+                        key={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 90, paddingTop: 4 }}
+                        columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    />
+                ) : (
+                    !searching && (
+                        <FlatList
+                            data={filteredNames}
+                            renderItem={filteredNames.length > 0 ? renderOrder : null} // Only render items if available
+                            keyExtractor={item => item.id.toString()}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 100, paddingTop: 4 }}
+                            columnWrapperStyle={{ justifyContent: 'space-between' }}
+                            key={2}
+                            onEndReached={!hasMore || searching ? null : loadMoreData} // Disable loadMore during search
+                            onEndReachedThreshold={0.5}
+                            ListFooterComponent={hasMore && !searching && <ActivityIndicator size="small" color={darkGreen} />}
+                            ListEmptyComponent={!loading && !searching && (
+                                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 20, }}>
+                                    <Image source={require('../assets/fallback_search.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                                    <Text style={{ textAlign: 'center', marginTop: 20, fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>
+                                        No products match your search.
+                                    </Text>
+                                </View>
+                            )}
+                        />
+                    )
+                )}
             </View>
         </SafeAreaView>
     )
 }
 
-export default ProductDetails;
+export default Cakes;
+
+const styles = StyleSheet.create({});

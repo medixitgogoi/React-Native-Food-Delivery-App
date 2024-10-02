@@ -29,7 +29,7 @@ const Cakes = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
-    // const wishlisted = useSelector(state => state.wishlist);
+    const wishlistProductsFromRedux = useSelector(state => state.wishlist.items);
 
     // Status bar setters
     useFocusEffect(
@@ -60,7 +60,7 @@ const Cakes = () => {
 
     const [filteredNames, setFilteredNames] = useState([]);
 
-    const [wishlistProducts, setWishlistProducts] = useState([]);
+    // const [wishlistProducts, setWishlistProducts] = useState([]);
 
     const [cakes, setCakes] = useState(null);
     const [originalCakes, setOriginalCakes] = useState([]);
@@ -244,10 +244,10 @@ const Cakes = () => {
                 },
             });
 
-            console.log('wislssdsddsdsd', response?.data?.data)
+            console.log('wislssdsddsdsd', response?.data?.data);
 
             if (response?.data?.status) {
-                dispatch(addItemToWishlist(response?.data?.data))
+                dispatch(addItemToWishlist(response?.data?.data));
             }
         } catch (error) {
             Alert.alert("Error: ", error.message || "Something went wrong.");
@@ -349,6 +349,8 @@ const Cakes = () => {
             </TouchableOpacity>
         );
     };
+
+    console.log('wishlistProductsFromRedux', wishlistProductsFromRedux);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background, }}>
