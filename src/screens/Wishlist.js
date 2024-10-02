@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -22,8 +23,10 @@ const Wishlist = () => {
 
     const navigation = useNavigation();
 
-    // const wishlistProducts = useSelector(state => state.wishlist);
+    const wishlistProductsss = useSelector(state => state.wishlist.items);
     const userDetails = useSelector(state => state.user);
+
+    console.log('wishlistItems', wishlistProductsss);
 
     const dispatch = useDispatch();
 
@@ -38,7 +41,7 @@ const Wishlist = () => {
             setLoading(true);
             axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
             const response = await axios.get('/user/wishlist/fetch');
-            console.log('wishlistProducts', response?.data?.data)
+            // console.log('wishlistProducts', response?.data?.data)
             setWishlistProducts(response?.data?.data || []);
         } catch (error) {
             Alert.alert("Error", error.message);
@@ -54,6 +57,10 @@ const Wishlist = () => {
             const response = await axios.post(`/user/wishlist/delete`, data, {
                 headers: { 'Content-Type': 'application/json' },
             });
+
+            if (response?.data?.status) {
+                dispatch(removeItemFromWishlist(id));
+            }
             console.log('delete', response);
         } catch (error) {
             Alert.alert("Error", error.message || "Something went wrong.");

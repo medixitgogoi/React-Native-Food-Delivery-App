@@ -20,7 +20,7 @@ export const wishlistSlice = createSlice({
             }
         },
         removeItemFromWishlist: (state, action) => {
-            state.items = state.items.filter(item => item.id !== action.payload.id);
+            state.items = state.items.filter(item => item.id !== action.payload);
         },
         deleteAllItemsFromWishlist: (state) => {
             state.items = [];

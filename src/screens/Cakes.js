@@ -498,7 +498,7 @@ const Cakes = () => {
                     !searching && (
                         <FlatList
                             data={filteredNames}
-                            renderItem={filteredNames.length > 0 ? renderOrder : null} // Only render items if available
+                            renderItem={filteredNames?.length > 0 ? renderOrder : null} // Only render items if available
                             keyExtractor={item => item.id.toString()}
                             numColumns={2}
                             showsVerticalScrollIndicator={false}
