@@ -98,7 +98,7 @@ const Home = () => {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 locations={[0, 0.99]}
-                style={{ paddingBottom: 20 }}
+                style={{}}
             >
                 <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, paddingVertical: 5 }}>
                     {/* Searchbar */}

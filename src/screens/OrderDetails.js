@@ -153,14 +153,21 @@ const OrderDetails = ({ route }) => {
                     {/* Order Number */}
                     <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 10 }}>
                         <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Order Number</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.o_uu_id || 123577373}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.o_uu_id}</Text>
                     </View>
 
                     {/* Payment */}
-                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
-                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Paid using : Using Upi_qr (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
-                    </View>
+                    {detail?.payment_type === '2' ? (
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Payment Method: Pay on Delivery (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
+                        </View>
+                    ) : (
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                            <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Payment Method: Online (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
+                        </View>
+                    )}
 
                     {/* Date */}
                     <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
@@ -197,7 +204,6 @@ const OrderDetails = ({ route }) => {
                         <Image source={require('../assets/fssai.png')} style={{ width: 29, height: 18, resizeMode: 'contain', opacity: 0.5 }} />
                         <Text style={{ color: offWhite, fontSize: responsiveHeight(1.7), fontWeight: '500' }}>Lic. No. 37453728745363</Text>
                     </View>
-
                 </View>
             </ScrollView>
 
