@@ -43,7 +43,7 @@ const OrderDetails = ({ route }) => {
 
     // handleCallPress
     const handleCallPress = () => {
-        const phoneNumber = '+910000000000'; // Add your phone number here
+        const phoneNumber = '+916033391141'; // Add your phone number here
         Linking.openURL(`tel:${phoneNumber}`);
     };
 
