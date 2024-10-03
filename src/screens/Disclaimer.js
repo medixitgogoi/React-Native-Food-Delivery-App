@@ -18,11 +18,11 @@ const Disclaimer = () => {
 
             {/* Header */}
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8 }}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingVertical: 5, paddingHorizontal: 10, flex: 1 }}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingVertical: 5, paddingHorizontal: 10 }}>
                     <Icon4 name="arrowleft" size={22} color={'#000'} />
                 </TouchableOpacity>
-                <View style={{ position: 'absolute', flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
-                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500', flex: 1 }}>Disclaimer</Text>
+                <View style={{ position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', }}>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Disclaimer</Text>
                 </View>
             </View>
 
