@@ -22,14 +22,14 @@ const Cancellation = () => {
                     <Icon4 name="arrowleft" size={22} color={'#000'} />
                 </TouchableOpacity>
                 <View style={{ position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', }}>
-                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Privacy Policy</Text>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Cancellation</Text>
                 </View>
             </View>
 
             {/* Content */}
             <ScrollView>
                 <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
-                    <Text style={{ color: '#000', textAlign: 'justify' }}>
+                    <Text style={{ color: '#000' }}>
                         The Cancellation section of the grocery delivery app provides users with clear guidelines and policies for canceling their orders. Customers can cancel their orders within a specific timeframe, usually before the order is processed or dispatched for delivery. The app aims to provide flexibility, allowing users to modify or cancel orders directly from their account. However, once the order has been prepared or dispatched, cancellation may no longer be available, or additional charges may apply. Refunds for canceled orders, where applicable, will be processed promptly, and users will be notified via email or app notifications. The cancellation policy ensures a seamless experience while balancing operational efficiency for both customers and delivery partners.
                     </Text>
                 </View>

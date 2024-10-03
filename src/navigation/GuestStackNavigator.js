@@ -26,6 +26,9 @@ import OrderDetails from '../screens/OrderDetails';
 import TermsAndConditions from '../auth/TermsAndConditions';
 import PrivacyPolicy from '../auth/PrivacyPolicy';
 import Cancellation from '../screens/Cancellation';
+import RefundAndReturn from '../screens/RefundAndReturn';
+import Contact from '../screens/Contact';
+import Disclaimer from '../screens/Disclaimer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -111,6 +114,9 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
             <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} />
             <Stack.Screen name="Cancellation" component={Cancellation} />
+            <Stack.Screen name="RefundAndReturn" component={RefundAndReturn} />
+            <Stack.Screen name="Contact" component={Contact} />
+            <Stack.Screen name="Disclaimer" component={Disclaimer} />
             {/* Add other screens that are independent of the tab navigator */}
         </Stack.Navigator>
     );
