@@ -155,6 +155,30 @@ const Profile = () => {
                             {/* Divider */}
                             <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
 
+                            {/* Disclaimer */}
+                            <TouchableOpacity onPress={() => navigation.navigate('Disclaimer')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Disclaimer</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
+
+                            {/* Divider */}
+                            <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
+
+                            {/* Privacy Policy */}
+                            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                                <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
+                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                </View>
+                                <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Privacy Policy</Text>
+                                <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
+                            </TouchableOpacity>
+
+                            {/* Divider */}
+                            <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
+
                             {/* Log out */}
                             <TouchableOpacity onPress={() => setIsLoggingOut(true)} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>

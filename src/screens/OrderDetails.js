@@ -192,7 +192,7 @@ const OrderDetails = ({ route }) => {
 
                     {/* Call Skercart */}
                     <TouchableOpacity onPress={handleCallPress} style={{ marginVertical: 15, alignSelf: 'center' }}>
-                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 00000000000)</Text>
+                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2), fontWeight: '500' }}>Call Skercart  (+91 6033391141)</Text>
                     </TouchableOpacity>
 
                     {/* Divider */}
