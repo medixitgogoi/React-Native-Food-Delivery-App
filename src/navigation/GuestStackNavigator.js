@@ -26,6 +26,8 @@ import { fetchCartProducts } from '../utils/fetchCartProducts';
 import { useSelector } from 'react-redux';
 import OrderPlaced from '../screens/OrderPlaced';
 import OrderDetails from '../screens/OrderDetails';
+import Disclaimer from '../screens/Disclaimer';
+import PrivacyPolicy from '../auth/PrivacyPolicy';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -108,6 +110,8 @@ const GuestStackNavigator = ({ cartItemCount }) => {
             <Stack.Screen name="Cakes" component={Cakes} />
             <Stack.Screen name="OrderPlaced" component={OrderPlaced} />
             <Stack.Screen name="OrderDetails" component={OrderDetails} />
+            <Stack.Screen name="Disclaimer" component={Disclaimer} />
+            <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
             {/* Add other screens that are independent of the tab navigator */}
         </Stack.Navigator>
     );
