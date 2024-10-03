@@ -327,7 +327,7 @@ const Cakes = () => {
                 {/* Details */}
                 <View style={{ padding: 10 }}>
                     <View style={{ flexDirection: 'column', gap: 3 }}>
-                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item?.name, search)}</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                             {/* <StarRating rating={item.starRating} /> */}
                             <StarRating rating={4} />
