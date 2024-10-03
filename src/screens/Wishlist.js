@@ -51,8 +51,8 @@ const Wishlist = () => {
     }, []);
 
     const deleteFromWishlist = useCallback(async (id) => {
-        setClciked(true);
         try {
+            setClciked(true);
             const data = { wishlist_id: id };
             const response = await axios.post(`/user/wishlist/delete`, data, {
                 headers: { 'Content-Type': 'application/json' },

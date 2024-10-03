@@ -239,7 +239,7 @@ const Cakes = () => {
     const addToWishlist = async (id) => {
         try {
             const data = { product_id: id };
-            
+
             const response = await axios.post(`/user/wishlist/add`, data, {
                 headers: {
                     'Content-Type': 'application/json'
