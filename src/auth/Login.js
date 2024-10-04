@@ -59,7 +59,7 @@ const Login = () => {
                 }
             });
 
-            console.log('response', response.data);
+            console.log('response', response);
 
             // Handle success response
             if (response.data.status) {

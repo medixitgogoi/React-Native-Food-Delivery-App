@@ -7,7 +7,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         addUser: (state, action) => {
-            state.push(action.payload);
+            return [action.payload]; // Replace the entire state with the new user object in an array
         },
         logoutUser: (state) => {
             return state = [];

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StatusBar, Image, } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StatusBar, Image, Alert, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addUser } from '../redux/UserSlice';
+import Toast from 'react-native-toast-message';
 
 const EditProfile = () => {
 
@@ -21,7 +22,6 @@ const EditProfile = () => {
     const navigation = useNavigation();
 
     const [mobile, setMobile] = useState('');
-    const [isMobileFocused, setIsMobileFocused] = useState(false);
 
     const [name, setName] = useState('');
     const [isNameFocused, setIsNameFocused] = useState(false);
@@ -32,14 +32,20 @@ const EditProfile = () => {
     const [gender, setGender] = useState('');
     const [isGenderFocused, setIsGenderFocused] = useState(false);
 
+    const [accessToken, setAccessToken] = useState('');
+
+    const [password, setPassword] = useState('');
+
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setMobile(userDetails?.[0]?.mobileNumber);
-        setName(userDetails[userDetails.length - 1]?.name);
-        setEmail(userDetails?.[userDetails.length - 1]?.email);
-        if (userDetails?.gender) {
-            setGender(userDetails?.[userDetails.length - 1]?.gender);
+        setPassword(userDetails?.[0]?.password);
+        setAccessToken(userDetails?.[0]?.accessToken)
+        setMobile(userDetails?.[0]?.mobile);
+        setName(userDetails[0]?.name);
+        setEmail(userDetails?.[0]?.email);
+        if (userDetails?.[0]?.gender) {
+            setGender(userDetails?.[0]?.gender);
         }
     }, [updateHandler]);
 
@@ -65,29 +71,61 @@ const EditProfile = () => {
 
             // Handle success response
             if (response?.data?.status) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'User Details updated successfully',
+                    text2: `You can only add up to ${stock} units of ${name}.`,
+                    position: 'top', // Adjusts to the bottom by default
+                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                });
+
+                setIsEmailFocused(false);
+                setIsNameFocused(false);
+                setIsGenderFocused(false);
+
                 const userInfo = {
+                    password: password,
+                    accessToken: accessToken,
                     name: response?.data?.data?.name,
                     email: response?.data?.data?.email,
                     gender: response?.data?.data?.gender,
+                    mobile: mobile,
                 };
 
                 dispatch(addUser(userInfo));
                 await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
 
-                setName('');
-                setPassword('');
-                setConfirmPassword('');
-                setEmail('');
             } else {
-                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+                Toast.show({
+                    type: 'error',
+                    text1: 'Something went wrong.',
+                    text2: response?.data?.message,
+                    position: 'top', // Adjusts to the bottom by default
+                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                });
+                // Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
             }
         } catch (error) {
             // Handle error response
-            // if (error.response) {
-            //     Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            // } else {
-            //     Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            // }
+            if (error.response) {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Something went wrong. Please try again.',
+                    text2: error.response.data.message,
+                    position: 'top', // Adjusts to the bottom by default
+                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                });
+                // Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Network error.',
+                    text2: `Please check your internet connection and try again.`,
+                    position: 'top', // Adjusts to the bottom by default
+                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                });
+                // Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+            }
         } finally {
             setLoading(false);
         }
@@ -127,7 +165,7 @@ const EditProfile = () => {
                         <View style={{ width: '100%', flexDirection: 'column', paddingHorizontal: 15, gap: 3, }}>
                             <Text style={{ color: '#888888', zIndex: 1, fontWeight: '500', fontStyle: 'italic' }}>Mobile</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', height: 40, backgroundColor: '#efefef', borderRadius: 10, elevation: 1, }}>
-                                <Text style={{ color: '#6f6f6f', paddingLeft: 10, fontWeight: '500', }}>{mobile}</Text>
+                                <Text style={{ color: '#6f6f6f', paddingLeft: 10, fontWeight: '500', fontStyle: 'italic' }}>{mobile}</Text>
                             </View>
                         </View>
 
