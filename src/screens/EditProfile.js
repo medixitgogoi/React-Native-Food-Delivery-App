@@ -36,16 +36,17 @@ const EditProfile = () => {
 
     useEffect(() => {
         setMobile(userDetails?.[0]?.mobileNumber);
-        setName(userDetails[0]?.name);
-        setEmail(userDetails?.[0]?.email);
+        setName(userDetails[userDetails.length - 1]?.name);
+        setEmail(userDetails?.[userDetails.length - 1]?.email);
         if (userDetails?.gender) {
-            setGender(userDetails?.gender);
+            setGender(userDetails?.[userDetails.length - 1]?.gender);
         }
     }, [updateHandler]);
 
     const updateHandler = async () => {
         try {
             setLoading(true);
+
             // Data object as per the API requirement
             const data = {
                 name: name,
@@ -63,7 +64,7 @@ const EditProfile = () => {
             console.log('editProfiel', response);
 
             // Handle success response
-            if (response.data.status) {
+            if (response?.data?.status) {
                 const userInfo = {
                     name: response?.data?.data?.name,
                     email: response?.data?.data?.email,
@@ -80,7 +81,6 @@ const EditProfile = () => {
             } else {
                 Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
             }
-
         } catch (error) {
             // Handle error response
             // if (error.response) {
@@ -117,7 +117,6 @@ const EditProfile = () => {
                 </View>
 
                 <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', }}>
-
                     {/* Avatar */}
                     <View style={{ width: 180, height: 180, alignSelf: 'center', borderRadius: 100, overflow: 'hidden', marginTop: 20, marginBottom: 15 }}>
                         <Image source={require('../assets/avatar.jpeg')} style={{ height: '100%', width: '100%', resizeMode: 'contain' }} />
