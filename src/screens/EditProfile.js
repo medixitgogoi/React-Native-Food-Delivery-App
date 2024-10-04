@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StatusBar, Image, Alert, } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StatusBar, Image, Alert, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -215,7 +215,11 @@ const EditProfile = () => {
 
                 {/* Update Profile */}
                 <TouchableOpacity onPress={updateHandler} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center', height: 48, backgroundColor: darkGreen, borderColor: backIconColor, borderWidth: 1.5, borderRadius: 12 }}>
-                    <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>Update Profile</Text>
+                    {loading ? (
+                        <ActivityIndicator size="small" color={'#000'} />
+                    ) : (
+                        <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>Update Profile</Text>
+                    )}
                 </TouchableOpacity>
             </LinearGradient>
 
