@@ -1,6 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StatusBar, Image, Alert, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useNavigation } from '@react-navigation/native';
@@ -23,13 +24,13 @@ const EditProfile = () => {
 
     const [mobile, setMobile] = useState('');
 
-    const [name, setName] = useState('');
+    const [name, setName] = useState();
     const [isNameFocused, setIsNameFocused] = useState(false);
 
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState();
     const [isEmailFocused, setIsEmailFocused] = useState(false);
 
-    const [gender, setGender] = useState('');
+    const [gender, setGender] = useState();
     const [isGenderFocused, setIsGenderFocused] = useState(false);
 
     const [accessToken, setAccessToken] = useState('');
@@ -37,6 +38,8 @@ const EditProfile = () => {
     const [password, setPassword] = useState('');
 
     const [loading, setLoading] = useState(false);
+
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         setPassword(userDetails?.[0]?.password);
@@ -50,6 +53,22 @@ const EditProfile = () => {
     }, [updateHandler]);
 
     const updateHandler = async () => {
+        // Check if any of the fields are empty
+        if (!name || !email || !gender) {
+            setError(true);
+
+            // Display error Toast
+            Toast.show({
+                type: 'error',
+                text1: 'Please fill all the details',
+                text2: 'All fields are required to proceed.',
+                position: 'top',
+                topOffset: 10,
+            });
+
+            return; // Exit the function if validation fails
+        }
+
         try {
             setLoading(true);
 
@@ -67,16 +86,16 @@ const EditProfile = () => {
                 }
             });
 
-            console.log('editProfiel', response);
+            console.log('editProfile', response);
 
             // Handle success response
             if (response?.data?.status) {
                 Toast.show({
                     type: 'success',
                     text1: 'User Details updated successfully',
-                    text2: `You can only add up to ${stock} units of ${name}.`,
-                    position: 'top', // Adjusts to the bottom by default
-                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                    text2: `Profile updated for ${response?.data?.data?.name}.`,
+                    position: 'top',
+                    topOffset: 10,
                 });
 
                 setIsEmailFocused(false);
@@ -98,38 +117,42 @@ const EditProfile = () => {
             } else {
                 Toast.show({
                     type: 'error',
-                    text1: 'Something went wrong.',
-                    text2: response?.data?.message,
-                    position: 'top', // Adjusts to the bottom by default
-                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                    text1: 'Update failed',
+                    text2: response?.data?.message || 'Something went wrong.',
+                    position: 'top',
+                    topOffset: 10,
                 });
-                // Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
             }
         } catch (error) {
             // Handle error response
             if (error.response) {
                 Toast.show({
                     type: 'error',
-                    text1: 'Something went wrong. Please try again.',
-                    text2: error.response.data.message,
-                    position: 'top', // Adjusts to the bottom by default
-                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                    text1: 'Something went wrong.',
+                    text2: error.response.data?.message || 'Please try again.',
+                    position: 'top',
+                    topOffset: 10,
                 });
-                // Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
             } else {
                 Toast.show({
                     type: 'error',
-                    text1: 'Network error.',
-                    text2: `Please check your internet connection and try again.`,
-                    position: 'top', // Adjusts to the bottom by default
-                    topOffset: 10, // Moves the toast 10 units down from the bottom
+                    text1: 'Network error',
+                    text2: 'Please check your internet connection and try again.',
+                    position: 'top',
+                    topOffset: 10,
                 });
-                // Alert.alert("Error", "Network error. Please check your internet connection and try again.");
             }
         } finally {
             setLoading(false);
         }
-    }
+    };
+
+    // Reset error when input fields are modified
+    useEffect(() => {
+        if (name && email && gender) {
+            setError(false); // Clear error when all fields are filled
+        }
+    }, [name, email, gender]);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -164,8 +187,9 @@ const EditProfile = () => {
                         {/* Mobile Input */}
                         <View style={{ width: '100%', flexDirection: 'column', paddingHorizontal: 15, gap: 3, }}>
                             <Text style={{ color: '#888888', zIndex: 1, fontWeight: '500', fontStyle: 'italic' }}>Mobile</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', height: 40, backgroundColor: '#efefef', borderRadius: 10, elevation: 1, }}>
-                                <Text style={{ color: '#6f6f6f', paddingLeft: 10, fontWeight: '500', fontStyle: 'italic' }}>{mobile}</Text>
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', height: 40, backgroundColor: '#efefef', borderRadius: 10, elevation: 1, justifyContent: 'space-between' }}>
+                                <Text style={{ color: '#6f6f6f', fontWeight: '500', fontStyle: 'italic' }}>{mobile}</Text>
+                                <Icon name="block" size={20} color={'red'} />
                             </View>
                         </View>
 
@@ -207,6 +231,7 @@ const EditProfile = () => {
                                     onChangeText={setGender}
                                     onFocus={() => setIsGenderFocused(true)}
                                     onBlur={() => setIsGenderFocused(false)}
+                                    placeholder='M or F'
                                 />
                             </View>
                         </View>
@@ -214,14 +239,37 @@ const EditProfile = () => {
                 </ScrollView>
 
                 {/* Update Profile */}
-                <TouchableOpacity onPress={updateHandler} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center', height: 48, backgroundColor: darkGreen, borderColor: backIconColor, borderWidth: 1.5, borderRadius: 12 }}>
+                <TouchableOpacity
+                    onPress={updateHandler}
+                    // onPress={() => {
+                    //     if (!name || !email || !gender) {
+                    //         setError(true);
+                    //     } else {
+                    //         updateHandler();
+                    //     }
+                    // }}
+                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center', height: 48, backgroundColor: darkGreen, borderColor: backIconColor, borderWidth: 1.5, borderRadius: 12 }}
+                >
                     {loading ? (
                         <ActivityIndicator size="small" color={'#000'} />
                     ) : (
-                        <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>Update Profile</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>Update Profile</Text>
+                        </View>
                     )}
                 </TouchableOpacity>
             </LinearGradient>
+
+            {error && (
+                Toast.show({
+                    type: 'error',
+                    text1: 'Please fill all the details',
+                    text2: 'Make sure to complete the name, email, and gender fields.',
+                    position: 'top',
+                    topOffset: 10,
+                })
+            )}
+
 
         </SafeAreaView>
     );
