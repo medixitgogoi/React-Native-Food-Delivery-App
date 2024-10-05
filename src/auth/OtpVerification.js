@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, offWhite } from '../utils/colors';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -40,38 +41,6 @@ const OtpVerification = ({ route }) => {
         return () => clearTimeout(timer);
     }, [resendTimer]);
 
-    const handleOTPVerificationSuccess = async () => {
-        setLoading(true);
-        try {
-            // Combine the OTP array into a single string
-            const otpCode = otp.join('');
-
-            const response = await axios.post(`user/otp/verify`, {
-                mobile: mobileNumber,
-                otp: otpCode, // Send the OTP as a single string
-            });
-
-            if (response.data.status) {
-                if (to === 'signup') {
-                    navigation.navigate('SignUp', { mobile: mobileNumber, otp: otpCode });
-                } else if (to === 'forgotPassword') {
-                    navigation.navigate('ForgotPassword');
-                }
-            } else {
-                // Display the error message if OTP is invalid
-                Alert.alert(response?.data?.message, response?.data?.error_message?.otp?.[0] || response?.data?.error_message?.mobile?.[0] || 'Something went wrong.');
-            }
-        } catch (error) {
-            // Check if the error response is available and display the backend error message
-            if (error.response && error.response.data && error.response.data.message) {
-                Alert.alert('Error', error.response.data.message);
-            } else {
-                Alert.alert('Error', error.message);
-            }
-        }
-        setLoading(false);
-    };
-
     const handleInputChange = (text, index) => {
         if (text.length === 1) {
             const newOtp = [...otp];
@@ -88,6 +57,52 @@ const OtpVerification = ({ route }) => {
                 inputRefs.current[index - 1].focus();
             }
         }
+    };
+
+    const handleOTPVerificationSuccess = async () => {
+        setLoading(true);
+        try {
+            // Combine the OTP array into a single string
+            const otpCode = otp.join('');
+
+            const response = await axios.post(to === 'signup' ? `/user/otp/verify` : `/user/change/password/otp/verify`, {
+                mobile: mobileNumber,
+                otp: otpCode, // Send the OTP as a single string
+            });
+
+            console.log('verify', response);
+
+            if (response?.data?.status) {
+                Toast.show({
+                    type: 'success',
+                    text1: response?.data?.message,
+                    position: 'top',
+                    topOffset: 50,
+                });
+                if (to === 'signup') {
+                    navigation.navigate('SignUp', { mobile: mobileNumber, otp: otpCode });
+                } else if (to === 'forgotPassword') {
+                    navigation.navigate('ForgotPassword');
+                }
+            } else {
+                // Display the error message if OTP is invalid
+                Toast.show({
+                    type: 'error',
+                    text1: response?.data?.message,
+                    text2: response?.data?.error_message?.otp?.[0] || response?.data?.error_message?.mobile?.[0] || 'Something went wrong.',
+                    position: 'top',
+                    topOffset: 50,
+                });
+            }
+        } catch (error) {
+            // Check if the error response is available and display the backend error message
+            if (error.response && error.response.data && error.response.data.message) {
+                Alert.alert('Error', error.response.data.message);
+            } else {
+                Alert.alert('Error', error.message);
+            }
+        }
+        setLoading(false);
     };
 
     const handleResendOTP = async () => {
@@ -114,30 +129,55 @@ const OtpVerification = ({ route }) => {
 
     const handleSendOtpPress = async () => {
         if (mobileNumber.length < 10) {
-            Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
+            Toast.show({
+                type: 'error',
+                text1: 'Invalid number',
+                text2: 'Please enter a valid 10-digit mobile number.',
+                position: 'top',
+                topOffset: 50,
+            });
             return;
         } else {
             setLoading(true);
             try {
-                const response = await axios.post(`user/otp/send`,
+                const response = await axios.post(to === 'signup' ? `user/otp/send` : `/user/change/password/otp/send`,
                     {
                         mobile: mobileNumber
                     }
                 );
 
-                if (response.data.status) {
+                if (response?.data?.status) {
+                    Toast.show({
+                        type: 'success',
+                        text1: response?.data?.message,
+                        position: 'top',
+                        topOffset: 50,
+                    });
                     setShowOtpSection(true);
                     Animated.timing(slideAnim, {
                         toValue: -screenWidth,
                         duration: 300,
                         useNativeDriver: true,
                     }).start();
+                } else {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Invalid Information',
+                        text2: response?.data?.message,
+                        position: 'top',
+                        topOffset: 50,
+                    });
                 }
-
             } catch (error) {
-                Alert.alert(error.message);
+                Toast.show({
+                    type: 'error',
+                    text1: error.message,
+                    position: 'top',
+                    topOffset: 50,
+                });
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         }
     };
 
@@ -171,7 +211,7 @@ const OtpVerification = ({ route }) => {
                                 <Image source={require('../assets/otp.png')} style={{ width: 220, height: 220, resizeMode: 'contain' }} />
                             </View>
 
-                            {/* Sections */}
+                            {/* Slidable sections */}
                             <Animated.View
                                 style={{
                                     flexDirection: 'row',
@@ -202,13 +242,17 @@ const OtpVerification = ({ route }) => {
                                         </View>
                                     </View>
 
+                                    {/* Send OTP button */}
                                     <LinearGradient
                                         colors={[darkGreen, '#3a9f43']}
                                         start={{ x: 0, y: 0 }}
                                         end={{ x: 1, y: 0 }}
                                         style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, marginTop: 35, width: '95%', }}
                                     >
-                                        <TouchableOpacity onPress={handleSendOtpPress} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <TouchableOpacity
+                                            onPress={handleSendOtpPress}
+                                            style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                                        >
                                             {loading ? (
                                                 <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Sending OTP ...</Text>
                                             ) : (
