@@ -59,25 +59,25 @@ const ForgotPassword = ({ route }) => {
                 console.log('change password', response);
 
                 // Handle success response
-                if (response.data.status) {
-                    const userInfo = {
-                        name: response?.data?.data?.name,
-                        email: response?.data?.data?.email,
-                        mobileNumber: mobileNumber,
-                        password: password,
-                        accessToken: response?.data?.access_token,
-                    };
+                // if (response.data.status) {
+                //     const userInfo = {
+                //         name: response?.data?.data?.name,
+                //         email: response?.data?.data?.email,
+                //         mobileNumber: mobileNumber,
+                //         password: password,
+                //         accessToken: response?.data?.access_token,
+                //     };
 
-                    dispatch(addUser(userInfo));
-                    await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+                //     dispatch(addUser(userInfo));
+                //     await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
 
-                    setName('');
-                    setPassword('');
-                    setConfirmPassword('');
-                    setEmail('');
-                } else {
-                    Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
-                }
+                //     setName('');
+                //     setPassword('');
+                //     setConfirmPassword('');
+                //     setEmail('');
+                // } else {
+                //     Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+                // }
             } catch (error) {
                 // Handle error response
                 if (error.response) {
@@ -210,7 +210,7 @@ const ForgotPassword = ({ route }) => {
                                     alignItems: 'center'
                                 }}
                             >
-                                <TouchableOpacity style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
+                                <TouchableOpacity onPress={changePasswordHandler} style={{ gap: 5, height: 47, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '65%' }}>
                                     <Text style={{ color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Change Password</Text>
                                 </TouchableOpacity>
                             </LinearGradient>
