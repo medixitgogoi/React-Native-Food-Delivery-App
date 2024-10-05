@@ -79,10 +79,11 @@ const OtpVerification = ({ route }) => {
                     position: 'top',
                     topOffset: 50,
                 });
+
                 if (to === 'signup') {
                     navigation.navigate('SignUp', { mobile: mobileNumber, otp: otpCode });
                 } else if (to === 'forgotPassword') {
-                    navigation.navigate('ForgotPassword');
+                    navigation.navigate('ForgotPassword', { mobile: mobileNumber, otp: otpCode });
                 }
             } else {
                 // Display the error message if OTP is invalid
