@@ -107,22 +107,19 @@ const OrderHistory = () => {
     // Render Order
     const renderOrder = ({ item }) => {
 
-        const timestamp = item?.address_detail?.created_at;
+        const apiDate = item?.created_at; // Input date from API
+        const dateParts = apiDate.split("/"); // Split the date into parts
 
-        const dateObj = new Date(timestamp);
+        // Create a new Date object (Month is 0-based in JavaScript)
+        const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
 
-        const day = dateObj.getUTCDate();
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const month = monthNames[dateObj.getUTCMonth()];
-        const year = dateObj.getUTCFullYear();
-        const formattedDate = `${day} ${month}, ${year}`;
+        // Options for formatting
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
 
-        // Format the time as 'HH:MMam/pm'
-        let hours = dateObj.getUTCHours();
-        const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
-        const period = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12 || 12;
-        const formattedTime = `${hours}:${minutes}${period}`;
+        // Format the date
+        const result = formattedDate.toLocaleDateString('en-GB', options);
+
+        const finalResult = result.replace(/(\w{3}) (\d{4})/, '$1, $2');
 
         return (
             <TouchableOpacity onPress={() => navigation.navigate('OrderDetails', { detail: item })} style={{ backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
@@ -149,11 +146,17 @@ const OrderHistory = () => {
                     <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>{formattedDate} at {formattedTime}</Text>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>{finalResult}</Text>
                         </View>
-                        <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
-                            <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>Delivered</Text>
-                        </View>
+                        {item?.status === '1' ? (
+                            <View style={{ backgroundColor: lightGreen, paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: backIconColor, borderWidth: 0.7 }}>
+                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>To be delivered</Text>
+                            </View>
+                        ) : (
+                            <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
+                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>To be delivered</Text>
+                            </View>
+                        )}
                     </View>
 
                     {/* Price */}

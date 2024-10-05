@@ -1,11 +1,9 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput, ScrollView, Dimensions, Alert, Image, FlatList, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, ScrollView, Image, Linking } from 'react-native';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import { useCallback, useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -24,22 +22,20 @@ const OrderDetails = ({ route }) => {
         }, [])
     );
 
-    const timestamp = detail?.address_detail?.created_at;
+    const apiDate = route?.params?.detail?.created_at; // Input date from API
 
-    const dateObj = new Date(timestamp);
+    const dateParts = apiDate.split("/"); // Split the date into parts
 
-    const day = dateObj.getUTCDate();
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[dateObj.getUTCMonth()];
-    const year = dateObj.getUTCFullYear();
-    const formattedDate = `${month} ${day}, ${year}`;
+    // Create a new Date object (Month is 0-based in JavaScript)
+    const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
 
-    // Format the time as 'HH:MMam/pm'
-    let hours = dateObj.getUTCHours();
-    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
-    const period = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12 || 12; // Convert to 12-hour format
-    const formattedTime = `${hours}:${minutes}${period}`;
+    // Options for formatting
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+
+    // Format the date
+    const result = formattedDate.toLocaleDateString('en-GB', options);
+
+    const finalResult = result.replace(/(\w{3}) (\d{4})/, '$1, $2');
 
     // handleCallPress
     const handleCallPress = () => {
@@ -142,7 +138,7 @@ const OrderDetails = ({ route }) => {
                         <Text style={{ fontSize: responsiveFontSize(1.6), fontWeight: '500', color: '#000' }}>₹{detail?.total_mrp - detail?.total_price}</Text>
                     </View>
 
-                    {/* Order Details */}
+                    {/* Order Details Heading */}
                     <View style={{ marginTop: 15 }}>
                         <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Order Details</Text>
                     </View>
@@ -172,7 +168,7 @@ const OrderDetails = ({ route }) => {
                     {/* Date */}
                     <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
                         <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Date</Text>
-                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{formattedDate} at {formattedTime}</Text>
+                        <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{finalResult}</Text>
                     </View>
 
                     {/* Phone Number */}
