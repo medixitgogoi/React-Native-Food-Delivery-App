@@ -13,6 +13,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const OtpVerification = ({ route }) => {
 
     const to = route?.params?.to;
+    console.log('to', to);
 
     const navigation = useNavigation();
 
