@@ -22,8 +22,6 @@ const SignUp = ({ route }) => {
 
     const dispatch = useDispatch();
 
-    const userDetails = useSelector(state => state.user);
-
     const [checked, setChecked] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -114,8 +112,6 @@ const SignUp = ({ route }) => {
             }
         }
     };
-
-    console.log('userDetails', userDetails);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
