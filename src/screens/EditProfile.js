@@ -55,7 +55,7 @@ const EditProfile = () => {
     const updateHandler = async () => {
         // Check if any of the fields are empty
         if (!name || !email || !gender) {
-            setError(true);
+            // setError(true);
 
             // Display error Toast
             Toast.show({
@@ -113,7 +113,6 @@ const EditProfile = () => {
 
                 dispatch(addUser(userInfo));
                 await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
-
             } else {
                 Toast.show({
                     type: 'error',
@@ -260,7 +259,7 @@ const EditProfile = () => {
                 </TouchableOpacity>
             </LinearGradient>
 
-            {error && (
+            {/* {error && (
                 Toast.show({
                     type: 'error',
                     text1: 'Please fill all the details',
@@ -268,7 +267,7 @@ const EditProfile = () => {
                     position: 'top',
                     topOffset: 10,
                 })
-            )}
+            )} */}
 
 
         </SafeAreaView>
