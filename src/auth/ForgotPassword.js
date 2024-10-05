@@ -59,25 +59,22 @@ const ForgotPassword = ({ route }) => {
                 console.log('change password', response);
 
                 // Handle success response
-                // if (response.data.status) {
-                //     const userInfo = {
-                //         name: response?.data?.data?.name,
-                //         email: response?.data?.data?.email,
-                //         mobileNumber: mobileNumber,
-                //         password: password,
-                //         accessToken: response?.data?.access_token,
-                //     };
+                if (!response.data.status) {
+                    navigation.navigate('Login');
 
-                //     dispatch(addUser(userInfo));
-                //     await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: 'Password changed successfully',
+                        position: 'top',
+                        topOffset: 50,
+                    });
 
-                //     setName('');
-                //     setPassword('');
-                //     setConfirmPassword('');
-                //     setEmail('');
-                // } else {
-                //     Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
-                // }
+                    setPassword('');
+                    setConfirmPassword('');
+                } else {
+                    Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+                }
             } catch (error) {
                 // Handle error response
                 if (error.response) {
