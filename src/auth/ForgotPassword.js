@@ -1,4 +1,4 @@
-import { Alert, Animated, Dimensions, Image, StatusBar, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Image, StatusBar, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -7,8 +7,13 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { backIconColor, darkGreen, offWhite } from '../utils/colors';
 import { useState } from 'react';
+import Toast from 'react-native-toast-message';
+import axios from 'axios';
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ route }) => {
+
+    const mobileNumber = route.params.mobile;
+    const otp = route.params.otp;
 
     const navigation = useNavigation();
 
@@ -20,6 +25,71 @@ const ForgotPassword = () => {
 
     const [show, setShow] = useState(true);
     const [confirmShow, setConfirmShow] = useState(true);
+
+    const [loading, setLoading] = useState(false);
+
+    const changePasswordHandler = async () => {
+        if (!password || !confirmPassword) {
+            Toast.show({
+                type: 'error',
+                text1: 'Incomplete Information',
+                text2: 'All fields are required.',
+                position: 'top',
+                topOffset: 10,
+            });
+            return;
+        } else {
+            try {
+                setLoading(true);
+                // Data object as per the API requirement
+                const data = {
+                    mobile: mobileNumber,
+                    otp: otp,
+                    password: password,
+                    confirm_password: confirmPassword
+                };
+
+                // API Call using axios
+                const response = await axios.post(`/user/change/password/submit`, data, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('change password', response);
+
+                // Handle success response
+                if (response.data.status) {
+                    const userInfo = {
+                        name: response?.data?.data?.name,
+                        email: response?.data?.data?.email,
+                        mobileNumber: mobileNumber,
+                        password: password,
+                        accessToken: response?.data?.access_token,
+                    };
+
+                    dispatch(addUser(userInfo));
+                    await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
+
+                    setName('');
+                    setPassword('');
+                    setConfirmPassword('');
+                    setEmail('');
+                } else {
+                    Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+                }
+            } catch (error) {
+                // Handle error response
+                if (error.response) {
+                    Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+                } else {
+                    Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
