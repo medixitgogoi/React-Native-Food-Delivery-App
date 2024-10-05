@@ -1,6 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StatusBar, Image, Alert, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import Icon2 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -22,7 +23,7 @@ const EditProfile = () => {
 
     const navigation = useNavigation();
 
-    const [mobile, setMobile] = useState('');
+    const [mobileNumber, setMobileNumber] = useState('');
 
     const [name, setName] = useState();
     const [isNameFocused, setIsNameFocused] = useState(false);
@@ -44,7 +45,7 @@ const EditProfile = () => {
     useEffect(() => {
         setPassword(userDetails?.[0]?.password);
         setAccessToken(userDetails?.[0]?.accessToken)
-        setMobile(userDetails?.[0]?.mobile);
+        setMobileNumber(userDetails?.[0]?.mobileNumber);
         setName(userDetails[0]?.name);
         setEmail(userDetails?.[0]?.email);
         if (userDetails?.[0]?.gender) {
@@ -108,7 +109,7 @@ const EditProfile = () => {
                     name: response?.data?.data?.name,
                     email: response?.data?.data?.email,
                     gender: response?.data?.data?.gender,
-                    mobile: mobile,
+                    mobileNumber: mobileNumber,
                 };
 
                 dispatch(addUser(userInfo));
@@ -187,7 +188,7 @@ const EditProfile = () => {
                         <View style={{ width: '100%', flexDirection: 'column', paddingHorizontal: 15, gap: 3, }}>
                             <Text style={{ color: '#888888', zIndex: 1, fontWeight: '500', fontStyle: 'italic' }}>Mobile</Text>
                             <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', height: 40, backgroundColor: '#efefef', borderRadius: 10, elevation: 1, justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#6f6f6f', fontWeight: '500', fontStyle: 'italic' }}>{mobile}</Text>
+                                <Text style={{ color: '#6f6f6f', fontWeight: '500', fontStyle: 'italic' }}>{mobileNumber}</Text>
                                 <Icon name="block" size={20} color={'red'} />
                             </View>
                         </View>
@@ -238,38 +239,24 @@ const EditProfile = () => {
                 </ScrollView>
 
                 {/* Update Profile */}
-                <TouchableOpacity
-                    onPress={updateHandler}
-                    // onPress={() => {
-                    //     if (!name || !email || !gender) {
-                    //         setError(true);
-                    //     } else {
-                    //         updateHandler();
-                    //     }
-                    // }}
-                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center', height: 48, backgroundColor: darkGreen, borderColor: backIconColor, borderWidth: 1.5, borderRadius: 12 }}
+                <LinearGradient
+                    colors={[darkGreen, '#3a9f43']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{ borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, elevation: 5, marginTop: 30, width: '95%', alignSelf: 'center', position: 'absolute', bottom: 10 }}
                 >
-                    {loading ? (
-                        <ActivityIndicator size="small" color={'#000'} />
-                    ) : (
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                            <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(2.3) }}>Update Profile</Text>
-                        </View>
-                    )}
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={updateHandler} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                        {loading ? (
+                            <ActivityIndicator size="small" color={'#000'} />
+                        ) : (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                <Text style={{ color: '#fff', fontWeight: '500', fontSize: responsiveFontSize(2.4) }}>Update Profile</Text>
+                                <Icon2 name="pencil-square" size={22} color={'#fff'} />
+                            </View>
+                        )}
+                    </TouchableOpacity>
+                </LinearGradient>
             </LinearGradient>
-
-            {/* {error && (
-                Toast.show({
-                    type: 'error',
-                    text1: 'Please fill all the details',
-                    text2: 'Make sure to complete the name, email, and gender fields.',
-                    position: 'top',
-                    topOffset: 10,
-                })
-            )} */}
-
-
         </SafeAreaView>
     );
 };

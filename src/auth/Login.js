@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -40,7 +41,15 @@ const Login = () => {
     const handleLoginSubmit = async () => {
         // Ensure all fields are filled
         if (!mobileNumber || !password) {
-            Alert.alert("Error", "All fields are required.");
+            Toast.show({
+                type: 'error',
+                text1: 'Missing Information',
+                text2: !mobileNumber
+                    ? 'Mobile number is required.'
+                    : 'Password is required.',
+                position: 'top',
+                topOffset: 50,
+            });
             return;
         }
 
@@ -77,16 +86,34 @@ const Login = () => {
                 setMobileNumber('');
                 setPassword('');
             } else {
-                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please check your credentials and try again.');
+                Toast.show({
+                    type: 'error',
+                    text1: response?.data?.message || 'Something went wrong.',
+                    text2: 'Please check your credentials and try again.',
+                    position: 'top',
+                    topOffset: 50,
+                });
             }
 
             setLoading(false);
         } catch (error) {
             // Handle error response
             if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.response?.data?.message || 'Something went wrong. Please try again.',
+                    position: 'top',
+                    topOffset: 50,
+                });
             } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: 'Network error. Please check your internet connection and try again.',
+                    position: 'top',
+                    topOffset: 50,
+                });
             }
         }
     };
@@ -146,6 +173,7 @@ const Login = () => {
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(2.5), fontWeight: 800, textAlign: 'center' }}>Hi There, Welcome Back 👋</Text>
 
                             <View style={{ flexDirection: 'column', gap: 3 }}>
+                                {/* Login heading */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: 8 }}>
                                     <Text style={{ color: '#e4e7ea' }}>_________________________ </Text>
                                     <Text style={{ color: '#000', textAlign: 'center', color: '#555555', textTransform: 'uppercase', fontWeight: 600, marginTop: 10, fontSize: responsiveFontSize(1.8) }}> Log in </Text>
@@ -196,7 +224,7 @@ const Login = () => {
                                     </View>
                                 </View>
 
-                                {/* Don't have account */}
+                                {/* Register Now and Forgot Password */}
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 5 }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6) }}>Don't have an account?</Text>
@@ -210,6 +238,7 @@ const Login = () => {
                                 </View>
                             </View>
 
+                            {/* Login button */}
                             <LinearGradient
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
