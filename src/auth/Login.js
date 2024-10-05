@@ -243,7 +243,7 @@ const Login = () => {
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
-                                style={{ borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, elevation: 2, marginTop: 30 }}
+                                style={{ borderRadius: 12, height: 50, paddingHorizontal: 24, elevation: 2, marginTop: 30, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}
                             >
                                 <TouchableOpacity
                                     onPress={handleLoginSubmit}
@@ -260,7 +260,6 @@ const Login = () => {
                                             <Icon2 name="login" size={23} color={'#fff'} />
                                         </View>
                                     )}
-                                    {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600' }}>Continue</Text> */}
                                 </TouchableOpacity>
                             </LinearGradient>
                         </View>
