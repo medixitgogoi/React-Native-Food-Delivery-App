@@ -42,6 +42,7 @@ const EditProfile = () => {
 
     const [error, setError] = useState(false);
 
+    // useEffect for setting the user details
     useEffect(() => {
         setPassword(userDetails?.[0]?.password);
         setAccessToken(userDetails?.[0]?.accessToken)
@@ -53,6 +54,7 @@ const EditProfile = () => {
         }
     }, [updateHandler]);
 
+    // updateHandler
     const updateHandler = async () => {
         // Check if any of the fields are empty
         if (!name || !email || !gender) {
@@ -158,13 +160,13 @@ const EditProfile = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar
                 animated={true}
-                backgroundColor={'#f9f9f9'}
+                backgroundColor={'#fff'}
                 barStyle="dark-content"
             />
 
             {/* Linear Gradient Background */}
             <LinearGradient
-                colors={['#f9f9f9', '#a6d7a1']}
+                colors={['#fff', '#c8e6c4']}
                 style={{ flex: 1 }}
             >
                 {/* Header */}
