@@ -5,6 +5,8 @@ export const fetchProducts = async (userDetails) => { // Pass userDetails as a p
     try {
         axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
         const response = await axios.get('/user/appload');
+        console.log('AppLoad', response);
+        
         return response?.data; // Return data inside the try block after receiving the response
     } catch (error) {
         Alert.alert("Error", error.message); // Add a title to the alert
