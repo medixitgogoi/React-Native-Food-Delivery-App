@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/Ionicons';
 import Icon3 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import Icon5 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -158,7 +159,7 @@ const Profile = () => {
                             {/* Disclaimer */}
                             <TouchableOpacity onPress={() => navigation.navigate('Disclaimer')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                    <Icon2 name="alert-circle-outline" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Disclaimer</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -170,7 +171,7 @@ const Profile = () => {
                             {/* Privacy Policy */}
                             <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                    <Icon2 name="shield-outline" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Privacy Policy</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -182,7 +183,7 @@ const Profile = () => {
                             {/* T&C */}
                             <TouchableOpacity onPress={() => navigation.navigate('TermsAndConditions')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                    <Icon4 name="filetext1" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Terms and Conditions</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -194,7 +195,7 @@ const Profile = () => {
                             {/* Cancellation */}
                             <TouchableOpacity onPress={() => navigation.navigate('Cancellation')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                    <Icon5 name="cancel" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Cancellation</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -206,7 +207,7 @@ const Profile = () => {
                             {/* Refund and Return Policy */}
                             <TouchableOpacity onPress={() => navigation.navigate('RefundAndReturn')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                    <Icon5 name="cash-refund" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Refund and Return Policy</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
@@ -218,7 +219,7 @@ const Profile = () => {
                             {/* Contact */}
                             <TouchableOpacity onPress={() => navigation.navigate('Contact')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
-                                    <Icon name="help-outline" size={15} color={backIconColor} />
+                                    <Icon5 name="phone-outline" size={15} color={backIconColor} />
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(2), flex: 1, color: '#000', fontWeight: '500' }}>Contact</Text>
                                 <Icon name="keyboard-arrow-right" size={20} color={'#818181'} />
