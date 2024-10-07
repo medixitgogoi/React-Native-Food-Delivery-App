@@ -156,7 +156,7 @@ const OrderDetails = ({ route }) => {
                     {detail?.payment_type === '2' ? (
                         <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
                             <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
-                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Payment Method: Pay on Delivery (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Payment Method: Cash on Delivery (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
                         </View>
                     ) : (
                         <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>

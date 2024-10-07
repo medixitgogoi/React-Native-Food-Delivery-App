@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCartProducts } from '../utils/fetchCartProducts';
 import { setCartItems } from '../redux/CartSlice';
 import { setWishlist } from '../redux/WishlistSlice';
+import Toast from 'react-native-toast-message';
 
 axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
 
@@ -31,7 +32,13 @@ const StackNavigation = () => {
                 const data = await fetchCartProducts(userDetails);
                 dispatch(setCartItems(data)); // Dispatch action to update cart in Redux
             } catch (error) {
-                Alert.alert("Error fetching groceries:", error.message);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error fetching groceries',
+                    text2: error.message,
+                    position: 'top',
+                    topOffset: 20,
+                });
             }
         };
 

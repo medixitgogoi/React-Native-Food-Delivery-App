@@ -90,10 +90,8 @@ const OrderHistory = () => {
                     const response = await axios.get('/user/order/fetch');
                     console.log('orders', response?.data?.data);
 
-                    const reversedOrders = response?.data?.data.reverse() || [];
-
-                    setOrders(reversedOrders);
-                    setFilteredNames(reversedOrders);
+                    setOrders(response?.data?.data);
+                    setFilteredNames(response?.data?.data);
                 } catch (error) {
                     Alert.alert("Error", error.message); // Add a title to the alert
                 } finally {

@@ -9,19 +9,22 @@ import Icon4 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import Icon6 from 'react-native-vector-icons/dist/Ionicons';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import phonepeSDK from 'react-native-phonepe-pg';
 import Base64 from 'react-native-base64';
 import sha256 from 'sha256';
+import { deleteAllItemsFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const Checkout = () => {
 
     const navigation = useNavigation();
+
+    const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
     console.log('userDetails', userDetails);
@@ -213,6 +216,7 @@ const Checkout = () => {
                     data: response?.data?.data,
                     selectedAddress: selectedAddress
                 });
+                dispatch(deleteAllItemsFromCart());
             }
 
             console.log('responseCOD', response);
@@ -364,7 +368,7 @@ const Checkout = () => {
                                             <Icon2 name="cash-multiple" size={20} color={"#000"} />
                                         </View>
                                         <Text style={{ fontSize: responsiveFontSize(2), color: '#000', fontWeight: '500' }}>
-                                            Pay on Delivery
+                                            Cash on Delivery
                                         </Text>
                                     </View>
                                     <Icon name="keyboard-arrow-right" size={20} color={'#5a5a5a'} />
