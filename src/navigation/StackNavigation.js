@@ -99,7 +99,7 @@ const StackNavigation = () => {
                 <AuthStackNavigator initialRoute="SplashScreen" />
             </NavigationContainer>
         );
-    }
+    };
 
     return (
         <NavigationContainer>
