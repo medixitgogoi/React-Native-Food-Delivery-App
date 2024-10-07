@@ -98,7 +98,13 @@ const SignUp = ({ route }) => {
                 setConfirmPassword('');
                 setEmail('');
             } else {
-                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+                Toast.show({
+                    type: 'error',
+                    text1: response?.data?.message || 'Something went wrong.',
+                    text2: 'Please try again.',
+                    position: 'top',
+                    topOffset: 50,
+                });
             }
 
             setLoading(false);
@@ -106,9 +112,21 @@ const SignUp = ({ route }) => {
         } catch (error) {
             // Handle error response
             if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.response.data.message || "Something went wrong. Please try again.",
+                    position: 'top',
+                    topOffset: 50,
+                });
             } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: "Network error. Please check your internet connection and try again.",
+                    position: 'top',
+                    topOffset: 50,
+                });
             }
         }
     };
