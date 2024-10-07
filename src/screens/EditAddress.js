@@ -111,7 +111,7 @@ const EditAddress = ({ route }) => {
         } catch (error) {
             // Handle error response
             if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+                Alert.alert("Error", error?.response?.data?.message || "Something went wrong. Please try again.");
             } else {
                 Alert.alert("Error", "Network error. Please check your internet connection and try again.");
             }
