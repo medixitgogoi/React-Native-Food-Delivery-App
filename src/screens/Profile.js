@@ -21,6 +21,7 @@ const Profile = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
+    console.log('userDetails', userDetails);
 
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -82,11 +83,13 @@ const Profile = () => {
                             <View style={{ flexDirection: 'column', gap: 3, width: '65%' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                                     <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{userDetails[0]?.name}</Text>
-                                    {userDetails?.[0]?.gender === 'M' ? (
+                                    {userDetails?.[0]?.gender === 'M' && (
                                         <View style={{ width: 20, height: 20, backgroundColor: lightGreen, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }}>
                                             <Icon2 name="male" size={15} color={backIconColor} />
                                         </View>
-                                    ) : (
+                                    )}
+
+                                    {userDetails?.[0]?.gender === 'F' && (
                                         <View style={{ width: 20, height: 20, backgroundColor: lightGreen, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }}>
                                             <Icon2 name="female" size={15} color={backIconColor} />
                                         </View>

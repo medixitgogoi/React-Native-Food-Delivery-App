@@ -101,6 +101,8 @@ const EditProfile = () => {
                     topOffset: 10,
                 });
 
+                navigation.navigate('Profile');
+
                 setIsEmailFocused(false);
                 setIsNameFocused(false);
                 setIsGenderFocused(false);
@@ -169,21 +171,26 @@ const EditProfile = () => {
                 colors={['#fff', '#c8e6c4']}
                 style={{ flex: 1 }}
             >
+
+                {/* Header */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8 }}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingVertical: 5, paddingHorizontal: 10 }}>
+                        <Icon4 name="arrowleft" size={22} color={'#000'} />
+                    </TouchableOpacity>
+                    <View style={{ position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Edit Profile</Text>
+                    </View>
+                </View>
+
                 <KeyboardAvoidingView
                     style={{ flex: 1 }}
-                    behavior={'padding'}
+                    behavior="padding"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 100}
                 >
-                    {/* Header */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8 }}>
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingVertical: 5, paddingHorizontal: 10 }}>
-                            <Icon4 name="arrowleft" size={22} color={'#000'} />
-                        </TouchableOpacity>
-                        <View style={{ position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Edit Profile</Text>
-                        </View>
-                    </View>
-
-                    <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', }}>
+                    <ScrollView
+                        contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}
+                        keyboardShouldPersistTaps="handled"
+                    >
                         {/* Avatar */}
                         <View style={{ width: 180, height: 180, alignSelf: 'center', borderRadius: 100, overflow: 'hidden', marginTop: 20, marginBottom: 15 }}>
                             <Image source={require('../assets/avatar.jpeg')} style={{ height: '100%', width: '100%', resizeMode: 'contain' }} />
@@ -243,26 +250,26 @@ const EditProfile = () => {
                             </View>
                         </View>
                     </ScrollView>
-
-                    {/* Update Profile */}
-                    <LinearGradient
-                        colors={[darkGreen, '#3a9f43']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        style={{ borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, elevation: 5, marginTop: 30, width: '95%', alignSelf: 'center', position: 'absolute', bottom: 10 }}
-                    >
-                        <TouchableOpacity onPress={updateHandler} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                            {loading ? (
-                                <ActivityIndicator size="small" color={'#000'} />
-                            ) : (
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                                    <Text style={{ color: '#fff', fontWeight: '500', fontSize: responsiveFontSize(2.4) }}>Update Profile</Text>
-                                    <Icon2 name="pencil-square" size={22} color={'#fff'} />
-                                </View>
-                            )}
-                        </TouchableOpacity>
-                    </LinearGradient>
                 </KeyboardAvoidingView>
+
+                {/* Update Profile */}
+                <LinearGradient
+                    colors={[darkGreen, '#3a9f43']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{ borderRadius: 12, paddingVertical: 13, paddingHorizontal: 24, elevation: 5, marginTop: 30, width: '95%', alignSelf: 'center', position: 'absolute', bottom: 10 }}
+                >
+                    <TouchableOpacity onPress={updateHandler} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+                        {loading ? (
+                            <ActivityIndicator size="small" color={'#000'} />
+                        ) : (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                <Text style={{ color: '#fff', fontWeight: '500', fontSize: responsiveFontSize(2.4) }}>Update Profile</Text>
+                                <Icon2 name="pencil-square" size={22} color={'#fff'} />
+                            </View>
+                        )}
+                    </TouchableOpacity>
+                </LinearGradient>
             </LinearGradient>
         </SafeAreaView>
     );

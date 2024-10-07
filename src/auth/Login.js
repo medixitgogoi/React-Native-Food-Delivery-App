@@ -244,19 +244,19 @@ const Login = () => {
                                 colors={[darkGreen, '#3a9f43']}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 0 }}
-                                style={{ borderRadius: 12, height: 50, paddingHorizontal: 24, elevation: 2, marginTop: 30, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}
+                                style={{ borderRadius: 12, height: 50, elevation: 2, marginTop: 30, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}
                             >
                                 <TouchableOpacity
                                     onPress={handleLoginSubmit}
                                     disabled={loading}
-                                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}
+                                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: '100%' }}
                                 >
                                     {loading ? (
                                         <View>
                                             <ActivityIndicator size='small' color={'#fff'} />
                                         </View>
                                     ) : (
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, width: '100%', height: '100%', justifyContent: 'center'}}>
                                             <Text style={{ textAlign: 'center', color: '#fff', fontSize: responsiveFontSize(2.5), fontWeight: '600', textTransform: 'uppercase' }}>Login</Text>
                                             <Icon2 name="login" size={23} color={'#fff'} />
                                         </View>

@@ -78,7 +78,7 @@ const SignUp = ({ route }) => {
                 }
             });
 
-            console.log('signup', response)
+            console.log('signup', response);
 
             // Handle success response
             if (response.data.status) {
