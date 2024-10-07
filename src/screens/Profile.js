@@ -80,12 +80,16 @@ const Profile = () => {
 
                             {/* Name and Email */}
                             <View style={{ flexDirection: 'column', gap: 3, width: '65%' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                                     <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{userDetails[0]?.name}</Text>
                                     {userDetails?.[0]?.gender === 'M' ? (
-                                        <Icon2 name="male" size={17} color={'#000'} />
+                                        <View style={{ width: 30, height: 30, backgroundColor: lightGreen, borderRadius: 5 }}>
+                                            <Icon2 name="male" size={15} color={backIconColor} />
+                                        </View>
                                     ) : (
-                                        <Icon2 name="female" size={17} color={'#000'} />
+                                        <View style={{ width: 20, height: 20, backgroundColor: lightGreen, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }}>
+                                            <Icon2 name="female" size={15} color={backIconColor} />
+                                        </View>
                                     )}
                                 </View>
                                 <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '400' }}>{userDetails[0]?.email}</Text>
