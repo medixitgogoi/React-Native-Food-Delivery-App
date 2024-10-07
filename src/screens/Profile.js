@@ -83,7 +83,7 @@ const Profile = () => {
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                                     <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{userDetails[0]?.name}</Text>
                                     {userDetails?.[0]?.gender === 'M' ? (
-                                        <View style={{ width: 30, height: 30, backgroundColor: lightGreen, borderRadius: 5 }}>
+                                        <View style={{ width: 20, height: 20, backgroundColor: lightGreen, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }}>
                                             <Icon2 name="male" size={15} color={backIconColor} />
                                         </View>
                                     ) : (
