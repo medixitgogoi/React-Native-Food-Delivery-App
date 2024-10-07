@@ -24,6 +24,8 @@ const Home = () => {
     const userDetails = useSelector(state => state.user);
     const wishlistProducts = useSelector(state => state.wishlist.items);
 
+    const firstName = userDetails?.[0]?.name?.split(' ')[0];
+
     const [loading, setLoading] = useState(true);
 
     const [search, setSearch] = useState('');
@@ -119,9 +121,20 @@ const Home = () => {
                     </View> */}
 
                     {/* Welcome */}
-                    <View style={{ flexDirection: 'column', width: '30%', }}>
+                    <View style={{ flexDirection: 'column', width: '30%' }}>
                         <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Welcome</Text>
-                        <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>{userDetails?.[0]?.name}</Text>
+                        <Text
+                            style={{
+                                fontSize: responsiveFontSize(2.5),
+                                fontWeight: '600',
+                                color: '#000',
+                                overflow: 'hidden', // Ensure overflow is hidden
+                            }}
+                            numberOfLines={1} // Limit to one line
+                            ellipsizeMode="tail" // Show ellipsis at the end if clipped
+                        >
+                            {firstName}
+                        </Text>
                     </View>
 
                     {/* Location */}
