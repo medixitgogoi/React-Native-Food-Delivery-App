@@ -68,13 +68,14 @@ const Login = () => {
                 }
             });
 
-            console.log('response', response);
+            console.log('login response', response);
 
             // Handle success response
             if (response.data.status) {
                 const userInfo = {
                     name: response?.data?.data?.name,
                     email: response?.data?.data?.email,
+                    gender: response?.data?.data?.gender,
                     mobileNumber: mobileNumber,
                     password: password,
                     accessToken: response?.data?.access_token,
