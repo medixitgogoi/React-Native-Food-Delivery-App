@@ -103,7 +103,7 @@ const StackNavigation = () => {
 
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? (
+            {isUserLoggedIn ? ( 
                 <GuestStackNavigator cartItemCount={cartProducts?.length} />
             ) : (
                 <AuthStackNavigator initialRoute="Login" />

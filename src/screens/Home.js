@@ -28,9 +28,6 @@ const Home = () => {
 
     const [loading, setLoading] = useState(true);
 
-    const [search, setSearch] = useState('');
-    const [isSearchFocused, setIsSearchFocused] = useState(false);
-
     // Filtering
     // Payment Gateway(For testing purposes)
     // For Card payment - use 4592-0001-6891-4253 and OTP (any four digit number)
