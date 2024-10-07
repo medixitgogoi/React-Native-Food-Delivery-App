@@ -101,7 +101,7 @@ const Home = () => {
                 locations={[0, 0.99]}
                 style={{}}
             >
-                <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, paddingVertical: 5 }}>
+                <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 15, paddingVertical: 5 }}>
                     {/* Searchbar */}
                     {/* <View style={{ width: '70%', borderColor: isSearchFocused ? '#3a9d43' : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 38, width: 23, }}>
@@ -119,13 +119,13 @@ const Home = () => {
                     </View> */}
 
                     {/* Welcome */}
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Welcome</Text>
-                        <Text style={{ fontSize: responsiveFontSize(2.5), fontWeight: '600', color: '#000' }}>{userDetails?.[0]?.name}</Text>
+                    <View style={{ flexDirection: 'column', width: '30%', }}>
+                        <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>Welcome</Text>
+                        <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>{userDetails?.[0]?.name}</Text>
                     </View>
 
                     {/* Location */}
-                    <View style={{ width: '29%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ width: '30%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                         <Icon3 name="location-pin" size={30} color={'#cb202d'} />
                         <TouchableOpacity style={{ width: '70%', flexDirection: 'column' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
@@ -137,12 +137,14 @@ const Home = () => {
                     </View>
 
                     {/* Profile */}
-                    <TouchableOpacity
-                        style={{ backgroundColor: lightGreen, width: 35, height: 35, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
-                        onPress={() => navigation.navigate('Profile')}
-                    >
-                        <Icon name="user-alt" size={15} color={'#000'} />
-                    </TouchableOpacity>
+                    <View style={{ width: '30%', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                        <TouchableOpacity
+                            style={{ backgroundColor: lightGreen, width: 35, height: 35, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
+                            onPress={() => navigation.navigate('Profile')}
+                        >
+                            <Icon name="user-alt" size={15} color={'#000'} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </LinearGradient>
 
