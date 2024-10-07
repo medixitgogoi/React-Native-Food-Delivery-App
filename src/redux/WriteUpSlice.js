@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    items: []  // Store the wishlist items inside an object
+    items: {}
 };
 
 export const writeUpSlice = createSlice({
@@ -14,5 +14,5 @@ export const writeUpSlice = createSlice({
     },
 });
 
-export const { addItemToWishlist, removeItemFromWishlist, deleteAllItemsFromWishlist, setWishlist } = wishlistSlice.actions;
+export const { setWriteUp } = writeUpSlice.actions;
 export default writeUpSlice.reducer;
