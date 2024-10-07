@@ -26,7 +26,9 @@ const OrderHistory = () => {
 
     const [orders, setOrders] = useState(null);
 
-    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1); // Track pagination
+    const [loading, setLoading] = useState(true); // Track loading state
+    const [hasMore, setHasMore] = useState(true); // Track if there's more data to load
 
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered results
@@ -80,27 +82,45 @@ const OrderHistory = () => {
     };
 
     // Fetch Orders
+    const fetchOrders = async (page) => {
+        try {
+            setLoading(true);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+
+            const response = await axios.get(`/user/order/fetch?page=${page}`);
+            const fetchedOrders = response?.data?.data;
+
+            if (fetchedOrders?.length > 0) {
+                setOrders((prevOrders) => [...prevOrders, ...fetchedOrders]); // Append new data
+                setFilteredOrders((prevOrders) => [...prevOrders, ...fetchedOrders]);
+            } else {
+                setHasMore(false); // No more data to load
+            }
+        } catch (error) {
+            Alert.alert("Error", error?.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useFocusEffect(
         useCallback(() => {
-            const getOrders = async () => {
-                try {
-                    setLoading(true);
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-
-                    const response = await axios.get('/user/order/fetch');
-                    console.log('orders', response?.data?.data);
-
-                    setOrders(response?.data?.data);
-                    setFilteredNames(response?.data?.data);
-                } catch (error) {
-                    Alert.alert("Error", error?.message); // Add a title to the alert
-                } finally {
-                    setLoading(false);
-                }
-            }
-            getOrders();
+            setPage(1); // Reset to the first page on focus
+            setOrders([]); // Reset orders on screen focus
+            fetchOrders(1); // Fetch first page
         }, [])
     );
+
+    // Function to load more orders when the user reaches the end
+    const loadMoreOrders = () => {
+        if (!loading && hasMore) {
+            setPage((prevPage) => {
+                const nextPage = prevPage + 1;
+                fetchOrders(nextPage);
+                return nextPage;
+            });
+        }
+    };
 
     // Render Order
     const renderOrder = ({ item }) => {
@@ -299,6 +319,15 @@ const OrderHistory = () => {
                         renderItem={renderOrder}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
+                        onEndReached={loadMoreOrders} // Trigger when reaching the end
+                        onEndReachedThreshold={0.5} // Trigger when user is 50% from the bottom
+                        ListFooterComponent={
+                            loading && hasMore ? (
+                                <View style={{ paddingVertical: 20 }}>
+                                    <ActivityIndicator size="small" color={darkGreen} />
+                                </View>
+                            ) : null
+                        }
                     />
                 )}
             </View>

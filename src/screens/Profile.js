@@ -1,6 +1,6 @@
-import { Alert, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
+import { backIconColor, darkGreen, lightGreen } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/Ionicons';
