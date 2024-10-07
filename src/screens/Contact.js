@@ -23,7 +23,7 @@ const Contact = () => {
                     <Icon4 name="arrowleft" size={22} color={'#000'} />
                 </TouchableOpacity>
                 <View style={{ position: 'absolute', left: 0, right: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Contact</Text>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Contact</Text>
                 </View>
             </View>
 
