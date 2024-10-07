@@ -73,7 +73,7 @@ const EditAddress = ({ route }) => {
                 pin: pinCode,
                 address: address1,
                 address_2: address2 ? address2 : null,
-                landmark: landmark ? landmark : 'lhahah',
+                landmark: landmark ? landmark : null,
                 address_type: addressType === 'Home' ? '1' : '2',
                 is_default: checked ? '2' : '1',
             };
@@ -107,11 +107,6 @@ const EditAddress = ({ route }) => {
             }
 
             setLoading(false);
-
-            // int p = 2;
-            // int *poi=& p;
-
-            // parseInt(*poi);
 
         } catch (error) {
             // Handle error response
