@@ -93,7 +93,7 @@ const OrderHistory = () => {
                     setOrders(response?.data?.data);
                     setFilteredNames(response?.data?.data);
                 } catch (error) {
-                    Alert.alert("Error", error.message); // Add a title to the alert
+                    Alert.alert("Error", error?.message); // Add a title to the alert
                 } finally {
                     setLoading(false);
                 }
