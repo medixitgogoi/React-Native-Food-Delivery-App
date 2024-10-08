@@ -137,7 +137,7 @@ const OrderHistory = () => {
                             </View>
 
                             {/* Details */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, width: '80%' }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, width: '79%' }}>
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>{highlightText(it.product_name, debouncedQuery)}</Text>
                                 <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2) }}>x {it?.quantity}</Text>
                             </View>
@@ -152,15 +152,34 @@ const OrderHistory = () => {
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
                             <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>{finalResult}</Text>
                         </View>
-                        {item?.status === '1' ? (
-                            <View style={{ backgroundColor: lightGreen, paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: backIconColor, borderWidth: 0.7 }}>
-                                <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>To be delivered</Text>
-                            </View>
-                        ) : (
-                            <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
-                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>To be delivered</Text>
-                            </View>
-                        )}
+                        {
+                            item?.status === '1' ? (
+                                // Status = 1 (New)
+                                <View style={{ backgroundColor: lightGreen, paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: backIconColor, borderWidth: 0.7 }}>
+                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>New</Text>
+                                </View>
+                            ) : item?.status === '2' ? (
+                                // Status = 2 (Accepted)
+                                <View style={{ backgroundColor: '#FFA500', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: '#FF8C00', borderWidth: 0.7 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Accepted</Text>
+                                </View>
+                            ) : item?.status === '3' ? (
+                                // Status = 3 (Dispatched)
+                                <View style={{ backgroundColor: '#1E90FF', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: '#1C86EE', borderWidth: 0.7 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Dispatched</Text>
+                                </View>
+                            ) : item?.status === '4' ? (
+                                // Status = 4 (Delivered)
+                                <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 7, borderRadius: 5 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>Delivered</Text>
+                                </View>
+                            ) : item?.status === '5' ? (
+                                // Status = 5 (Cancelled)
+                                <View style={{ backgroundColor: '#cb202d', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: '#CD3700', borderWidth: 0.7 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Cancelled</Text>
+                                </View>
+                            ) : null
+                        }
                     </View>
 
                     {/* Price */}
