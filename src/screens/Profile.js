@@ -8,12 +8,13 @@ import Icon3 from 'react-native-vector-icons/dist/FontAwesome';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import Icon5 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import { logoutUser } from '../redux/UserSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { fetchProducts } from '../utils/fetchProducts';
 
 const Profile = () => {
 
@@ -21,11 +22,11 @@ const Profile = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
-    const detaisl = useSelector(state => state.writeUp.items);
-    console.log('writeUp detsils', detaisl);
     // console.log('userDetails', userDetails);
 
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    const [writeUp, setWriteUp] = useState(null);
 
     // Status Bar Modifications
     useFocusEffect(
@@ -51,6 +52,30 @@ const Profile = () => {
             setIsLoggingOut(false);
         }
     };
+
+    // fetch products
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetchProducts(userDetails);
+                console.log('response', response);
+
+                if (response?.status) {
+                    setWriteUp(response?.app_writeup);
+                }
+            } catch (error) {
+                Toast.show({
+                    type: 'error',
+                    text1: "Error fetching data",
+                    text2: error.message,
+                    position: 'top', // Adjusts to the bottom by default
+                    topOffset: 20, // Moves the toast 10 units down from the bottom
+                });
+            }
+        };
+
+        fetchData(); // Call the async function inside useEffect
+    }, [userDetails]);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -173,7 +198,7 @@ const Profile = () => {
                             <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
 
                             {/* Disclaimer */}
-                            <TouchableOpacity onPress={() => navigation.navigate('Disclaimer')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Disclaimer', { data: writeUp?.disclaimer })} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                     <Icon2 name="alert-circle-outline" size={15} color={backIconColor} />
                                 </View>
