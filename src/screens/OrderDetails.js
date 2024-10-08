@@ -63,7 +63,6 @@ const OrderDetails = ({ route }) => {
             <ScrollView style={{ paddingHorizontal: 14, paddingTop: 15 }}>
                 <View style={{ paddingBottom: 100 }}>
                     <Text style={{ fontSize: responsiveFontSize(2.3), fontWeight: '600', color: '#000' }}>Your Order</Text>
-
                     {/* Divider */}
                     {/* <View style={{ width: '100%', alignSelf: 'flex-end', backgroundColor: '#e1e3e5', height: 1, marginTop: 8 }}></View> */}
 
