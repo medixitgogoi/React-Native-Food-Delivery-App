@@ -210,7 +210,7 @@ const Profile = () => {
                             <View style={{ width: '86%', alignSelf: 'flex-end', backgroundColor: '#f0f1f2', height: 1 }}></View>
 
                             {/* Privacy Policy */}
-                            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy', { data: writeUp?.privacy_policy })} style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 10, marginTop: 3, marginBottom: 2 }}>
                                 <View style={{ padding: 5, borderRadius: 50, backgroundColor: lightGreen, elevation: 1 }}>
                                     <Icon2 name="shield-outline" size={15} color={backIconColor} />
                                 </View>

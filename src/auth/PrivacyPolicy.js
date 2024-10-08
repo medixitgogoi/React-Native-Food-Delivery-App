@@ -1,10 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import RenderHTML from 'react-native-render-html';
 
-const PrivacyPolicy = () => {
+const PrivacyPolicy = ({ route }) => {
+
+    const { width } = useWindowDimensions(); // Get screen width for RenderHTML
+
+    const privacyPolicy = route?.params?.data || ''; // Disclaimer content
 
     const navigation = useNavigation();
 
@@ -30,7 +35,6 @@ const PrivacyPolicy = () => {
             <ScrollView>
                 <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
                     <Text style={{ color: '#000', textAlign: 'justify' }}>
-                        At Skercart, we take your privacy seriously and are committed to safeguarding your personal information. This Privacy Policy explains how we collect, use, and protect your data when you use our grocery delivery services through our mobile app or website. We collect personal information such as your name, email address, phone number, and payment details to process your orders and improve your experience. Additionally, we may gather location data to ensure accurate deliveries and browsing information to enhance our services. Rest assured, we employ industry-standard security measures to protect your data from unauthorized access or breaches.
                     </Text>
                 </View>
             </ScrollView>

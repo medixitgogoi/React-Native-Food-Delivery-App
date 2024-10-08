@@ -3,11 +3,13 @@ import { View, Text, ScrollView, StatusBar, TouchableOpacity, useWindowDimension
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import RenderHTML from 'react-native-render-html'; // Import RenderHTML
+import RenderHTML from 'react-native-render-html';
 
 const Disclaimer = ({ route }) => {
-    const disclaimer = route?.params?.data || ''; // Disclaimer content
+    
     const { width } = useWindowDimensions(); // Get screen width for RenderHTML
+
+    const disclaimer = route?.params?.data || ''; // Disclaimer content
 
     const navigation = useNavigation();
 
@@ -31,10 +33,18 @@ const Disclaimer = ({ route }) => {
 
             {/* Content */}
             <ScrollView>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
+                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 0 }}>
                     <RenderHTML
                         contentWidth={width} // Use device width
                         source={{ html: disclaimer }} // Render the HTML disclaimer
+                        tagsStyles={{
+                            p: {
+                                color: '#000',      // Black text
+                            },
+                            span: {
+                                color: '#000',      // Black text for inline elements
+                            }
+                        }}
                     />
                 </View>
             </ScrollView>
