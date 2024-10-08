@@ -21,9 +21,6 @@ const Profile = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
-    const writeUpItems = useSelector((state) => state.writeup.items);
-
-    console.log('writeupDetails', writeUpItems);
     console.log('userDetails', userDetails);
 
     const [isLoggingOut, setIsLoggingOut] = useState(false);

@@ -4,7 +4,6 @@ import userReducer from "./UserSlice";
 import wishlistReducer from "./WishlistSlice";
 import themeReducer from './ThemeSlice';
 import loginReducer from "./LoginSlice";
-import writeupReducer from './WriteUpSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,7 +11,6 @@ export const store = configureStore({
         user: userReducer,
         wishlist: wishlistReducer,
         theme: themeReducer,
-        login: loginReducer,
-        writeup: writeupReducer,
+        login: loginReducer
     },
 })

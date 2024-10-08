@@ -9,10 +9,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import StarRating from '../components/StarRating';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import { fetchProducts } from '../utils/fetchProducts';
-import { setWriteUp } from '../redux/WriteUpSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -21,8 +20,6 @@ const { width: screenWidth } = Dimensions.get('window');
 const Home = () => {
 
     const navigation = useNavigation();
-
-    const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
     const wishlistProducts = useSelector(state => state.wishlist.items);
@@ -54,13 +51,11 @@ const Home = () => {
         const fetchData = async () => {
             try {
                 const response = await fetchProducts(userDetails);
-                console.log('response', response);
+                console.log('response', response?.app_writeup);
 
                 setGroceries(response?.grocery?.slice(0, 15) || []);
                 setRestaurants(response?.resturants?.slice(0, 15) || []);
                 setCakes(response?.cakes?.slice(0, 15) || []);
-
-                dispatch(setWriteUp(response?.data?.app_writeup));
 
                 setBranch(response?.branch?.area);
                 setPin(response?.branch?.pin);
