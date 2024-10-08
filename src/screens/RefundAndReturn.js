@@ -1,10 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import RenderHTML from 'react-native-render-html';
 
-const RefundAndReturn = () => {
+const RefundAndReturn = ({ route }) => {
+
+    const { width } = useWindowDimensions(); // Get screen width for RenderHTML
+
+    const refund = route?.params?.data || ''; // Disclaimer content
 
     const navigation = useNavigation();
 
@@ -28,10 +33,19 @@ const RefundAndReturn = () => {
 
             {/* Content */}
             <ScrollView>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
-                    <Text style={{ color: '#000' }}>
-                        Our Refund and Return Policy is designed to ensure customer satisfaction while maintaining the highest standards of quality and service. If you are not completely satisfied with your order, we offer a hassle-free refund and return process. Returns are accepted for products that are damaged, expired, or incorrect upon delivery. To request a refund or exchange, simply contact our customer support team within 24 hours of receiving your order. We may ask for a photo of the product or other relevant details to process your request. Refunds will be issued to the original payment method and typically take 5-7 business days to reflect. Please note that for perishable items, refunds or returns may be limited depending on the condition of the product. We strive to make the process as seamless as possible, ensuring you can shop with confidence.
-                    </Text>
+                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 0 }}>
+                    <RenderHTML
+                        contentWidth={width} // Use device width
+                        source={{ html: refund }} // Render the HTML disclaimer
+                        tagsStyles={{
+                            p: {
+                                color: '#000',      // Black text
+                            },
+                            span: {
+                                color: '#000',      // Black text for inline elements
+                            }
+                        }}
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>

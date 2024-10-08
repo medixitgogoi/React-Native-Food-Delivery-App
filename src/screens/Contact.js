@@ -3,9 +3,10 @@ import { View, Text, ScrollView, StatusBar, TouchableOpacity } from 'react-nativ
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { backIconColor, darkGreen } from '../utils/colors';
 
-const Contact = () => {
+const Contact = ({ route }) => {
+
+    const contact = route?.params?.data || '';
 
     const navigation = useNavigation();
 
@@ -28,21 +29,9 @@ const Contact = () => {
             </View>
 
             {/* Content */}
-            <ScrollView>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
-                    <Text style={{ color: '#000', marginBottom: 10 }}>
-                        If you have any questions, concerns, or feedback, we’d love to hear from you! Please reach out to our customer support team through the following channels:
-                    </Text>
-                    <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 5 }}>Phone:</Text>
-                    <Text style={{ color: '#000', marginBottom: 10 }}>+91 6033391141</Text>
-                    <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 5 }}>Email:</Text>
-                    <Text style={{ color: '#000', marginBottom: 10 }}>support@groceryapp.com</Text>
-                    <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 5 }}>Business Hours:</Text>
-                    <Text style={{ color: '#000', marginBottom: 10 }}>Monday - Friday: 8 AM - 8 PM</Text>
-                    <Text style={{ color: '#000', marginBottom: 10 }}>Saturday - Sunday: 10 AM - 6 PM</Text>
-                    <Text style={{ color: '#000', }}>Your feedback is important to us, and we aim to respond to all inquiries within 24 hours. Thank you for choosing our grocery delivery service!</Text>
-                </View>
-            </ScrollView>
+            <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 0 }}>
+                <Text style={{ color: '#000' }}>{contact}</Text>
+            </View>
         </SafeAreaView>
     )
 }
