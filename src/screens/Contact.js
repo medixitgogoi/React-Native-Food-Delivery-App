@@ -37,8 +37,7 @@ const Contact = ({ route }) => {
 
             {/* Content */}
             <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 5 }}>
-                <Text style={{
-                    color: '#000', fontSize: responsiveFontSize(2), marginBottom: 10, fontWeight: '500'}}>
+                <Text style={{ color: '#000', fontSize: responsiveFontSize(2), marginBottom: 10, fontWeight: '500' }}>
                     Have a question or need help with your order? Reach out to our customer support team.
                 </Text>
 

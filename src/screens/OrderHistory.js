@@ -137,7 +137,7 @@ const OrderHistory = () => {
                             </View>
 
                             {/* Details */}
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, width: '80%' }}>
                                 <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>{highlightText(it.product_name, debouncedQuery)}</Text>
                                 <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2) }}>x {it?.quantity}</Text>
                             </View>
