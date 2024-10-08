@@ -151,7 +151,7 @@ const OrderDetails = ({ route }) => {
                         <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500' }}>{detail?.o_uu_id}</Text>
                     </View>
 
-                    {/* Payment */}
+                    {/* Payment type */}
                     {detail?.payment_type === '2' ? (
                         <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
                             <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment</Text>
@@ -163,6 +163,35 @@ const OrderDetails = ({ route }) => {
                             <Text style={{ fontSize: responsiveFontSize(1.8), color: '#000', fontWeight: '500', }}>Payment Method: Online (₹{detail?.total_price + detail?.delivery_charge + detail?.addl_charge}.00)</Text>
                         </View>
                     )}
+
+                    {/* Payment status */}
+                    <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500', opacity: 0.7 }}>Payment Status</Text>
+                        {
+                            detail?.payment_status === '1' ? (
+                                // Payment status = Pending
+                                <View style={{ backgroundColor: '#FFFF00', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.6), color: '#FFA500', fontWeight: '500' }}>
+                                        Pending
+                                    </Text>
+                                </View>
+                            ) : detail?.payment_status === '2' ? (
+                                // Payment status = Paid
+                                <View style={{ backgroundColor: lightGreen, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.6), color: '#1E90FF', fontWeight: '500' }}>
+                                        Paid
+                                    </Text>
+                                </View>
+                            ) : detail?.payment_status === '3' ? (
+                                // Payment status = Completed
+                                <View style={{ backgroundColor: darkGreen, paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.6), color: '#32CD32', fontWeight: '500' }}>
+                                        Completed
+                                    </Text>
+                                </View>
+                            ) : null
+                        }
+                    </View>
 
                     {/* Date */}
                     <View style={{ flexDirection: 'column', justifyContent: 'center', marginTop: 12 }}>
