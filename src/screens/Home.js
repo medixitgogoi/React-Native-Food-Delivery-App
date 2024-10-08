@@ -135,15 +135,19 @@ const Home = () => {
                     </View>
 
                     {/* Location */}
-                    <View style={{ width: '30%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ width: '30%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: loading ? 'flex-start' : 'space-between' }}>
                         <Icon3 name="location-pin" size={30} color={'#cb202d'} />
-                        <TouchableOpacity style={{ width: '70%', flexDirection: 'column' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '600' }}>{branch}</Text>
-                                <Icon4 name="caret-down-outline" size={15} color={'#000'} />
-                            </View>
-                            <Text style={{ color: '#768697', fontWeight: '600', fontSize: responsiveFontSize(1.5) }}>Assam</Text>
-                        </TouchableOpacity>
+                        {!loading ? (
+                            <TouchableOpacity style={{ width: '70%', flexDirection: 'column' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), fontWeight: '600' }}>{branch}</Text>
+                                    <Icon4 name="caret-down-outline" size={15} color={'#000'} />
+                                </View>
+                                <Text style={{ color: '#768697', fontWeight: '600', fontSize: responsiveFontSize(1.5) }}>Assam</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            <ActivityIndicator size="small" color={backIconColor} />
+                        )}
                     </View>
 
                     {/* Profile */}
@@ -499,7 +503,7 @@ const Home = () => {
                     </ScrollView>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
