@@ -1,10 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StatusBar, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import RenderHTML from 'react-native-render-html';
 
-const TermsAndConditions = () => {
+const TermsAndConditions = ({ route }) => {
+
+    const { width } = useWindowDimensions(); // Get screen width for RenderHTML
+
+    const terms = route?.params?.data || ''; // Disclaimer content
 
     const navigation = useNavigation();
 
@@ -28,12 +33,19 @@ const TermsAndConditions = () => {
 
             {/* Content */}
             <ScrollView>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
-                    <Text style={{ color: '#000', textAlign: 'justify' }}>
-                        Welcome to Skercart, your go-to grocery delivery app. By using our services, you agree to be bound by the following terms and conditions. These terms govern your access to and use of our app, including any orders placed through our platform. All users must provide accurate, up-to-date information during registration and ensure payment details are valid for processing transactions. We reserve the right to modify prices, products, and promotions without prior notice. Any orders placed are subject to availability, and we may limit or cancel quantities purchased at our discretion. Delivery times are estimates, and while we strive to deliver on time, unforeseen circumstances may cause delays. In such cases, Skercart is not liable for any resulting inconvenience.
-
-                        All content, including images and descriptions of goods, are for informational purposes and may not reflect the exact product delivered. Users are responsible for ensuring their account security, and any misuse or unauthorized access must be reported immediately. We maintain the right to suspend or terminate accounts for violating these terms. By using our service, you also agree to our privacy policy, which outlines how we handle your personal information. These terms may be updated periodically, and continued use of the app signifies acceptance of any changes.
-                    </Text>
+                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 0 }}>
+                    <RenderHTML
+                        contentWidth={width} // Use device width
+                        source={{ html: terms }} // Render the HTML disclaimer
+                        tagsStyles={{
+                            p: {
+                                color: '#000',      // Black text
+                            },
+                            span: {
+                                color: '#000',      // Black text for inline elements
+                            }
+                        }}
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>
