@@ -33,9 +33,19 @@ const PrivacyPolicy = ({ route }) => {
 
             {/* Content */}
             <ScrollView>
-                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
-                    <Text style={{ color: '#000', textAlign: 'justify' }}>
-                    </Text>
+                <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 0 }}>
+                    <RenderHTML
+                        contentWidth={width} // Use device width
+                        source={{ html: privacyPolicy }} // Render the HTML disclaimer
+                        tagsStyles={{
+                            p: {
+                                color: '#000',      // Black text
+                            },
+                            span: {
+                                color: '#000',      // Black text for inline elements
+                            }
+                        }}
+                    />
                 </View>
             </ScrollView>
         </SafeAreaView>
