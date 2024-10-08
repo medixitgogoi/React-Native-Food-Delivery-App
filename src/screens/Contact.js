@@ -1,14 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, StatusBar, TouchableOpacity, Linking } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
+import { darkGreen } from '../utils/colors';
 
 const Contact = ({ route }) => {
 
     const contact = route?.params?.data || '';
 
     const navigation = useNavigation();
+
+    // handleCallPress
+    const handleCallPress = () => {
+        const phoneNumber = contact; // Add your phone number here
+        Linking.openURL(`tel:${phoneNumber}`);
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -29,9 +36,23 @@ const Contact = ({ route }) => {
             </View>
 
             {/* Content */}
-            <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 0 }}>
-                <Text style={{ color: '#000' }}>{contact}</Text>
+            <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 5 }}>
+                <Text style={{
+                    color: '#000', fontSize: responsiveFontSize(2), marginBottom: 10, fontWeight: '500'}}>
+                    Have a question or need help with your order? Reach out to our customer support team.
+                </Text>
+
+                <Text style={{ color: '#000', fontSize: 14, marginBottom: 10 }}>
+                    We're here to assist you 24/7 with any inquiries or issues.
+                </Text>
+
+                <TouchableOpacity onPress={handleCallPress}>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), marginBottom: 5 }}>
+                        Phone: <Text style={{ color: darkGreen, fontWeight: '500' }}>+91 {contact}</Text>
+                    </Text>
+                </TouchableOpacity>
             </View>
+
         </SafeAreaView>
     )
 }
