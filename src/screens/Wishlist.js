@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, SafeAreaView, TouchableOpacity, View, FlatList, Dimensions, Image } from 'react-native';
+import { StatusBar, StyleSheet, Text, SafeAreaView, TouchableOpacity, View, FlatList, Dimensions, Image, Alert } from 'react-native';
 import { background, lightGreen, backIconColor, offWhite } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -13,7 +13,6 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import LinearGradient from 'react-native-linear-gradient';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
