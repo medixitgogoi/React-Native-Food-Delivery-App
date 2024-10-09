@@ -508,7 +508,7 @@ const Home = () => {
                     </ScrollView>
                 </View>
             </ScrollView>
-        </SafeAreaView >
+        </SafeAreaView>
     );
 };
 
