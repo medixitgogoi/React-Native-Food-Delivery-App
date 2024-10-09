@@ -83,7 +83,7 @@ const Wishlist = () => {
         const product = wishlistProducts?.find(it => it.id === item.id);
 
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.product_id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2, }}>
                 {/* Wishlist */}
                 <TouchableOpacity onPress={() => deleteFromWishlist(product?.id)} style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 27, height: 27, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Icon2 name="heart" size={18} color={'#3ea947'} />
