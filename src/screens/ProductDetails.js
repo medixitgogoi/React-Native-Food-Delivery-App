@@ -19,6 +19,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import axios from 'axios';
 import { addItemToWishlist } from '../redux/WishlistSlice';
+import Toast from 'react-native-toast-message';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -120,9 +121,14 @@ const ProductDetails = ({ route }) => {
                 }
 
                 setRelatedProducts(data || []); // Set the fetched data
-
             } catch (error) {
-                Alert.alert("Error fetching related products", error.message); // Log errors if any
+                Toast.show({
+                    type: 'error',
+                    text1: "Error fetching related products",
+                    text2: error.message,
+                    position: 'top',
+                    topOffset: 50,
+                });
             }
         };
 
@@ -163,9 +169,21 @@ const ProductDetails = ({ route }) => {
         } catch (error) {
             // Handle error response
             if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.response.data.message || "Something went wrong. Please try again.",
+                    position: 'top',
+                    topOffset: 50,
+                });
             } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: "Network error. Please check your internet connection and try again.",
+                    position: 'top',
+                    topOffset: 50,
+                });
             }
         } finally {
             setAddToCartLoading(false);
@@ -182,7 +200,13 @@ const ProductDetails = ({ route }) => {
 
                 setCartProducts(response?.data?.data);
             } catch (error) {
-                Alert.alert("Error", error.message); // Add a title to the alert
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.message,
+                    position: 'top',
+                    topOffset: 50,
+                });
                 return null; // Return null in case of error
             } finally {
                 setLoading(false);
@@ -209,7 +233,13 @@ const ProductDetails = ({ route }) => {
                 console.log('wishlistProducts', response?.data?.data);
                 setWishlistProducts(response?.data?.data || []);
             } catch (error) {
-                Alert.alert("Error", error.message);
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: error.message,
+                    position: 'top',
+                    topOffset: 50,
+                });
             } finally {
                 setLoading(false);
             }
@@ -270,7 +300,13 @@ const ProductDetails = ({ route }) => {
                 setIsPresentInTheWishlist(wishlistItem);
             }
         } catch (error) {
-            Alert.alert("Error: ", error.message || "Something went wrong.");
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: error.message || "Something went wrong.",
+                position: 'top',
+                topOffset: 50,
+            });
         } finally {
             setAddToWishlistLoading(false);
         }
