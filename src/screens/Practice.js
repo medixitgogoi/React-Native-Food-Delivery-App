@@ -6,7 +6,7 @@ import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/dist/AntDesign';
-import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import Icon6 from 'react-native-vector-icons/dist/Entypo';
 import StarRatingDetails from '../components/StarRatingDetails';
 import StarRating from '../components/StarRating';
@@ -18,6 +18,7 @@ import { fetchRestaurants } from '../utils/fetchRestaurants';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import axios from 'axios';
+import { addItemToWishlist } from '../redux/WishlistSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
@@ -36,14 +37,17 @@ const ProductDetails = ({ route }) => {
     // console.log('userDetails', userDetails);
 
     const [cartProducts, setCartProducts] = useState([]);
+    const [wishlistProducts, setWishlistProducts] = useState([]);
 
     const [isPresentInTheCart, setIsPresentInTheCart] = useState({});
+    const [isPresentInTheWishlist, setIsPresentInTheWishlist] = useState({});
 
     const type = product?.type;
 
     const navigation = useNavigation();
 
     const [addToCartTrigger, setAddToCartTrigger] = useState(false);
+    const [addToWishlistTrigger, setAddToWishlistTrigger] = useState(false);
 
     const [relatedProducts, setRelatedProducts] = useState(null);
 
@@ -55,6 +59,7 @@ const ProductDetails = ({ route }) => {
 
     const [loading, setLoading] = useState(false);
     const [addToCartLoading, setAddToCartLoading] = useState(false);
+    const [addToWishlistLoading, setAddToWishlistLoading] = useState(false);
 
     // fetch Product details
     const getProductDetails = async () => {
@@ -186,12 +191,37 @@ const ProductDetails = ({ route }) => {
         getCartProducts();
     }, [addToCartTrigger, productId]);
 
-    // isPresentInTheCart
+    // is Present In The Cart
     useFocusEffect(
         useCallback(() => {
             setIsPresentInTheCart(cartProducts?.find(it => it?.product_id === product?.id));
             setUnit(isPresentInTheCart);
         }, [cartProducts, addToCartTrigger, productId]) // Dependencies for the callback
+    );
+
+    // Get wishlist products
+    useEffect(() => {
+        const getWishlistedProducts = async () => {
+            try {
+                setLoading(true);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+                const response = await axios.get('/user/wishlist/fetch');
+                // console.log('wishlistProducts', response?.data?.data);
+                setWishlistProducts(response?.data?.data || []);
+            } catch (error) {
+                Alert.alert("Error", error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        getWishlistedProducts();
+    }, [addToWishlistTrigger, productId])
+
+    // is Present In The Wishlist
+    useFocusEffect(
+        useCallback(() => {
+            setIsPresentInTheWishlist(wishlistProducts?.find(it => it?.product_id === product?.id));
+        }, [wishlistProducts, addToWishlistTrigger, productId]) // Dependencies for the callback
     );
 
     // Discount Percentage
@@ -219,6 +249,33 @@ const ProductDetails = ({ route }) => {
         setUnit(null);
     };
 
+    // add To Wishlist
+    const addToWishlist = async () => {
+        try {
+            setAddToWishlistLoading(true);
+            const data = { product_id: productId };
+
+            const response = await axios.post(`/user/wishlist/add`, data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            console.log('wislssdsddsdsd', response?.data?.data);
+
+            if (response?.data?.status) {
+                const wishlistItem = response?.data?.data; // Extract the cart item from the response
+
+                dispatch(addItemToWishlist(wishlistItem));
+                setIsPresentInTheWishlist(wishlistItem);
+            }
+        } catch (error) {
+            Alert.alert("Error: ", error.message || "Something went wrong.");
+        } finally {
+            setAddToWishlistLoading(false);
+        }
+    };
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
@@ -236,9 +293,18 @@ const ProductDetails = ({ route }) => {
                     <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '600' }}>Details</Text>
                     <TouchableOpacity
                         style={{ backgroundColor: '#fff', width: 32, height: 32, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
-                        onPress={() => navigation.navigate('Cart')}
+                        onPress={addToWishlist}
+                        disabled={isPresentInTheWishlist ? true : false}
                     >
-                        <Icon4 name="shopping" size={20} color={'#000'} />
+                        {addToWishlistLoading ? (
+                            <ActivityIndicator color={backIconColor} size="small" />
+                        ) : (
+                            isPresentInTheWishlist ? (
+                                <Icon5 name="heart" size={20} color={'#3ea947'} />
+                            ) : (
+                                <Icon name="favorite-border" size={20} color={'#019934'} />
+                            )
+                        )}
                     </TouchableOpacity>
                 </View>
 
