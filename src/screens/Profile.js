@@ -58,7 +58,7 @@ const Profile = () => {
         const fetchData = async () => {
             try {
                 const response = await fetchProducts(userDetails);
-                console.log('response', response);
+                // console.log('response', response);
 
                 if (response?.status) {
                     setWriteUp(response?.app_writeup);

@@ -29,20 +29,8 @@ const About = () => {
             {/* Content */}
             <ScrollView>
                 <View style={{ flexDirection: 'column', paddingHorizontal: 12, marginTop: 10 }}>
-                    <Text style={{ color: '#000', textAlign: 'justify' }}>
-                        Welcome to Skercart, your go-to app for fast and convenient grocery delivery. We aim to provide a seamless shopping experience, offering a wide range of products from fresh produce to everyday essentials, all delivered right to your doorstep.
-
-                        Please note that product availability can vary due to stock levels and supply chain factors. While we do our best to keep inventory up-to-date, there may be rare occasions when certain items become unavailable after you've placed an order. In such cases, we will notify you promptly, offering alternatives or refunds as needed.
-
-                        Skercart strives to provide accurate product details, pricing, and nutritional information. However, product images and descriptions may differ slightly from the actual items delivered. We encourage you to check product labels directly for the most reliable information, especially if you have dietary restrictions or allergies.
-
-                        Our team works hard to deliver your orders on time, but delivery windows are estimates and can be affected by factors like traffic, weather, or operational issues. Should any delays occur, we will keep you informed and work to resolve the situation as quickly as possible.
-
-                        Skercart partners with trusted third-party vendors and delivery providers to ensure a smooth operation. We are committed to quality service, but we cannot take responsibility for actions or errors by third-party suppliers. Any concerns related to delivery or payment should be addressed to the respective provider.
-
-                        Your health and safety are our priority. We adhere to strict food safety guidelines, and we encourage you to inspect your orders upon delivery. By using Skercart, you acknowledge and accept our terms of service, and we advise reviewing these periodically as we may update them from time to time.
-
-                        Thank you for choosing Skercart for your grocery needs. We look forward to serving you!
+                    <Text style={{ color: '#000' }}>
+                        Welcome to Sker Cart, the first hyper-local app-based food and grocery delivery service in the region! The word "Sker" means commodities and is derived from the local/Ethnic dialect of Ribhoi in Meghalaya, reflecting our deep-rooted connection to the community. Our mission is to provide the best service that our customers deserve while supporting local vendors and businesses. We believe in helping these small enterprises reach a larger customer base through our innovative app. At our core, we believe in the principle of "For Local, By Local and Of Local." We are passionate about connecting our community through products and services that are crafted with care and authenticity. Our mission is to support local businesses, and individuals, fostering a sense of belonging and pride within our area. By choosing us, you’re not just making a purchase; you’re making an investment in the local economy and helping to sustain the vibrant culture that makes our community unique.
                     </Text>
                 </View>
             </ScrollView>
