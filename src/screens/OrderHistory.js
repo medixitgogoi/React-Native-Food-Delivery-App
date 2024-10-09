@@ -132,8 +132,8 @@ const OrderHistory = () => {
                     {item.order_detail.map(it => (
                         <View key={it?.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                             {/* Image */}
-                            <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1 }}>
-                                <Image source={require('../assets/orange.png')} style={{ resizeMode: 'contain', width: '100%', height: '100%' }} />
+                            <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1, overflow: 'hidden', borderColor: backIconColor, borderWidth: 0.3 }}>
+                                <Image source={{ uri: it?.image }} resizeMode='cover' style={{ width: '100%', height: '100%' }} />
                             </View>
 
                             {/* Details */}

@@ -57,8 +57,6 @@ const Cakes = () => {
     const [nonVeg, setNonVeg] = useState(false);
     const [clicked, setClicked] = useState(false);
 
-    const [ids, setIds] = useState([]);
-
     const [filteredNames, setFilteredNames] = useState([]);
 
     // const [wishlistProducts, setWishlistProducts] = useState([]);
