@@ -296,7 +296,7 @@ const Cakes = () => {
         };
 
         const product = wishlistProductsFromRedux.find(it => it.product_id === item.id);
-        
+
         if (product) {
             console.log('product', product);
         }
@@ -304,7 +304,7 @@ const Cakes = () => {
         return (
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.id })} key={item?.id} style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderTopLeftRadius: 14, borderTopRightRadius: 14, borderBottomLeftRadius: 14, borderBottomRightRadius: 20, overflow: 'hidden', elevation: 2 }}>
                 {/* Wishlist */}
-                <View style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                {/* <View style={{ zIndex: 10, backgroundColor: '#c6e6c3', borderRadius: 50, position: 'absolute', top: 8, right: 8, width: 30, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     {product?.product_id === item?.id ? (
                         <TouchableOpacity>
                             <Icon5 name="heart" size={18} color={'#3ea947'} />
@@ -314,7 +314,7 @@ const Cakes = () => {
                             <Icon name="favorite-border" size={18} color={'#019934'} />
                         </TouchableOpacity>
                     )}
-                </View>
+                </View> */}
 
                 {/* Image */}
                 <View style={{ backgroundColor: lightGreen, borderRadius: 12, margin: 3 }}>
