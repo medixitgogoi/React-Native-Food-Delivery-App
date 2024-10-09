@@ -206,7 +206,7 @@ const ProductDetails = ({ route }) => {
                 setLoading(true);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
                 const response = await axios.get('/user/wishlist/fetch');
-                // console.log('wishlistProducts', response?.data?.data);
+                console.log('wishlistProducts', response?.data?.data);
                 setWishlistProducts(response?.data?.data || []);
             } catch (error) {
                 Alert.alert("Error", error.message);
@@ -249,6 +249,7 @@ const ProductDetails = ({ route }) => {
         setUnit(null);
     };
 
+    // add To Wishlist
     const addToWishlist = async () => {
         try {
             setAddToWishlistLoading(true);
@@ -266,7 +267,6 @@ const ProductDetails = ({ route }) => {
                 const wishlistItem = response?.data?.data; // Extract the cart item from the response
 
                 dispatch(addItemToWishlist(wishlistItem));
-
                 setIsPresentInTheWishlist(wishlistItem);
             }
         } catch (error) {
@@ -294,11 +294,16 @@ const ProductDetails = ({ route }) => {
                     <TouchableOpacity
                         style={{ backgroundColor: '#fff', width: 32, height: 32, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
                         onPress={addToWishlist}
+                        disabled={isPresentInTheWishlist ? true : false}
                     >
-                        {isPresentInTheWishlist ? (
-                            <Icon5 name="heart" size={18} color={'#3ea947'} />
+                        {addToWishlistLoading ? (
+                            <ActivityIndicator color={backIconColor} size="small" />
                         ) : (
-                            <Icon name="favorite-border" size={18} color={'#019934'} />
+                            isPresentInTheWishlist ? (
+                                <Icon5 name="heart" size={20} color={'#3ea947'} />
+                            ) : (
+                                <Icon name="favorite-border" size={20} color={'#019934'} />
+                            )
                         )}
                     </TouchableOpacity>
                 </View>
