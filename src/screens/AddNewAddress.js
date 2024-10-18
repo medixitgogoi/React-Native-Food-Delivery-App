@@ -165,7 +165,7 @@ const AddNewAddress = ({ route }) => {
 
             // Handle success response
             if (response.data.status) {
-
+                
                 navigation.navigate(to);
 
                 setName('');
@@ -176,20 +176,7 @@ const AddNewAddress = ({ route }) => {
                 setAddress1(null);
                 setAddress2(null);
                 setChecked(false);
-                setLandmark(null)
-
-                // const userInfo = {
-                //     name: response?.data?.data?.name,
-                //     email: response?.data?.data?.email,
-                //     mobileNumber: mobileNumber,
-                //     password: password,
-                //     accessToken: response?.data?.access_token,
-                // };
-
-                // dispatch(addUser(userInfo));
-                // await AsyncStorage.setItem('userDetails', JSON.stringify(userInfo));
-
-
+                setLandmark(null);
             } else {
                 Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
             }

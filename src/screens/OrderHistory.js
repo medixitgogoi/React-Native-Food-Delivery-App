@@ -225,22 +225,24 @@ const OrderHistory = () => {
             </View>
 
             {/* Searchbar */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, marginTop: 5, marginBottom: 12 }}>
-                <View style={{ width: '100%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 2 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, width: 23, }}>
-                        <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
+            {orders?.length !== 0 && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, marginTop: 5, marginBottom: 12 }}>
+                    <View style={{ width: '100%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 2 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, width: 23, }}>
+                            <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
+                        </View>
+                        <TextInput
+                            style={{ height: 40, color: '#000', fontWeight: '500', letterSpacing: 0.3, width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
+                            placeholder="Search by dish, cake or grocery"
+                            placeholderTextColor="#a0abb7"
+                            value={searchQuery}
+                            onChangeText={setSearchQuery} // Handle text input directly
+                            onFocus={() => setIsSearchFocused(true)}
+                            onBlur={() => setIsSearchFocused(false)}
+                        />
                     </View>
-                    <TextInput
-                        style={{ height: 40, color: '#000', fontWeight: '500', letterSpacing: 0.3, width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
-                        placeholder="Search by dish, cake or grocery"
-                        placeholderTextColor="#a0abb7"
-                        value={searchQuery}
-                        onChangeText={setSearchQuery} // Handle text input directly
-                        onFocus={() => setIsSearchFocused(true)}
-                        onBlur={() => setIsSearchFocused(false)}
-                    />
                 </View>
-            </View>
+            )}
 
             {/* Fallback image */}
             {!loading && orders.length === 0 && (

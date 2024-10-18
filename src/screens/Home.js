@@ -31,10 +31,6 @@ const Home = () => {
 
     const [loading, setLoading] = useState(true);
 
-    // Filtering
-    // Payment Gateway(For testing purposes)
-    // For Card payment - use 4592-0001-6891-4253 and OTP (any four digit number)
-
     const [cakes, setCakes] = useState(null);
     const [restaurants, setRestaurants] = useState(null);
     const [groceries, setGroceries] = useState(null);
@@ -54,7 +50,6 @@ const Home = () => {
         const fetchData = async () => {
             try {
                 const response = await fetchProducts(userDetails);
-                console.log('response', response?.data?.delivery_charge);
 
                 setGroceries(response?.grocery?.slice(0, 15) || []);
                 setRestaurants(response?.resturants?.slice(0, 15) || []);
@@ -140,7 +135,7 @@ const Home = () => {
                     </View>
 
                     {/* Location */}
-                    <View style={{ width: '30%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: loading ? 'flex-start' : 'space-between' }}>
+                    {/* <View style={{ width: '30%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: loading ? 'flex-start' : 'space-between' }}>
                         <Icon3 name="location-pin" size={30} color={'#cb202d'} />
                         {!loading ? (
                             <TouchableOpacity style={{ width: '70%', flexDirection: 'column' }}>
@@ -153,7 +148,7 @@ const Home = () => {
                         ) : (
                             <ActivityIndicator size="small" color={backIconColor} />
                         )}
-                    </View>
+                    </View> */}
 
                     {/* Profile */}
                     <View style={{ width: '30%', flexDirection: 'row', justifyContent: 'flex-end' }}>

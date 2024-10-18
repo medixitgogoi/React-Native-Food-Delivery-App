@@ -11,7 +11,7 @@ import { setCartItems } from '../redux/CartSlice';
 import { setWishlist } from '../redux/WishlistSlice';
 import Toast from 'react-native-toast-message';
 
-axios.defaults.baseURL = 'https://grocery.panditenterprise.in/public/api/';
+axios.defaults.baseURL = 'https://admin.skercart.com/api/';
 
 const StackNavigation = () => {
 
@@ -32,13 +32,7 @@ const StackNavigation = () => {
                 const data = await fetchCartProducts(userDetails);
                 dispatch(setCartItems(data)); // Dispatch action to update cart in Redux
             } catch (error) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Error fetching groceries',
-                    text2: error.message,
-                    position: 'top',
-                    topOffset: 20,
-                });
+                console.log('error', error);
             }
         };
 
@@ -103,7 +97,7 @@ const StackNavigation = () => {
 
     return (
         <NavigationContainer>
-            {isUserLoggedIn ? ( 
+            {isUserLoggedIn ? (
                 <GuestStackNavigator cartItemCount={cartProducts?.length} />
             ) : (
                 <AuthStackNavigator initialRoute="Login" />

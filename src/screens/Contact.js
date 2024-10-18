@@ -1,19 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StatusBar, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, StatusBar, TouchableOpacity, Linking, useWindowDimensions } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { darkGreen } from '../utils/colors';
+import RenderHTML from 'react-native-render-html';
 
 const Contact = ({ route }) => {
 
+    const { width } = useWindowDimensions(); // Get screen width for RenderHTML
+
     const contact = route?.params?.data || '';
+    console.log('contact', contact);
 
     const navigation = useNavigation();
 
     // handleCallPress
     const handleCallPress = () => {
-        const phoneNumber = contact; // Add your phone number here
+        // Format the phone number with a country code (assuming +91 for India)
+        const phoneNumber = `+91${contact}`;
         Linking.openURL(`tel:${phoneNumber}`);
     };
 
@@ -45,11 +50,28 @@ const Contact = ({ route }) => {
                     We're here to assist you 24/7 with any inquiries or issues.
                 </Text>
 
-                <TouchableOpacity onPress={handleCallPress}>
-                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), marginBottom: 5 }}>
-                        Phone: <Text style={{ color: darkGreen, fontWeight: '500' }}>+91 {contact}</Text>
-                    </Text>
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), marginRight: 5 }}>Phone:</Text>
+
+                    <Text style={{ color: darkGreen, fontSize: responsiveFontSize(1.9), marginRight: 2, fontWeight: '500' }}>+91</Text>
+
+                    <RenderHTML
+                        contentWidth={width} // Use device width
+                        source={{ html: contact }} // Render the HTML disclaimer
+                        tagsStyles={{
+                            p: {
+                                color: darkGreen,      // Black text
+                                fontWeight: 500,
+                                fontSize: responsiveFontSize(2.2),  // Increase font size for <p> tag
+                            },
+                            span: {
+                                color: darkGreen,      // Black text for inline elements
+                                fontWeight: 500,
+                                fontSize: responsiveFontSize(2.2),  // Increase font size for <p> tag
+                            }
+                        }}
+                    />
+                </View>
             </View>
 
         </SafeAreaView>

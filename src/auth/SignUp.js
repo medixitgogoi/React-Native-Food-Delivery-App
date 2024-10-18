@@ -1,4 +1,4 @@
-import { Alert, Animated, Dimensions, Image, StatusBar, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Alert, StatusBar, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
@@ -6,12 +6,13 @@ import Icon from 'react-native-vector-icons/dist/Feather';
 import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import { backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
-import { useState, useRef, useEffect } from 'react';
+import { backIconColor, darkGreen, offWhite } from '../utils/colors';
+import { useState } from 'react';
 import axios from 'axios';
 import { addUser } from '../redux/UserSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const SignUp = ({ route }) => {
 
@@ -22,7 +23,6 @@ const SignUp = ({ route }) => {
 
     const dispatch = useDispatch();
 
-    const [checked, setChecked] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const [name, setName] = useState('');
@@ -50,12 +50,6 @@ const SignUp = ({ route }) => {
         // Ensure passwords match
         if (password !== confirmPassword) {
             Alert.alert("Error", "Passwords do not match.");
-            return;
-        }
-
-        // Ensure terms and conditions are accepted
-        if (!checked) {
-            Alert.alert("Error", "Please accept the Terms & Conditions.");
             return;
         }
 
@@ -268,33 +262,6 @@ const SignUp = ({ route }) => {
                                     <Text style={{ color: '#333', fontSize: responsiveFontSize(1.8), fontWeight: '500' }}>Already have an account? </Text>
                                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                                         <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.8), fontWeight: '600' }}>Login</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-
-                        {/* Terms of service and Privacy Policy */}
-                        <View style={{ marginBottom: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-                            <TouchableOpacity onPress={() => setChecked(prev => !prev)}>
-                                {checked ? (
-                                    <View>
-                                        <Icon2 name="checkbox-marked" size={16} color={backIconColor} />
-                                    </View>
-                                ) : (
-                                    <View>
-                                        <Icon2 name="checkbox-blank-outline" size={16} color={'#868c95'} />
-                                    </View>
-                                )}
-                            </TouchableOpacity>
-                            <View style={{ flexDirection: 'column', alignItems: 'center', }}>
-                                <Text style={{ color: '#000', fontSize: responsiveFontSize(1.5), paddingTop: 1.5 }}>By continuing, you agree to our company's</Text>
-                                <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center', gap: 3 }}>
-                                    <TouchableOpacity onPress={() => navigation.navigate('TermsAndConditions')}>
-                                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.7), fontWeight: '600' }}>Terms & Conditions</Text>
-                                    </TouchableOpacity>
-                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(1.5) }}>and</Text>
-                                    <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
-                                        <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.7), fontWeight: '600' }}>Privacy Policy</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

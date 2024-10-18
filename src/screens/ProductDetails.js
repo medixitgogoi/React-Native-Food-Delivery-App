@@ -550,21 +550,25 @@ const ProductDetails = ({ route }) => {
                         alignSelf: 'center',
                     }}
                     onPress={() => {
-                        if (unit) {
-                            addToCart();
+                        if (isPresentInTheCart) {
+                            navigation.navigate('Cart')
                         } else {
-                            setError(true);
+                            if (unit) {
+                                addToCart();
+                            } else {
+                                setError(true);
+                            }
                         }
                     }}
-                    disabled={isPresentInTheCart ? true : false}
+                // disabled={isPresentInTheCart ? true : false}
                 >
                     {addToCartLoading ? (
                         <ActivityIndicator color={backIconColor} size="small" />
                     ) : (
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                            <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500' }}>{`${isPresentInTheCart ? 'Added to cart' : 'Add to cart'}`}</Text>
+                            <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500' }}>{`${isPresentInTheCart ? 'Go to cart' : 'Add to cart'}`}</Text>
                             {isPresentInTheCart ? (
-                                <Icon2 name="checkcircle" size={21} color={backIconColor} />
+                                <Icon name="keyboard-arrow-right" size={23} color={backIconColor} />
                             ) : (
                                 <Icon name="add-shopping-cart" size={19} color={'#fff'} />
                             )}

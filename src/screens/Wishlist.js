@@ -1,5 +1,5 @@
 import { StatusBar, StyleSheet, Text, SafeAreaView, TouchableOpacity, View, FlatList, Dimensions, Image, Alert } from 'react-native';
-import { background, lightGreen, backIconColor, offWhite } from '../utils/colors';
+import { background, lightGreen, backIconColor, offWhite, darkGreen } from '../utils/colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -8,7 +8,7 @@ import Icon3 from 'react-native-vector-icons/dist/AntDesign';
 import Icon4 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import StarRating from '../components/StarRating';
-import { addItemToWishlist, removeItemFromWishlist } from '../redux/WishlistSlice';
+import { removeItemFromWishlist } from '../redux/WishlistSlice';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
@@ -146,6 +146,18 @@ const Wishlist = () => {
 
             {/* Content */}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
+                {/* Fallback image */}
+                {!loading && wishlistProducts?.length === 0 && (
+                    <View style={{ height: '80%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+                        <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+                        <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your wishlist!</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ elevation: 2, marginTop: 20, backgroundColor: darkGreen, paddingVertical: 10, gap: 8, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                            <Icon3 name="arrowleft" size={20} color={'#000'} />
+                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Go to Home</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+
                 {/* Products */}
                 {loading ? (
                     <FlatList

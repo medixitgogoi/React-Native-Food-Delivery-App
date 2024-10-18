@@ -6,7 +6,7 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import RenderHTML from 'react-native-render-html';
 
 const Disclaimer = ({ route }) => {
-    
+
     const { width } = useWindowDimensions(); // Get screen width for RenderHTML
 
     const disclaimer = route?.params?.data || ''; // Disclaimer content
