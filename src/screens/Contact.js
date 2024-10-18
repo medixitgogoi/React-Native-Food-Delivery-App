@@ -60,12 +60,12 @@ const Contact = ({ route }) => {
                         source={{ html: contact }} // Render the HTML disclaimer
                         tagsStyles={{
                             p: {
-                                color: backIconColor,      // Black text
+                                color: backIconColor, // Black text
                                 fontWeight: 500,
                                 fontSize: responsiveFontSize(2.1),  // Increase font size for <p> tag
                             },
                             span: {
-                                color: darkGreen,      // Black text for inline elements
+                                color: darkGreen, // Black text for inline elements
                                 fontWeight: 500,
                                 fontSize: responsiveFontSize(2.1),  // Increase font size for <p> tag
                             }
