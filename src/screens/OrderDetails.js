@@ -238,9 +238,9 @@ const OrderDetails = ({ route }) => {
                 colors={['#67c770', '#3a9f43']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 12, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, elevation: 2, position: 'absolute', bottom: 10, width: '93%', alignSelf: 'center' }}
+                style={{ borderRadius: 12, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', elevation: 2, position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center' }}
             >
-                <TouchableOpacity style={{ flexDirection: 'column', gap: 1 }}>
+                <TouchableOpacity style={{ flexDirection: 'column', gap: 1, width: '100%', height: '100%', justifyContent: 'center' }}>
                     <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', textAlign: 'center', fontWeight: '600' }}>Repeat Order</Text>
                     <Text style={{ fontSize: responsiveFontSize(1.4), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
                 </TouchableOpacity>

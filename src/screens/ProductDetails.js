@@ -361,21 +361,72 @@ const ProductDetails = ({ route }) => {
             <ScrollView>
                 {/* Loading */}
                 {loading && (
-                    <View style={{ paddingHorizontal: 11, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', width: screenWidth }}>
-                        {/* First shimmer card */}
-                        <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                    <View style={{ paddingTop: 10 }}>
+                        {/* Name */}
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: 150, height: 30, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false} // Set to true when data is loaded
+                            >
+                            </ShimmerPlaceHolder>
                         </View>
 
-                        {/* Second shimmer card */}
-                        <View style={{ width: screenWidth / 2.2, marginVertical: 6, backgroundColor: '#fff', borderRadius: 14, padding: 3, elevation: 1, marginHorizontal: 1 }}>
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '100%', height: 120, borderRadius: 14 }} />
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '70%', height: 18, marginTop: 10, borderRadius: 8, marginLeft: 5 }} />
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '50%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
-                            <ShimmerPlaceHolder autoRun={true} visible={!loading} style={{ width: '30%', height: 18, marginVertical: 5, borderRadius: 8, marginLeft: 5 }} />
+                        {/* Star rating */}
+                        <View style={{ paddingHorizontal: 13, marginVertical: 10 }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: 100, height: 20, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                        </View>
+
+                        {/* Price and quantity */}
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: 80, height: 30, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                            <ShimmerPlaceHolder
+                                style={{ width: 50, height: 20, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                        </View>
+
+                        {/* Units */}
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', marginTop: 20 }}>
+                            {product?.productSize?.map(it => (
+                                <ShimmerPlaceHolder
+                                    key={it.id}
+                                    style={{ width: 100, height: 100, borderRadius: 10, marginRight: 10 }}
+                                    autoRun={true}
+                                    visible={false}
+                                >
+                                    <TouchableOpacity onPress={() => unitSelector(it)} disabled={isPresentInTheCart}>
+                                    </TouchableOpacity>
+                                </ShimmerPlaceHolder>
+                            ))}
+                        </View>
+
+                        {/* Product Details */}
+                        <View style={{ paddingHorizontal: 13, marginTop: 20 }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: '80%', height: 20, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                            <ShimmerPlaceHolder
+                                style={{ width: '100%', height: 50, marginTop: 10, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
                         </View>
                     </View>
                 )}

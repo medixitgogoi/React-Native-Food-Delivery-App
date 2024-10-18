@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCartProducts } from '../utils/fetchCartProducts';
 import { setCartItems } from '../redux/CartSlice';
 import { setWishlist } from '../redux/WishlistSlice';
-import Toast from 'react-native-toast-message';
 
 axios.defaults.baseURL = 'https://admin.skercart.com/api/';
 

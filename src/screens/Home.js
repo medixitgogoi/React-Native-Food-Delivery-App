@@ -25,6 +25,8 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
+    console.log('userDetails', userDetails);
+
     const wishlistProducts = useSelector(state => state.wishlist.items);
 
     const firstName = userDetails?.[0]?.name?.split(' ')[0];
