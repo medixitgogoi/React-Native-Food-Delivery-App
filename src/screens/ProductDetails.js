@@ -428,6 +428,73 @@ const ProductDetails = ({ route }) => {
                             >
                             </ShimmerPlaceHolder>
                         </View>
+
+                        {/* Name */}
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: 150, height: 30, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false} // Set to true when data is loaded
+                            >
+                            </ShimmerPlaceHolder>
+                        </View>
+
+                        {/* Star rating */}
+                        <View style={{ paddingHorizontal: 13, marginVertical: 10 }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: 100, height: 20, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                        </View>
+
+                        {/* Price and quantity */}
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: 80, height: 30, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                            <ShimmerPlaceHolder
+                                style={{ width: 50, height: 20, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                        </View>
+
+                        {/* Units */}
+                        <View style={{ paddingHorizontal: 13, flexDirection: 'row', marginTop: 20 }}>
+                            {product?.productSize?.map(it => (
+                                <ShimmerPlaceHolder
+                                    key={it.id}
+                                    style={{ width: 100, height: 100, borderRadius: 10, marginRight: 10 }}
+                                    autoRun={true}
+                                    visible={false}
+                                >
+                                    <TouchableOpacity onPress={() => unitSelector(it)} disabled={isPresentInTheCart}>
+                                    </TouchableOpacity>
+                                </ShimmerPlaceHolder>
+                            ))}
+                        </View>
+
+                        {/* Product Details */}
+                        <View style={{ paddingHorizontal: 13, marginTop: 20 }}>
+                            <ShimmerPlaceHolder
+                                style={{ width: '80%', height: 20, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                            <ShimmerPlaceHolder
+                                style={{ width: '100%', height: 50, marginTop: 10, borderRadius: 5 }}
+                                autoRun={true}
+                                visible={false}
+                            >
+                            </ShimmerPlaceHolder>
+                        </View>
                     </View>
                 )}
 
