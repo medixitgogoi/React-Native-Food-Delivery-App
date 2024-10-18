@@ -69,6 +69,15 @@ const Home = () => {
         fetchData(); // Call the async function inside useEffect
     }, [userDetails]);
 
+    const getGreetingMessage = () => {
+        const hour = new Date().getHours();
+
+        if (hour < 12) return "Good Morning! ☀️"; // Sun emoji for morning
+        if (hour < 18) return "Good Afternoon! 🌤️"; // Sun with cloud for afternoon
+        return "Good Evening! 🌙"; // Moon emoji for evening
+    };
+
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
@@ -133,6 +142,10 @@ const Home = () => {
                             {firstName}
                         </Text>
                     </View>
+
+                    <Text style={{ color: '#1d4f21', fontSize: responsiveFontSize(2.1), fontWeight: '600', textAlign: 'center' }}>
+                        {getGreetingMessage()}
+                    </Text>
 
                     {/* Location */}
                     {/* <View style={{ width: '30%', height: 40, borderRadius: 12, flexDirection: 'row', alignItems: 'center', justifyContent: loading ? 'flex-start' : 'space-between' }}>

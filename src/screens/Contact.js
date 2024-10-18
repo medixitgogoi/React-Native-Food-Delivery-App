@@ -3,7 +3,7 @@ import { View, Text, StatusBar, TouchableOpacity, Linking, useWindowDimensions }
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { darkGreen } from '../utils/colors';
+import { backIconColor, darkGreen } from '../utils/colors';
 import RenderHTML from 'react-native-render-html';
 
 const Contact = ({ route }) => {
@@ -53,21 +53,21 @@ const Contact = ({ route }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ color: '#000', fontSize: responsiveFontSize(1.9), marginRight: 5 }}>Phone:</Text>
 
-                    <Text style={{ color: darkGreen, fontSize: responsiveFontSize(1.9), marginRight: 2, fontWeight: '500' }}>+91</Text>
+                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(2.1), marginRight: 2, fontWeight: '500' }}>+91</Text>
 
                     <RenderHTML
                         contentWidth={width} // Use device width
                         source={{ html: contact }} // Render the HTML disclaimer
                         tagsStyles={{
                             p: {
-                                color: darkGreen,      // Black text
+                                color: backIconColor,      // Black text
                                 fontWeight: 500,
-                                fontSize: responsiveFontSize(2.2),  // Increase font size for <p> tag
+                                fontSize: responsiveFontSize(2.1),  // Increase font size for <p> tag
                             },
                             span: {
                                 color: darkGreen,      // Black text for inline elements
                                 fontWeight: 500,
-                                fontSize: responsiveFontSize(2.2),  // Increase font size for <p> tag
+                                fontSize: responsiveFontSize(2.1),  // Increase font size for <p> tag
                             }
                         }}
                     />

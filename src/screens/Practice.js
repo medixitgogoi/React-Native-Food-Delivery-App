@@ -577,3 +577,40 @@ const ProductDetails = ({ route }) => {
 }
 
 export default ProductDetails;
+
+<LinearGradient
+    colors={[darkGreen, background]}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 0, y: 1 }}
+    locations={[0, 0.99]}
+    style={{}}
+>
+    <View style={{ paddingHorizontal: 12, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 15, paddingVertical: 5 }}>
+        {/* Welcome */}
+        <View style={{ flexDirection: 'column', width: '30%' }}>
+            <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(1.9), }}>Welcome</Text>
+            <Text
+                style={{
+                    fontSize: responsiveFontSize(2.5),
+                    fontWeight: '600',
+                    color: '#000',
+                    overflow: 'hidden', // Ensure overflow is hidden
+                }}
+                numberOfLines={1} // Limit to one line
+                ellipsizeMode="tail" // Show ellipsis at the end if clipped
+            >
+                {firstName}
+            </Text>
+        </View>
+
+        {/* Profile */}
+        <View style={{ width: '30%', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <TouchableOpacity
+                style={{ backgroundColor: lightGreen, width: 35, height: 35, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', elevation: 5 }}
+                onPress={() => navigation.navigate('Profile')}
+            >
+                <Icon name="user-alt" size={15} color={'#000'} />
+            </TouchableOpacity>
+        </View>
+    </View>
+</LinearGradient>
