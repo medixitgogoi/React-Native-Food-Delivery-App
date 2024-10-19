@@ -22,8 +22,6 @@ const OrderHistory = () => {
 
     const [isSearchFocused, setIsSearchFocused] = useState(false);
 
-    const [filteredNames, setFilteredNames] = useState([]);
-
     const [orders, setOrders] = useState(null);
 
     const [loading, setLoading] = useState(true);
@@ -91,7 +89,6 @@ const OrderHistory = () => {
                     console.log('orders', response?.data?.data);
 
                     setOrders(response?.data?.data);
-                    setFilteredNames(response?.data?.data);
                 } catch (error) {
                     Toast.show({
                         type: 'error',
@@ -107,6 +104,11 @@ const OrderHistory = () => {
             getOrders();
         }, [])
     );
+
+    // Reorder
+    const reorder = () => {
+
+    }
 
     // Render Order
     const renderOrder = ({ item }) => {
@@ -199,7 +201,7 @@ const OrderHistory = () => {
                     end={{ x: 1, y: 0 }}
                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 >
-                    <TouchableOpacity style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                    <TouchableOpacity onPress={reorder} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                         <Icon name="replay" size={22} color={'#fff'} />
                         <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
                     </TouchableOpacity>
