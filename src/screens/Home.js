@@ -25,7 +25,7 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
-    console.log('userDetails', userDetails);
+    // console.log('userDetails', userDetails);
 
     const wishlistProducts = useSelector(state => state.wishlist.items);
 
