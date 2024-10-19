@@ -106,8 +106,8 @@ const OrderHistory = () => {
     );
 
     // Reorder
-    const reorder = () => {
-
+    const reorder = (item) => {
+        console.log('reorder item', item);
     }
 
     // Render Order
@@ -201,7 +201,7 @@ const OrderHistory = () => {
                     end={{ x: 1, y: 0 }}
                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 >
-                    <TouchableOpacity onPress={reorder} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                    <TouchableOpacity onPress={() => reorder(item)} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                         <Icon name="replay" size={22} color={'#fff'} />
                         <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
                     </TouchableOpacity>
