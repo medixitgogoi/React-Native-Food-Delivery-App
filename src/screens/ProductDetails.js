@@ -168,11 +168,11 @@ const ProductDetails = ({ route }) => {
             }
         } catch (error) {
             // Handle error response
-            if (error.response) {
+            if (error?.response) {
                 Toast.show({
                     type: 'error',
                     text1: 'Error',
-                    text2: error.response.data.message || "Something went wrong. Please try again.",
+                    text2: error?.response?.data?.message || "Something went wrong. Please try again.",
                     position: 'top',
                     topOffset: 50,
                 });

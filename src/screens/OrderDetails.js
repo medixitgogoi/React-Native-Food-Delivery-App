@@ -68,13 +68,12 @@ const OrderDetails = ({ route }) => {
 
                     {detail?.order_detail?.map(it => (
                         <View key={it?.id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#e6e8e9', borderBottomWidth: 1 }}>
-                            <View style={{ flexDirection: 'column', gap: 2 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                    <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}</Text>
-                                    <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>({it?.product_size})</Text>
+                            <View style={{ flexDirection: 'column', gap: 2, width: '85%' }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                    <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>{it?.product_name}  ({it?.product_size})</Text>
+                                    {/* <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>({it?.product_size})</Text> */}
                                 </View>
-                                {/* <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>Quantity: {it?.product_size}</Text> */}
-                                {/* <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>MRP: {it?.mrp}</Text> */}
+
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 3 }}>
                                     <Text style={{ fontSize: responsiveFontSize(1.7), color: '#000', fontWeight: '500' }}>Quantity: </Text>
                                     <View style={{ backgroundColor: lightGreen, width: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 18, borderRadius: 3, borderColor: '#40af4a', elevation: 1, borderWidth: 0.8 }}>
@@ -84,6 +83,7 @@ const OrderDetails = ({ route }) => {
                                     <Text style={{ fontSize: 12, color: '#000', fontWeight: '500' }}>₹{it?.price}</Text>
                                 </View>
                             </View>
+
                             <Text style={{ fontSize: responsiveFontSize(1.9), color: '#000', fontWeight: '500' }}>₹{it?.price * parseInt(it?.quantity)}</Text>
                         </View>
                     ))}

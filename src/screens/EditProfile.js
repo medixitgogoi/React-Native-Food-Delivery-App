@@ -17,7 +17,7 @@ import Toast from 'react-native-toast-message';
 const EditProfile = () => {
 
     const userDetails = useSelector(state => state.user);
-    console.log('userDetails', userDetails);
+    // console.log('userDetails', userDetails);
 
     const dispatch = useDispatch();
 
@@ -192,8 +192,8 @@ const EditProfile = () => {
                         keyboardShouldPersistTaps="handled"
                     >
                         {/* Avatar */}
-                        <View style={{ width: 180, height: 180, alignSelf: 'center', borderRadius: 100, overflow: 'hidden', marginTop: 20, marginBottom: 15 }}>
-                            <Image source={require('../assets/avatar.jpeg')} style={{ height: '100%', width: '100%', resizeMode: 'contain' }} />
+                        <View style={{ width: 180, height: 180, alignSelf: 'center', borderRadius: 100, overflow: 'hidden', marginTop: 20, marginBottom: 15, backgroundColor: lightGreen, borderColor: darkGreen, borderWidth: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                            <Image source={require('../assets/ava2.png')} style={{ height: '65%', width: '65%', resizeMode: 'contain' }} />
                         </View>
 
                         <View style={{ marginHorizontal: 0, backgroundColor: '#fff', borderRadius: 20, paddingVertical: 20, width: '95%', marginTop: 30, borderColor: darkGreen, borderWidth: 1.5, elevation: 1 }}>
