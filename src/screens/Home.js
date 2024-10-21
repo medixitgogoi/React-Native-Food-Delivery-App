@@ -3,7 +3,6 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import Icon3 from 'react-native-vector-icons/dist/MaterialIcons';
-import Icon4 from 'react-native-vector-icons/dist/Ionicons';
 import Icon5 from 'react-native-vector-icons/dist/AntDesign';
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -76,9 +75,9 @@ const Home = () => {
 
         if (hour < 12) return "Good Morning! ☀️"; // Sun emoji for morning
         if (hour < 18) return "Good Afternoon! 🌤️"; // Sun with cloud for afternoon
+
         return "Good Evening! 🌙"; // Moon emoji for evening
     };
-
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
