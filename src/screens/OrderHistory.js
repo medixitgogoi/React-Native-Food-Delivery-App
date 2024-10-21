@@ -106,9 +106,34 @@ const OrderHistory = () => {
     );
 
     // Reorder
-    const reorder = (item) => {
-        console.log('reorder item', item);
-    }
+    const reorder = async (item) => {
+        // Map the item array to extract the necessary fields
+
+        const formData = new FormData();
+
+        // Iterate through each product in the item array
+        item.forEach((product, index) => {
+            formData.append(`products[${index}][product_id]`, product.product_id);
+            formData.append(`products[${index}][product_size_id]`, product.product_size_id);
+            formData.append(`products[${index}][quantity]`, product.quantity);
+        });
+
+        try {
+            // Send the POST request with JSON data
+            const response = await axios.post('/user/cart/reorder', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response?.data?.status) {
+                navigation.navigate('Cart', { data: response?.data?.data });
+            }
+            console.log('Reorder', response);
+        } catch (error) {
+            console.error('Error reordering:', error);
+        }
+    };
 
     // Render Order
     const renderOrder = ({ item }) => {
@@ -201,7 +226,7 @@ const OrderHistory = () => {
                     end={{ x: 1, y: 0 }}
                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 >
-                    <TouchableOpacity onPress={() => reorder(item)} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                    <TouchableOpacity onPress={() => reorder(item?.order_detail)} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                         <Icon name="replay" size={22} color={'#fff'} />
                         <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
                     </TouchableOpacity>

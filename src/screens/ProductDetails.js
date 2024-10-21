@@ -167,6 +167,7 @@ const ProductDetails = ({ route }) => {
                 setUnit(isPresentInTheCart);
             }
         } catch (error) {
+            console.log('error add to cart: ', error)
             // Handle error response
             if (error?.response) {
                 Toast.show({
