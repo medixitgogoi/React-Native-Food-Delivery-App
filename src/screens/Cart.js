@@ -19,10 +19,6 @@ const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 const Cart = ({ route }) => {
 
     const reorderedProducts = route?.params?.data;  // Get the reordered products from route params
-    console.log('reorderedProducts', reorderedProducts);
-
-    const cartProductsFromRedux = useSelector(state => state.cart.items); // Use cart items from Redux
-    console.log('cartProductsFromRedux', cartProductsFromRedux);
 
     const dispatch = useDispatch();
 
@@ -62,15 +58,12 @@ const Cart = ({ route }) => {
                 // Merge reordered products with fetched cart products if any
                 if (reorderedProducts) {
                     setCartProducts(reorderedProducts);
-                    // reorderedProducts.forEach((product) => {
-                    //     dispatch(addItemToCart(product));
-                    // });
                 }
 
                 setCartProducts(fetchedProducts);
             }
 
-            // console.log('Cart Products: ', response?.data?.data);
+            console.log('Cart Products: ', response?.data?.data);
         } catch (error) {
             Toast.show({
                 type: 'error',

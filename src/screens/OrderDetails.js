@@ -6,10 +6,15 @@ import Icon4 from 'react-native-vector-icons/dist/AntDesign';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addItemToCart, deleteAllItemsFromCart } from '../redux/CartSlice';
 
 const OrderDetails = ({ route }) => {
 
     const navigation = useNavigation();
+
+    const dispatch = useDispatch();
 
     console.log('route', route?.params?.detail);
 
@@ -41,6 +46,40 @@ const OrderDetails = ({ route }) => {
     const handleCallPress = () => {
         const phoneNumber = '+916033391141'; // Add your phone number here
         Linking.openURL(`tel:${phoneNumber}`);
+    };
+
+    // Reorder
+    const reorder = async (item) => {
+        // Map the item array to extract the necessary fields
+
+        const formData = new FormData();
+
+        // Iterate through each product in the item array
+        item.forEach((product, index) => {
+            formData.append(`products[${index}][product_id]`, product.product_id);
+            formData.append(`products[${index}][product_size_id]`, product.product_size_id);
+            formData.append(`products[${index}][quantity]`, product.quantity);
+        });
+
+        try {
+            // Send the POST request with JSON data
+            const response = await axios.post('/user/cart/reorder', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response?.data?.status) {
+                dispatch(deleteAllItemsFromCart());
+                response?.data?.data?.forEach((product) => {
+                    dispatch(addItemToCart(product));
+                });
+                navigation.navigate('Cart', { data: response?.data?.data });
+            }
+            console.log('Reorder', response);
+        } catch (error) {
+            console.error('Error reordering:', error);
+        }
     };
 
     return (
@@ -240,7 +279,7 @@ const OrderDetails = ({ route }) => {
                 end={{ x: 1, y: 0 }}
                 style={{ borderRadius: 12, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', elevation: 2, position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center' }}
             >
-                <TouchableOpacity style={{ flexDirection: 'column', gap: 1, width: '100%', height: '100%', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => reorder(detail?.order_detail)} style={{ flexDirection: 'column', gap: 1, width: '100%', height: '100%', justifyContent: 'center' }}>
                     <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', textAlign: 'center', fontWeight: '600' }}>Repeat Order</Text>
                     <Text style={{ fontSize: responsiveFontSize(1.4), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
                 </TouchableOpacity>
