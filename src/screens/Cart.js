@@ -12,14 +12,14 @@ import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import Toast from 'react-native-toast-message';
-import { removeItemFromCart } from '../redux/CartSlice';
+import { deleteAllItemsFromCart, removeItemFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const Cart = ({ route }) => {
 
-    const reorderedProducts = route.params.data || {};  // Get the reordered products from route params
-    console.log('reorderedProducts', reorderedProducts);
+    const reorderedProducts = route?.params?.data || [];  // Get the reordered products from route params
+    // console.log('reorderedProducts', reorderedProducts);
 
     const dispatch = useDispatch();
 
@@ -54,12 +54,27 @@ const Cart = ({ route }) => {
             const response = await axios.get('/user/cart/fetch');
 
             if (response?.data?.status) {
-                setCartProducts(response?.data?.data);
+                let fetchedProducts = response?.data?.data;
+
+                // Merge reordered products with fetched cart products if any
+                if (reorderedProducts) {
+                    setCartProducts(reorderedProducts);
+                    dispatch(deleteAllItemsFromCart());
+                    dispatch(addItemToCart(reorderedProducts)); // Dispatch the action to update the cart in the Redux store
+                }
+
+                setCartProducts(fetchedProducts);
             }
 
-            console.log('Cart Products', response?.data?.data);
+            console.log('Cart Products: ', response?.data?.data);
         } catch (error) {
-            Alert.alert('Error', error.message || 'Failed to fetch cart data.');
+            Toast.show({
+                type: 'error',
+                text1: "Error",
+                text2: error.message || 'Failed to fetch cart data.',
+                position: 'top',
+                topOffset: 50,
+            });
         } finally {
             setQuantityLoading(false);
             setLoading(false);
