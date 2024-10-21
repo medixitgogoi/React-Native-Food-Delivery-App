@@ -12,11 +12,11 @@ import { addItemToCart, deleteAllItemsFromCart } from '../redux/CartSlice';
 
 const OrderDetails = ({ route }) => {
 
+    // console.log('route', route?.params?.detail);
+
     const navigation = useNavigation();
 
     const dispatch = useDispatch();
-
-    console.log('route', route?.params?.detail);
 
     const [detail, setDetail] = useState(null);
 
@@ -70,11 +70,11 @@ const OrderDetails = ({ route }) => {
             });
 
             if (response?.data?.status) {
+                navigation.navigate('Cart', { data: response?.data?.data });
                 dispatch(deleteAllItemsFromCart());
                 response?.data?.data?.forEach((product) => {
                     dispatch(addItemToCart(product));
                 });
-                navigation.navigate('Cart', { data: response?.data?.data });
             }
             console.log('Reorder', response);
         } catch (error) {

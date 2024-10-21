@@ -28,7 +28,6 @@ const OrderHistory = () => {
     const [orders, setOrders] = useState(null);
 
     const [loading, setLoading] = useState(true);
-    const [reorderLoading, setReorderLoading] = useState(true);
 
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered results
