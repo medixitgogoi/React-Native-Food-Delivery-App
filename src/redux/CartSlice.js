@@ -11,11 +11,13 @@ export const cartSlice = createSlice({
             state.items = action.payload;
         },
         addItemToCart: (state, action) => {
-            const existingItem = state.items.find(item => item.id === action.payload.id);
-            if (existingItem) {
-                return;
-            } else {
-                state.items.push(action.payload);
+            if (state.length != 0) {
+                const existingItem = state.items.find(item => item.id === action.payload.id);
+                if (existingItem) {
+                    return;
+                } else {
+                    state.items.push(action.payload);
+                }
             }
         },
         removeItemFromCart: (state, action) => {

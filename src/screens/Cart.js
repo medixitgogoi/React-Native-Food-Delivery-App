@@ -1,4 +1,4 @@
-import { StatusBar, Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Animated, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { StatusBar, Text, View, SafeAreaView, TouchableOpacity, Image, Animated, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -16,7 +16,10 @@ import { removeItemFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-const Cart = () => {
+const Cart = ({ route }) => {
+
+    const reorderedProducts = route.params.data || {};  // Get the reordered products from route params
+    console.log('reorderedProducts', reorderedProducts);
 
     const dispatch = useDispatch();
 
@@ -54,7 +57,7 @@ const Cart = () => {
                 setCartProducts(response?.data?.data);
             }
 
-            console.log('getCartProducts', response?.data?.data);
+            console.log('Cart Products', response?.data?.data);
         } catch (error) {
             Alert.alert('Error', error.message || 'Failed to fetch cart data.');
         } finally {
