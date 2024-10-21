@@ -9,14 +9,17 @@ import Icon5 from 'react-native-vector-icons/dist/Ionicons';
 import { useCallback, useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
+import { addItemToCart, deleteAllItemsFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const OrderHistory = () => {
 
     const navigation = useNavigation();
+
+    const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
 
@@ -127,6 +130,10 @@ const OrderHistory = () => {
             });
 
             if (response?.data?.status) {
+                dispatch(deleteAllItemsFromCart());
+                response?.data?.data?.forEach((product) => {
+                    dispatch(addItemToCart(product));
+                });
                 navigation.navigate('Cart', { data: response?.data?.data });
             }
             console.log('Reorder', response);

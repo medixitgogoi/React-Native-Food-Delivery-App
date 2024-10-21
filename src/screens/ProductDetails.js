@@ -139,6 +139,7 @@ const ProductDetails = ({ route }) => {
     const addToCart = async () => {
         try {
             setAddToCartLoading(true);
+            
             // Data object as per the API requirement
             const data = {
                 product_id: product?.id,
@@ -153,7 +154,7 @@ const ProductDetails = ({ route }) => {
                 }
             });
 
-            // console.log('productDetails', response)
+            console.log('productDetails', response)
 
             // Handle success response
             if (response?.data?.status) {

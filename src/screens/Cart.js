@@ -12,14 +12,17 @@ import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
 import Toast from 'react-native-toast-message';
-import { deleteAllItemsFromCart, removeItemFromCart } from '../redux/CartSlice';
+import { addItemToCart, deleteAllItemsFromCart, removeItemFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
 const Cart = ({ route }) => {
 
-    const reorderedProducts = route?.params?.data || [];  // Get the reordered products from route params
-    // console.log('reorderedProducts', reorderedProducts);
+    const reorderedProducts = route?.params?.data;  // Get the reordered products from route params
+    console.log('reorderedProducts', reorderedProducts);
+
+    const cartProductsFromRedux = useSelector(state => state.cart.items); // Use cart items from Redux
+    console.log('cartProductsFromRedux', cartProductsFromRedux);
 
     const dispatch = useDispatch();
 
@@ -59,14 +62,15 @@ const Cart = ({ route }) => {
                 // Merge reordered products with fetched cart products if any
                 if (reorderedProducts) {
                     setCartProducts(reorderedProducts);
-                    dispatch(deleteAllItemsFromCart());
-                    dispatch(addItemToCart(reorderedProducts)); // Dispatch the action to update the cart in the Redux store
+                    // reorderedProducts.forEach((product) => {
+                    //     dispatch(addItemToCart(product));
+                    // });
                 }
 
                 setCartProducts(fetchedProducts);
             }
 
-            console.log('Cart Products: ', response?.data?.data);
+            // console.log('Cart Products: ', response?.data?.data);
         } catch (error) {
             Toast.show({
                 type: 'error',
@@ -142,11 +146,7 @@ const Cart = ({ route }) => {
                 dispatch(removeItemFromCart(id));
             }
         } catch (error) {
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            }
+            console.log('error', error);
         }
     };
 
