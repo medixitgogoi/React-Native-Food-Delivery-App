@@ -78,7 +78,7 @@ const OrderDetails = ({ route }) => {
             }
             console.log('Reorder', response);
         } catch (error) {
-            console.error('Error reordering:', error);
+            console.error('Error reordering: ', error);
         }
     };
 

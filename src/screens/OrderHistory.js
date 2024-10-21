@@ -28,6 +28,7 @@ const OrderHistory = () => {
     const [orders, setOrders] = useState(null);
 
     const [loading, setLoading] = useState(true);
+    const [reorderLoading, setReorderLoading] = useState(true);
 
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered results
@@ -130,11 +131,11 @@ const OrderHistory = () => {
             });
 
             if (response?.data?.status) {
+                navigation.navigate('Cart', { data: response?.data?.data });
                 dispatch(deleteAllItemsFromCart());
                 response?.data?.data?.forEach((product) => {
                     dispatch(addItemToCart(product));
                 });
-                navigation.navigate('Cart', { data: response?.data?.data });
             }
             console.log('Reorder', response);
         } catch (error) {
