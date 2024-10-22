@@ -52,8 +52,6 @@ const ProductDetails = ({ route }) => {
 
     const [relatedProducts, setRelatedProducts] = useState(null);
 
-    // const [quantity, setQuantity] = useState(1);
-
     const [unit, setUnit] = useState(null);
 
     const [error, setError] = useState(false);
@@ -122,13 +120,7 @@ const ProductDetails = ({ route }) => {
 
                 setRelatedProducts(data.filter(item => item.id !== productId) || []); // Set the fetched data
             } catch (error) {
-                Toast.show({
-                    type: 'error',
-                    text1: "Error fetching related products",
-                    text2: error.message,
-                    position: 'top',
-                    topOffset: 50,
-                });
+                console.log('error', error);
             }
         };
 
