@@ -20,6 +20,9 @@ const Cart = ({ route }) => {
 
     const reorderedProducts = route?.params?.data;  // Get the reordered products from route params
 
+    const cartProductsFromRedux = useSelector(state => state.cart.items); // Use cart items from Redux
+    console.log('cartProductsFromReduxxxxxx: ', cartProductsFromRedux);
+
     const dispatch = useDispatch();
 
     const navigation = useNavigation();
@@ -63,7 +66,7 @@ const Cart = ({ route }) => {
                 setCartProducts(fetchedProducts);
             }
 
-            console.log('Cart Products: ', response?.data?.data);
+            // console.log('Cart Products: ', response?.data?.data);
         } catch (error) {
             Toast.show({
                 type: 'error',

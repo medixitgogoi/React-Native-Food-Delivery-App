@@ -19,6 +19,9 @@ const OrderHistory = () => {
 
     const navigation = useNavigation();
 
+    const cartProducts = useSelector(state => state.cart.items); // Use cart items from Redux
+    console.log('cartProducts', cartProducts);
+
     const dispatch = useDispatch();
 
     const userDetails = useSelector(state => state.user);
@@ -129,14 +132,17 @@ const OrderHistory = () => {
                 }
             });
 
+            const products = response?.data?.data;
+
             if (response?.data?.status) {
                 navigation.navigate('Cart', { data: response?.data?.data });
                 dispatch(deleteAllItemsFromCart());
-                response?.data?.data?.forEach((product) => {
+                products.forEach((product) => {
+                    console.log('product', product)
                     dispatch(addItemToCart(product));
                 });
             }
-            console.log('Reorder', response);
+            // console.log('Reorder', response);
         } catch (error) {
             console.error('Error reordering:', error);
         }

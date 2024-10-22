@@ -1,213 +1,249 @@
-import { StatusBar, Text, View, SafeAreaView, TouchableOpacity, Image, Animated, ScrollView, ActivityIndicator, Alert } from 'react-native';
-import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, Alert, Image, FlatList } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
-import Icon2 from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import Icon3 from 'react-native-vector-icons/dist/FontAwesome6';
 import Icon4 from 'react-native-vector-icons/dist/AntDesign';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import Icon5 from 'react-native-vector-icons/dist/Ionicons';
+import { useCallback, useEffect, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder';
-import Toast from 'react-native-toast-message';
-import { removeItemFromCart } from '../redux/CartSlice';
+import { addItemToCart, deleteAllItemsFromCart } from '../redux/CartSlice';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient);
 
-const Cart = ({ route }) => {
-
-    const reorderedProducts = route.params.data || [];  // Get the reordered products from route params
-    console.log('reorderedProducts', reorderedProducts);
-
-    const dispatch = useDispatch();
+const OrderHistory = () => {
 
     const navigation = useNavigation();
 
+    const dispatch = useDispatch();
+
     const userDetails = useSelector(state => state.user);
 
-    const moveAnim = useRef(new Animated.Value(0)).current;
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    const [orders, setOrders] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
-    const [cartProducts, setCartProducts] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(''); // State for search query
+    const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered results
+    const [debouncedQuery, setDebouncedQuery] = useState(''); // State for debounced query
 
-    const [changeQuantityId, setChangeQuantityId] = useState(null);
-    const [quantityLoading, setQuantityLoading] = useState(false);
+    // Handle search input and debounce it
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedQuery(searchQuery); // Set debounced query after delay
+        }, 300); // 300ms delay
 
-    const [deletingProductId, setDeletingProductId] = useState(null);
+        return () => {
+            clearTimeout(handler); // Clear the timeout if user types again
+        };
+    }, [searchQuery]); // Effect runs when searchQuery changes
 
-    // Status Bar setters
+    // Filter orders based on debounced query
+    useEffect(() => {
+        if (debouncedQuery.trim() === '') {
+            setFilteredOrders(orders); // If search query is empty, show all orders
+            return;
+        }
+
+        const filtered = orders.filter(order =>
+            order.order_detail.some(product =>
+                product.product_name.toLowerCase().includes(debouncedQuery.toLowerCase())
+            )
+        );
+
+        setFilteredOrders(filtered); // Update state with filtered orders
+    }, [debouncedQuery, orders]); // Effect runs when debouncedQuery or orders change
+
+    // Function to highlight matching text
+    const highlightText = (text, query) => {
+        if (!query) return <Text>{text}</Text>; // If no query, return plain text
+
+        const regex = new RegExp(`(${query})`, 'gi'); // Case-insensitive regex for query
+        const parts = text.split(regex); // Split text by matching query
+
+        return (
+            <Text>
+                {parts.map((part, index) =>
+                    part.toLowerCase() === query.toLowerCase() ? (
+                        <Text key={index} style={{ backgroundColor: 'yellow' }}>{part}</Text>
+                    ) : (
+                        <Text key={index}>{part}</Text>
+                    )
+                )}
+            </Text>
+        );
+    };
+
+    // Fetch Orders
     useFocusEffect(
         useCallback(() => {
-            StatusBar.setBackgroundColor(background); // Set your cart screen status bar color
-            StatusBar.setBarStyle('dark-content'); // Optional: change text color (light/dark)
+            const getOrders = async () => {
+                try {
+                    setLoading(true);
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
+
+                    const response = await axios.get('/user/order/fetch');
+                    console.log('orders', response?.data?.data);
+
+                    setOrders(response?.data?.data);
+                } catch (error) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Error',
+                        text2: error?.message,
+                        position: 'top',
+                        topOffset: 50,
+                    });
+                } finally {
+                    setLoading(false);
+                }
+            }
+            getOrders();
         }, [])
     );
 
-    // Get Cart Products
-    const getCartProducts = useCallback(async () => {
+    // Reorder
+    const reorder = async (item) => {
+        // Map the item array to extract the necessary fields
+
+        const formData = new FormData();
+
+        // Iterate through each product in the item array
+        item.forEach((product, index) => {
+            formData.append(`products[${index}][product_id]`, product.product_id);
+            formData.append(`products[${index}][product_size_id]`, product.product_size_id);
+            formData.append(`products[${index}][quantity]`, product.quantity);
+        });
+
         try {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userDetails[0]?.accessToken}`;
-
-            const response = await axios.get('/user/cart/fetch');
-
-            if (response?.data?.status) {
-                setCartProducts(response?.data?.data);
-            }
-
-            console.log('Cart Products', response?.data?.data);
-        } catch (error) {
-            Alert.alert('Error', error.message || 'Failed to fetch cart data.');
-        } finally {
-            setQuantityLoading(false);
-            setLoading(false);
-        }
-    }, [userDetails]);
-
-    // getCartProducts useFocusEffect()
-    useFocusEffect(
-        useCallback(() => {
-            setLoading(true);
-            getCartProducts();
-        }, [userDetails, setCartProducts, getCartProducts, deleteItemFromCart])
-    );
-
-    // Animation for the continue button
-    useEffect(() => {
-        const startAnimation = () => {
-            Animated.loop(
-                Animated.sequence([
-                    Animated.timing(moveAnim, {
-                        toValue: 10,
-                        duration: 500,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(moveAnim, {
-                        toValue: 0,
-                        duration: 500,
-                        useNativeDriver: true,
-                    }),
-                ])
-            ).start();
-        };
-
-        startAnimation();
-    }, [moveAnim]);
-
-    // CartProductsSubTotal
-    const cartProductsSubTotal = () => {
-        return cartProducts?.reduce((total, item) => total + item.quantity * item.mrp, 0);
-    };
-
-    // TotalDiscount
-    const totalDiscount = () => {
-        return cartProducts.reduce((total, item) => total + ((item.mrp - item.price) * item.quantity), 0);
-    };
-
-    // DeleteItemFromCart
-    const deleteItemFromCart = async (id) => {
-        try {
-            setLoading(true);
-            setDeletingProductId(id);
-
-            const data = {
-                cart_id: id,
-            };
-
-            const response = await axios.post(`/user/cart/delete`, data, {
+            // Send the POST request with JSON data
+            const response = await axios.post('/user/cart/reorder', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 }
             });
 
             if (response?.data?.status) {
-                getCartProducts();
-                dispatch(removeItemFromCart(id));
-            }
-        } catch (error) {
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            }
-        }
-    };
-
-    // DecrementQuantity
-    const decrementQuantity = async (id, quantity) => {
-        try {
-            setChangeQuantityId(id);
-            setQuantityLoading(true);
-
-            const data = {
-                cart_id: id,
-                quantity: parseInt(quantity) - 1,
-            };
-
-            const response = await axios.post(`/user/cart/update`, data, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            console.log('responseQuantityMinus', response);
-            if (response?.data?.status) {
-                getCartProducts();
-            }
-        } catch (error) {
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-            } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-            }
-        }
-    }
-
-    // IncrementQuantity
-    const incrementQuantity = async (id, quantity, stock, name) => {
-        if (parseInt(quantity) + 1 > parseInt(stock)) {
-            Toast.show({
-                type: 'error',
-                text1: 'Stock Limit Reached',
-                text2: `You can only add up to ${stock} units of ${name}.`,
-                position: 'top', // Adjusts to the bottom by default
-                topOffset: 10, // Moves the toast 10 units down from the bottom
-            });
-        } else {
-            try {
-                setChangeQuantityId(id);
-                setQuantityLoading(true);
-
-                const data = {
-                    cart_id: id,
-                    quantity: parseInt(quantity) + 1,
-                };
-
-                const response = await axios.post(`/user/cart/update`, data, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                navigation.navigate('Cart', { data: response?.data?.data });
+                dispatch(deleteAllItemsFromCart());
+                response?.data?.data?.forEach((product) => {
+                    dispatch(addItemToCart(product));
                 });
-
-                console.log('responseQuantityPlus', response);
-                if (response?.data?.status) {
-                    getCartProducts();
-                }
-            } catch (error) {
-                if (error?.response) {
-                    Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
-                } else {
-                    Alert.alert("Error", "Network error. Please check your internet connection and try again.");
-                }
             }
+            console.log('Reorder', response);
+        } catch (error) {
+            console.error('Error reordering:', error);
         }
+    };
 
-    }
+    // Render Order
+    const renderOrder = ({ item }) => {
+
+        const apiDate = item?.created_at; // Input date from API
+        const dateParts = apiDate.split("/"); // Split the date into parts
+
+        // Create a new Date object (Month is 0-based in JavaScript)
+        const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+
+        // Options for formatting
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+
+        // Format the date
+        const result = formattedDate.toLocaleDateString('en-GB', options);
+
+        const finalResult = result.replace(/(\w{3}) (\d{4})/, '$1, $2');
+
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('OrderDetails', { detail: item })} style={{ backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
+                {/* Details */}
+                <View style={{ flexDirection: 'column', gap: 8, backgroundColor: lightGreen, padding: 10, borderRadius: 12 }}>
+                    {item.order_detail.map(it => (
+                        <View key={it?.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                            {/* Image */}
+                            <View style={{ width: 30, height: 30, backgroundColor: background, borderRadius: 8, elevation: 1, overflow: 'hidden', borderColor: backIconColor, borderWidth: 0.3 }}>
+                                <Image source={{ uri: it?.image }} resizeMode='cover' style={{ width: '100%', height: '100%' }} />
+                            </View>
+
+                            {/* Details */}
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, width: '79%' }}>
+                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>{highlightText(it.product_name, debouncedQuery)}</Text>
+                                <Text style={{ color: offWhite, fontWeight: '500', fontSize: responsiveFontSize(2) }}>x {it?.quantity}</Text>
+                            </View>
+                        </View>
+                    ))}
+                </View>
+
+                {/* Date, status, price */}
+                <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>Order placed on</Text>
+                            <Text style={{ color: '#000', fontSize: responsiveFontSize(1.6), fontWeight: '500' }}>{finalResult}</Text>
+                        </View>
+                        {
+                            item?.status === '1' ? (
+                                // Status = 1 (New)
+                                <View style={{ backgroundColor: lightGreen, paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5, borderColor: backIconColor, borderWidth: 0.7 }}>
+                                    <Text style={{ color: backIconColor, fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>New</Text>
+                                </View>
+                            ) : item?.status === '2' ? (
+                                // Status = 2 (Accepted)
+                                <View style={{ backgroundColor: '#1E90FF', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Accepted</Text>
+                                </View>
+                            ) : item?.status === '3' ? (
+                                // Status = 3 (Dispatched)
+                                <View style={{ backgroundColor: '#1E90FF', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Dispatched</Text>
+                                </View>
+                            ) : item?.status === '4' ? (
+                                // Status = 4 (Delivered)
+                                <View style={{ backgroundColor: darkGreen, paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Delivered</Text>
+                                </View>
+                            ) : item?.status === '5' ? (
+                                // Status = 5 (Cancelled)
+                                <View style={{ backgroundColor: '#cb202d', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5 }}>
+                                    <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.4), fontWeight: '500' }}>Cancelled</Text>
+                                </View>
+                            ) : null
+                        }
+                    </View>
+
+                    {/* Price */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: '#000', fontSize: responsiveFontSize(2), fontWeight: '600' }}>₹{item?.total_price + item?.delivery_charge + item?.addl_charge}.00</Text>
+                        <Icon name="keyboard-arrow-right" size={19} color={'#000'} />
+                    </View>
+                </View>
+
+                {/* Divider */}
+                <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }}></View>
+
+                {/* Reorder button */}
+                <LinearGradient
+                    colors={['#76cd7d', '#3a9f43']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <TouchableOpacity onPress={() => reorder(item?.order_detail)} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                        <Icon name="replay" size={22} color={'#fff'} />
+                        <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
+                    </TouchableOpacity>
+                </LinearGradient>
+            </TouchableOpacity>
+        )
+    };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: background, paddingBottom: loading ? 0 : 50 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: background }}>
             <StatusBar
                 animated={true}
                 backgroundColor={background}
@@ -215,203 +251,120 @@ const Cart = ({ route }) => {
             />
 
             {/* Header */}
-            <View style={{ paddingHorizontal: 10, height: 50, width: '100%', flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity style={{ width: 30, height: 30, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 8, elevation: 3 }} onPress={() => navigation.goBack()}>
-                    <Icon name="keyboard-arrow-left" size={23} color={'#000'} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, paddingVertical: 8 }}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingVertical: 5, paddingHorizontal: 10, alignSelf: 'flex-start' }}>
+                    <Icon4 name="arrowleft" size={23} color={'#000'} />
                 </TouchableOpacity>
-
-                <View style={{ flex: 0.9, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ color: '#000', fontWeight: "600", fontSize: responsiveFontSize(2.5), textTransform: 'uppercase' }}>
-                        Your Food Cart
-                    </Text>
-                </View>
+                <Text style={{ color: '#000', fontSize: responsiveFontSize(2.4), fontWeight: '500' }}>Your Orders</Text>
             </View>
 
-            {/* Content */}
-            <ScrollView>
-                {/* Fallback image */}
-                {!loading && cartProducts?.length === 0 && (
-                    <View style={{ height: '100%', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
-                        <Image source={require('../assets/fallback.png')} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
-                        <Text style={{ color: '#818791', textAlign: 'center', fontWeight: '500', fontSize: responsiveFontSize(2) }}>Looks like you haven't added any items yet. Start shopping now to fill your cart!</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ elevation: 2, marginTop: 20, backgroundColor: darkGreen, paddingVertical: 10, gap: 8, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                            <Icon4 name="arrowleft" size={20} color={'#000'} />
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Go to Home</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-
-                {/* Cart products */}
-                <View style={{ paddingHorizontal: 10, paddingTop: 5 }}>
-                    {/* Skeleton loader */}
-                    {loading && [1, 1, 1, 1, 1].map((item, index) => (
-                        <View key={index} style={{ flex: 1, flexDirection: 'column', height: '100%', justifyContent: 'space-between', elevation: 2, marginVertical: 5, backgroundColor: '#fff', padding: 10, borderRadius: 12, marginHorizontal: 1, marginVertical: 5 }}>
-                            {/* Title Shimmer */}
-                            <ShimmerPlaceHolder
-                                LinearGradient={LinearGradient}
-                                style={{ width: '60%', height: 20, marginBottom: 10, borderRadius: 4 }}
-                            />
-
-                            {/* Detail Lines Shimmer */}
-                            <ShimmerPlaceHolder
-                                LinearGradient={LinearGradient}
-                                style={{ width: '40%', height: 15, marginBottom: 5, borderRadius: 4 }}
-                            />
-                            <ShimmerPlaceHolder
-                                LinearGradient={LinearGradient}
-                                style={{ width: '50%', height: 15, marginBottom: 5, borderRadius: 4 }}
-                            />
-
-                            {/* Quantity Buttons and Price */}
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                <ShimmerPlaceHolder
-                                    LinearGradient={LinearGradient}
-                                    style={{ width: 80, height: 30, borderRadius: 6 }}
-                                />
-                                <ShimmerPlaceHolder
-                                    LinearGradient={LinearGradient}
-                                    style={{ width: 50, height: 30, borderRadius: 6 }}
-                                />
-                            </View>
+            {/* Searchbar */}
+            {orders?.length !== 0 && (
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, marginTop: 5, marginBottom: 12 }}>
+                    <View style={{ width: '100%', borderColor: isSearchFocused ? backIconColor : '#F9FAFD', borderWidth: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 11, paddingHorizontal: 8, elevation: 2 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', height: 40, width: 23, }}>
+                            <Icon5 name="search" size={20} color={backIconColor} style={{ margin: 0, padding: 0 }} />
                         </View>
-                    ))}
-
-                    {/* Content */}
-                    {!loading && cartProducts?.map(item => (
-                        <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { data: item?.product_id })} key={item.id} style={{ marginBottom: 12, padding: 5, backgroundColor: '#fff', borderRadius: 12, elevation: 1, flexDirection: 'row', alignItems: 'center', overflow: 'hidden' }}>
-                            {/* Image */}
-                            <View style={{ padding: 10, flexDirection: 'row', borderRadius: 10, alignItems: 'center', justifyContent: 'center', flex: 1.2, backgroundColor: '#e4f4ea' }}>
-                                <Image source={{ uri: item?.image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
-                            </View>
-
-                            {/* Details */}
-                            <View style={{ flex: 3, flexDirection: 'column', height: '100%', paddingHorizontal: 10, paddingVertical: 6 }}>
-                                {/* Name */}
-                                <View style={{ flex: 0.8, width: '92%' }}>
-                                    <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                </View>
-
-                                {/* To be changed */}
-                                <View style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingTop: 3 }}>
-                                    <View style={{ flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-                                        {/* Type */}
-                                        <View style={{ flexDirection: 'column', gap: 3 }}>
-                                            {item?.type != "2" && (
-                                                item?.veg_type === '1' ? (
-                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                                        <View style={{ width: 12, height: 12, borderColor: '#000', borderWidth: 1.2, borderRadius: 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                                            <View style={{ backgroundColor: 'green', width: 5, height: 5, borderRadius: 10, }}>
-                                                            </View>
-                                                        </View>
-                                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.6) }}>Veg</Text>
-                                                    </View>
-                                                ) : (
-                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                                                        <View style={{ width: 12, height: 12, borderColor: '#000', borderWidth: 1.2, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}>
-                                                            <Icon4 name="caretup" size={8} color={'#cb202d'} style={{ margin: 0, paddingTop: 1, alignSelf: 'center' }} />
-                                                        </View>
-                                                        <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.6) }}>Non-veg</Text>
-                                                    </View>
-                                                ))
-                                            }
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                                                <Icon2 name="scale-bathroom" size={14} color={'#000'} style={{ marginLeft: -1.5 }} />
-                                                <Text style={{ color: offWhite, fontWeight: '600', fontSize: responsiveFontSize(1.6) }}>{item?.size} {item?.unit}</Text>
-                                            </View>
-                                        </View>
-
-                                        {/* Quantity updations */}
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                            {/* Minus */}
-                                            <TouchableOpacity disabled={item?.quantity === 1} onPress={() => decrementQuantity(item?.id, item?.quantity)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Icon3 name="minus" size={13} color={'#000'} />
-                                            </TouchableOpacity>
-
-                                            {/* Quantity */}
-                                            <View style={{ width: 27, justifyContent: 'center', alignItems: 'center' }}>
-                                                {quantityLoading && item?.quantity != 1 && changeQuantityId === item?.id ? (
-                                                    <ActivityIndicator size='small' color={darkGreen} />
-                                                ) : (
-                                                    <Text style={{ color: '#000', fontSize: responsiveFontSize(2.1), fontWeight: '700' }}>
-                                                        {item?.quantity}
-                                                    </Text>
-                                                )}
-                                            </View>
-
-                                            {/* Plus */}
-                                            <TouchableOpacity onPress={() => incrementQuantity(item?.id, item?.quantity, item?.in_stock, item?.name)} style={{ paddingVertical: 4, paddingHorizontal: 6, borderRadius: 6, borderColor: backIconColor, borderWidth: 1.3, backgroundColor: lightGreen, justifyContent: 'center', flexDirection: 'row', alignItems: 'center' }}>
-                                                <Icon3 name="plus" size={13} color={'#000'} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-
-                                    {/* Price */}
-                                    <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingBottom: 25 }}>
-                                        <Text style={{ color: '#000', fontWeight: '800', fontSize: responsiveFontSize(2.2) }}>₹{item?.price * item?.quantity}.00</Text>
-                                    </View>
-                                </View>
-                            </View>
-
-                            {/* Delete button */}
-                            <TouchableOpacity onPress={() => deleteItemFromCart(item.id)} style={{ elevation: 2, position: 'absolute', width: 27, height: 27, backgroundColor: '#fceced', top: 0, right: 0, borderBottomLeftRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
-                                {deletingProductId === item?.id ? (
-                                    <ActivityIndicator size='small' color={'#cb202d'} />
-                                ) : (
-                                    <Icon name="delete" size={18} color={'#cb202d'} />
-                                )}
-                            </TouchableOpacity>
-                        </TouchableOpacity>
-                    ))}
+                        <TextInput
+                            style={{ height: 40, color: '#000', fontWeight: '500', letterSpacing: 0.3, width: '87%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}
+                            placeholder="Search by dish, cake or grocery"
+                            placeholderTextColor="#a0abb7"
+                            value={searchQuery}
+                            onChangeText={setSearchQuery} // Handle text input directly
+                            onFocus={() => setIsSearchFocused(true)}
+                            onBlur={() => setIsSearchFocused(false)}
+                        />
+                    </View>
                 </View>
-
-                {/* Cart Total */}
-                {!loading && cartProducts?.length != 0 && (
-                    <View style={{ backgroundColor: '#fff', marginTop: 10, elevation: 1, borderRadius: 12, overflow: 'hidden', margin: 10 }}>
-                        {/* Heading */}
-                        <View style={{ backgroundColor: darkGreen, paddingTop: 10, flexDirection: 'row', alignItems: 'flex-end', gap: 4, justifyContent: 'center' }}>
-                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(2), fontWeight: '600', textTransform: 'uppercase', color: '#000', marginBottom: 10 }}>Price Details</Text>
-                            <Text style={{ textAlign: 'center', fontSize: responsiveFontSize(1.9), fontWeight: '500', color: '#000', marginBottom: 10 }}>({cartProducts?.length} {cartProducts?.length === 1 ? 'item' : 'items'})</Text>
-                        </View>
-
-                        {/* Total Details */}
-                        <View style={{ flexDirection: 'column', justifyContent: 'center', width: '100%', marginTop: 5, gap: 4, paddingHorizontal: 20, padding: 7 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Total MRP</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹{cartProductsSubTotal()}.00</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Discount on MRP</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹{totalDiscount()}.00</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Delivery Charges</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹20.00</Text>
-                            </View>
-                            {/* <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
-                                <Text style={{ color: '#000', fontWeight: '400', fontSize: responsiveFontSize(1.8) }}>Additional Charges</Text>
-                                <Text style={{ color: '#000', fontWeight: '500', fontSize: responsiveFontSize(1.9) }}>₹20.00</Text>
-                            </View> */}
-                            <View style={{ borderStyle: 'dashed', borderWidth: 0.6, borderColor: offWhite, marginVertical: 5 }}></View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'space-between', paddingVertical: 3 }}>
-                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>Total Amount</Text>
-                                <Text style={{ color: '#000', fontWeight: '700', fontSize: responsiveFontSize(2.1) }}>₹{cartProductsSubTotal() + 20 - totalDiscount()}.00</Text>
-                            </View>
-                        </View>
-                    </View>
-                )}
-            </ScrollView>
-
-            {/* Continue button */}
-            {!loading && cartProducts?.length !== 0 && (
-                <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ alignSelf: 'center', position: 'absolute', bottom: 10, backgroundColor: lightGreen, borderRadius: 12, width: '95%', padding: 10, height: 45, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, borderColor: backIconColor, borderWidth: 1.3 }}>
-                    <Text style={{ color: backIconColor, fontWeight: '700', textAlign: 'center', fontSize: responsiveFontSize(2.2), textTransform: 'uppercase' }}>Continue</Text>
-                    <Animated.View style={{ transform: [{ translateX: moveAnim }] }}>
-                        <Icon4 name="arrowright" size={20} color={backIconColor} />
-                    </Animated.View>
-                </TouchableOpacity>
             )}
+
+            {/* Fallback image */}
+            {!loading && orders.length === 0 && (
+                <View style={{ flexDirection: 'column', alignItems: 'center', gap: 30, flex: 1, marginTop: 30 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Image source={require('../assets/orders-fallback.png')} style={{ width: 200, height: 200, resizeMode: 'contain' }} />
+                    </View>
+                    <View style={{ width: '90%' }}>
+                        <Text style={{ fontSize: responsiveFontSize(1.9), textAlign: 'center', color: '#000', fontWeight: '500' }}>
+                            You haven't placed any orders yet! Hungry? Explore our menu and start your first order now.
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate('Home')} style={{ elevation: 2, backgroundColor: darkGreen, paddingVertical: 10, gap: 8, paddingHorizontal: 20, borderRadius: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon4 name="arrowleft" size={20} color={'#000'} />
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Go to Home</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
+            {/* Content */}
+            <View style={{ flex: 1 }}>
+                {loading ? (
+                    <FlatList
+                        data={[1, 1, 1, 1, 1]}
+                        renderItem={({ index }) => (
+                            <View key={index} style={{ backgroundColor: '#fff', flexDirection: 'column', elevation: 2, overflow: 'hidden', borderRadius: 12, padding: 10 }}>
+                                {/* Details */}
+                                <View style={{ flexDirection: 'column', gap: 8, backgroundColor: '#EDF7EC', padding: 10, borderRadius: 12 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                        <ShimmerPlaceHolder
+                                            style={{ width: 30, height: 30, backgroundColor: '#F9FAFD', borderRadius: 8 }}
+                                            autoRun={true}
+                                            visible={false} // Set to true when data is loaded
+                                        />
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                                            <ShimmerPlaceHolder
+                                                style={{ width: '90%', height: 20, backgroundColor: '#F9FAFD', borderRadius: 5 }}
+                                                autoRun={true}
+                                                visible={false}
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
+
+                                {/* Date, status, price */}
+                                <View style={{ backgroundColor: '#fff', flexDirection: 'row', paddingTop: 14, alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <View style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
+                                            <ShimmerPlaceHolder
+                                                style={{ width: '90%', height: 20, backgroundColor: '#F9FAFD', borderRadius: 5 }}
+                                                autoRun={true}
+                                                visible={false}
+                                            />
+                                        </View>
+                                        <ShimmerPlaceHolder
+                                            style={{ width: 80, height: 20, backgroundColor: '#F9FAFD', borderRadius: 5 }}
+                                            autoRun={true}
+                                            visible={false}
+                                        />
+                                    </View>
+                                </View>
+
+                                {/* Divider */}
+                                <View style={{ height: 1, width: '100%', backgroundColor: '#f0f0f0', marginVertical: 12 }} />
+
+                                {/* Reorder button */}
+                                <ShimmerPlaceHolder
+                                    style={{ borderRadius: 10, height: 35, width: '100%', paddingHorizontal: 0, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                                    autoRun={true}
+                                    visible={false}
+                                />
+                            </View>
+                        )}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
+                        keyExtractor={(item, index) => String(index)}
+                    />
+                ) : (
+                    <FlatList
+                        data={filteredOrders}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={renderOrder}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20, paddingTop: 3, gap: 12 }}
+                    />
+                )}
+            </View>
         </SafeAreaView>
     )
 }
 
-export default Cart;
+export default OrderHistory;
