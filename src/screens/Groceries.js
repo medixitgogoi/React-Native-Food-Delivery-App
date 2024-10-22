@@ -242,18 +242,18 @@ const Groceries = () => {
                     </View>
                 </View>
 
+                {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                    <StarRating rating={item.starRating} />
+                    <StarRating rating={4} />
+                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
+                        <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
+                    </View>
+                </View> */}
+
                 <View style={{ padding: 10 }}>
                     <View style={{ flexDirection: 'column', gap: 3 }}>
                         <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{getHighlightedText(item.name, search)}</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                            {/* <StarRating rating={item.starRating} /> */}
-                            <StarRating rating={4} />
-                            <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                <Icon3 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                            </View>
-                        </View>
                     </View>
 
                     {/* <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 2 }}>

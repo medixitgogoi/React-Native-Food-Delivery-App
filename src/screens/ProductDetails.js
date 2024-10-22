@@ -120,7 +120,7 @@ const ProductDetails = ({ route }) => {
                     data = await fetchRestaurants(userDetails); // Pass userDetails if needed
                 }
 
-                setRelatedProducts(data || []); // Set the fetched data
+                setRelatedProducts(data.filter(item => item.id !== productId) || []); // Set the fetched data
             } catch (error) {
                 Toast.show({
                     type: 'error',
@@ -139,7 +139,7 @@ const ProductDetails = ({ route }) => {
     const addToCart = async () => {
         try {
             setAddToCartLoading(true);
-            
+
             // Data object as per the API requirement
             const data = {
                 product_id: product?.id,
@@ -522,12 +522,6 @@ const ProductDetails = ({ route }) => {
                             )}
                         </View>
 
-                        {/* Star rating */}
-                        <View style={{ paddingHorizontal: 13, }}>
-                            <StarRatingDetails rating={4} />
-                            {/* <StarRatingDetails rating={product.starRating} /> */}
-                        </View>
-
                         {/* Price and quantity */}
                         <View style={{ paddingHorizontal: 13, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 3 }}>
@@ -610,15 +604,6 @@ const ProductDetails = ({ route }) => {
                                         <View style={{ padding: 10 }}>
                                             <View style={{ flexDirection: 'column', gap: 3 }}>
                                                 <Text style={{ fontSize: responsiveFontSize(2), fontWeight: '600', color: '#000' }} numberOfLines={1} ellipsizeMode='tail'>{item.name}</Text>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                                                    {/* <StarRating rating={item.starRating} /> */}
-                                                    <StarRating rating={4} />
-                                                    <View style={{ backgroundColor: backIconColor, paddingVertical: 2, paddingHorizontal: 4, gap: 2, borderRadius: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                        <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>4</Text>
-                                                        {/* <Text style={{ color: '#fff', fontSize: responsiveFontSize(1.5), fontWeight: '500' }}>{item.starRating}</Text> */}
-                                                        <Icon2 name="star" size={10} color={'#fff'} style={{ margin: 0, padding: 0, alignSelf: 'center' }} />
-                                                    </View>
-                                                </View>
                                             </View>
 
                                             {type !== '2' && (
