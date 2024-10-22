@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StatusBar, ScrollView, Image, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, ScrollView, Image, Linking, ActivityIndicator } from 'react-native';
 import { responsiveFontSize, responsiveHeight } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -19,6 +19,8 @@ const OrderDetails = ({ route }) => {
     const dispatch = useDispatch();
 
     const [detail, setDetail] = useState(null);
+
+    const [loading, setLoading] = useState(false);
 
     // setDetail
     useFocusEffect(
@@ -50,6 +52,7 @@ const OrderDetails = ({ route }) => {
 
     // Reorder
     const reorder = async (item) => {
+        setLoading(true);
         // Map the item array to extract the necessary fields
 
         const formData = new FormData();
@@ -79,6 +82,8 @@ const OrderDetails = ({ route }) => {
             console.log('Reorder', response);
         } catch (error) {
             console.error('Error reordering: ', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -280,8 +285,15 @@ const OrderDetails = ({ route }) => {
                 style={{ borderRadius: 12, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', elevation: 2, position: 'absolute', bottom: 10, width: '95%', alignSelf: 'center' }}
             >
                 <TouchableOpacity onPress={() => reorder(detail?.order_detail)} style={{ flexDirection: 'column', gap: 1, width: '100%', height: '100%', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', textAlign: 'center', fontWeight: '600' }}>Repeat Order</Text>
-                    <Text style={{ fontSize: responsiveFontSize(1.4), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
+                    {/* Show ActivityIndicator only for the clicked order */}
+                    {loading ? (
+                        <ActivityIndicator size="small" color={lightGreen} />
+                    ) : (
+                        <>
+                            <Text style={{ fontSize: responsiveFontSize(2.2), color: '#fff', textAlign: 'center', fontWeight: '600' }}>Repeat Order</Text>
+                            <Text style={{ fontSize: responsiveFontSize(1.4), color: '#fff', textAlign: 'center' }}>VIEW CART ON NEXT STEP</Text>
+                        </>
+                    )}
                 </TouchableOpacity>
             </LinearGradient>
         </SafeAreaView>
