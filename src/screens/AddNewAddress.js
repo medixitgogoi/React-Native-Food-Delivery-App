@@ -13,10 +13,12 @@ import GetLocation from 'react-native-get-location';
 import Geocoder from 'react-native-geocoder';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const AddNewAddress = ({ route }) => {
 
     const to = route?.params?.to;
+    console.log('to: ', to);
 
     const navigation = useNavigation();
 
@@ -155,7 +157,7 @@ const AddNewAddress = ({ route }) => {
             };
 
             // API Call using axios
-            const response = await axios.post(`user/shippingAddress/add`, data, {
+            const response = await axios.post(`/user/shippingAddress/add`, data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -164,9 +166,16 @@ const AddNewAddress = ({ route }) => {
             console.log('response', response);
 
             // Handle success response
-            if (response.data.status) {
-                
-                navigation.navigate(to);
+            if (response?.data?.status) {
+
+                // navigation.navigate(to);
+                Toast.show({
+                    type: 'success',
+                    text1: "Address saved succesfully",
+                    // text2: error.message || 'Failed to fetch cart data.',
+                    position: 'top',
+                    topOffset: 0,
+                });
 
                 setName('');
                 setContact('')
@@ -178,17 +187,17 @@ const AddNewAddress = ({ route }) => {
                 setChecked(false);
                 setLandmark(null);
             } else {
-                Alert.alert(response?.data?.message || 'Something went wrong.', 'Please try again.');
+                console.log(response?.data?.message || 'Something went wrong.', 'Please try again.');
             }
-
-            setLoading(false);
         } catch (error) {
             // Handle error response
-            if (error.response) {
-                Alert.alert("Error", error.response.data.message || "Something went wrong. Please try again.");
+            if (error) {
+                console.log("Error", error || "Something went wrong. Please try again.");
             } else {
-                Alert.alert("Error", "Network error. Please check your internet connection and try again.");
+                console.log("Error", "Network error. Please check your internet connection and try again.");
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -454,16 +463,14 @@ const AddNewAddress = ({ route }) => {
             </KeyboardAvoidingView>
 
             {/* Location loading spinner */}
-            {
-                loadingLocation && (
-                    <View style={{ position: 'absolute', alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
-                        <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
-                            <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
-                            <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
-                        </View>
+            {loadingLocation && (
+                <View style={{ position: 'absolute', alignItems: 'center', height: '100%', flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#00000050' }}>
+                    <View style={{ backgroundColor: lightGreen, paddingVertical: 10, paddingHorizontal: 18, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 }}>
+                        <ActivityIndicator size="large" color={backIconColor} style={{ marginRight: 10 }} />
+                        <Text style={{ color: '#000', fontWeight: '600', fontSize: responsiveFontSize(2) }}>Fetching location ...</Text>
                     </View>
-                )
-            }
+                </View>
+            )}
         </SafeAreaView>
     )
 }
