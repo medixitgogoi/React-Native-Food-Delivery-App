@@ -642,8 +642,8 @@ const ProductDetails = ({ route }) => {
                         borderColor: backIconColor,
                         borderWidth: 1.5,
                         position: 'absolute',
-                        bottom: 8,
-                        width: '95%',
+                        bottom: 2,
+                        width: '96%',
                         alignSelf: 'center',
                     }}
                     onPress={() => {
@@ -657,7 +657,6 @@ const ProductDetails = ({ route }) => {
                             }
                         }
                     }}
-                // disabled={isPresentInTheCart ? true : false}
                 >
                     {addToCartLoading ? (
                         <ActivityIndicator color={backIconColor} size="small" />
@@ -665,7 +664,7 @@ const ProductDetails = ({ route }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                             <Text style={{ color: isPresentInTheCart ? backIconColor : '#fff', fontSize: responsiveFontSize(2.6), fontWeight: '500' }}>{`${isPresentInTheCart ? 'Go to cart' : 'Add to cart'}`}</Text>
                             {isPresentInTheCart ? (
-                                <Icon name="keyboard-arrow-right" size={23} color={backIconColor} />
+                                <Icon2 name="arrowright" size={23} color={backIconColor} />
                             ) : (
                                 <Icon name="add-shopping-cart" size={19} color={'#fff'} />
                             )}
