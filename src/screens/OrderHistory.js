@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StatusBar, TextInput, Alert, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, TextInput, Alert, Image, FlatList, ActivityIndicator } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { background, backIconColor, darkGreen, lightGreen, offWhite } from '../utils/colors';
@@ -31,6 +31,8 @@ const OrderHistory = () => {
     const [orders, setOrders] = useState(null);
 
     const [loading, setLoading] = useState(true);
+
+    const [loadingOrderId, setLoadingOrderId] = useState(null);
 
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered results
@@ -113,18 +115,20 @@ const OrderHistory = () => {
 
     // Reorder
     const reorder = async (item) => {
-        // Map the item array to extract the necessary fields
+        setLoadingOrderId(item?.id); // Set the loading order ID
 
+        // Map the item array to extract the necessary fields
         const formData = new FormData();
 
         // Iterate through each product in the item array
-        item.forEach((product, index) => {
+        item.order_detail.forEach((product, index) => {
             formData.append(`products[${index}][product_id]`, product.product_id);
             formData.append(`products[${index}][product_size_id]`, product.product_size_id);
             formData.append(`products[${index}][quantity]`, product.quantity);
         });
 
         try {
+
             // Send the POST request with JSON data
             const response = await axios.post('/user/cart/reorder', formData, {
                 headers: {
@@ -145,6 +149,8 @@ const OrderHistory = () => {
             // console.log('Reorder', response);
         } catch (error) {
             console.error('Error reordering:', error);
+        } finally {
+            setLoadingOrderId(null); // Reset the loading order ID after processing
         }
     };
 
@@ -239,9 +245,16 @@ const OrderHistory = () => {
                     end={{ x: 1, y: 0 }}
                     style={{ borderRadius: 12, paddingHorizontal: 24, elevation: 2, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 >
-                    <TouchableOpacity onPress={() => reorder(item?.order_detail)} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                        <Icon name="replay" size={22} color={'#fff'} />
-                        <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
+                    <TouchableOpacity onPress={() => reorder(item)} style={{ gap: 3, height: 40, borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                        {/* Show ActivityIndicator only for the clicked order */}
+                        {loadingOrderId === item?.id ? (
+                            <ActivityIndicator size="small" color={lightGreen} />
+                        ) : (
+                            <>
+                                <Icon name="replay" size={22} color={'#fff'} />
+                                <Text style={{ color: '#fff', fontWeight: '600', fontSize: responsiveFontSize(2.1) }}>Reorder</Text>
+                            </>
+                        )}
                     </TouchableOpacity>
                 </LinearGradient>
             </TouchableOpacity>
