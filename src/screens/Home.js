@@ -129,7 +129,7 @@ const Home = () => {
 
                     {/* Welcome */}
                     <View style={{ flexDirection: 'column', width: '30%' }}>
-                        <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(1.9), }}>Welcome</Text>
+                        <Text style={{ color: '#25642a', fontWeight: '500', fontSize: responsiveFontSize(1.9), }}>Hi</Text>
                         <Text
                             style={{
                                 fontSize: responsiveFontSize(2.5),
