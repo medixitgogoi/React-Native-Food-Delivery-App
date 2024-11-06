@@ -20,7 +20,7 @@ const OrderHistory = () => {
     const navigation = useNavigation();
 
     const cartProducts = useSelector(state => state.cart.items); // Use cart items from Redux
-    console.log('cartProducts', cartProducts);
+    // console.log('cartProducts', cartProducts);
 
     const dispatch = useDispatch();
 
