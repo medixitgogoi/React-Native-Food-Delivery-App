@@ -182,7 +182,7 @@ const ProductDetails = ({ route }) => {
         } finally {
             setAddToCartLoading(false);
         }
-    }
+    };
 
     // Get cart products
     useEffect(() => {

@@ -171,7 +171,6 @@ const EditProfile = () => {
                 colors={['#fff', '#c8e6c4']}
                 style={{ flex: 1 }}
             >
-
                 {/* Header */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ paddingVertical: 5, paddingHorizontal: 10 }}>
